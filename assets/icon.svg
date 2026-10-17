@@ -2,34 +2,44 @@
   <title>paper-lector</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E3A5F"/>
-      <stop offset="1" stop-color="#0F2236"/>
+      <stop offset="0" stop-color="#1B1E21"/>
+      <stop offset="1" stop-color="#0B0B0D"/>
     </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2DD4BF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2DD4BF" stop-opacity="0.06"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
 
   <!-- background -->
   <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <rect x="2" y="2" width="252" height="252" rx="54" fill="none" stroke="#2DD4BF" stroke-opacity="0.25" stroke-width="2"/>
 
   <!-- back sheets: the rest of the stack -->
-  <rect x="76" y="44" width="116" height="150" rx="10" fill="#7F96B2" opacity="0.45"/>
-  <rect x="68" y="52" width="116" height="150" rx="10" fill="#B9C8DA" opacity="0.7"/>
+  <rect x="76" y="44" width="116" height="150" rx="10" fill="#2DD4BF" fill-opacity="0.06" stroke="#2DD4BF" stroke-opacity="0.35" stroke-width="2"/>
+  <rect x="68" y="52" width="116" height="150" rx="10" fill="#2DD4BF" fill-opacity="0.1" stroke="#2DD4BF" stroke-opacity="0.6" stroke-width="2"/>
 
   <!-- front sheet with folded corner -->
-  <path d="M60 70 a10 10 0 0 1 10 -10 h70 l36 36 v104 a10 10 0 0 1 -10 10 h-96 a10 10 0 0 1 -10 -10 z" fill="#F7F4EC"/>
-  <path d="M140 60 v26 a10 10 0 0 0 10 10 h26 z" fill="#D9D2C0"/>
+  <path d="M60 70 a10 10 0 0 1 10 -10 h70 l36 36 v104 a10 10 0 0 1 -10 10 h-96 a10 10 0 0 1 -10 -10 z" fill="#0F1A1A"/>
+  <path d="M60 70 a10 10 0 0 1 10 -10 h70 l36 36 v104 a10 10 0 0 1 -10 10 h-96 a10 10 0 0 1 -10 -10 z" fill="url(#glass)" stroke="#5EEAD4" stroke-width="3" filter="url(#glow)"/>
+  <path d="M140 60 v26 a10 10 0 0 0 10 10 h26 z" fill="#2DD4BF" fill-opacity="0.35" stroke="#5EEAD4" stroke-width="2"/>
 
   <!-- text lines; the second one is the highlighted reading lead -->
-  <rect x="78" y="82" width="48" height="8" rx="4" fill="#9AA6B4"/>
-  <rect x="74" y="108" width="88" height="16" rx="5" fill="#F2B544"/>
+  <rect x="78" y="82" width="48" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.45"/>
+  <rect x="74" y="108" width="88" height="16" rx="5" fill="#F2B544" filter="url(#glow)"/>
   <rect x="80" y="112" width="70" height="8" rx="4" fill="#5B4A1F"/>
-  <rect x="78" y="138" width="80" height="8" rx="4" fill="#9AA6B4"/>
-  <rect x="78" y="156" width="64" height="8" rx="4" fill="#9AA6B4"/>
-  <rect x="78" y="174" width="42" height="8" rx="4" fill="#9AA6B4"/>
+  <rect x="78" y="138" width="80" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.45"/>
+  <rect x="78" y="156" width="64" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.45"/>
+  <rect x="78" y="174" width="42" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.45"/>
 
   <!-- magnifier over the lower-right corner, circling over the page -->
-  <g>
+  <g filter="url(#glow)">
     <line x1="190" y1="190" x2="214" y2="214" stroke="#F2B544" stroke-width="14" stroke-linecap="round"/>
-    <circle cx="168" cy="168" r="30" fill="#FFFFFF" fill-opacity="0.22" stroke="#F2B544" stroke-width="10"/>
+    <circle cx="168" cy="168" r="30" fill="#F2B544" fill-opacity="0.12" stroke="#F2B544" stroke-width="10"/>
     <animateMotion dur="4s" repeatCount="indefinite" path="M0 0 a16 16 0 1 1 -32 0 a16 16 0 1 1 32 0"/>
   </g>
 </svg>
