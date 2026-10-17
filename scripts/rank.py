@@ -14,8 +14,10 @@ Method:
      search results with no PDF (source abstract_only). Abstract-only scores run lower than full-text ones, so the two
      orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
-  Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
-  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_<name>_rank-bm25.csv.
+  Provider "local" (literature.json "rank": {"provider": "local"}, or --provider local) needs no API key: the
+  model2vec model potion-multilingual-128M (static token vectors, 531 MB, downloaded once) replaces voyage-4-large
+  in step 3, and in step 4 each paper is scored by the cosine of the same model's vectors for the query and for its
+  abstract plus 3 windows. Output: <out>_<name>_rank-local.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
   rerun or a run resumed after a crash only pays for new text. Table src ties each vector to its PDF's SHA-256 and
@@ -43,6 +45,10 @@ TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
 TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
 TOK_SHA = 'c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539'
 TOK_PATH = Path.home() / '.cache/paper-lector/voyage-4-large-tokenizer.json'
+LOCAL, LOCAL_REV = 'minishlab/potion-multilingual-128M', '73908c3438cf03b6a01bcb9611d62b23d0726f08'
+LOCAL_FILES = {'model.safetensors': '14b5eb39cb4ce5666da8ad1f3dc6be4346e9b2d601c073302fa0a31bf7943397',
+               'tokenizer.json': '19f1909063da3cfe3bd83a782381f040dccea475f4816de11116444a73e1b6a1'}
+LOCAL_DIR = Path.home() / '.cache/paper-lector/potion-multilingual-128M'
 CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
            'from into over than then which when where while what who how does do can not no '
@@ -96,22 +102,51 @@ def tokenizer():
     """Voyage's tokenizer at a pinned revision, downloaded once into the cache and checked against its SHA-256.
     A partial download never lands at TOK_PATH."""
     from tokenizers import Tokenizer
-    if not TOK_PATH.exists():
-        TOK_PATH.parent.mkdir(parents=True, exist_ok=True)
-        part = TOK_PATH.with_suffix('.part')
-        try:
-            urllib.request.urlretrieve(TOK_URL, part)
-        except OSError as e:
-            part.unlink(missing_ok=True)
-            sys.exit(f'cannot download the tokenizer ({e}). rank.py needs it once, also with --dry and bm25: connect to the '
-                     f'internet and run "rank.py --setup", or copy {TOK_URL} to {TOK_PATH}')
-        if common.sha256_file(part) != TOK_SHA:
-            part.unlink()
-            sys.exit(f'the tokenizer downloaded from {TOK_URL} does not match its pinned SHA-256; not used')
-        part.replace(TOK_PATH)
+    fetch(TOK_URL, TOK_PATH, TOK_SHA, 'the tokenizer', 'rank.py needs it once, also with --dry and local', 'rank.py --setup')
     if common.sha256_file(TOK_PATH) != TOK_SHA:
         sys.exit(f'{TOK_PATH} is not the pinned tokenizer (revision {TOK_REV[:7]}). Delete it and run "rank.py --setup"')
     return Tokenizer.from_file(str(TOK_PATH))
+
+
+def fetch(url, path, want, what, why, setup):
+    """Download url to path once; a partial download or one with the wrong SHA-256 never lands at path."""
+    if path.exists():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    part = path.with_suffix('.part')
+    try:
+        urllib.request.urlretrieve(url, part)
+    except OSError as e:
+        part.unlink(missing_ok=True)
+        sys.exit(f'cannot download {what} ({e}). {why}: connect to the internet and run "{setup}", or copy {url} to {path}')
+    if common.sha256_file(part) != want:
+        part.unlink()
+        sys.exit(f'{what} downloaded from {url} does not match its pinned SHA-256; not used')
+    part.replace(path)
+
+
+def local_model():
+    """potion-multilingual-128M at a pinned revision, downloaded once (531 MB) and checked against its SHA-256 on every
+    load. Returns texts -> unit-norm vectors: the mean of the texts' static token vectors, as model2vec computes them."""
+    from tokenizers import Tokenizer
+    for f, want in LOCAL_FILES.items():
+        fetch(f'https://huggingface.co/{LOCAL}/resolve/{LOCAL_REV}/{f}', LOCAL_DIR / f, want, f'the local model ({f})',
+              'The local provider needs it once (531 MB)', 'rank.py --setup --provider local')
+        if common.sha256_file(LOCAL_DIR / f) != want:
+            sys.exit(f'{LOCAL_DIR / f} is not the pinned local model (revision {LOCAL_REV[:7]}). Delete it and run '
+                     f'"rank.py --setup --provider local"')
+    path = LOCAL_DIR / 'model.safetensors'
+    with open(path, 'rb') as fh:
+        n = int.from_bytes(fh.read(8), 'little')
+        shape = json.loads(fh.read(n))['embeddings']['shape']
+    emb = np.memmap(path, np.float32, 'r', offset=8 + n, shape=tuple(shape))
+    tok = Tokenizer.from_file(str(LOCAL_DIR / 'tokenizer.json'))
+
+    def vecs(texts):
+        V = np.array([emb[e.ids].mean(0) if e.ids else np.zeros(shape[1]) for e in
+                      tok.encode_batch(list(texts), add_special_tokens=False)], float).reshape(-1, shape[1])
+        return V / np.maximum(np.linalg.norm(V, axis=1, keepdims=True), 1e-12)
+    return vecs
 
 
 def need_pdftotext():
@@ -529,7 +564,7 @@ def questions_log(cfg, qfile):
 
 def csv_name(out, name, variant):
     """<out>_<name>_rank.csv for the default hybrid run (name from the queries file, else paper-lector); dense and
-    bm25 runs keep their variant in the file name."""
+    local runs keep their variant in the file name."""
     return f'{out}_{name}_rank.csv' if variant == 'hybrid' else f'{out}_{name}_rank-{variant}.csv'
 
 
@@ -559,7 +594,7 @@ def main(argv=None):
     ap.add_argument('--queries', help='queries file (default: "queries" in the config)')
     ap.add_argument('--dirs', help='comma-separated PDF folders (default: "pdf_dirs" in the config)')
     ap.add_argument('--ids', help='CSV with a "paper" column (and optionally "sha256"): rank exactly these papers (frozen corpus)')
-    ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or bm25 (no API key); default: "rank" in the config, else voyage')
+    ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or local (no API key); default: "rank" in the config, else voyage')
     ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation); voyage only')
     ap.add_argument('--abstracts', help='comma-separated search JSONL files: also rank every paper on its abstract, '
                     'including results with no PDF (abs_fused_rank, source abstract_only)')
@@ -568,12 +603,15 @@ def main(argv=None):
     ap.add_argument('--dry', action='store_true', help='build windows, print counts and the token estimate; no API call')
     ap.add_argument('--out', help='output path prefix (default: runs/<date>_<time> next to the config, for example '
                     'runs/2026-10-17_2315)')
-    ap.add_argument('--setup', action='store_true', help='check pdftotext and download the tokenizer once, then exit')
+    ap.add_argument('--setup', action='store_true', help='check pdftotext and download the tokenizer once (with --provider local also the local model), then exit')
     a = ap.parse_args(argv)
     need_pdftotext()
     if a.setup:
         tokenizer()
-        print(f'ready: pdftotext {shutil.which("pdftotext")}, tokenizer {TOK_PATH}')
+        if a.provider == 'local':
+            local_model()
+        print(f'ready: pdftotext {shutil.which("pdftotext")}, tokenizer {TOK_PATH}'
+              + (f', local model {LOCAL_DIR}' if a.provider == 'local' else ''))
         return
     cfg = common.load_config(a.config, required=not (a.dirs and a.queries))
     qpath = a.queries or (cfg and cfg['queries'])
@@ -620,10 +658,10 @@ def main(argv=None):
     variants = a.variants.split(',')
     if any(v not in ('hybrid', 'dense') for v in variants):
         sys.exit('--variants takes hybrid and/or dense')
-    if provider == 'bm25':
+    if provider == 'local':
         if variants != ['hybrid']:
             sys.exit('--variants applies to the voyage provider only')
-        variants = ['bm25']
+        variants = ['local']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
     outs = [Path(run_name(a.out, a.name))] + [Path(csv_name(a.out, a.name, v)) for v in variants]
@@ -708,7 +746,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         + sum(sum(ntok(x['doc']) for x in AR) + ntok(q['text']) * len(AR) for q in Q.values())
     print(f'{len(P)} papers, {len(W)} windows, bibliography cut in {sum(p["bib_cut"] for p in P)}, '
           f'abstract found in {sum(p["abstract_found"] for p in P)}; {len(Q)} queries, fuse {fuse}; '
-          + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider bm25, no API call'), file=sys.stderr)
+          + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider local, no API call'), file=sys.stderr)
     if provider == 'voyage':                 # stop before any paid call rather than on the API's refusal half-way
         qmax = max((ntok(q['text']) for q in Q.values()), default=0)
         long = [(p['id'], n) for p, n in zip(P, pkg_n) if n + qmax > RERANK_PAIR] \
@@ -738,13 +776,16 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             E = embed([(w['text'], w['n']) for w in W], 'document', usage,
                       [(P[w['paper']]['sha256'], j - P[w['paper']]['wins'][0], w['pages']) for j, w in enumerate(W)])
             QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage, [(qsha, i, '') for i in Q])
+    else:
+        vecs = local_model()
+        E, QE = vecs(w['text'] for w in W), vecs(q['text'] for q in Q.values())
 
     abs_rows = {}
     if AR:
         for qid, q in Q.items():
             col = f'{qid}_{q["label"]}'
-            if provider == 'bm25':
-                sc = dict(enumerate(map(float, bm25_scores([x['doc'] for x in AR], q['keywords'] or q['text']))))
+            if provider == 'local':
+                sc = dict(enumerate(map(float, vecs(x['doc'] for x in AR) @ vecs([q['text']])[0])))
             else:
                 sc, qn = {}, ntok(q['text'])
                 items = [{'i': i, 'n': ntok(x['doc']) + qn} for i, x in enumerate(AR)]
@@ -770,7 +811,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         sanity = None
         for qi, (qid, q) in enumerate(Q.items() if P else []):      # no PDFs: abstract order only
             col = f'{qid}_{q["label"]}'
-            cos = E @ QE[qi] if variant != 'bm25' else None
+            cos = E @ QE[qi]
             lex = bm25_scores([w['text'] for w in W], q['keywords'] or q['text']) if variant != 'dense' else None
             pkgs = []
             for pi, p in enumerate(P):
@@ -783,9 +824,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                 text = 'Abstract: ' + p['head'] + ''.join(f"\n\n[{W[j]['pages']}] {W[j]['text']}" for j in chosen)
                 pkgs.append({'pi': pi, 'text': text, 'n': ntok(text), 'pages': '; '.join(W[j]['pages'] for j in chosen)})
             qn, score = ntok(q['text']), {}
-            if variant == 'bm25':
-                score = {k['pi']: float(v) for k, v in zip(pkgs, bm25_scores([k['text'] for k in pkgs], q['keywords'] or q['text']))}
-            for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH, MAX_ITEMS) if variant != 'bm25' else []):
+            if variant == 'local':
+                score = {k['pi']: float(v) for k, v in zip(pkgs, vecs(k['text'] for k in pkgs) @ QE[qi])}
+            for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH, MAX_ITEMS) if variant != 'local' else []):
                 r = call('rerank', {'query': q['text'], 'documents': [k['text'] for k in part], 'model': RERANK, 'truncation': False})
                 usage['rerank'] += r['usage']['total_tokens']
                 for x in r['data']:
@@ -842,7 +883,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         commit = ''
     run = {'created': datetime.datetime.now().isoformat(timespec='seconds'), 'paper_lector_commit': commit,
            'question': question, 'queries': Q, 'queries_sha': qsha, 'fuse': fuse,
-           'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else None,
+           'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else f'{LOCAL}@{LOCAL_REV}',
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'versions': versions(),
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},

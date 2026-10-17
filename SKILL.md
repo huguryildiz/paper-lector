@@ -12,7 +12,7 @@ PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/nul
 PY=$PL/.venv/bin/python        # arm64 venv with numpy and tokenizers; pdftotext must be on PATH
 ```
 
-On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It checks for `pdftotext` (printing the install command if missing) and downloads the tokenizer that every rank run needs, also `--dry` and `bm25`. After that, the `bm25` provider works offline.
+On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It checks for `pdftotext` (printing the install command if missing) and downloads the tokenizer that every rank run needs, also `--dry` and `local`. With `--provider local` it also downloads the local model (531 MB, once); after that, the `local` provider works offline.
 
 | Step | Command | Output |
 | --- | --- | --- |
@@ -43,7 +43,7 @@ Every script looks for `literature.json`, starting in the current folder and wal
 - `queries`: the frozen queries file for `rank.py`. Keep queries files in a `queries/` folder named after their `name` (`queries/entanglement-scheduling.json`; a revision of the same question is `queries/entanglement-scheduling-v2.json` with the same `name`). The project keeps one `questions.jsonl`, beside the config's queries file (else in `queries/`), so every queries file is checked against the same history wherever it lies.
 
 A project then looks like this: `literature.json`, `sources.csv`, `queries/` (queries files and `questions.jsonl`), `pdfs/` (PDFs and `fetch_log.jsonl`) and `runs/` (every search and rank output, named by date, time, name and kind).
-- `rank` (optional): `{"provider": "voyage"}` (default) or `{"provider": "bm25"}`. `--provider` overrides it for one run.
+- `rank` (optional): `{"provider": "voyage"}` (default) or `{"provider": "local"}`. `--provider` overrides it for one run.
 
 If there is no `literature.json`, ask the user once where their PDFs are, then write the file. Do not guess.
 
@@ -81,7 +81,7 @@ Check only the keys the run needs: OpenAlex for search and fetch, Voyage for ran
 mkdir -p ~/.config/paper-lector && read -rs "k?<NAME>: " && echo "<NAME>=$k" >> ~/.config/paper-lector/.env && unset k
 ```
 
-In bash the `read` part is `read -rsp "<NAME>: " k`. Options: "I added it, continue" (recommended; run the check again, and ask again if it is still missing), "Use bm25 instead" (Voyage only, see "No Voyage key" below), "Continue without a key" (OpenAlex only), "Stop". If OpenAlex answers 401 or 403 later, the key is there but wrong: say so and show the same screen.
+In bash the `read` part is `read -rsp "<NAME>: " k`. Options: "I added it, continue" (recommended; run the check again, and ask again if it is still missing), "Use the local model instead" (Voyage only; say in its description that it downloads 531 MB once; see "No Voyage key" below), "Continue without a key" (OpenAlex only), "Stop". If OpenAlex answers 401 or 403 later, the key is there but wrong: say so and show the same screen.
 
 OpenAlex without a key: fetch works. Keyword and citing searches return only the first page, at most 200 works; references come back whole (one request per 100); semantic stops at 50 with or without a key. The daily budget is about 100 searches, shared by everyone on the same IP address. The free key (openalex.org, a few minutes) removes the page limit and gives ten times the budget. Say this in the "Continue without a key" description. When a keyless search prints `only the first N of M were written`, report both numbers. When a script stops with `daily budget is used up`, report the reset time and show the key screen.
 
@@ -166,7 +166,7 @@ From the answers, write each slot's `text` and `keywords` by the rules below, sh
 Rules for drafting:
 
 - Each `text` is one English sentence of about 20 to 50 words; each `keywords` is a short BM25 string of the same meaning.
-- If some PDFs are not in English (for example Turkish theses or journal papers), add that language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 matches words, so English keywords alone miss those papers; `voyage-4-large` embeddings and `rerank-3` are multilingual and handle `text` as it is. `rank.py` finds abstract, introduction, bibliography and appendix headings in English, Turkish, German, French, Spanish, Italian, Portuguese and Russian. In other languages it falls back to the first 1,000 tokens and keeps the bibliography; the dry run shows this as `-` in the `abs` and `bib` columns. Chinese, Japanese and Korean text has no spaces between words, so BM25 does not work on it; use the voyage provider for those papers.
+- If some PDFs are not in English (for example Turkish theses or journal papers), add that language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 matches words, so English keywords alone miss those papers; `voyage-4-large` embeddings, `rerank-3` and the local model are multilingual and handle `text` as it is. `rank.py` finds abstract, introduction, bibliography and appendix headings in English, Turkish, German, French, Spanish, Italian, Portuguese and Russian. In other languages it falls back to the first 1,000 tokens and keeps the bibliography; the dry run shows this as `-` in the `abs` and `bib` columns. Chinese, Japanese and Korean text has no spaces between words, so BM25 does not work on it; use the voyage provider for those papers.
 - Spread the vocabularies of neighbouring fields across the set (for example queueing: service discipline, LIFO, buffer; decision theory: policy, Markov decision process). A relevant paper may use another field's words.
 - Put the decision ("which X") in `main`. Do not put a solver in `approach` unless the user intends it.
 - Leave a slot empty rather than padding it. Use two queries with the same label if one slot really needs two angles.
@@ -197,7 +197,7 @@ What happens inside: the whole PDF is split into 1,200-token windows with page l
 
 Output columns: `paper`, `link` (DOI, else arXiv or OpenAlex page), `citation` (authors, year, title, venue, volume, pages; from the search record, so filled with `--abstracts`), `fused_rank`, `fused_score`, then per query `<id>_<label>_rank`, `_score` and `_pages` (the pages the reranker read, a place to start reading), then `tokens`, `bib_cut`, `abstract_found`. `<prefix>_<name>_rank_run.json` records the question, queries, fuse list, models, parameters, corpus ids, token usage and the paper-lector commit.
 
-**No Voyage key.** If `VOYAGE_API_KEY` is missing, the key screen in step ⚙️ offers the `bm25` provider instead of stopping. It makes no API call and has no budget: windows are chosen by BM25 on the keyword string and each paper is scored by BM25 on its abstract plus 3 windows. Output is `<prefix>_<name>_rank-bm25.csv`. Say in the report that BM25 matches words, not meaning, so synonyms are missed and the order is rougher; never compare its scores with a voyage run.
+**No Voyage key.** If `VOYAGE_API_KEY` is missing, the key screen in step ⚙️ offers the `local` provider instead of stopping. It makes no API call and has no budget. It uses `potion-multilingual-128M`, a model2vec model of static token vectors (MIT licence), kept in `~/.cache/paper-lector/`; if it is not there yet, run `$PY $PL/scripts/rank.py --setup --provider local` first and tell the user it downloads 531 MB once. Windows are chosen by fusing its cosine similarity with BM25 on the keyword string, and each paper is scored by the cosine between the query `text` and its abstract plus 3 windows; there is no reranker. Output is `<prefix>_<name>_rank-local.csv`. Say in the report that the order is rougher than a voyage run: on [`examples/qnet`](examples/qnet), 18 PDFs, its fused order agreed with the voyage run at Spearman 0.56 and its abstract order at 0.64 (BM25 alone, the provider it replaces, gave 0.49 and 0.34). Never compare its scores with a voyage run. A config that still says `"provider": "bm25"` stops and asks for `local`.
 
 `--variants hybrid,dense` adds a dense-only ablation (voyage only). `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus; give it a `sha256` column from `corpus.files` in the earlier `_rank_run.json` so a different file under the same id stops the run. If a run stops with `<prefix>_<name>_rank_run.lock exists`, check that no other rank run is going before you delete the lock; never delete a lock or partial output of a run that may still be running.
 

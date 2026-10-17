@@ -19,7 +19,7 @@ The details behind the [README](README.md): what each script writes, how runs ar
 
 API keys are looked up in the environment, then the project's `.env`, then `~/.config/paper-lector/.env`. `OPENALEX_API_KEY` is used by search and fetch; without it, keyword and citing searches return only the first 200 works (references and semantic are not cut) and the daily budget is about 100 searches, shared by everyone on the same IP address. `VOYAGE_API_KEY` is used by `rank.py` with the default `voyage` provider.
 
-`rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
+`rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `local` provider. `rank.py --setup --provider local` also downloads the local model (`minishlab/potion-multilingual-128M`, 531 MB) into `~/.cache/paper-lector/potion-multilingual-128M/`, pinned the same way and checked against its SHA-256 on every load; after that, the `local` provider works fully offline. A local run without the model downloads it first. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
 ## Project layout
 
@@ -35,12 +35,13 @@ API keys are looked up in the environment, then the project's `.env`, then `~/.c
 │   └── fetch_log.jsonl        what fetch_pdf.py saved, and what it could not get
 └── runs/
     ├── <date>_<time>_<name>_<mode>_search.jsonl   with its .query.json
-    ├── <date>_<time>_<name>_rank.csv              _rank-bm25.csv, _rank-dense.csv
+    ├── <date>_<time>_<name>_rank.csv              _rank-local.csv, _rank-dense.csv
     └── <date>_<time>_<name>_rank_run.json
 
 ~/.cache/paper-lector/         shared by every project on the machine
 ├── embeddings.sqlite          vectors (table emb) and where each came from (table src)
-└── voyage-4-large-tokenizer.json
+├── voyage-4-large-tokenizer.json
+└── potion-multilingual-128M/     the local provider's model, 531 MB
 ```
 
 Only `literature.json` has a fixed name. The other paths come from it (`pdf_dirs`, `download_dir`, `sources`, `queries`), so another layout works too; this one is what the agent writes for a new project. Search and rank outputs go to `runs/` next to the config unless `--out` says otherwise, and sort by time, so a search and the rank that used it sit together. `runs/` is reproducible from the logs and usually stays out of git, like the PDFs; [`examples/qnet`](examples/qnet) keeps its runs as a worked example.
@@ -100,7 +101,7 @@ RRF adds up reciprocal ranks with k = 60 (Cormack, Clarke and Büttcher, SIGIR 2
 
 $$\text{fused score}(d) = \sum_{q \in \text{fuse}} \frac{1}{60 + \text{rank}_q(d)}$$
 
-A paper ranked 3rd, 3rd, 1st and 4th on four fused queries scores 1/63 + 1/63 + 1/61 + 1/64 = 0.063764. Ranks are summed rather than scores because reranker scores sit on different scales from one query to the next; the price is that a large score gap and a small one count the same. Tied scores share the better rank. The window choice in step 3 uses the same formula over two ranks, cosine and BM25 (a window with no keyword match gets no BM25 term). The `dense` variant drops BM25 from step 3; the `bm25` provider replaces the embeddings in step 3 and the reranker in step 4 with BM25.
+A paper ranked 3rd, 3rd, 1st and 4th on four fused queries scores 1/63 + 1/63 + 1/61 + 1/64 = 0.063764. Ranks are summed rather than scores because reranker scores sit on different scales from one query to the next; the price is that a large score gap and a small one count the same. Tied scores share the better rank. The window choice in step 3 uses the same formula over two ranks, cosine and BM25 (a window with no keyword match gets no BM25 term). The `dense` variant drops BM25 from step 3; the `local` provider replaces the embeddings in step 3 with the local model and the reranker in step 4 with that model's cosine.
 
 BM25 statistics depend on the whole collection, so after adding PDFs rerank everything rather than only the new files.
 
@@ -110,7 +111,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 
 `rank.py` finds abstract, introduction, bibliography and appendix headings in English, Turkish, German, French, Spanish, Italian, Portuguese and Russian (for example *Özet*, *Zusammenfassung*, *Résumé*, *Kaynaklar*, *Références*, *Литература*). Numbered reference lines with a year also count as a bibliography. In other languages it falls back to the first 1,000 tokens and keeps the bibliography; the dry run shows this as `-` in the `abs` and `bib` columns.
 
-`voyage-4-large` and `rerank-3` are multilingual, so the English `text` of each query works on those papers as it is. BM25 matches words, so add the other language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 tokenises on Unicode letters and drops Turkish stop words. Chinese, Japanese and Korean text has no spaces between words and BM25 does not work on it; use the `voyage` provider for those papers.
+`voyage-4-large`, `rerank-3` and the local model are multilingual, so the English `text` of each query works on those papers as it is. BM25 matches words, so add the other language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 tokenises on Unicode letters and drops Turkish stop words. Chinese, Japanese and Korean text has no spaces between words and BM25 does not work on it; use the `voyage` provider for those papers (the local model's tokenizer reads them, but this has not been tested).
 
 ## Script options
 
@@ -127,10 +128,10 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 | | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |
 | | `--dest DIR` | Save here instead of `download_dir` |
 | `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer, exit |
-| | `--out PREFIX` | Output prefix for `_<name>_rank.csv` (or `_<name>_rank-bm25.csv`, `_<name>_rank-dense.csv`) and `_<name>_rank_run.json`; `<name>` is the queries file's `"name"`, else `paper-lector`. Default: `runs/<date>_<time>` next to the config, with `-2` added when that minute is taken |
+| | `--out PREFIX` | Output prefix for `_<name>_rank.csv` (or `_<name>_rank-local.csv`, `_<name>_rank-dense.csv`) and `_<name>_rank_run.json`; `<name>` is the queries file's `"name"`, else `paper-lector`. Default: `runs/<date>_<time>` next to the config, with `-2` added when that minute is taken |
 | | `--dry` | Build windows, print counts and the token estimate; no API call |
 | | `--budget N` | Stop before any API call if the estimate is above N tokens (default 15M) |
-| | `--provider voyage\|bm25` | Override `rank.provider` for this run |
+| | `--provider voyage\|local` | Override `rank.provider` for this run |
 | | `--queries FILE` / `--dirs A,B` | Override `queries` or `pdf_dirs` from the config |
 | | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus). With a `sha256` column (copy it from `corpus.files` in `_rank_run.json`) a changed file under the same id stops the run. An empty list stops it too |
 | | `--abstracts FILE[,FILE]` | Search JSONL files: rank every paper on its abstract alone as well (`abs_fused_rank`), including search results with no PDF (`source` = `abstract_only`, listed after the PDFs and named like the PDFs `fetch_pdf.py` saves). Each row also gets a `link` (DOI, else arXiv or OpenAlex), a `citation`, and from the search record `cited_by` (OpenAlex citation count), `cited_pct` (its percentile among works of the same field and year) and `cited_at` (the date they were read; counts grow). When two versions of a paper count as one, the most cited version's numbers are kept. Citations are for reading the list only; they never change a rank. A record is tied to its PDF through the sources DOI, an `OK` line in `fetch_log.jsonl` (the file in that log's own folder, SHA-256 checked) or, failing those, its title: at least 80% of its content words in order in the PDF's first 40 words, and one PDF only. Records whose titles are at least 95% alike (a preprint and its published version) count as one paper. Only a real abstract counts in the abstract order (the search record's, else one under an Abstract heading in the PDF); a paper with neither is listed but unranked. With no PDFs at all, the run gives the abstract order alone, and `--ids` listing only `abstract_only` rows is refused. The two orders are kept apart: abstract-only scores run lower than full-text ones |
@@ -141,7 +142,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 
 For now, `rank.py` supports one API: Voyage (`voyage-4-large` embeddings and `rerank-3`). Other embedding or rerank services, such as OpenAI, Cohere or a local Ollama model, are not supported yet. Adding one means a new name in `PROVIDERS` in `scripts/common.py`, a matching request and response format in `call()` in `scripts/rank.py`, and its own API key name. If you need one, open an issue.
 
-The `bm25` provider needs no key and makes no API call (apart from the one-time tokenizer download): windows are chosen by BM25 on each query's keyword string, and each paper is scored by BM25 on its abstract plus those windows. The output is `<out>_<name>_rank-bm25.csv` with the same columns, and `_rank_run.json` records the provider.
+The `local` provider needs no key and makes no API call (apart from the one-time downloads). It uses [`potion-multilingual-128M`](https://huggingface.co/minishlab/potion-multilingual-128M), a [model2vec](https://github.com/MinishLab/model2vec) model: one fixed vector per token, so a text's vector is the mean of its tokens' vectors, computed with numpy and no neural network at run time. Windows are chosen as in step 3, by RRF of this model's cosine and BM25; each paper is then scored by the cosine between the query `text` and its abstract plus those windows, in place of `rerank-3`. 18 PDFs take a few seconds. The output is `<out>_<name>_rank-local.csv` with the same columns, and `_rank_run.json` records the provider and the model with its revision. Expect a rougher order than voyage: on [`examples/qnet`](examples/qnet), 18 PDFs, its fused order agreed with the voyage run at Spearman 0.56 and its abstract order at 0.64 (BM25 alone, the provider it replaces, gave 0.49 and 0.34). The `bm25` provider is gone; a config that names it stops and asks for `local`.
 
 ## Safety
 

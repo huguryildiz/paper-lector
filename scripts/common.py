@@ -5,7 +5,7 @@ from pathlib import Path
 CONFIG_NAME = 'literature.json'
 LABELS = ('main', 'subject', 'approach', 'outcome', 'context', 'comparison')
 DEFAULT_FUSE_LABELS = ('main', 'subject')
-PROVIDERS = ('voyage', 'bm25')
+PROVIDERS = ('voyage', 'local')
 
 
 def find_config(explicit=None, start=None):
@@ -43,6 +43,8 @@ def load_config(explicit=None, required=True, start=None):
         if k in cfg and not isinstance(cfg[k], str):
             sys.exit(f'{path}: "{k}" must be a path string')
     rank = cfg.get('rank', {})
+    if isinstance(rank, dict) and rank.get('provider') == 'bm25':
+        sys.exit(f'{path}: the bm25 provider was replaced by "local" (a model2vec model, no API key): set "rank": {{"provider": "local"}}')
     if not isinstance(rank, dict) or rank.get('provider', 'voyage') not in PROVIDERS:
         sys.exit(f'{path}: "rank" must look like {{"provider": "voyage"}}; provider is one of {", ".join(PROVIDERS)}')
     out = {'root': root, 'path': path, 'pdf_dirs': [(root / d).resolve() for d in cfg['pdf_dirs']]}

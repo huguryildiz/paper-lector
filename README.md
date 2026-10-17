@@ -147,7 +147,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 4. `rerank-3` scores each paper on its abstract plus those windows.
 5. The per-query ranks are combined with Reciprocal Rank Fusion into `fused_rank`.
 
-Without a Voyage key, set `"rank": {"provider": "bm25"}` (or `--provider bm25`): no API call, but BM25 only matches words, so expect a rougher order. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
+Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call, a one-time 531 MB model download, and a rougher order than Voyage. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
 
 ## Tests
 

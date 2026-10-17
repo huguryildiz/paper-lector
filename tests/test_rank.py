@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 import rank
-from conftest import FakeVoyage, WordTokenizer
+from conftest import FakeVoyage, WordTokenizer, local_vecs
 
 
 @pytest.fixture
@@ -13,6 +13,7 @@ def offline(monkeypatch, tmp_path):
     monkeypatch.setattr(rank, 'CACHE', tmp_path / 'cache' / 'embeddings.sqlite')
     monkeypatch.setattr(rank, 'call', fake)
     monkeypatch.setattr(rank, 'tokenizer', WordTokenizer)
+    monkeypatch.setattr(rank, 'local_model', lambda: local_vecs)
     monkeypatch.setattr(rank, 'WIN', 60)
     monkeypatch.setattr(rank, 'STEP', 50)
     monkeypatch.setenv('VOYAGE_API_KEY', 'test')
@@ -93,61 +94,62 @@ def test_missing_id_fails(project, offline, monkeypatch):
         rank.main(['--out', str(project / 'runs/x'), '--ids', str(project / 'ids.csv')])
 
 
-def test_bm25_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_path):
+def test_local_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_path):
     monkeypatch.chdir(project)
     monkeypatch.setenv('HOME', str(tmp_path / 'home'))
     monkeypatch.delenv('VOYAGE_API_KEY')
     (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "sources": "sources.csv", "queries": "queries/queries.json", '
-                                             '"rank": {"provider": "bm25"}}')
+                                             '"rank": {"provider": "local"}}')
     rank.main(['--out', str(project / 'runs/b'), '--budget', '10'])   # budget only guards API tokens
     assert offline.calls == []
-    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector_rank-bm25.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector_rank-local.csv')))
     assert rows[0]['paper'] == 'Switch2024'
     assert {r['paper']: int(r['Q3_context_rank']) for r in rows}['Ocean2023'] == 1
     assert all(r['Q0_main_pages'] for r in rows)
     run = json.load(open(project / 'runs/b_paper-lector_rank_run.json'))
-    assert run['models']['provider'] == 'bm25' and run['models']['rerank'] is None and run['usage'] == {}
+    assert run['models']['provider'] == 'local' and run['models']['rerank'] is None
+    assert run['models']['embed'] == f'{rank.LOCAL}@{rank.LOCAL_REV}' and run['usage'] == {}
 
 
 def test_provider_flag_overrides_config(project, offline, monkeypatch):
     monkeypatch.chdir(project)
-    rank.main(['--out', str(project / 'runs/f'), '--provider', 'bm25'])
-    assert offline.calls == [] and (project / 'runs/f_paper-lector_rank-bm25.csv').exists()
+    rank.main(['--out', str(project / 'runs/f'), '--provider', 'local'])
+    assert offline.calls == [] and (project / 'runs/f_paper-lector_rank-local.csv').exists()
 
 
-def test_bm25_rejects_variants(project, offline, monkeypatch):
+def test_local_rejects_variants(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     with pytest.raises(SystemExit, match='voyage provider only'):
-        rank.main(['--out', str(project / 'runs/v'), '--provider', 'bm25', '--variants', 'dense'])
+        rank.main(['--out', str(project / 'runs/v'), '--provider', 'local', '--variants', 'dense'])
 
 
 def test_changed_queries_refuse_previous_out(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     out = str(project / 'runs/q')
-    rank.main(['--out', out, '--provider', 'bm25'])
+    rank.main(['--out', out, '--provider', 'local'])
     with pytest.raises(SystemExit, match='already exists'):            # same queries: never overwrite a run
-        rank.main(['--out', out, '--provider', 'bm25'])
-    rank.main(['--out', out, '--provider', 'bm25', '--dry'])           # a dry run writes nothing, so it may reuse it
+        rank.main(['--out', out, '--provider', 'local'])
+    rank.main(['--out', out, '--provider', 'local', '--dry'])           # a dry run writes nothing, so it may reuse it
     q = project / 'queries/queries.json'
     q.write_text(q.read_text().replace('"question"', '"fuse": ["Q0", "Q3"], "question"'))
     with pytest.raises(SystemExit, match='different question, queries or fuse'):
-        rank.main(['--out', out, '--provider', 'bm25', '--dry'])
+        rank.main(['--out', out, '--provider', 'local', '--dry'])
     with pytest.raises(SystemExit, match='ranked before with a different question'):   # edited after a run
-        rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])
+        rank.main(['--out', str(project / 'runs/q2'), '--provider', 'local'])
     (project / 'queries/queries2.json').write_text(q.read_text())
-    rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25', '--queries', str(project / 'queries/queries2.json')])
+    rank.main(['--out', str(project / 'runs/q2'), '--provider', 'local', '--queries', str(project / 'queries/queries2.json')])
 
 
 def test_default_out_is_dated_and_each_run_is_logged(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     monkeypatch.setattr(rank, 'stamp', lambda: '2026-10-17_2315')
-    rank.main(['--provider', 'bm25'])
-    rank.main(['--provider', 'bm25'])                                   # same minute: a suffix, never an overwrite
-    assert sorted(p.name for p in (project / 'runs').glob('*.csv')) == ['2026-10-17_2315-2_paper-lector_rank-bm25.csv', '2026-10-17_2315_paper-lector_rank-bm25.csv']
+    rank.main(['--provider', 'local'])
+    rank.main(['--provider', 'local'])                                   # same minute: a suffix, never an overwrite
+    assert sorted(p.name for p in (project / 'runs').glob('*.csv')) == ['2026-10-17_2315-2_paper-lector_rank-local.csv', '2026-10-17_2315_paper-lector_rank-local.csv']
     log = [json.loads(l) for l in open(project / 'queries/questions.jsonl')]
     assert [e['out'] for e in log] == ['runs/2026-10-17_2315', 'runs/2026-10-17_2315-2']
     assert log[0]['question'].startswith('Which user should receive') and log[0]['queries'] == 'queries.json'
-    rank.main(['--provider', 'bm25', '--dry'])                          # a dry run is not logged
+    rank.main(['--provider', 'local', '--dry'])                          # a dry run is not logged
     assert len(open(project / 'queries/questions.jsonl').readlines()) == 2
 
 
@@ -196,12 +198,12 @@ def test_unreadable_pdf_recorded_and_fails_frozen_ids(project, offline, monkeypa
     from conftest import make_pdf
     monkeypatch.chdir(project)
     make_pdf(project / 'papers/topic/Scan2020.pdf', [[]])
-    rank.main(['--out', str(project / 'runs/s'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/s'), '--provider', 'local'])
     run = json.load(open(project / 'runs/s_paper-lector_rank_run.json'))
     assert run['corpus']['skipped'][0]['id'] == 'Scan2020' and 'Scan2020' not in run['corpus']['ids']
     (project / 'ids.csv').write_text('paper\nScan2020\nOcean2023\n')
     with pytest.raises(SystemExit, match='frozen corpus is incomplete'):
-        rank.main(['--out', str(project / 'runs/s2'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+        rank.main(['--out', str(project / 'runs/s2'), '--provider', 'local', '--ids', str(project / 'ids.csv')])
 
 
 def test_identical_copy_skipped_and_near_duplicate_reported(project, offline, monkeypatch):
@@ -214,7 +216,7 @@ def test_identical_copy_skipped_and_near_duplicate_reported(project, offline, mo
         ['Age based scheduling at a quantum switch (preprint)', 'Abstract',
          'We study which user receives a stored entangled pair.'] + ['lorem ipsum dolor sit amet consectetur'] * 40,
         ['Our policy serves the youngest stored pair first', 'threshold structure of the optimal policy']])
-    rank.main(['--out', str(project / 'runs/dup'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/dup'), '--provider', 'local'])
     run = json.load(open(project / 'runs/dup_paper-lector_rank_run.json'))
     kept = [i for i in run['corpus']['ids'] if i in ('Switch2024', 'SwitchCopy')]
     assert len(kept) == 1                                                  # byte-identical copy not ranked twice
@@ -293,7 +295,7 @@ def test_pdftotext_failure_is_skipped_not_ranked(project, offline, monkeypatch):
             return subprocess.CompletedProcess(cmd, 1, 'partial text ' * 200, 'Syntax Error: broken xref')
         return real(cmd, **kw)
     monkeypatch.setattr(rank.subprocess, 'run', fake)
-    rank.main(['--out', str(project / 'runs/f'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/f'), '--provider', 'local'])
     run = json.load(open(project / 'runs/f_paper-lector_rank_run.json'))
     assert 'Ocean2023' not in run['corpus']['ids']
     assert 'broken xref' in run['corpus']['skipped'][0]['reason']
@@ -309,14 +311,14 @@ def test_empty_ids_file_is_refused(project, offline, monkeypatch):
 
 def test_ids_with_sha256_catch_a_changed_file(project, offline, monkeypatch):
     monkeypatch.chdir(project)
-    rank.main(['--out', str(project / 'runs/a'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/a'), '--provider', 'local'])
     files = json.load(open(project / 'runs/a_paper-lector_rank_run.json'))['corpus']['files']
     (project / 'ids.csv').write_text('paper,sha256\n' + ''.join(f"{f['id']},{f['sha256']}\n" for f in files))
-    rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+    rank.main(['--out', str(project / 'runs/b'), '--provider', 'local', '--ids', str(project / 'ids.csv')])
     from conftest import make_pdf
     make_pdf(project / 'papers/topic/Ocean2023.pdf', [['a different paper now'] * 40])
     with pytest.raises(SystemExit, match='SHA-256 differs'):
-        rank.main(['--out', str(project / 'runs/c'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+        rank.main(['--out', str(project / 'runs/c'), '--provider', 'local', '--ids', str(project / 'ids.csv')])
 
 
 def test_partial_outputs_and_lock_stop_a_second_run(project, offline, monkeypatch):
@@ -350,10 +352,10 @@ def test_formula_like_paper_id_is_escaped_in_csv(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     src = project / 'papers/topic/Ocean2023.pdf'
     src.rename(src.with_name('=1+1.pdf'))
-    rank.main(['--out', str(project / 'runs/x'), '--provider', 'bm25'])
-    rows = list(csv.DictReader(open(project / 'runs/x_paper-lector_rank-bm25.csv')))
+    rank.main(['--out', str(project / 'runs/x'), '--provider', 'local'])
+    rows = list(csv.DictReader(open(project / 'runs/x_paper-lector_rank-local.csv')))
     assert "'=1+1" in {r['paper'] for r in rows}
-    rank.main(['--out', str(project / 'runs/y'), '--provider', 'bm25', '--ids', str(project / 'runs/x_paper-lector_rank-bm25.csv')])
+    rank.main(['--out', str(project / 'runs/y'), '--provider', 'local', '--ids', str(project / 'runs/x_paper-lector_rank-local.csv')])
     assert '=1+1' in json.load(open(project / 'runs/y_paper-lector_rank_run.json'))['corpus']['ids']      # the CSV works as --ids again
 
 
@@ -362,8 +364,36 @@ def test_id_that_really_starts_with_a_quote_is_kept(project, offline, monkeypatc
     src = project / 'papers/topic/Ocean2023.pdf'
     src.rename(src.with_name("'=x.pdf"))
     (project / 'ids.csv').write_text("paper\n'=x\n")
-    rank.main(['--out', str(project / 'runs/q'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+    rank.main(['--out', str(project / 'runs/q'), '--provider', 'local', '--ids', str(project / 'ids.csv')])
     assert json.load(open(project / 'runs/q_paper-lector_rank_run.json'))['corpus']['ids'] == ["'=x"]
+
+
+def test_local_model_download_fails_cleanly(monkeypatch, tmp_path):
+    import urllib.request
+    monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path / 'm')
+    def no_net(url, path):
+        open(path, 'w').write('partial')
+        raise OSError('no network')
+    monkeypatch.setattr(urllib.request, 'urlretrieve', no_net)
+    with pytest.raises(SystemExit, match='531 MB.*rank.py --setup --provider local'):
+        rank.local_model()
+    assert list((tmp_path / 'm').iterdir()) == []                       # no half file left
+
+
+def test_local_model_with_wrong_hash_is_refused(monkeypatch, tmp_path):
+    monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path)
+    for f in rank.LOCAL_FILES:
+        (tmp_path / f).write_text('{}')
+    with pytest.raises(SystemExit, match='not the pinned local model'):
+        rank.local_model()
+
+
+@pytest.mark.skipif(not (rank.LOCAL_DIR / 'model.safetensors').exists(), reason='local model not cached; run rank.py --setup --provider local')
+def test_real_local_model_vectors():
+    V = rank.local_model()(['quantum switch scheduling', 'kuantum anahtarında zamanlama', 'seawater attenuation', ''])
+    assert V.shape[0] == 4 and np.allclose(np.linalg.norm(V[:3], axis=1), 1) and not V[3].any()
+    assert V[0] @ V[1] > V[0] @ V[2]                                     # multilingual: the Turkish phrase is closer
+    assert rank.local_model()([]).shape == (0, V.shape[1])
 
 
 def test_tokenizer_with_wrong_hash_is_refused(monkeypatch, tmp_path):
@@ -375,7 +405,7 @@ def test_tokenizer_with_wrong_hash_is_refused(monkeypatch, tmp_path):
 
 def test_run_record_has_files_and_versions(project, offline, monkeypatch):
     monkeypatch.chdir(project)
-    rank.main(['--out', str(project / 'runs/v'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/v'), '--provider', 'local'])
     run = json.load(open(project / 'runs/v_paper-lector_rank_run.json'))
     assert all(len(f['sha256']) == 64 for f in run['corpus']['files'])
     assert run['versions']['tokenizer_revision'] == rank.TOK_REV and run['versions']['pdftotext']
@@ -436,11 +466,11 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert len(list(csv.DictReader(open(project / 'runs/a2_paper-lector_rank.csv')))) == 3
 
 
-def test_abstracts_with_bm25_and_without_flag(project, offline, monkeypatch):
+def test_abstracts_with_local_and_without_flag(project, offline, monkeypatch):
     monkeypatch.chdir(project)
-    rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--abstracts', str(search_file(project))])
+    rank.main(['--out', str(project / 'runs/b'), '--provider', 'local', '--abstracts', str(search_file(project))])
     assert offline.calls == []
-    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector_rank-bm25.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector_rank-local.csv')))
     assert {r['paper']: r['abs_fused_rank'] for r in rows}['Lovelace2025_SwitchMemorySchedulingWaitingUsers'] != ''
     rank.main(['--out', str(project / 'runs/c')])
     rows = list(csv.DictReader(open(project / 'runs/c_paper-lector_rank.csv')))
@@ -453,17 +483,17 @@ def test_queries_name_names_the_files_and_stays_with_the_question(project, offli
     monkeypatch.setattr(rank, 'stamp', lambda: '2026-10-17_2315')
     q = project / 'queries/queries.json'
     q.write_text(q.read_text().replace('{\n "question"', '{\n "name": "switch-scheduling",\n "question"'))
-    rank.main(['--provider', 'bm25'])
-    assert [p.name for p in (project / 'runs').glob('*.csv')] == ['2026-10-17_2315_switch-scheduling_rank-bm25.csv']
+    rank.main(['--provider', 'local'])
+    assert [p.name for p in (project / 'runs').glob('*.csv')] == ['2026-10-17_2315_switch-scheduling_rank-local.csv']
     assert json.loads(open(project / 'queries/questions.jsonl').readline())['name'] == 'switch-scheduling'
     q.write_text(q.read_text().replace('switch-scheduling', 'switch-queues'))       # renamed after a run: refused
     with pytest.raises(SystemExit, match='ranked before with a different question'):
-        rank.main(['--provider', 'bm25', '--dry'])
+        rank.main(['--provider', 'local', '--dry'])
     (project / 'queries/queries2.json').write_text(q.read_text())                          # same question, other name
     with pytest.raises(SystemExit, match='ranked before as "switch-scheduling"'):
-        rank.main(['--provider', 'bm25', '--dry', '--queries', str(project / 'queries/queries2.json')])
+        rank.main(['--provider', 'local', '--dry', '--queries', str(project / 'queries/queries2.json')])
     (project / 'queries/queries2.json').write_text(q.read_text().replace('switch-queues', 'switch-scheduling'))
-    rank.main(['--provider', 'bm25', '--queries', str(project / 'queries/queries2.json')])  # revised queries, same name
+    rank.main(['--provider', 'local', '--queries', str(project / 'queries/queries2.json')])  # revised queries, same name
 
 
 @pytest.mark.parametrize('name', ['Switch', 'switch_scheduling', 'a' * 26, '-switch', 'switch--x', 7])
@@ -619,16 +649,16 @@ def test_cache_ties_each_vector_to_its_pdf_window_or_query(project, offline, mon
 
 def test_one_out_prefix_holds_one_queries_name(project, offline, monkeypatch):
     monkeypatch.chdir(project)
-    rank.main(['--out', str(project / 'runs/q'), '--provider', 'bm25'])
+    rank.main(['--out', str(project / 'runs/q'), '--provider', 'local'])
     q2 = project / 'queries/other.json'
     q2.write_text((project / 'queries/queries.json').read_text().replace('{\n "question": "Which', '{\n "name": "other",\n "question": "Whom'))
     with pytest.raises(SystemExit, match='already holds a run of "paper-lector"'):
-        rank.main(['--out', str(project / 'runs/q'), '--provider', 'bm25', '--queries', str(q2)])
-    rank.main(['--out', str(project / 'runs/q_2'), '--provider', 'bm25', '--queries', str(q2)])   # q_2 is not q
-    rank.main(['--out', str(project / 'runs/q-[x]'), '--provider', 'bm25', '--queries', str(q2)])  # glob characters
+        rank.main(['--out', str(project / 'runs/q'), '--provider', 'local', '--queries', str(q2)])
+    rank.main(['--out', str(project / 'runs/q_2'), '--provider', 'local', '--queries', str(q2)])   # q_2 is not q
+    rank.main(['--out', str(project / 'runs/q-[x]'), '--provider', 'local', '--queries', str(q2)])  # glob characters
     (project / 'runs/old_run.json').write_text('{}')                     # a run record from before the _rank names
     with pytest.raises(SystemExit, match='older paper-lector'):
-        rank.main(['--out', str(project / 'runs/old'), '--provider', 'bm25'])
+        rank.main(['--out', str(project / 'runs/old'), '--provider', 'local'])
 
 
 @pytest.mark.parametrize('search_abstract, kept', [
@@ -655,17 +685,17 @@ def test_one_questions_log_per_project(project, offline, monkeypatch):
     (project / 'old').mkdir()
     moved = project / 'old/q.json'
     moved.write_text(base)
-    rank.main(['--out', str(project / 'runs/a'), '--provider', 'bm25', '--queries', 'old/q.json'])
+    rank.main(['--out', str(project / 'runs/a'), '--provider', 'local', '--queries', 'old/q.json'])
     log = [json.loads(l) for l in open(project / 'queries/questions.jsonl')]           # the project's one log
     assert log[-1]['queries'] == '../old/q.json' and not (project / 'old/questions.jsonl').exists()
     other = project / 'queries/renamed.json'                                   # same question, other name, other folder
     other.write_text(base.replace('{\n "question"', '{\n "name": "renamed",\n "question"'))
     with pytest.raises(SystemExit, match='ranked before as "paper-lector"'):
-        rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--queries', str(other)])
+        rank.main(['--out', str(project / 'runs/b'), '--provider', 'local', '--queries', str(other)])
     moved.write_text(base.replace('"question"', '"fuse": ["Q0", "Q3"], "question"'))
     monkeypatch.chdir(project / 'papers')                                      # another folder, a relative path
     with pytest.raises(SystemExit, match='ranked before with a different question'):
-        rank.main(['--out', str(project / 'runs/c'), '--provider', 'bm25', '--queries', '../old/q.json',
+        rank.main(['--out', str(project / 'runs/c'), '--provider', 'local', '--queries', '../old/q.json',
                    '--config', str(project / 'literature.json')])
 
 
@@ -677,4 +707,4 @@ def test_older_log_beside_the_queries_file_still_counts(project, offline, monkey
     (project / 'literature/questions.jsonl').write_text(json.dumps({'queries': 'queries.json', 'queries_sha': 'older',
                                                                      'question': 'x'}) + '\n')
     with pytest.raises(SystemExit, match='ranked before with a different question'):
-        rank.main(['--out', str(project / 'runs/l'), '--provider', 'bm25', '--queries', str(q)])
+        rank.main(['--out', str(project / 'runs/l'), '--provider', 'local', '--queries', str(q)])

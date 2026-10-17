@@ -1,4 +1,4 @@
-"""Offline fixtures: tiny real PDFs, a whitespace tokenizer, and a fake Voyage API."""
+"""Offline fixtures: tiny real PDFs, a whitespace tokenizer, a fake Voyage API and a fake local model."""
 import hashlib, re, sys
 from pathlib import Path
 
@@ -59,6 +59,12 @@ def bag(text, dim=64):
     for t in re.findall(r'[a-z]+', text.lower()):
         v[int(hashlib.md5(t.encode()).hexdigest(), 16) % dim] += 1
     return (v + 1e-3).tolist()
+
+
+def local_vecs(texts):
+    """Stands in for rank.local_model(): unit-norm hashed bag of words."""
+    V = np.array([bag(t, 4096) for t in texts], float).reshape(-1, 4096)
+    return V / np.linalg.norm(V, axis=1, keepdims=True)
 
 
 class FakeVoyage:
