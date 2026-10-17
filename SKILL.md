@@ -16,7 +16,7 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 
 | Step | Command | Output |
 | --- | --- | --- |
-| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: write `rout*` to match routing and routes |
+| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: `schedul*` matches scheduling and schedules. Writes `<file>.query.json` beside it |
 | Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (status `OK` with source URL and SHA-256, or `MANUAL` with title and landing URL); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
 | Rank | `$PY $PL/scripts/rank.py --dry`, then without `--dry` | `runs/<date>_<time>_<name>.csv` and `_run.json` next to the config, and one line in `questions.jsonl` beside the queries file |
 
@@ -93,9 +93,25 @@ OpenAlex without a key: fetch works, and search returns only the first page, at 
 | Citing works | `--cites <DOI, arXiv id or W id>` | Papers that cite one paper; forward in time |
 | References | `--refs <DOI, arXiv id or W id>` | Papers one paper cites; back in time |
 
-Then write one search per chosen mode from the user's topic: a boolean query for keyword (unstemmed: `rout*` for routing and routes; neighbouring fields' words joined with OR), one plain sentence for semantic, or the seed paper's DOI for citing and references (ask for the seed if the user has not named one). Show them all together and ask, on a single-choice screen, "Run this search" (recommended), "Edit it" (the user types the new text in the free-text field), or "Change the mode". Run only after the user approves; never run a query the user has not seen.
+Then write one search per chosen mode from the user's topic: a keyword query (rules below), one plain sentence for semantic, or the seed paper's DOI for citing and references (ask for the seed if the user has not named one). Show them all together and ask, on a single-choice screen, "Run this search" (recommended), "Edit it" (the user types the new text in the free-text field), or "Change the mode". Run only after the user approves; never run a query the user has not seen. After an edit, if you change anything in the user's text (a bracket, a `*`, a term), show the new text on the same screen again; run the user's own text unchanged only when it passes the check below as typed.
 
-Run each approved search into its own `--out` file. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
+A keyword query has two blocks:
+
+    (setting terms, joined by OR) AND (task terms, joined by OR)
+
+- `setting`: the field, system, population or material the question is about.
+- `task`: the problem, intervention or kind of method it looks for there.
+
+- At most 6 terms in total, at least 1 per block (2 + 4, 3 + 3). Fewer is fine; never add a term to fill a place.
+- The task block holds at least one topic term: the problem, the object designed, the process studied, in words any relevant paper would use. Method or algorithm names come only beside one. Check: would a relevant paper that names none of the method terms still be found?
+- Leave out metrics and outcomes (delay, accuracy, energy), which are read from the papers found; words most papers of any field hold (model, method, approach, system, optimization alone); and a term with a general word welded on ("X optimization" when authors write "X").
+- Use the words authors of that field write in titles and abstracts, with common synonyms and abbreviations in the same block.
+- The search is unstemmed: "routing" does not match "routes". Put `*` on a stem that begins only the words you mean (`schedul*`, `entangl*`); `rout*` also matches routine and gives millions. Otherwise list the forms (`routing OR routes`). No `*` inside quotes: OpenAlex refuses `"quantum network*"` in a boolean query; write `"quantum network" OR "quantum networks"`.
+- Quote a multiword term. Give each block its own parentheses and join the blocks with AND.
+
+`openalex_search.py` refuses a query OpenAlex would misread and sends nothing: OR at one level with AND, NOT or plain adjacency (`"quantum switch" scheduling OR "operations research"` returns the works of the phrase alone), a group with OR next to a term without AND, unbalanced quotes or brackets, `*` inside quotes, and more than 5 AND/OR/NOT. Fix the query, then show it again.
+
+Run each approved search into its own `--out` file; the script writes the mode, the query text, the date and the counts to `<file>.query.json` next to it, so the run can be traced and repeated. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
 
 ## Step 2: writing the queries
 

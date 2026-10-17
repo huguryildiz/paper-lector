@@ -118,7 +118,7 @@ PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/nul
 PY=$PL/.venv/bin/python
 
 # find papers and download the open-access ones
-$PY $PL/scripts/openalex_search.py --exact '(underwater AND acoustic) AND (rout* OR relay*) AND (lifetime OR energy)' --out runs/uw.jsonl
+$PY $PL/scripts/openalex_search.py --exact '("underwater acoustic" OR "underwater sensor") AND (routing OR routes OR relay*)' --out runs/uw.jsonl
 $PY $PL/scripts/fetch_pdf.py --from runs/uw.jsonl
 
 # count tokens without calling the API, then rank
@@ -146,7 +146,7 @@ See [`SKILL.md`](SKILL.md) for the query-writing rules and the full agent workfl
 
 | Mode | Flag | What you get | Use it when |
 | --- | --- | --- | --- |
-| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (`rout*` matches routing and routes). The same query on the same OpenAlex data gives the same list | You want a complete, repeatable search and know the field's words |
+| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (`schedul*` matches scheduling and schedules). The same query on the same OpenAlex data gives the same list | You want a complete, repeatable search and know the field's words |
 | Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning to a sentence, even when they use other words. The list can change between runs | You are new to a field, or its papers use many names for one idea |
 | Citing works | `--cites <id>` | Works that cite one paper | You have a key paper and want what came after it |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
@@ -182,7 +182,7 @@ All three scripts look for `literature.json` from the current folder up to the p
 | Script | Option | What it does |
 | --- | --- | --- |
 | `openalex_search.py` | `--semantic TEXT` | Meaning-based search; at most 50 results and not reproducible |
-| | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`rout*` for routing and routes); all pages. The same query on the same OpenAlex snapshot gives the same list |
+| | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`schedul*` for scheduling and schedules); all pages; a query OpenAlex would misread (OR mixed with AND at one level, more than 5 operators) is refused; writes `<out>.query.json` with the query and counts. The same query on the same OpenAlex snapshot gives the same list |
 | | `--cites ID` / `--refs ID` | Works citing ID, or all works ID references (DOI, arXiv id or OpenAlex W id) |
 | | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources` |
 | | `--max N` | Stop after N records (0 = all) |

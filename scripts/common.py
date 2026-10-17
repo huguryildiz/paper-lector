@@ -112,6 +112,11 @@ def openalex_json(url, key, timeout):
             sys.exit(f'OpenAlex daily budget is used up; it resets in about {retry_after(e) // 3600 + 1} h.'
                      + ('' if key else ' Without a key the budget is about 100 searches a day, shared by everyone on'
                         ' this IP address; a free OPENALEX_API_KEY gives ten times that.'))
+        if e.code == 400:
+            try:
+                sys.exit('OpenAlex refused the request: ' + json.load(e).get('message', ''))
+            except ValueError:
+                pass
         raise
 
 

@@ -1,3 +1,4 @@
+import json
 import fetch_pdf
 import openalex_search
 
@@ -222,3 +223,40 @@ def test_spent_daily_budget_stops_with_reset_time(monkeypatch):
     monkeypatch.setattr(openalex_search.common.time, 'sleep', lambda s: pytest.fail('waited for a spent budget'))
     with pytest.raises(SystemExit, match='resets in about 4 h.*free OPENALEX_API_KEY'):
         openalex_search.common.openalex_json('https://api.openalex.org/works', None, timeout=5)
+
+
+@pytest.mark.parametrize('q,bad', [
+    ('"quantum switch" scheduling OR "operations research"', 'mixed'),
+    ('"quantum switch" AND scheduling OR "operations research"', 'mixed'),
+    ('(a OR b) c', 'no operator'),
+    ('(a OR b OR c) AND (d OR e OR f OR g)', '6 AND/OR/NOT'),
+    ('(a OR b', 'unbalanced'), ('"a b', 'unbalanced'),
+    ('("quantum switch" OR "quantum network*") AND schedul*', 'inside quotes'),
+    ('("quantum switch" OR "quantum network") AND (schedul* OR "operations research")', None),
+    ('quantum switch scheduling', None), ('(a OR b) NOT c', None)])
+def test_query_issues(q, bad):
+    issues = openalex_search.query_issues(q)
+    assert (not issues) if bad is None else any(bad in i for i in issues)
+
+
+def test_misread_query_is_not_sent_and_query_record_is_written(project, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    sent = []
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', lambda url, key, timeout: sent.append(url) or
+                        {'results': [{'id': 'https://openalex.org/W1'}], 'meta': {'count': 1, 'next_cursor': None}})
+    with pytest.raises(SystemExit, match='query not sent'):
+        openalex_search.main(['--exact', 'switch scheduling OR routing', '--out', str(tmp_path / 'bad.jsonl')])
+    assert sent == [] and not (tmp_path / 'bad.query.json').exists()
+    openalex_search.main(['--exact', 'switch AND (scheduling OR routing)', '--out', str(tmp_path / 's.jsonl')])
+    rec = json.loads((tmp_path / 's.query.json').read_text())
+    assert rec['mode'] == 'exact' and rec['query'] == 'switch AND (scheduling OR routing)'
+    assert rec['count'] == 1 and rec['written'] == 1 and rec['keyless'] is False
+
+
+def test_openalex_400_shows_its_message(monkeypatch):
+    import io, urllib.error
+    err = urllib.error.HTTPError('u', 400, 'Bad', {}, io.BytesIO(b'{"message": "Wildcards do not work here"}'))
+    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', lambda *a, **k: (_ for _ in ()).throw(err))
+    with pytest.raises(SystemExit, match='OpenAlex refused the request: Wildcards do not work here'):
+        openalex_search.common.openalex_json('https://api.openalex.org/works', 'k', timeout=5)

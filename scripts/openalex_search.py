@@ -10,7 +10,7 @@ Run anywhere inside a project (the key comes from the environment, the project .
 ~/.config/paper-lector/.env; literature.json, when present, marks works already in the sources table):
   python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)' --out runs/x17.jsonl
 """
-import argparse, json, sys, urllib.error, urllib.parse
+import argparse, datetime, json, re, sys, urllib.error, urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -38,6 +38,51 @@ def work_id(x):
 
 def held_dois(cfg):
     return {v['doi']: k for k, v in common.sources(cfg).items() if v['doi']}
+
+
+MAX_OPERATORS = 5
+
+
+def query_issues(q):
+    """What OpenAlex would get wrong without saying so. It reads OR wrongly when OR shares a level with AND, NOT or
+    plain adjacency, or when a group holding OR sits next to a term with no operator: live 2026-10-17,
+    '"quantum switch" scheduling OR "operations research"' returned the 500 works of the phrase alone, the bracketed
+    '"quantum switch" AND (scheduling OR "operations research")' 20. It also slows searches with many operators."""
+    if q.count('"') % 2:
+        return ['unbalanced quotes']
+    tokens = re.findall(r'"[^"]*"|\(|\)|[^\s()"]+', q)
+    issues = [f'{t}: no * or ? inside quotes in a boolean query (OpenAlex answers 400); list the forms'
+              for t in tokens if t.startswith('"') and re.search(r'[*?]', t)] if len(tokens) > 1 else []
+    levels, prev, closed_or = [set()], None, False
+    for t in tokens:
+        if t in ('AND', 'OR', 'NOT'):
+            levels[-1].add('or' if t == 'OR' else 'and')
+            prev, closed_or = 'op', False
+            continue
+        if prev == 'term' and t != ')':          # two operands side by side: OpenAlex reads AND
+            if closed_or:
+                issues.append('a group with OR sits next to a term or group with no operator; write AND between them')
+            levels[-1].add('and')
+        if t == '(':
+            levels.append(set())
+            prev, closed_or = 'open', False
+        elif t == ')':
+            if len(levels) == 1:
+                return ['unbalanced parentheses']
+            closed_or = 'or' in levels.pop()
+            prev = 'term'
+        else:
+            prev, closed_or = 'term', False
+        if {'or', 'and'} <= levels[-1]:
+            issues.append('OR is mixed with AND, NOT or adjacency at one level; put each OR list in its own parentheses')
+    if len(levels) != 1:
+        issues.append('unbalanced parentheses')
+    if {'or', 'and'} <= levels[0]:
+        issues.append('OR is mixed with AND, NOT or adjacency at one level; put each OR list in its own parentheses')
+    n = sum(t in ('AND', 'OR', 'NOT') for t in tokens)
+    if n > MAX_OPERATORS:
+        issues.append(f'{n} AND/OR/NOT operators; at most {MAX_OPERATORS} (6 terms in two blocks)')
+    return list(dict.fromkeys(issues))
 
 
 def record(w, held):
@@ -68,6 +113,8 @@ def main(argv=None):
     ap.add_argument('--config', help='path to literature.json (default: searched upward)')
     ap.add_argument('--max', type=int, default=0, help='stop after this many records (0 = all)')
     a = ap.parse_args(argv)
+    if a.exact and (issues := query_issues(a.exact)):
+        sys.exit('query not sent: ' + '; '.join(issues))
     global KEY
     cfg = common.load_config(a.config, required=False)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
@@ -104,6 +151,11 @@ def main(argv=None):
     if a.refs:
         print(f'references: listed {meta["count"]}, written {len(works)}', file=sys.stderr)
     print(f"count {meta.get('count')}  written {len(works)}  already in sources.csv {n_held}  -> {a.out}", file=sys.stderr)
+    mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k))
+    Path(a.out).with_suffix('.query.json').write_text(json.dumps({
+        'mode': mode, 'query': getattr(a, mode), 'date': datetime.datetime.now().isoformat(timespec='seconds'),
+        'count': meta.get('count'), 'written': len(works), 'already_in_sources': n_held, 'max': a.max or None,
+        'keyless': not KEY, 'out': Path(a.out).name}, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     if not KEY and (meta.get('count') or 0) > len(works) and not a.max:
         print(f'no OPENALEX_API_KEY: only the first {len(works)} of {meta["count"]} were written; a free key gets them all',
               file=sys.stderr)
