@@ -27,6 +27,10 @@
   &nbsp;·&nbsp;
   <a href="#example-underwater-routing-papers">Example</a>
   &nbsp;·&nbsp;
+  <a href="#how-ranking-works">How it works</a>
+  &nbsp;·&nbsp;
+  <a href="#script-options">Options</a>
+  &nbsp;·&nbsp;
   <a href="#ranking-providers">Providers</a>
   &nbsp;·&nbsp;
   <a href="#tests">Tests</a>
@@ -71,7 +75,13 @@ mkdir -p ~/.config/paper-lector
 cp .env.example ~/.config/paper-lector/.env
 ```
 
-On its first run, `rank.py` downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. It uses it to cut windows and count tokens, so the download also happens with `--dry` and with the `bm25` provider.
+Then, once and while online:
+
+```bash
+.venv/bin/python scripts/rank.py --setup
+```
+
+It checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
 ## Example: underwater routing papers
 
@@ -96,7 +106,7 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 
 > Rank my PDFs for this question: which next hop should a node in an underwater acoustic sensor network choose so that the network lives longer?
 
-The agent first checks that the PDF folders hold PDFs; if they are empty, it offers to search OpenAlex and download open-access papers. Then it asks seven questions in a fixed order: the six query slots, then which slots to fuse. Each screen holds as many questions as the agent's question tool allows, so Claude Code shows two screens and Codex may show three. For each slot you take the agent's suggestion, type your own wording, or leave it empty (`main` is required). The agent writes the queries from your answers and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
+The agent first counts the PDFs in `pdf_dirs`. If a folder is missing or empty, it does not start the questions; it offers to search OpenAlex and download open-access papers, to point to another folder, or to stop. Then it asks seven questions in a fixed order: the six query slots, then which slots to fuse. Each screen holds as many questions as the agent's question tool allows, so Claude Code shows two screens and Codex may show three. For each slot you take the agent's suggestion, type your own wording, or leave it empty (`main` is required). The agent writes the queries from your answers and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
 
 **3b. From the shell.** The same steps by hand, run from anywhere inside the project:
 
@@ -118,9 +128,56 @@ $PY $PL/scripts/rank.py --out runs/uw-2026-10-20
 
 `fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite` after each batch, so a rerun, or a run restarted after a crash, pays only for new text; the estimate still counts everything. Dropped connections, timeouts and HTTP 429/5xx are retried.
 
-**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. `runs/uw_run.json` records the question, queries, fuse list, models, token usage, commit and any PDFs skipped for having no text (scanned or protected, under `corpus.skipped`), so the run can be repeated. `rank.py` never overwrites a run: a second run into the same `--out` stops, and so does one whose question, queries or fuse list differ from the saved run. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
+**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. `runs/uw_run.json` records the question, queries, fuse list, models, parameters, corpus ids, token usage and the paper-lector commit, so the run can be repeated. `rank.py` never overwrites a run: a second run into the same `--out` stops, and so does one whose question, queries or fuse list differ from the saved run. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
-See [`SKILL.md`](SKILL.md) for the query-writing rules, the optional `sources` CSV, and the other options (`--cites`, `--refs`, `--expect`, `--ids`, `--variants`).
+**5. Check what was left out or counted twice.** Both the dry run and `_run.json` report two kinds of problem paper:
+
+- PDFs with no extractable text (scanned images or protected files) are skipped and listed under `corpus.skipped`. They are missing from the order; run OCR on them or read them yourself. A `--ids` run stops if any listed paper has no text, since its frozen corpus would be incomplete.
+- Byte-identical copies of a PDF are skipped with a note. Papers whose abstracts share most of their words (often a preprint and its published version) are ranked both times and listed under `corpus.possible_duplicates`. Move one copy out of `pdf_dirs` and rerun into a new `--out`.
+
+See [`SKILL.md`](SKILL.md) for the query-writing rules and the full agent workflow.
+
+## How ranking works
+
+1. `pdftotext` extracts the whole PDF. The bibliography is cut only when its heading is found with confidence; appendices stay.
+2. The text is split into 1,200-token windows with 200 tokens of overlap, each labelled with the PDF pages it covers.
+3. For each paper and query, windows are ordered by Reciprocal Rank Fusion (k = 60) of `voyage-4-large` cosine similarity and BM25 on the query's keyword string. The best 3 are kept.
+4. `rerank-3` scores each paper once per query on its abstract (or its first 1,000 tokens when no abstract is found) plus those 3 windows.
+5. `fused_rank` is RRF over the queries in `fuse`.
+
+BM25 statistics depend on the whole collection, so after adding PDFs rerank everything rather than only the new files.
+
+### PDFs in other languages
+
+`rank.py` finds abstract, introduction, bibliography and appendix headings in English, Turkish, German, French, Spanish, Italian, Portuguese and Russian (for example *Özet*, *Zusammenfassung*, *Résumé*, *Kaynaklar*, *Références*, *Литература*). Numbered reference lines with a year also count as a bibliography. In other languages it falls back to the first 1,000 tokens and keeps the bibliography; the dry run shows this as `-` in the `abs` and `bib` columns.
+
+`voyage-4-large` and `rerank-3` are multilingual, so the English `text` of each query works on those papers as it is. BM25 matches words, so add the other language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 tokenises on Unicode letters and drops Turkish stop words. Chinese, Japanese and Korean text has no spaces between words and BM25 does not work on it; use the `voyage` provider for those papers.
+
+## Script options
+
+All three scripts look for `literature.json` from the current folder up to the project root (the first folder with `.git`); `--config` points to another one.
+
+| Script | Option | What it does |
+| --- | --- | --- |
+| `openalex_search.py` | `--semantic TEXT` | Meaning-based search; at most 50 results and not reproducible |
+| | `--exact QUERY` | Boolean query on title and abstract; all pages, reproducible |
+| | `--cites ID` / `--refs ID` | Works citing ID, or works ID references (DOI, arXiv id or OpenAlex W id) |
+| | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources` |
+| | `--max N` | Stop after N records (0 = all) |
+| `fetch_pdf.py` | `DOI ...` / `ARXIV_ID ...` | Fetch the listed works |
+| | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py` |
+| | `--dest DIR` | Save here instead of `download_dir` |
+| `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer, exit |
+| | `--out PREFIX` | Output prefix for `_hybrid.csv` (or `_bm25.csv`) and `_run.json` |
+| | `--dry` | Build windows, print counts and the token estimate; no API call |
+| | `--budget N` | Stop before any API call if the estimate is above N tokens (default 15M) |
+| | `--provider voyage\|bm25` | Override `rank.provider` for this run |
+| | `--queries FILE` / `--dirs A,B` | Override `queries` or `pdf_dirs` from the config |
+| | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus) |
+| | `--expect A,B` | Paper ids you expect in the first query's top 10, written down before the run |
+| | `--variants hybrid,dense` | Add a dense-only ablation (voyage only) |
+
+`fetch_pdf.py` keeps a file only if it starts with `%PDF`, never overwrites an existing file, and does not save a download that is byte-identical to a PDF already in the folders. It never works around paywalls, logins or bot checks.
 
 ## Ranking providers
 
@@ -139,7 +196,7 @@ BM25 only matches words, so a paper that says "relay" when the query says "next 
 .venv/bin/python -m pytest -q
 ```
 
-The tests run offline: small generated PDFs, a word tokenizer and a fake Voyage API.
+The tests run offline: small generated PDFs, sample text with headings in each supported language, a word tokenizer and a fake Voyage API. They need `pdftotext` on `PATH`.
 
 ## License
 
