@@ -176,6 +176,9 @@ def sources(cfg):
     return out
 
 
+NAME_MAX = 25
+
+
 def load_queries(path):
     """Validate the queries file. Returns (question, queries in id order with empty slots removed, fuse ids)."""
     try:
@@ -185,6 +188,10 @@ def load_queries(path):
     if not isinstance(data, dict):
         sys.exit(f'{path}: the file must hold one JSON object with "question", "queries" and "fuse"')
     Q = data.get('queries')
+    name = data.get('name')
+    if name is not None and not (isinstance(name, str) and len(name) <= NAME_MAX and re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', name)):
+        sys.exit(f'{path}: "name" must be lowercase letters, digits and single hyphens, at most {NAME_MAX} characters '
+                 f'(for example "entanglement-scheduling"); it names the output files')
     if not isinstance(Q, dict) or not Q:
         sys.exit(f'{path}: needs a "queries" object, e.g. {{"Q0": {{"label": "main", "text": "...", "keywords": "..."}}}}')
     out = {}

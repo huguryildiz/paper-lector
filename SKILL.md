@@ -18,7 +18,7 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 | --- | --- | --- |
 | Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: write `rout*` to match routing and routes |
 | Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (status `OK` with source URL and SHA-256, or `MANUAL` with title and landing URL); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
-| Rank | `$PY $PL/scripts/rank.py --dry`, then without `--dry` | `runs/<date>_<time>_paper-lector.csv` and `_run.json` next to the config, and one line in `questions.jsonl` beside the queries file |
+| Rank | `$PY $PL/scripts/rank.py --dry`, then without `--dry` | `runs/<date>_<time>_<name>.csv` and `_run.json` next to the config, and one line in `questions.jsonl` beside the queries file |
 
 Write outputs outside the project's tracked files (a scratch or `runs/` folder) unless the user asks to keep them.
 
@@ -132,7 +132,7 @@ Each slot question names the slot and what it asks, for example "approach: what 
 
 Without such a tool, ask the same questions in chat, one numbered list per slot, and wait for the reply.
 
-From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run. `rank.py` backs this up: it never overwrites an existing `<prefix>_run.json`, and if that run was made with a different question, queries or fuse list it says so. Use a new queries file and a new `--out`.
+From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Above the table, propose a `name` for the file: two or three words of the question, lowercase with hyphens, at most 25 characters (`entanglement-scheduling`). First read `questions.jsonl` beside the queries file: if the same question was ranked before, reuse its name (`rank.py` refuses another one). The name goes into the file as `"name"` and names every output of its runs; a file without one gives `paper-lector`. Never change a frozen file after seeing results; a revision is a new file and a new run. `rank.py` backs this up: it never overwrites an existing `<prefix>_run.json`, and if that run was made with a different question, queries or fuse list it says so. Use a new queries file and a new `--out`.
 
 Rules for drafting:
 

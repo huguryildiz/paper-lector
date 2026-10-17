@@ -14,14 +14,14 @@ Method:
      orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
   Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
-  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_paper-lector-bm25.csv.
+  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_<name>-bm25.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
   rerun or a run resumed after a crash only pays for new text.
 
   rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
   rank.py --dry                           # counts and token estimate, no API call
-  rank.py                                 # writes runs/<date>_<time>_paper-lector.csv and _run.json, logs questions.jsonl
+  rank.py                                 # writes runs/<date>_<time>_<name>.csv and _run.json, logs questions.jsonl
 """
 import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
@@ -425,9 +425,10 @@ def rel(path, cfg):
     return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
 
-def csv_name(out, variant):
-    """<out>_paper-lector.csv for the default hybrid run; dense and bm25 runs keep their name in the file."""
-    return f'{out}_paper-lector.csv' if variant == 'hybrid' else f'{out}_paper-lector-{variant}.csv'
+def csv_name(out, name, variant):
+    """<out>_<name>.csv for the default hybrid run (name from the queries file, else paper-lector); dense and bm25
+    runs keep their variant in the file name."""
+    return f'{out}_{name}.csv' if variant == 'hybrid' else f'{out}_{name}-{variant}.csv'
 
 
 def stamp():
@@ -472,12 +473,19 @@ def main(argv=None):
     if not qpath:
         sys.exit('no queries file: pass --queries or set "queries" in the config')
     question, Q, fuse = common.load_queries(qpath)
-    qsha = sha(json.dumps({'question': question, 'queries': Q, 'fuse': fuse}, sort_keys=True))
+    name = json.load(open(qpath, encoding='utf-8')).get('name')
+    frozen = {'question': question, 'queries': Q, 'fuse': fuse}
+    qsha = sha(json.dumps(dict(frozen, name=name) if name else frozen, sort_keys=True))   # older files: same hash as before
     log = Path(qpath).parent / 'questions.jsonl'
     seen = [json.loads(l) for l in open(log, encoding='utf-8') if l.strip()] if log.is_file() else []
     if any(e.get('queries') == Path(qpath).name and e.get('queries_sha') != qsha for e in seen):
         sys.exit(f'{qpath} was ranked before with a different question, queries or fuse list ({log}). A frozen queries '
                  f'file is not edited: write the new queries into a new file and rank that')
+    same = {e.get('name') or 'paper-lector' for e in seen if e.get('question') == question}
+    if same and (name or 'paper-lector') not in same:
+        sys.exit(f'this question was ranked before as "{sorted(same)[0]}" ({log}); give the queries file that "name" '
+                 f'so its runs keep one name')
+    a.name = name or 'paper-lector'
     if not a.out:
         base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / stamp()
         a.out, n = str(base), 2
@@ -497,7 +505,7 @@ def main(argv=None):
         variants = ['bm25']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
-    outs = [Path(f'{a.out}_run.json')] + [Path(csv_name(a.out, v)) for v in variants]
+    outs = [Path(f'{a.out}_run.json')] + [Path(csv_name(a.out, a.name, v)) for v in variants]
     lock = Path(f'{a.out}_run.lock')
     if not a.dry:
         if any(p.exists() for p in outs):
@@ -514,7 +522,7 @@ def main(argv=None):
         if not a.dry:
             with open(log, 'a', encoding='utf-8') as f:
                 f.write(json.dumps({'created': datetime.datetime.now().isoformat(timespec='seconds'), 'question': question,
-                                    'queries': Path(qpath).name, 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
+                                    'name': a.name, 'queries': Path(qpath).name, 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
                                     'out': rel(a.out, cfg), 'abstracts': a.abstracts or ''}, ensure_ascii=False) + '\n')
     finally:
         if not a.dry:
@@ -668,7 +676,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),
                        key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
-        path = Path(csv_name(a.out, variant)); path.parent.mkdir(parents=True, exist_ok=True)
+        path = Path(csv_name(a.out, a.name, variant)); path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, 'x', newline='', encoding='utf-8') as f:
             w = csv.writer(f); w.writerow(head)
             for r in order:

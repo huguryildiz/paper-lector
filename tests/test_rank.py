@@ -441,3 +441,29 @@ def test_abstracts_with_bm25_and_without_flag(project, offline, monkeypatch):
     rows = list(csv.DictReader(open(project / 'runs/c_paper-lector.csv')))
     assert all(r['source'] == 'full_text' for r in rows) and 'abs_fused_rank' not in rows[0]
     assert {r['paper']: r['link'] for r in rows} == {'queue2022': 'https://doi.org/10.1/q', 'Switch2024': '', 'Ocean2023': ''}
+
+
+def test_queries_name_names_the_files_and_stays_with_the_question(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    monkeypatch.setattr(rank, 'stamp', lambda: '2026-10-17_2315')
+    q = project / 'queries.json'
+    q.write_text(q.read_text().replace('{\n "question"', '{\n "name": "switch-scheduling",\n "question"'))
+    rank.main(['--provider', 'bm25'])
+    assert [p.name for p in (project / 'runs').glob('*.csv')] == ['2026-10-17_2315_switch-scheduling-bm25.csv']
+    assert json.loads(open(project / 'questions.jsonl').readline())['name'] == 'switch-scheduling'
+    q.write_text(q.read_text().replace('switch-scheduling', 'switch-queues'))       # renamed after a run: refused
+    with pytest.raises(SystemExit, match='ranked before with a different question'):
+        rank.main(['--provider', 'bm25', '--dry'])
+    (project / 'queries2.json').write_text(q.read_text())                          # same question, other name
+    with pytest.raises(SystemExit, match='ranked before as "switch-scheduling"'):
+        rank.main(['--provider', 'bm25', '--dry', '--queries', str(project / 'queries2.json')])
+    (project / 'queries2.json').write_text(q.read_text().replace('switch-queues', 'switch-scheduling'))
+    rank.main(['--provider', 'bm25', '--queries', str(project / 'queries2.json')])  # revised queries, same name
+
+
+@pytest.mark.parametrize('name', ['Switch', 'switch_scheduling', 'a' * 26, '-switch', 'switch--x', 7])
+def test_bad_queries_name_is_refused(project, name):
+    q = project / 'queries.json'
+    q.write_text(q.read_text().replace('{\n "question"', '{\n "name": ' + json.dumps(name) + ',\n "question"'))
+    with pytest.raises(SystemExit, match='"name" must be lowercase'):
+        rank.common.load_queries(q)
