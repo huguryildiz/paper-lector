@@ -12,6 +12,8 @@ PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/nul
 PY=$PL/.venv/bin/python        # arm64 venv with numpy and tokenizers; pdftotext must be on PATH
 ```
 
+On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It checks for `pdftotext` (printing the install command if missing) and downloads the tokenizer that every rank run needs, also `--dry` and `bm25`. After that, the `bm25` provider works offline.
+
 | Step | Command | Output |
 | --- | --- | --- |
 | Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources` |
@@ -86,6 +88,7 @@ From the answers, write each slot's `text` and `keywords` by the rules below, sh
 Rules for drafting:
 
 - Each `text` is one English sentence of about 20 to 50 words; each `keywords` is a short BM25 string of the same meaning.
+- If some PDFs are not in English (for example Turkish theses or journal papers), add that language's terms to `keywords` next to the English ones (`energy routing enerji yönlendirme`). BM25 matches words, so English keywords alone miss those papers; `voyage-4-large` embeddings and `rerank-3` are multilingual and handle `text` as it is. `rank.py` finds Turkish abstract (Özet, Öz), introduction (Giriş), bibliography (Kaynaklar, Kaynakça) and appendix (Ekler, Ek A) headings.
 - Spread the vocabularies of neighbouring fields across the set (for example queueing: service discipline, LIFO, buffer; decision theory: policy, Markov decision process). A relevant paper may use another field's words.
 - Put the decision ("which X") in `main`. Do not put a solver in `approach` unless the user intends it.
 - Leave a slot empty rather than padding it. Use two queries with the same label if one slot really needs two angles.

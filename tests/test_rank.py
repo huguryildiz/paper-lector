@@ -203,3 +203,33 @@ def test_identical_copy_skipped_and_near_duplicate_reported(project, offline, mo
     assert len(kept) == 1                                                  # byte-identical copy not ranked twice
     assert sorted([kept[0], 'SwitchPreprint']) in [sorted(p) for p in run['corpus']['possible_duplicates']]
     assert not any('Ocean2023' in p or 'queue2022' in p for p in run['corpus']['possible_duplicates'])
+
+
+def test_missing_pdftotext_names_the_install(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    monkeypatch.setattr(rank.shutil, 'which', lambda name: None)
+    with pytest.raises(SystemExit, match='brew install poppler'):
+        rank.main(['--out', str(project / 'runs/x'), '--dry'])
+
+
+def test_offline_tokenizer_download_fails_cleanly(monkeypatch, tmp_path):
+    import urllib.request
+    monkeypatch.setattr(rank, 'TOK_PATH', tmp_path / 'tok.json')
+    def no_net(url, path):
+        open(path, 'w').write('{"partial')
+        raise OSError('no network')
+    monkeypatch.setattr(urllib.request, 'urlretrieve', no_net)
+    with pytest.raises(SystemExit, match='rank.py --setup'):
+        rank.tokenizer()
+    assert not (tmp_path / 'tok.json').exists() and not (tmp_path / 'tok.part').exists()   # no half file left
+
+
+def test_turkish_abstract_bibliography_and_terms():
+    t = 'Başlık\nÖZET\n' + 'kelime ' * 80 + '\nGİRİŞ\nmetin\n'
+    assert rank.abstract(t).startswith('kelime')
+    assert rank.abstract('Giriş\nözellikle ' + 'kelime ' * 80 + '\nGiriş\n') is None       # "öz" inside a word is no heading
+    refs = '\n'.join(f'[{i}] Yazar, Başlık, 2020.' for i in range(1, 6))
+    body, cut, _ = rank.clean('satır metin\n' * 400 + 'KAYNAKLAR\n' + refs + '\nEK A\nek tablo\n')
+    assert cut and 'Yazar' not in body and 'ek tablo' in body
+    s = rank.bm25_scores(['güç tüketimi düşük', 'power routing', 'GÜÇ TÜKETİMİ'], 'güç tüketimi')
+    assert s[0] > 0 and s[1] == 0 and s[2] > 0

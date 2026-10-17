@@ -15,10 +15,11 @@ Method:
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
   rerun or a run resumed after a crash only pays for new text.
 
+  rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
   rank.py --out runs/2026-10-17 --dry     # counts and token estimate, no API call
   rank.py --out runs/2026-10-17           # writes <out>_hybrid.csv and <out>_run.json
 """
-import argparse, csv, datetime, hashlib, json, math, re, sqlite3, subprocess, sys, urllib.request
+import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
 from pathlib import Path
 
@@ -34,7 +35,8 @@ TOK_URL = 'https://huggingface.co/voyageai/voyage-4-large/resolve/main/tokenizer
 TOK_PATH = Path.home() / '.cache/paper-lector/voyage-4-large-tokenizer.json'
 CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
-           'from into over than then which when where while what who how does do can not no'.split())
+           'from into over than then which when where while what who how does do can not no '
+           've ile bir bu şu için da de olan olarak gibi daha en çok her ise veya ya ki ne'.split())
 KEY = None
 
 
@@ -72,11 +74,25 @@ def embed(items, input_type, usage):
 
 
 def tokenizer():
+    """Voyage's tokenizer, downloaded once into the cache. A partial download never lands at TOK_PATH."""
     from tokenizers import Tokenizer
     if not TOK_PATH.exists():
         TOK_PATH.parent.mkdir(parents=True, exist_ok=True)
-        urllib.request.urlretrieve(TOK_URL, TOK_PATH)
+        part = TOK_PATH.with_suffix('.part')
+        try:
+            urllib.request.urlretrieve(TOK_URL, part)
+        except OSError as e:
+            part.unlink(missing_ok=True)
+            sys.exit(f'cannot download the tokenizer ({e}). rank.py needs it once, also with --dry and bm25: connect to the '
+                     f'internet and run "rank.py --setup", or copy {TOK_URL} to {TOK_PATH}')
+        part.replace(TOK_PATH)
     return Tokenizer.from_file(str(TOK_PATH))
+
+
+def need_pdftotext():
+    if not shutil.which('pdftotext'):
+        sys.exit('pdftotext not found. Install poppler: "brew install poppler" (macOS), '
+                 '"sudo apt install poppler-utils" (Debian/Ubuntu), "conda install -c conda-forge poppler" (Windows)')
 
 
 def digest(path):
@@ -123,7 +139,7 @@ def find_pdfs(dirs, known, ids=None):
 
 def clean(text):
     """Cut the bibliography if a References heading in the second half is followed by citation entries; keep appendices."""
-    heads = [m for m in re.finditer(r'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?(r ?eferences|b ?ibliography)\s*$', text, re.I)
+    heads = [m for m in re.finditer(r'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?(r ?eferences|b ?ibliography|kaynaklar|kaynakça)\s*$', text, re.I)
              if m.start() > len(text) * 0.5]
     if not heads:
         return text, False, None
@@ -131,14 +147,15 @@ def clean(text):
     tail = text[start:start + 5000]
     if len(re.findall(r'(?m)^\s*\[\d+\]', tail)) < 3 and len(re.findall(r'\(\d{4}\)|, \d{4}\.', tail)) < 3:
         return text, False, None
-    app = re.search(r'(?m)^\s*(?:[A-Z]\.?\s*)?(a ?ppendix|a ?ppendices|s ?upplementary material)\b', text[start:], re.I)
+    app = re.search(r'(?m)^\s*(?:[A-Z]\.?\s*)?(a ?ppendix|a ?ppendices|s ?upplementary material|ekler\b|ek\s*[A-Z0-9]?\s*$)', text[start:], re.I)
     if not app:
         return text[:start], True, None
     return text[:start] + text[start + app.start():], True, (start, app.start())
 
 
 def abstract(text):
-    m = re.search(r'abstract\W{0,3}(.{300,3000}?)(?=\b(?:I\.|1\.?)?\s*i ?ntroduction\b)', text[:15000], re.I | re.S)
+    m = re.search(r'\b(?:abstract|özet|öz)\b\W{0,3}(.{300,3000}?)(?=\b(?:I\.|1\.?)?\s*(?:i ?ntroduction|g[iİ]r[iİ][şŞ])\b)',
+                  text[:15000], re.I | re.S)
     return m.group(1).strip() if m else None
 
 
@@ -168,7 +185,7 @@ def windows(path, tok):
 def near_duplicates(P, threshold=0.8):
     """Pairs of papers whose abstracts (or opening text) share most of their words: often a preprint and its
     published version, or one paper saved under two names. Reported, never dropped."""
-    words = [set(w for w in re.findall(r'[a-z]{4,}', p['head'].lower()) if w not in STOP) for p in P]
+    words = [set(w for w in re.findall(r'[^\W\d_]{4,}', lower(p['head'])) if w not in STOP) for p in P]
     pairs = []
     for i in range(len(P)):
         for j in range(i + 1, len(P)):
@@ -177,8 +194,13 @@ def near_duplicates(P, threshold=0.8):
     return pairs
 
 
+def lower(s):
+    """Lowercase that keeps Turkish dotted capital I as one letter (plain str.lower adds a combining dot)."""
+    return s.replace('İ', 'i').lower()
+
+
 def bm25_scores(docs, query, k1=1.2, b=0.75):
-    terms = lambda s: [t for t in re.split(r'[^a-z0-9]+', s.lower()) if t and t not in STOP]
+    terms = lambda s: [t for t in re.split(r'[\W_]+', lower(s)) if t and t not in STOP]
     toks = [Counter(terms(d)) for d in docs]
     lens = np.array([sum(t.values()) for t in toks], float); avg = lens.mean() or 1.0
     df = Counter(t for c in toks for t in c)
@@ -235,8 +257,16 @@ def main(argv=None):
     ap.add_argument('--expect', default='', help='paper ids expected in the first query\'s top 10, fixed before the run')
     ap.add_argument('--budget', type=int, default=15_000_000, help='stop before any API call if the token estimate is higher')
     ap.add_argument('--dry', action='store_true', help='build windows, print counts and the token estimate; no API call')
-    ap.add_argument('--out', required=True, help='output path prefix')
+    ap.add_argument('--out', help='output path prefix (required unless --setup)')
+    ap.add_argument('--setup', action='store_true', help='check pdftotext and download the tokenizer once, then exit')
     a = ap.parse_args(argv)
+    need_pdftotext()
+    if a.setup:
+        tokenizer()
+        print(f'ready: pdftotext {shutil.which("pdftotext")}, tokenizer {TOK_PATH}')
+        return
+    if not a.out:
+        ap.error('--out is required')
 
     cfg = common.load_config(a.config, required=not (a.dirs and a.queries))
     qpath = a.queries or (cfg and cfg['queries'])
