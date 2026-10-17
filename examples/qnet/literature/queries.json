@@ -1,0 +1,21 @@
+{
+  "question": "Çok kullanıcılı bir kuantum ağında entanglement dağıtımını zamanlamak için hangi yöntemler (optimizasyon, heuristik, RL) kullanılmış ve hangi metriklerle karşılaştırılmış?",
+  "fuse": ["Q0", "Q1", "Q2", "Q3"],
+  "queries": {
+    "Q0": {"label": "main", "description": "core question",
+           "text": "Which methods, such as mathematical optimization, heuristics or reinforcement learning, have been used to schedule entanglement distribution among multiple users in a quantum network, and which performance metrics were used to compare them?",
+           "keywords": "entanglement distribution scheduling multi-user quantum network optimization heuristic reinforcement learning metrics"},
+    "Q1": {"label": "subject", "description": "multi-user quantum network",
+           "text": "A multi-user quantum network of repeaters, switches and quantum memories serving many concurrent entanglement requests between different source-destination pairs or user groups that share limited link and memory resources.",
+           "keywords": "multi-user quantum network repeater switch quantum memory concurrent requests source destination pairs"},
+    "Q2": {"label": "approach", "description": "method families",
+           "text": "Entanglement routing and scheduling algorithms based on integer or linear programming, Markov decision processes, greedy or heuristic path selection, and deep reinforcement learning policies that decide which requests to serve, when and on which paths.",
+           "keywords": "entanglement routing scheduling integer linear programming Markov decision process heuristic greedy deep reinforcement learning path selection"},
+    "Q3": {"label": "outcome", "description": "metrics",
+           "text": "Performance measured by entanglement rate or throughput, end-to-end fidelity, latency and waiting time, fairness across users, fraction of requests satisfied, and memory or resource usage.",
+           "keywords": "entanglement rate throughput fidelity latency waiting time fairness request satisfaction memory utilization"},
+    "Q4": {"label": "comparison", "description": "baselines",
+           "text": "Proposed methods compared against baselines such as shortest-path routing, greedy allocation and first-come-first-served service.",
+           "keywords": "baseline shortest path greedy first-come-first-served FCFS"}
+  }
+}

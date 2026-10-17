@@ -155,6 +155,8 @@ See [`SKILL.md`](SKILL.md) for the query-writing rules and the full agent workfl
 
 These modes only find papers. Ranking your own PDFs is a separate step (`rank.py`) and always reads by meaning with the Voyage provider, whichever mode found the papers.
 
+[`examples/qnet`](examples/qnet/papers.md) is a whole run from a keyword search: 47 works found, 35 kept after reading the abstracts, 18 open-access PDFs ranked on full text and all 33 distinct papers ranked on their abstracts (`--abstracts`), so the papers behind publisher sites still get a place.
+
 ## How ranking works
 
 1. `pdftotext` extracts the whole PDF. The bibliography is cut only when its heading is found with confidence; appendices stay.
