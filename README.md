@@ -40,7 +40,7 @@ paper-lector is an agent skill for Claude Code and Codex with three scripts:
 
 - `openalex_search.py` searches OpenAlex (semantic, exact boolean, citing works, references).
 - `fetch_pdf.py` downloads open-access PDFs (arXiv first, then OpenAlex locations) and lists the rest for manual download.
-- `rank.py` ranks your own PDF collection against a few frozen research-question queries. It splits each PDF into page-labelled windows, picks the best windows per paper with BM25 plus `voyage-4-large` embeddings, scores each paper with `rerank-3`, and fuses the per-query ranks into a reading order. Without a Voyage key it can run on BM25 alone (see "Ranking without an API key").
+- `rank.py` ranks your own PDF collection against a few frozen research-question queries. It splits each PDF into page-labelled windows, picks the best windows per paper with BM25 plus `voyage-4-large` embeddings, scores each paper with `rerank-3`, and fuses the ranks of the queries listed in `fuse` (`main` and `subject` by default) into a reading order. Without a Voyage key it can run on BM25 alone (see "Ranking without an API key").
 
 `SKILL.md` is the full guide that the agent reads.
 
@@ -58,12 +58,14 @@ ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 
 The symlink is what lets the agent find the skill; make the one for the agent you use, or both.
 
-API keys: copy `.env.example` to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`, and fill in `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank with the default `voyage` provider). A key set in the environment takes precedence over both files.
+API keys: copy `.env.example` to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`, and fill in `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank with the default `voyage` provider). Lookup order: the environment, then the project's `.env`, then `~/.config/paper-lector/.env`.
 
 ```bash
 mkdir -p ~/.config/paper-lector
 cp .env.example ~/.config/paper-lector/.env
 ```
+
+On its first run, `rank.py` downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. It uses it to cut windows and count tokens, so the download also happens with `--dry` and with the `bm25` provider.
 
 ## Example: underwater routing papers
 
@@ -80,7 +82,7 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 }
 ```
 
-`rank` is optional; `voyage` is the default.
+`rank` is optional; `voyage` is the default. An optional `sources` CSV (the papers you already hold, with `key`, `pdf_path` and `doi` columns) can be added too; [`examples/literature.json`](examples/literature.json) shows it.
 
 **2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run. `rank.py` refuses to reuse an `--out` prefix whose `_run.json` was made with different queries.
 
@@ -107,7 +109,7 @@ $PY $PL/scripts/rank.py --out runs/uw
 
 `fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default).
 
-**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`. The `<query>_pages` columns give the pages the reranker read, which is a sensible place to start reading. `runs/uw_run.json` records the queries, models, token usage and commit, so the run can be repeated. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
+**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages the reranker read, which is a sensible place to start reading. `runs/uw_run.json` records the queries, models, token usage and commit, so the run can be repeated. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
 See [`SKILL.md`](SKILL.md) for the query-writing rules, the optional `sources` CSV, and the other options (`--cites`, `--refs`, `--expect`, `--ids`, `--variants`).
 
@@ -117,7 +119,7 @@ For now, `rank.py` supports one API: Voyage (`voyage-4-large` embeddings and `re
 
 ### Ranking without an API key
 
-Set `"rank": {"provider": "bm25"}` in `literature.json`, or pass `--provider bm25` for a single run. No key and no API call: windows are chosen by BM25 on each query's keyword string, and each paper is scored by BM25 on its abstract plus those windows. The output is `<out>_bm25.csv` with the same columns, and `_run.json` records the provider.
+Set `"rank": {"provider": "bm25"}` in `literature.json`, or pass `--provider bm25` for a single run. No key and no API call (apart from the one-time tokenizer download): windows are chosen by BM25 on each query's keyword string, and each paper is scored by BM25 on its abstract plus those windows. The output is `<out>_bm25.csv` with the same columns, and `_run.json` records the provider.
 
 BM25 only matches words, so a paper that says "relay" when the query says "next hop" scores low. Expect a rougher order than with Voyage, and don't compare scores between the two providers.
 
