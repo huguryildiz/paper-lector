@@ -53,7 +53,7 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 
 > Rank my PDFs for this question: which next hop should a node in an underwater acoustic sensor network choose so that the network lives longer?
 
-Claude drafts the queries and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
+Claude asks for the six query slots on two question screens: for each slot you take its suggestion, type your own, or leave it empty (`main` is required). It then writes the queries and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
 
 **3b. From the shell.** The same steps by hand, run from anywhere inside the project:
 

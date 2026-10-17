@@ -46,7 +46,7 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 
 ## Step 2: writing the queries
 
-Settle the research question before drafting any query. Suggest 2 or 3 candidate questions, each one neutral sentence, built from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`). Ask with the AskUserQuestion tool: one option per candidate, recommended one first; the tool's free-text "Other" lets the user write their own. Without that tool, list the candidates numbered and ask the user to pick one or type their own. Use the chosen or written question word for word; if the user edits a candidate, the edited text wins. It becomes the `question` field and the `main` slot.
+Fill all six slots on two AskUserQuestion screens before writing any query text. Each screen holds up to 4 questions, shown as tabs.
 
 Six labels, all optional except `main`:
 
@@ -59,12 +59,20 @@ Six labels, all optional except `main`:
 | `context` | Where or under which conditions | Underwater links, delayed control |
 | `comparison` | Alternatives or baselines | First-come-first-served, random choice |
 
-Then fill the other five slots the same way, on question screens, before writing any query text. One AskUserQuestion call takes at most 4 questions, so use two calls:
+The two screens:
 
-1. `subject`, `approach`, `outcome`, `context`.
-2. `comparison`, then the `fuse` choice (multiSelect over the filled slots, `main` + `subject` marked recommended).
+1. `main`, `subject`, `approach`, `outcome`.
+2. `context`, `comparison`, then the `fuse` choice (multiSelect over the filled slots, `main` + `subject` marked recommended).
 
-Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. Options: one or two suggestions drawn from the question, written like the example column (a short phrase, recommended first, the description saying why it fits), plus "Leave empty". The tool's free-text "Other" takes the user's own wording, which is used as given. Without the tool, ask the same questions in chat, one numbered list per slot.
+Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. It offers three ways to fill the slot:
+
+- Claude's suggestion: one short phrase drawn from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`), written like the example column, marked recommended, the description saying why it fits.
+- The user's own wording, typed in the tool's free-text "Other" and used as given.
+- "Leave empty".
+
+`main` cannot be left empty. Its two options are candidate questions, each one neutral sentence; if the user's request already states the question, that sentence word for word is the first option. The chosen or written question becomes the `question` field and the `main` slot; if the user edits a candidate, the edited text wins.
+
+Without the tool, ask the same questions in chat, one numbered list per slot.
 
 From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run.
 
@@ -112,7 +120,7 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 ## Examples
 
-**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Offer candidate questions (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?") and take the user's pick or their own wording. Ask the slot screens (`subject` suggestion: "Underwater acoustic sensor network nodes on battery"; `comparison`: "Depth-based routing" or "Leave empty"), write the queries from the answers, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
+**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Ask the two screens: `main` candidates (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?"), a suggestion for each other slot (`subject`: "Underwater acoustic sensor network nodes on battery"; `comparison`: "Depth-based routing"), each with "Leave empty" except `main`, and the user's own wording through "Other". Write the queries from the answers, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
 
 **Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection, compare with the previous `_run.json` and report papers that entered or left the fused top 10.
 
