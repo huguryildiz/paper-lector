@@ -1,53 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 454" width="880" height="454" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 488" width="880" height="488" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
 <title>paper-lector example output</title>
-<rect width="880" height="454" rx="14" fill="#0b1220"/>
-<rect x="0.5" y="0.5" width="879" height="453" rx="14" fill="none" stroke="#24324a"/>
-<text x="28" y="38" fill="#8b9bb4" font-size="12" letter-spacing="1.5" font-weight="600">QUESTION</text>
-<text x="28" y="62" fill="#e6edf3" font-size="16" font-weight="600">Which retrieval and generation choices reduce hallucination in retrieval-augmented</text>
-<text x="28" y="84" fill="#e6edf3" font-size="16" font-weight="600">generation with large language models?</text>
-<line x1="28" y1="134" x2="852" y2="134" stroke="#24324a"/>
-<text x="28" y="124" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="start">#</text>
-<text x="64" y="124" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="start">PAPER</text>
-<text x="596" y="124" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">MAIN</text>
-<text x="680" y="124" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">SUBJECT</text>
-<text x="852" y="124" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="end">START AT</text>
-<rect x="16" y="144" width="848" height="48" rx="8" fill="#111b2e"/>
-<text x="34" y="176" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">1</text>
-<text x="64" y="167" fill="#e6edf3" font-size="14.5" font-weight="600">ReDeEP: Detecting Hallucination in Retrieval-Augmented…</text>
-<text x="64" y="185" fill="#8b9bb4" font-size="12.5">Sun et al., 2024</text>
-<text x="596" y="176" fill="#c9d4e3" font-size="14" text-anchor="middle">1</text>
-<text x="680" y="176" fill="#c9d4e3" font-size="14" text-anchor="middle">5</text>
-<rect x="766" y="159" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="176" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 7-8</text>
-<text x="34" y="228" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">2</text>
-<text x="64" y="219" fill="#e6edf3" font-size="14.5" font-weight="600">Retrieval-Augmented Generation for Large Language…</text>
-<text x="64" y="237" fill="#8b9bb4" font-size="12.5">Gao et al., 2023</text>
-<text x="596" y="228" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
-<text x="680" y="228" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
-<rect x="766" y="211" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="228" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 9-10</text>
-<rect x="16" y="248" width="848" height="48" rx="8" fill="#111b2e"/>
-<text x="34" y="280" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">3</text>
-<text x="64" y="271" fill="#e6edf3" font-size="14.5" font-weight="600">Corrective Retrieval Augmented Generation</text>
-<text x="64" y="289" fill="#8b9bb4" font-size="12.5">Yan et al., 2025</text>
-<text x="596" y="280" fill="#c9d4e3" font-size="14" text-anchor="middle">2</text>
-<text x="680" y="280" fill="#c9d4e3" font-size="14" text-anchor="middle">7</text>
-<rect x="766" y="263" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="280" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
-<text x="34" y="332" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">4</text>
-<text x="64" y="323" fill="#e6edf3" font-size="14.5" font-weight="600">Retrieval-augmented generation for natural language…</text>
-<text x="64" y="341" fill="#8b9bb4" font-size="12.5">Wu et al., 2026</text>
-<text x="596" y="332" fill="#c9d4e3" font-size="14" text-anchor="middle">11</text>
-<text x="680" y="332" fill="#c9d4e3" font-size="14" text-anchor="middle">2</text>
-<rect x="766" y="315" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="332" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 40-42</text>
-<rect x="16" y="352" width="848" height="48" rx="8" fill="#111b2e"/>
-<text x="34" y="384" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">5</text>
-<text x="64" y="375" fill="#e6edf3" font-size="14.5" font-weight="600">Searching for Best Practices in Retrieval-Augmented…</text>
-<text x="64" y="393" fill="#8b9bb4" font-size="12.5">Wang et al., 2024</text>
-<text x="596" y="384" fill="#c9d4e3" font-size="14" text-anchor="middle">10</text>
-<text x="680" y="384" fill="#c9d4e3" font-size="14" text-anchor="middle">6</text>
-<rect x="766" y="367" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="384" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 2-3</text>
-<text x="28" y="434" fill="#6b7a92" font-size="12">Top 5 of 40 arXiv PDFs · voyage-4-large + rerank-3 · fused over main and subject · a rank is a reading lead, not evidence</text>
+<rect width="880" height="488" rx="14" fill="#0b1220"/>
+<rect x="0.5" y="0.5" width="879" height="487" rx="14" fill="none" stroke="#24324a"/>
+<text x="28" y="38" fill="#8b9bb4" font-size="12" letter-spacing="1.5" font-weight="600">QUESTION (LITSEARCH)</text>
+<text x="28" y="62" fill="#e6edf3" font-size="16" font-weight="600">Which studies should I look into that have explored the task of factuality in</text>
+<text x="28" y="84" fill="#e6edf3" font-size="16" font-weight="600">abstractive summarization and proposed ways to detect hallucinated content in</text>
+<text x="28" y="106" fill="#e6edf3" font-size="16" font-weight="600">generated text?</text>
+<line x1="28" y1="156" x2="852" y2="156" stroke="#24324a"/>
+<text x="28" y="146" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="start">#</text>
+<text x="64" y="146" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="start">PAPER</text>
+<text x="596" y="146" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">MAIN</text>
+<text x="680" y="146" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">SUBJECT</text>
+<text x="852" y="146" fill="#8b9bb4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="end">START AT</text>
+<rect x="16" y="166" width="848" height="48" rx="8" fill="#111b2e"/>
+<text x="34" y="198" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">1</text>
+<text x="64" y="189" fill="#e6edf3" font-size="14.5" font-weight="600">On Faithfulness and Factuality in Abstractive Summarizati…</text>
+<text x="64" y="207" fill="#8b9bb4" font-size="12.5">Maynez et al., 2020<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
+<text x="596" y="198" fill="#c9d4e3" font-size="14" text-anchor="middle">1</text>
+<text x="680" y="198" fill="#c9d4e3" font-size="14" text-anchor="middle">1</text>
+<rect x="766" y="181" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
+<text x="809" y="198" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
+<text x="34" y="250" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">2</text>
+<text x="64" y="241" fill="#e6edf3" font-size="14.5" font-weight="600">Detecting Hallucinated Content in Conditional Neural Sequ…</text>
+<text x="64" y="259" fill="#8b9bb4" font-size="12.5">Zhou et al., 2020<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
+<text x="596" y="250" fill="#c9d4e3" font-size="14" text-anchor="middle">2</text>
+<text x="680" y="250" fill="#c9d4e3" font-size="14" text-anchor="middle">2</text>
+<rect x="766" y="233" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
+<text x="809" y="250" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
+<rect x="16" y="270" width="848" height="48" rx="8" fill="#111b2e"/>
+<text x="34" y="302" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">3</text>
+<text x="64" y="293" fill="#e6edf3" font-size="14.5" font-weight="600">Evaluating the Factual Consistency of Abstractive Text Su…</text>
+<text x="64" y="311" fill="#8b9bb4" font-size="12.5">Kryscinski et al., 2019<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
+<text x="596" y="302" fill="#c9d4e3" font-size="14" text-anchor="middle">3</text>
+<text x="680" y="302" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
+<rect x="766" y="285" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
+<text x="809" y="302" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 9-10</text>
+<text x="34" y="354" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">4</text>
+<text x="64" y="345" fill="#e6edf3" font-size="14.5" font-weight="600">Understanding Factuality in Abstractive Summarization wit…</text>
+<text x="64" y="363" fill="#8b9bb4" font-size="12.5">Pagnoni et al., 2021<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
+<text x="596" y="354" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
+<text x="680" y="354" fill="#c9d4e3" font-size="14" text-anchor="middle">6</text>
+<rect x="766" y="337" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
+<text x="809" y="354" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 10-11</text>
+<rect x="16" y="374" width="848" height="48" rx="8" fill="#111b2e"/>
+<text x="34" y="406" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">5</text>
+<text x="64" y="397" fill="#e6edf3" font-size="14.5" font-weight="600">Evaluating Attribution in Dialogue Systems: The BEGIN Ben…</text>
+<text x="64" y="415" fill="#8b9bb4" font-size="12.5">Dziri et al., 2021</text>
+<text x="596" y="406" fill="#c9d4e3" font-size="14" text-anchor="middle">5</text>
+<text x="680" y="406" fill="#c9d4e3" font-size="14" text-anchor="middle">5</text>
+<rect x="766" y="389" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
+<text x="809" y="406" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 16-17</text>
+<text x="28" y="448" fill="#6b7a92" font-size="12">Top 5 of 40 PDFs · voyage-4-large + rerank-3 · fused over main and subject · the 5 LitSearch gold papers rank 1, 2, 3, 4, 7</text>
 </svg>

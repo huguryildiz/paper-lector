@@ -14,6 +14,11 @@
     "Q3": {"label": "outcome", "description": "what is measured",
            "text": "Network lifetime, energy per delivered bit, packet delivery ratio, end-to-end delay and void-region avoidance in underwater networks.",
            "keywords": "network lifetime energy per bit packet delivery ratio delay void region"},
-    "Q4": {"label": "context", "description": "conditions", "text": "", "keywords": ""}
+    "Q4": {"label": "context", "description": "conditions",
+           "text": "Sparse or mobile deployments with ocean currents, multipath, high bit error rates and nodes that cannot be recharged or replaced.",
+           "keywords": "sparse mobile deployment ocean current multipath bit error rate non rechargeable battery"},
+    "Q5": {"label": "comparison", "description": "baselines",
+           "text": "Compared with greedy depth-based forwarding, shortest-path or minimum-hop routing, flooding and random relay choice.",
+           "keywords": "baseline greedy depth based forwarding shortest path minimum hop flooding random relay"}
   }
 }
