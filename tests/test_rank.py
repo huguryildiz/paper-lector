@@ -647,3 +647,34 @@ def test_pdf_abstract_the_search_abstract_misses_goes_back_to_the_windows(projec
     docs = [d.split('\n\n[p.', 1)[1] for e, b in offline.calls if e == 'rerank' for d in b['documents'] if d.startswith(head + '\n\n[p.')]
     assert docs
     assert any('measured on the testbed' in d for d in docs) == kept
+
+
+def test_one_questions_log_per_project(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    base = (project / 'queries/queries.json').read_text()
+    (project / 'old').mkdir()
+    moved = project / 'old/q.json'
+    moved.write_text(base)
+    rank.main(['--out', str(project / 'runs/a'), '--provider', 'bm25', '--queries', 'old/q.json'])
+    log = [json.loads(l) for l in open(project / 'queries/questions.jsonl')]           # the project's one log
+    assert log[-1]['queries'] == '../old/q.json' and not (project / 'old/questions.jsonl').exists()
+    other = project / 'queries/renamed.json'                                   # same question, other name, other folder
+    other.write_text(base.replace('{\n "question"', '{\n "name": "renamed",\n "question"'))
+    with pytest.raises(SystemExit, match='ranked before as "paper-lector"'):
+        rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--queries', str(other)])
+    moved.write_text(base.replace('"question"', '"fuse": ["Q0", "Q3"], "question"'))
+    monkeypatch.chdir(project / 'papers')                                      # another folder, a relative path
+    with pytest.raises(SystemExit, match='ranked before with a different question'):
+        rank.main(['--out', str(project / 'runs/c'), '--provider', 'bm25', '--queries', '../old/q.json',
+                   '--config', str(project / 'literature.json')])
+
+
+def test_older_log_beside_the_queries_file_still_counts(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    (project / 'literature').mkdir()
+    q = project / 'literature/queries.json'
+    q.write_text((project / 'queries/queries.json').read_text())
+    (project / 'literature/questions.jsonl').write_text(json.dumps({'queries': 'queries.json', 'queries_sha': 'older',
+                                                                     'question': 'x'}) + '\n')
+    with pytest.raises(SystemExit, match='ranked before with a different question'):
+        rank.main(['--out', str(project / 'runs/l'), '--provider', 'bm25', '--queries', str(q)])

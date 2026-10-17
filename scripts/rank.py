@@ -25,7 +25,7 @@ Method:
   rank.py --dry                           # counts and token estimate, no API call
   rank.py                                 # writes runs/<date>_<time>_<name>_rank.csv and _rank_run.json, logs questions.jsonl
 """
-import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
+import argparse, csv, datetime, hashlib, json, math, os, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
 from pathlib import Path
 
@@ -519,6 +519,14 @@ def rel(path, cfg):
     return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
 
+def questions_log(cfg, qfile):
+    """One questions.jsonl per project, so the freeze and name checks see every queries file: beside the config's
+    queries file, else in <project>/queries/; with no config, beside the queries file given."""
+    if cfg:
+        return (cfg['queries'].parent if cfg['queries'] else cfg['root'] / 'queries') / 'questions.jsonl'
+    return qfile.parent / 'questions.jsonl'
+
+
 def csv_name(out, name, variant):
     """<out>_<name>_rank.csv for the default hybrid run (name from the queries file, else paper-lector); dense and
     bm25 runs keep their variant in the file name."""
@@ -575,9 +583,16 @@ def main(argv=None):
     name = json.load(open(qpath, encoding='utf-8')).get('name')
     frozen = {'question': question, 'queries': Q, 'fuse': fuse}
     qsha = sha(json.dumps(dict(frozen, name=name) if name else frozen, sort_keys=True))   # older files: same hash as before
-    log = Path(qpath).parent / 'questions.jsonl'
-    seen = [json.loads(l) for l in open(log, encoding='utf-8') if l.strip()] if log.is_file() else []
-    if any(e.get('queries') == Path(qpath).name and e.get('queries_sha') != qsha for e in seen):
+    qfile = Path(qpath).resolve()
+    log = questions_log(cfg, qfile)
+    seen = []
+    for f in dict.fromkeys([log, qfile.parent / 'questions.jsonl']):      # and an older log beside the queries file
+        for l in (open(f, encoding='utf-8') if f.is_file() else []):
+            if l.strip():
+                e = json.loads(l)
+                e['file'] = (f.parent / e.get('queries', '')).resolve()    # "queries" is relative to its log's folder
+                seen.append(e)
+    if any(e['file'] == qfile and e.get('queries_sha') != qsha for e in seen):
         sys.exit(f'{qpath} was ranked before with a different question, queries or fuse list ({log}). A frozen queries '
                  f'file is not edited: write the new queries into a new file and rank that')
     same = {e.get('name') or 'paper-lector' for e in seen if e.get('question') == question}
@@ -626,9 +641,10 @@ def main(argv=None):
     try:
         rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha)
         if not a.dry:
+            log.parent.mkdir(parents=True, exist_ok=True)
             with open(log, 'a', encoding='utf-8') as f:
                 f.write(json.dumps({'created': datetime.datetime.now().isoformat(timespec='seconds'), 'question': question,
-                                    'name': a.name, 'queries': Path(qpath).name, 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
+                                    'name': a.name, 'queries': os.path.relpath(qfile, log.parent), 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
                                     'out': rel(a.out, cfg), 'abstracts': a.abstracts or ''}, ensure_ascii=False) + '\n')
     finally:
         if not a.dry:
