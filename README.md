@@ -88,10 +88,6 @@ Without a Voyage key, add `--provider local` to that command; it also downloads 
 
 > Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?
 
-<p align="center">
-  <img src="assets/qnet-output.svg" alt="Example run: the top 5 of 73 PDFs for the quantum network scheduling question, with abstract rank, citation count and the pages to start reading" width="880">
-</p>
-
 **1. Config.** `literature.json` sits at the project root, and its paths are relative to it.
 
 ```json
@@ -136,7 +132,7 @@ The keyword search returned 137 works and the semantic search the 50 closest. Th
 
 Ranking scored the 73 PDFs on full text and 149 papers on their abstracts; 76 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.59M tokens and every embedding came from the cache: a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
 
-**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/qnet/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`. [`make_svg.py`](examples/qnet/make_svg.py) draws the card above from the CSV and the run record.
+**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/qnet/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
