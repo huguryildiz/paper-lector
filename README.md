@@ -122,16 +122,16 @@ $PY $PL/scripts/openalex_search.py --exact '(underwater AND acoustic) AND (rout*
 $PY $PL/scripts/fetch_pdf.py --from runs/uw.jsonl
 
 # count tokens without calling the API, then rank
-$PY $PL/scripts/rank.py --out runs/uw --dry
-$PY $PL/scripts/rank.py --out runs/uw
+$PY $PL/scripts/rank.py --dry
+$PY $PL/scripts/rank.py                 # writes runs/2026-10-17_2315_hybrid.csv and _run.json
 
-# later, after adding PDFs: same queries, new --out; cached embeddings are reused
-$PY $PL/scripts/rank.py --out runs/uw-2026-10-20
+# later, after adding PDFs: same queries, a new dated output; cached embeddings are reused
+$PY $PL/scripts/rank.py
 ```
 
 `fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. An `ERROR` line means the OpenAlex lookup itself failed (a bad key, a dropped connection), and a `SKIP` line a JSONL record with no DOI, arXiv or OpenAlex id. It ends with a count of each and exits with status 1 if any paper was not obtained. Every saved PDF gets a line in `fetch_log.jsonl` in the download folder with status `OK`, the id, the URL it came from (so you can tell a preprint from the published version), the file name and its SHA-256. Every `MANUAL` paper gets a line there too, with its title and landing URL, so the list of papers to download by hand outlives the terminal. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). The estimate is an upper bound computed before any call: every window, the queries, and each rerank package with its abstract, page labels and query. `--budget` checks that estimate; it does not meter the run as it goes. Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite` after each batch, so a rerun, or a run restarted after a crash, pays only for new text; the estimate still counts everything. Dropped connections, timeouts, cut-off responses and HTTP 429/5xx are retried, for API calls and PDF downloads alike.
 
-**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. An id that starts with `=`, `+`, `-` or `@` gets a `'` in front in the CSV, so a spreadsheet does not run it as a formula. `runs/uw_run.json` records the question, queries, fuse list, models, parameters, each paper's id, path and SHA-256, token usage, the paper-lector commit and the versions of Python, numpy, tokenizers, pdftotext and the tokenizer, so the run can be repeated. `rank.py` never overwrites a run: it stops if any output of that `--out` already exists (also a CSV left by a run that crashed before writing `_run.json`), and so does a run whose question, queries or fuse list differ from the saved run. While a run is going, `<out>_run.lock` keeps a second run from using the same `--out`; if a run is killed, the lock stays, and the error says to delete it. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
+**4. Read the output.** `runs/<date>_<time>_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. An id that starts with `=`, `+`, `-` or `@` gets a `'` in front in the CSV, so a spreadsheet does not run it as a formula. `runs/<date>_<time>_run.json` records the question, queries, fuse list, models, parameters, each paper's id, path and SHA-256, token usage, the paper-lector commit and the versions of Python, numpy, tokenizers, pdftotext and the tokenizer, so the run can be repeated. `rank.py` never overwrites a run: it stops if any output of that `--out` already exists (also a CSV left by a run that crashed before writing `_run.json`), and so does a run whose question, queries or fuse list differ from the saved run. Each finished run also adds a line to `questions.jsonl` beside the queries file (time, question, queries file and hash, fuse list, provider, output); a queries file edited after it was ranked is refused, so write revised queries to a new file. While a run is going, `<out>_run.lock` keeps a second run from using the same `--out`; if a run is killed, the lock stays, and the error says to delete it. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
 **5. Check what was left out or counted twice.** Both the dry run and `_run.json` report two kinds of problem paper:
 
@@ -159,7 +159,7 @@ These modes only find papers. Ranking your own PDFs is a separate step (`rank.py
 
 ## How ranking works
 
-1. `pdftotext` extracts the whole PDF. The bibliography is cut only when its heading is found with confidence; appendices stay.
+1. `pdftotext` extracts the whole PDF. The bibliography is cut when a References heading in the second half is followed by citation entries, or, with no heading (APS and Nature styles), from the first `[1]` or `1. Author ... year` entry in the second half that more entries follow; appendices and supplementary material stay.
 2. The text is split into 1,200-token windows with 200 tokens of overlap, each labelled with the PDF pages it covers.
 3. For each paper and query, windows are ordered by Reciprocal Rank Fusion (k = 60) of `voyage-4-large` cosine similarity and BM25 on the query's keyword string. The best 3 are kept.
 4. `rerank-3` scores each paper once per query on its abstract (or its first 1,000 tokens when no abstract is found) plus those 3 windows.
@@ -190,7 +190,7 @@ All three scripts look for `literature.json` from the current folder up to the p
 | | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |
 | | `--dest DIR` | Save here instead of `download_dir` |
 | `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer, exit |
-| | `--out PREFIX` | Output prefix for `_hybrid.csv` (or `_bm25.csv`) and `_run.json` |
+| | `--out PREFIX` | Output prefix for `_hybrid.csv` (or `_bm25.csv`) and `_run.json`. Default: `runs/<date>_<time>` next to the config, with `-2` added when that minute is taken |
 | | `--dry` | Build windows, print counts and the token estimate; no API call |
 | | `--budget N` | Stop before any API call if the estimate is above N tokens (default 15M) |
 | | `--provider voyage\|bm25` | Override `rank.provider` for this run |

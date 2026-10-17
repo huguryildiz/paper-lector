@@ -131,7 +131,23 @@ def test_changed_queries_refuse_previous_out(project, offline, monkeypatch):
     q.write_text(q.read_text().replace('"question"', '"fuse": ["Q0", "Q3"], "question"'))
     with pytest.raises(SystemExit, match='different question, queries or fuse'):
         rank.main(['--out', out, '--provider', 'bm25', '--dry'])
-    rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])   # new --out is fine
+    with pytest.raises(SystemExit, match='ranked before with a different question'):   # edited after a run
+        rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])
+    (project / 'queries2.json').write_text(q.read_text())
+    rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25', '--queries', str(project / 'queries2.json')])
+
+
+def test_default_out_is_dated_and_each_run_is_logged(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    monkeypatch.setattr(rank, 'stamp', lambda: '2026-10-17_2315')
+    rank.main(['--provider', 'bm25'])
+    rank.main(['--provider', 'bm25'])                                   # same minute: a suffix, never an overwrite
+    assert sorted(p.name for p in (project / 'runs').glob('*.csv')) == ['2026-10-17_2315-2_bm25.csv', '2026-10-17_2315_bm25.csv']
+    log = [json.loads(l) for l in open(project / 'questions.jsonl')]
+    assert [e['out'] for e in log] == ['runs/2026-10-17_2315', 'runs/2026-10-17_2315-2']
+    assert log[0]['question'].startswith('Which user should receive') and log[0]['queries'] == 'queries.json'
+    rank.main(['--provider', 'bm25', '--dry'])                          # a dry run is not logged
+    assert len(open(project / 'questions.jsonl').readlines()) == 2
 
 
 def test_missing_pdf_folder_fails(project, offline, monkeypatch):
@@ -400,6 +416,8 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert by['Ng2024_NoAbstractHere']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'Ng2024_NoAbstractHere'
     assert by['Ng2024_NoAbstractHere']['link'] == 'https://openalex.org/W7'
     assert by['queue2022']['link'] == 'https://doi.org/10.1/q'
+    full = [d for e, b in offline.calls if e == 'rerank' for d in b['documents'] if '\n\n[p.' in d]
+    assert any(d.startswith('Abstract: Which user receives a stored entangled pair at a switch.') for d in full)
     assert by['queue2022']['abstract_from'] == 'search'                   # matched through the sources DOI
     assert by['Switch2024']['abstract_from'] == 'search'                  # matched through its title on page 1
     assert by['Ocean2023']['abstract_from'] == 'pdf'                      # fetch_log match, record had no abstract

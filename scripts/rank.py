@@ -1,12 +1,13 @@
 """Rank a PDF collection against frozen research-question slots and give a reading order with starting pages.
 
 Method:
-  1. Whole PDF through pdftotext; the bibliography is cut only when its heading is found with confidence;
-     appendices stay.
+  1. Whole PDF through pdftotext; the bibliography is cut after a References heading or, with none, from the
+     first numbered entry in the second half that more entries follow; appendices and supplementary material stay.
   2. 1,200-token windows with 200-token overlap (Voyage's tokenizer), each labelled with its PDF pages.
   3. Per paper and query, windows are ranked by Reciprocal Rank Fusion (k = 60) of voyage-4-large cosine
      and BM25 on the query's keyword string ("hybrid"), or by cosine alone ("dense"); the top 3 are kept.
-  4. rerank-3 scores every paper once per query on its abstract (or first 1,000 tokens) plus the 3 windows.
+  4. rerank-3 scores every paper once per query on its abstract (from --abstracts when the paper is in the search
+     results, else read from the PDF, else its first 1,000 tokens) plus the 3 windows.
   5. fused_rank = RRF over the queries listed in "fuse" (default: main and subject). A reading order only.
   6. With --abstracts <search JSONL>, every paper is also ranked on its abstract alone (abs_fused_rank), including
      search results with no PDF (source abstract_only). Abstract-only scores run lower than full-text ones, so the two
@@ -19,8 +20,8 @@ Method:
   rerun or a run resumed after a crash only pays for new text.
 
   rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
-  rank.py --out runs/2026-10-17 --dry     # counts and token estimate, no API call
-  rank.py --out runs/2026-10-17           # writes <out>_hybrid.csv and <out>_run.json
+  rank.py --dry                           # counts and token estimate, no API call
+  rank.py                                 # writes runs/<date>_<time>_hybrid.csv and _run.json, logs questions.jsonl
 """
 import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
@@ -157,7 +158,7 @@ BIB = (r'r ?eferences|b ?ibliography|kaynaklar|kaynakça|literatur|literaturverz
        r'|r[ée]f[ée]rences(?: bibliographiques)?|bibliographie|referencias(?: bibliogr[aá]ficas)?|bibliograf[ií]a'
        r'|riferimenti(?: bibliografici)?|refer[êe]ncias(?: bibliogr[aá]ficas)?|литература|список литературы'
        r'|библиография|список использованных источников')
-APPENDIX = (r'a ?ppendix\b|a ?ppendices\b|s ?upplementary material\b|ekler\b|ek\s*[A-Z0-9]?\s*$|anhang\b|annexes?\b'
+APPENDIX = (r'a ?ppendix\b|a ?ppendices\b|s ?upplement(?:al|ary)\s+(?:materials?|information|notes?|methods)\b|ekler\b|ek\s*[A-Z0-9]?\s*$|anhang\b|annexes?\b'
             r'|ap[ée]ndices?\b|anexos?\b|appendice\b|ap[êe]ndices?\b|приложени[ея]\b')
 ABSTRACT = r'abstract|özet|öz|zusammenfassung|kurzfassung|r[ée]sum[ée]|resumen|riassunto|resumo|аннотация|реферат'
 INTRO = (r'i ?ntroduction|g[iİ]r[iİ][şŞ]|einleitung|einführung|introducci[oó]n|introduzione|introdu[çc][ãa]o'
@@ -167,14 +168,16 @@ CITES = [r'(?m)^\s*\[\d+\]', r'\(\d{4}\)|, \d{4}\.', r'(?m)^\s*\d{1,3}\.\s+\S.*\
 
 def clean(text):
     """Cut the bibliography if a References heading (in any language in BIB) in the second half is followed by
-    citation entries; keep appendices."""
+    citation entries; with no such heading (APS and Nature styles print none), cut from the first entry "[1]" or
+    "1. Author ... year" in the second half that is followed by more entries. Keep appendices."""
     heads = [m for m in re.finditer(rf'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?({BIB})\s*:?\s*$', text, re.I)
              if m.start() > len(text) * 0.5]
-    if not heads:
-        return text, False, None
-    start = heads[-1].start()
-    tail = text[start:start + 5000]
-    if all(len(re.findall(c, tail)) < 3 for c in CITES):
+    cites = lambda at: any(len(re.findall(c, text[at:at + 5000])) >= 3 for c in CITES)
+    start = heads[-1].start() if heads and cites(heads[-1].start()) else None
+    if start is None:
+        start = next((m.start() for m in re.finditer(r'(?m)^\s*(?:\[1\]|1\.\s+\S.*\b(?:19|20)\d{2}\b)', text)
+                      if m.start() > len(text) * 0.5 and cites(m.start())), None)
+    if start is None:
         return text, False, None
     app = re.search(rf'(?m)^\s*(?:[A-Z]\.?\s*)?({APPENDIX})', text[start:], re.I)
     if not app:
@@ -415,6 +418,17 @@ def abstract_corpus(paths, P, W, cfg, dirs):
     return list(A.values())
 
 
+def rel(path, cfg):
+    """A path relative to the project root when it lies inside it, so the log stays valid if the project moves."""
+    root = (cfg['root'] if cfg else Path.cwd()).resolve()
+    path = Path(path).resolve()
+    return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
+
+
+def stamp():
+    return datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
+
+
 def versions():
     """Versions that change windows or scores, for the run record."""
     import platform, tokenizers
@@ -439,7 +453,8 @@ def main(argv=None):
     ap.add_argument('--expect', default='', help='paper ids expected in the first query\'s top 10, fixed before the run')
     ap.add_argument('--budget', type=int, default=15_000_000, help='stop before any API call if the token estimate is higher')
     ap.add_argument('--dry', action='store_true', help='build windows, print counts and the token estimate; no API call')
-    ap.add_argument('--out', help='output path prefix (required unless --setup)')
+    ap.add_argument('--out', help='output path prefix (default: runs/<date>_<time> next to the config, for example '
+                    'runs/2026-10-17_2315)')
     ap.add_argument('--setup', action='store_true', help='check pdftotext and download the tokenizer once, then exit')
     a = ap.parse_args(argv)
     need_pdftotext()
@@ -447,15 +462,22 @@ def main(argv=None):
         tokenizer()
         print(f'ready: pdftotext {shutil.which("pdftotext")}, tokenizer {TOK_PATH}')
         return
-    if not a.out:
-        ap.error('--out is required')
-
     cfg = common.load_config(a.config, required=not (a.dirs and a.queries))
     qpath = a.queries or (cfg and cfg['queries'])
     if not qpath:
         sys.exit('no queries file: pass --queries or set "queries" in the config')
     question, Q, fuse = common.load_queries(qpath)
     qsha = sha(json.dumps({'question': question, 'queries': Q, 'fuse': fuse}, sort_keys=True))
+    log = Path(qpath).parent / 'questions.jsonl'
+    seen = [json.loads(l) for l in open(log, encoding='utf-8') if l.strip()] if log.is_file() else []
+    if any(e.get('queries') == Path(qpath).name and e.get('queries_sha') != qsha for e in seen):
+        sys.exit(f'{qpath} was ranked before with a different question, queries or fuse list ({log}). A frozen queries '
+                 f'file is not edited: write the new queries into a new file and rank that')
+    if not a.out:
+        base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / stamp()
+        a.out, n = str(base), 2
+        while any(Path(a.out).parent.glob(Path(a.out).name + '_*')):
+            a.out, n = f'{base}-{n}', n + 1
     prev = Path(f'{a.out}_run.json')
     if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != qsha:
         sys.exit(f'{prev} was made with a different question, queries or fuse list. A frozen queries file is not edited: '
@@ -484,6 +506,11 @@ def main(argv=None):
                      f'Use a new --out, or delete the lock and the partial outputs if no run is going on')
     try:
         rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha)
+        if not a.dry:
+            with open(log, 'a', encoding='utf-8') as f:
+                f.write(json.dumps({'created': datetime.datetime.now().isoformat(timespec='seconds'), 'question': question,
+                                    'queries': Path(qpath).name, 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
+                                    'out': rel(a.out, cfg), 'abstracts': a.abstracts or ''}, ensure_ascii=False) + '\n')
     finally:
         if not a.dry:
             lock.unlink(missing_ok=True)
@@ -523,8 +550,11 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         w['label_n'] = ntok(f"\n\n[{w['pages']}] ")
     A = abstract_corpus(a.abstracts.split(','), P, W, cfg, dirs) if a.abstracts else []
     AR = [x for x in A if x['text']]
+    byid = {p['id']: p for p in P}
     for x in A:
         x['doc'] = 'Abstract: ' + (x['title'] + '. ' if x['from'] == 'search' and x['title'] else '') + x['text']
+        if x['source'] == 'full_text' and x['from'] == 'search':
+            byid[x['id']]['head'] = x['text']        # the search record's abstract beats one guessed from the PDF
     # Upper bound per rerank package: "Abstract: " + head + the N_WIN largest windows with their page labels.
     head_n = [ntok('Abstract: ' + p['head']) for p in P]
     pkg = sum(h + sum(sorted((W[j]['n'] + W[j]['label_n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P))
