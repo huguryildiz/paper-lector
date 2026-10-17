@@ -60,6 +60,26 @@ Drop steps 2–4 when the collection already has PDFs, and stop after step 4 for
 
 Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
 
+Check the keys in step ⚙️, before any search or question screen. This prints only `found` or `missing`, never a value:
+
+```bash
+$PY -c "
+import sys; sys.path.insert(0, '$PL/scripts'); import common as c
+cfg = c.load_config(required=False)
+for n in ('OPENALEX_API_KEY', 'VOYAGE_API_KEY'):
+    try: c.api_key(n, cfg); print(n, 'found')
+    except SystemExit: print(n, 'missing')
+"
+```
+
+Check only the keys the run needs: OpenAlex for search and fetch, Voyage for ranking with the voyage provider. For each missing one, ask with the question tool and never collect the key through it: whatever the user types in its free-text field lands in the chat. Show the user this command for their own terminal (the Terminal panel or Terminal.app; a `!` shell in Claude Code cannot read input), with `<NAME>` filled in. `read -s` hides the typing, so the key goes straight to the file:
+
+```bash
+mkdir -p ~/.config/paper-lector && read -rs "k?<NAME>: " && echo "<NAME>=$k" >> ~/.config/paper-lector/.env && unset k
+```
+
+In bash the `read` part is `read -rsp "<NAME>: " k`. Options: "I added it, continue" (recommended; run the check again, and ask again if it is still missing), "Use bm25 instead" (Voyage only, see "No Voyage key" below), "Stop". If OpenAlex answers 401 or 403 later, the key is there but wrong: say so and show the same screen.
+
 ## Searching OpenAlex
 
 `openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
@@ -144,7 +164,7 @@ What happens inside: the whole PDF is split into 1,200-token windows with page l
 
 Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<label>_rank`, `_score` and `_pages` (the pages the reranker read, a place to start reading), then `tokens`, `bib_cut`, `abstract_found`. `<prefix>_run.json` records the question, queries, fuse list, models, parameters, corpus ids, token usage and the paper-lector commit.
 
-**No Voyage key.** If `VOYAGE_API_KEY` is missing, tell the user and offer the `bm25` provider instead of stopping. It makes no API call and has no budget: windows are chosen by BM25 on the keyword string and each paper is scored by BM25 on its abstract plus 3 windows. Output is `<prefix>_bm25.csv`. Say in the report that BM25 matches words, not meaning, so synonyms are missed and the order is rougher; never compare its scores with a voyage run.
+**No Voyage key.** If `VOYAGE_API_KEY` is missing, the key screen in step ⚙️ offers the `bm25` provider instead of stopping. It makes no API call and has no budget: windows are chosen by BM25 on the keyword string and each paper is scored by BM25 on its abstract plus 3 windows. Output is `<prefix>_bm25.csv`. Say in the report that BM25 matches words, not meaning, so synonyms are missed and the order is rougher; never compare its scores with a voyage run.
 
 `--variants hybrid,dense` adds a dense-only ablation (voyage only). `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus; give it a `sha256` column from `corpus.files` in the earlier `_run.json` so a different file under the same id stops the run. If a run stops with `<prefix>_run.lock exists`, check that no other rank run is going before you delete the lock; never delete a lock or partial output of a run that may still be running.
 
