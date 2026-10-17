@@ -1,0 +1,13 @@
+{
+ "mode": "exact",
+ "query": "(\"quantum network\" OR \"quantum networks\" OR \"quantum internet\") AND (entangl*) AND (schedul*)",
+ "date": "2026-10-18T01:44:47",
+ "count": 137,
+ "written": 137,
+ "already_in_sources": 0,
+ "max": null,
+ "keyless": false,
+ "keyless_first_page_only": false,
+ "name": "entanglement-scheduling",
+ "out": "2026-10-18_0144_entanglement-scheduling_exact_search.jsonl"
+}

@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Agent Skill for Claude Code and Codex</strong><br>
-  <sub>Ranks research PDFs and suggests starting pages; reading leads, not evidence.</sub>
+  <sub>Ranks a PDF corpus against fixed research questions to prioritize reading, indicating where each paper should be read first, without establishing what it reports.</sub>
 </p>
 
 <p align="center">
@@ -25,7 +25,7 @@
   &nbsp;·&nbsp;
   <a href="#install">Install</a>
   &nbsp;·&nbsp;
-  <a href="#example-underwater-routing-papers">Example</a>
+  <a href="#example-quantum-network-scheduling">Example</a>
   &nbsp;·&nbsp;
   <a href="#search-modes">Search modes</a>
   &nbsp;·&nbsp;
@@ -82,28 +82,34 @@ Then, once and while online, check `pdftotext` and download the pinned tokenizer
 
 Without a Voyage key, add `--provider local` to that command; it also downloads the local model, [`potion-multilingual-128M`](https://huggingface.co/minishlab/potion-multilingual-128M) (531 MB).
 
-## Example: underwater routing papers
+## Example: quantum network scheduling
 
-Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor networks, and the question is which next hop a node should pick so the network lives longer.
+[`examples/qnet`](examples/qnet) is a complete run made with these scripts. The question:
 
-**1. Config.** Put `literature.json` at the project root. Paths are relative to that file.
+> Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?
+
+<p align="center">
+  <img src="assets/qnet-output.svg" alt="Example run: the top 5 of 73 PDFs for the quantum network scheduling question, with abstract rank, citation count and the pages to start reading" width="880">
+</p>
+
+**1. Config.** `literature.json` sits at the project root, and its paths are relative to it.
 
 ```json
 {
   "pdf_dirs": ["pdfs"],
-  "download_dir": "pdfs/new",
-  "queries": "queries/underwater-routing.json",
+  "download_dir": "pdfs",
+  "queries": "queries/queries.json",
   "rank": {"provider": "voyage"}
 }
 ```
 
-**2. Queries.** `queries/underwater-routing.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, ...), each with a full sentence and a keyword string. [`examples/queries/underwater-routing.json`](examples/queries/underwater-routing.json) is the file for this example. Once you have seen results from a queries file, don't edit it; write a new one.
+**2. Queries.** [`queries/queries.json`](examples/qnet/queries/queries.json) holds the question and five labelled queries (`main`, `subject`, `approach`, `outcome`, `comparison`), each written as a full sentence with a keyword string; the first four are fused. Once a queries file has produced results, it stays as it is; a changed question gets a new file.
 
 **3a. With an agent.** Open the project in Claude Code or Codex and ask:
 
-> Rank my PDFs for this question: which next hop should a node in an underwater acoustic sensor network choose so that the network lives longer?
+> Find and rank papers on how entanglement distribution is scheduled among many users of a quantum network.
 
-The agent asks a short set of questions to fill the query slots, shows the queries for you to edit, then runs a dry run, the ranking, and reports the top 10 with the pages to start on. If the PDF folder is empty, it offers to search OpenAlex first.
+The agent asks which search modes to run and shows its queries for approval. It then downloads the open-access PDFs and fills the query slots through a few questions. After a dry run it ranks the papers and reports the top 10 with the pages to start on.
 
 **3b. From the shell.**
 
@@ -111,18 +117,26 @@ The agent asks a short set of questions to fill the query slots, shows the queri
 PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/null | head -1)
 PY=$PL/.venv/bin/python
 
-# find papers and download the open-access ones
-$PY $PL/scripts/openalex_search.py --exact '("underwater acoustic" OR "underwater sensor") AND (routing OR routes OR relay*)' --name underwater-routing
-$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_1420_underwater-routing_exact_search.jsonl
+# search OpenAlex two ways, compare, download the open-access PDFs
+$PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
+    --exact '("quantum network" OR "quantum networks" OR "quantum internet") AND (entangl*) AND (schedul*)'
+$PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
+    --semantic 'Scheduling entanglement distribution among multiple users in a quantum network with optimization, heuristics or reinforcement learning'
+$PY $PL/scripts/search_overlap.py runs/*_exact_search.jsonl runs/*_semantic_search.jsonl
+$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl
+$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl
 
-# count tokens without calling the API, then rank
-$PY $PL/scripts/rank.py --dry
-$PY $PL/scripts/rank.py                 # writes runs/2026-10-17_2315_<name>_rank.csv and _rank_run.json
+# count tokens without calling the API, then rank PDFs on full text and every paper on its abstract
+A=runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl,runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl
+$PY $PL/scripts/rank.py --abstracts $A --dry
+$PY $PL/scripts/rank.py --abstracts $A
 ```
 
-`fetch_pdf.py` prints a `MANUAL` line for each paper it could not get; download those yourself. `rank.py` stops before any API call if the token estimate is above 15M, and caches embeddings so a rerun pays only for new text.
+The keyword search returned 137 works and the semantic search the 50 closest. They share 20, so 167 distinct works came out, and `search_overlap.py` reported LOW OVERLAP: only 40% of the semantic works were in the keyword results. `fetch_pdf.py` downloaded 73 open-access PDFs. For each paper it could not get, it wrote a `MANUAL` line with the publisher page, where the PDF can be downloaded by hand.
 
-**4. Read the output.** The CSV has one row per paper, sorted by `fused_rank`; the `<query>_pages` columns give the pages to start reading. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
+Ranking scored the 73 PDFs on full text and 149 papers on their abstracts; 76 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.59M tokens and every embedding came from the cache: a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
+
+**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/qnet/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`. [`make_svg.py`](examples/qnet/make_svg.py) draws the card above from the CSV and the run record.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
@@ -137,9 +151,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 | Citing works | `--cites <id>` | Works that cite one paper (all pages need `OPENALEX_API_KEY`; without it, the first 200) | You want what came after a key paper |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
 
-`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the qnet question it was 3 of 50: the keyword query missed papers that say "request scheduling" or "resource allocation" instead of "multi-user", and the agent proposes a revised query when the overlap is under half.
-
-[`examples/qnet`](examples/qnet/papers.md) is a whole run from a keyword search: 47 works found, 18 open-access PDFs ranked on full text and all 34 distinct papers ranked on their abstracts (`--abstracts`).
+`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the qnet question it was 20 of 50, under half, and the agent then names the words the keyword query lacks and proposes a revised query.
 
 ## How ranking works
 

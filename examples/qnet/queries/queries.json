@@ -1,5 +1,6 @@
 {
-  "question": "Çok kullanıcılı bir kuantum ağında entanglement dağıtımını zamanlamak için hangi yöntemler (optimizasyon, heuristik, RL) kullanılmış ve hangi metriklerle karşılaştırılmış?",
+  "name": "entanglement-scheduling",
+  "question": "Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?",
   "fuse": ["Q0", "Q1", "Q2", "Q3"],
   "queries": {
     "Q0": {"label": "main", "description": "core question",

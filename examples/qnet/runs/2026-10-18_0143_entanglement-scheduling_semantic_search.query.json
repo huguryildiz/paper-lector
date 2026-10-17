@@ -1,0 +1,13 @@
+{
+ "mode": "semantic",
+ "query": "Scheduling entanglement distribution among multiple users in a quantum network with optimization, heuristics or reinforcement learning",
+ "date": "2026-10-18T01:43:59",
+ "count": 50,
+ "written": 50,
+ "already_in_sources": 0,
+ "max": null,
+ "keyless": false,
+ "keyless_first_page_only": false,
+ "name": "entanglement-scheduling",
+ "out": "2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl"
+}

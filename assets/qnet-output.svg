@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 588" width="880" height="588" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" role="img" aria-label="paper-lector example output: top 5 of 73 PDFs">
+<title>paper-lector example output (quantum network scheduling)</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#121518"/><stop offset="1" stop-color="#08090B"/></linearGradient><linearGradient id="row" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2DD4BF" stop-opacity="0.12"/><stop offset="1" stop-color="#2DD4BF" stop-opacity="0.03"/></linearGradient><linearGradient id="rule" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2DD4BF"/><stop offset="1" stop-color="#2DD4BF" stop-opacity="0"/></linearGradient><filter id="glow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<style>.r{animation:in .6s ease-out both}@keyframes in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}.p{animation:pulse 2.4s ease-in-out infinite}@keyframes pulse{0%,100%{fill-opacity:.14}50%{fill-opacity:.32}}.scan{animation:scan 6s ease-in-out infinite}@keyframes scan{0%{transform:translateY(0)}50%{transform:translateY(224px)}100%{transform:translateY(0)}}@media (prefers-reduced-motion:reduce){.r,.p,.scan{animation:none}}</style>
+<rect width="880" height="588" rx="16" fill="url(#bg)"/>
+<rect x="1" y="1" width="878" height="586" rx="15" fill="none" stroke="#2DD4BF" stroke-opacity="0.28" stroke-width="1.5"/>
+<g transform="translate(28 24) scale(0.1719)"><rect width="256" height="256" rx="56" fill="#141719"/><rect x="2" y="2" width="252" height="252" rx="54" fill="none" stroke="#2DD4BF" stroke-opacity="0.3" stroke-width="4"/><rect x="68" y="52" width="116" height="150" rx="10" fill="#2DD4BF" fill-opacity="0.1" stroke="#2DD4BF" stroke-opacity="0.6" stroke-width="3"/><path d="M60 70 a10 10 0 0 1 10 -10 h70 l36 36 v104 a10 10 0 0 1 -10 10 h-96 a10 10 0 0 1 -10 -10 z" fill="#0F1A1A" stroke="#5EEAD4" stroke-width="5"/><rect x="74" y="108" width="88" height="16" rx="5" fill="#F2B544"/><rect x="78" y="138" width="80" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.5"/><rect x="78" y="156" width="64" height="8" rx="4" fill="#5EEAD4" fill-opacity="0.5"/><circle cx="168" cy="168" r="30" fill="#F2B544" fill-opacity="0.12" stroke="#F2B544" stroke-width="12"/><line x1="190" y1="190" x2="214" y2="214" stroke="#F2B544" stroke-width="16" stroke-linecap="round"/></g>
+<text x="86" y="44" fill="#E6EDF3" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" letter-spacing="1.5">PAPER-<tspan fill="#5EEAD4">LECTOR</tspan></text>
+<text x="86" y="63" fill="#8B9BB4" font-size="10.5" letter-spacing="2.6">EXAMPLE RUN · QUANTUM NETWORK SCHEDULING</text>
+<rect x="28" y="86" width="64" height="3" rx="1.5" fill="url(#rule)"/>
+<text x="28" y="112" fill="#8B9BB4" font-size="11.5" letter-spacing="1.6" font-weight="600">QUESTION</text>
+<text x="28" y="134" fill="#E6EDF3" font-size="15.5" font-weight="600">Which methods (optimization, heuristics, reinforcement learning) have been used to schedule</text>
+<text x="28" y="156" fill="#E6EDF3" font-size="15.5" font-weight="600">entanglement distribution in a multi-user quantum network, and with which metrics were they</text>
+<text x="28" y="178" fill="#E6EDF3" font-size="15.5" font-weight="600">compared?</text>
+<text x="34" y="218" fill="#8B9BB4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">#</text>
+<text x="64" y="218" fill="#8B9BB4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="start">PAPER</text>
+<text x="592" y="218" fill="#8B9BB4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">ABSTRACT</text>
+<text x="678" y="218" fill="#8B9BB4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="middle">CITED BY</text>
+<text x="852" y="218" fill="#8B9BB4" font-size="11" letter-spacing="1.2" font-weight="600" text-anchor="end">START AT</text>
+<line x1="28" y1="228" x2="852" y2="228" stroke="#2DD4BF" stroke-opacity="0.25"/>
+<rect class="scan" x="16" y="238" width="4" height="50" rx="2" fill="#F2B544" filter="url(#glow)"/>
+<g class="r" style="animation-delay:0.25s">
+<rect x="26" y="238" width="838" height="50" rx="9" fill="url(#row)" stroke="#2DD4BF" stroke-opacity="0.18"/>
+<text x="44" y="271" fill="#F2B544" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle">1</text>
+<text x="64" y="262" fill="#E6EDF3" font-size="14" font-weight="600">Scheduling Concurrent Entanglement Requests in Quantum Netw…</text>
+<text x="64" y="280" fill="#8B9BB4" font-size="12">Ni et al., 2026</text>
+<text x="592" y="270" fill="#C9D4E3" font-size="14" text-anchor="middle">1</text>
+<text x="678" y="270" fill="#C9D4E3" font-size="14" text-anchor="middle">0</text>
+<rect class="p" x="764" y="253" width="88" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.6" style="animation-delay:0.0s"/>
+<text x="808" y="270" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 2-3</text>
+</g>
+<g class="r" style="animation-delay:0.60s">
+<rect x="26" y="294" width="838" height="50" rx="9" fill="url(#row)" stroke="#2DD4BF" stroke-opacity="0.18"/>
+<text x="44" y="327" fill="#F2B544" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle">2</text>
+<text x="64" y="318" fill="#E6EDF3" font-size="14" font-weight="600">Effective routing design for remote entanglement generation…</text>
+<text x="64" y="336" fill="#8B9BB4" font-size="12">Li et al., 2021</text>
+<text x="592" y="326" fill="#C9D4E3" font-size="14" text-anchor="middle">21</text>
+<text x="678" y="326" fill="#C9D4E3" font-size="14" text-anchor="middle">134</text>
+<rect class="p" x="764" y="309" width="88" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.6" style="animation-delay:0.4s"/>
+<text x="808" y="326" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 7-8</text>
+</g>
+<g class="r" style="animation-delay:0.95s">
+<rect x="26" y="350" width="838" height="50" rx="9" fill="url(#row)" stroke="#2DD4BF" stroke-opacity="0.18"/>
+<text x="44" y="383" fill="#F2B544" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle">3</text>
+<text x="64" y="374" fill="#E6EDF3" font-size="14" font-weight="600">Entanglement Request Scheduling in Quantum Networks Using D…</text>
+<text x="64" y="392" fill="#8B9BB4" font-size="12">Ni et al., 2025</text>
+<text x="592" y="382" fill="#C9D4E3" font-size="14" text-anchor="middle">2</text>
+<text x="678" y="382" fill="#C9D4E3" font-size="14" text-anchor="middle">2</text>
+<rect class="p" x="764" y="365" width="88" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.6" style="animation-delay:0.8s"/>
+<text x="808" y="382" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
+</g>
+<g class="r" style="animation-delay:1.30s">
+<rect x="26" y="406" width="838" height="50" rx="9" fill="url(#row)" stroke="#2DD4BF" stroke-opacity="0.18"/>
+<text x="44" y="439" fill="#F2B544" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle">4</text>
+<text x="64" y="430" fill="#E6EDF3" font-size="14" font-weight="600">ESDI: Entanglement Scheduling and Distribution in the Quant…</text>
+<text x="64" y="448" fill="#8B9BB4" font-size="12">Gu et al., 2023</text>
+<text x="592" y="438" fill="#C9D4E3" font-size="14" text-anchor="middle">3</text>
+<text x="678" y="438" fill="#C9D4E3" font-size="14" text-anchor="middle">14</text>
+<rect class="p" x="764" y="421" width="88" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.6" style="animation-delay:1.2s"/>
+<text x="808" y="438" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 4</text>
+</g>
+<g class="r" style="animation-delay:1.65s">
+<rect x="26" y="462" width="838" height="50" rx="9" fill="url(#row)" stroke="#2DD4BF" stroke-opacity="0.18"/>
+<text x="44" y="495" fill="#F2B544" font-family="Georgia, 'Times New Roman', serif" font-size="20" font-weight="700" text-anchor="middle">5</text>
+<text x="64" y="486" fill="#E6EDF3" font-size="14" font-weight="600">QoS-Aware Reinforcement Learning Routing for Entanglement N…</text>
+<text x="64" y="504" fill="#8B9BB4" font-size="12">Abreu et al., 2026</text>
+<text x="592" y="494" fill="#C9D4E3" font-size="14" text-anchor="middle">15</text>
+<text x="678" y="494" fill="#C9D4E3" font-size="14" text-anchor="middle">0</text>
+<rect class="p" x="764" y="477" width="88" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.6" style="animation-delay:1.6s"/>
+<text x="808" y="494" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 3-5</text>
+</g>
+<text x="28" y="540" fill="#5F6B7A" font-size="12">Top 5 of 73 PDFs · 149 papers ranked on abstracts · voyage-4-large + rerank-3 · fused over main, subject, approach, outcome</text>
+</svg>

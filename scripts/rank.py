@@ -382,6 +382,28 @@ def cell(s):
     return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r') else s
 
 
+def unique_pages(s):
+    """A _pages cell without repeated labels (two windows can share a label), first occurrence kept."""
+    return '; '.join(dict.fromkeys(s.split('; '))) if s else s
+
+
+def start_pages(cells, k=3):
+    """Up to k page labels to start reading at: labels counted once per query cell, most counted first (then by
+    page), a label overlapping one already picked skipped, never widened."""
+    def span(p):
+        a, _, b = p[3:].partition('-')
+        return int(a), int(b or a)
+    count = Counter(p for c in cells if c for p in set(c.split('; ')))
+    picked = []
+    for p in sorted(count, key=lambda p: (-count[p], *span(p))):
+        a, b = span(p)
+        if not any(a <= y and b >= x for x, y in map(span, picked)):
+            picked.append(p)
+        if len(picked) == k:
+            break
+    return '; '.join(picked)
+
+
 def read_ids(path):
     """Paper ids (and SHA-256 when the CSV has that column) from a CSV with a "paper" column."""
     rows = list(csv.DictReader(open(path, encoding='utf-8-sig')))
@@ -835,7 +857,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                 row = rows[P[k['pi']]['id']]
                 row[f'{col}_rank'] = 1 + sum(1 for v in score.values() if v > score[k['pi']])
                 row[f'{col}_score'] = round(score[k['pi']], 4)
-                row[f'{col}_pages'] = k['pages']
+                row[f'{col}_pages'] = unique_pages(k['pages'])
             if sanity is None:
                 sanity = [P[i]['id'] for i in sorted(score, key=lambda i: (-score[i], P[i]['id']))[:10]]
         cols = {qid: f'{qid}_{q["label"]}' for qid, q in Q.items()}
@@ -844,6 +866,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         for r in rows.values():
             r['fused_rank'] = 1 + sum(1 for o in rows.values() if o['_fs'] > r['_fs'])
             r['fused_score'] = round(r['_fs'], 6)
+            r['start_pages'] = start_pages(r[f'{cols[q]}_pages'] for q in fuse)
         first = cols[next(iter(Q))]
         order = sorted(rows.values(), key=lambda r: (-r['_fs'], r[f'{first}_rank'], r['paper']))
         meta = {p['id']: p for p in P}
@@ -852,6 +875,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         if a.abstracts:
             head += ['abs_fused_rank', 'abs_fused_score'] + [f'{c}_abs_{s}' for c in cols.values() for s in ('rank', 'score')] \
                 + ['abstract_from']
+        lead = ['fused_rank'] + ['abs_fused_rank'] * bool(a.abstracts) + ['citation', 'link', 'cited_by', 'cited_pct', 'start_pages']
+        head = lead + [h for h in head if h not in lead]          # reading columns first, the rest in their old order
+        val = lambda h, v: cell(v) if h == 'paper' else v
         known = common.sources(cfg)
         info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], source=x['source'],
                               link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec']),
@@ -865,9 +891,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             w = csv.writer(f); w.writerow(head)
             for r in order:
                 m = dict(meta[r['paper']], source='full_text', **{k: v for k, v in info.get(r['paper'], {}).items() if k != 'source'})
-                w.writerow([cell(r['paper'])] + [r.get(h, m.get(h)) for h in head[1:]])
+                w.writerow([val(h, r.get(h, m.get(h))) for h in head])
             for x in extra:
-                w.writerow([cell(x['id'])] + [info[x['id']].get(h) for h in head[1:]])
+                w.writerow([val(h, dict(info[x['id']], paper=x['id']).get(h)) for h in head])
         outputs[variant] = {'csv': str(path), 'fused_top10': [r['paper'] for r in order[:10]], 'first_query_top10': sanity}
         print(f'[{variant}] fused top 10: ' + ', '.join(r['paper'] for r in order[:10]))
         if a.expect:

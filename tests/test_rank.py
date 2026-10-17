@@ -66,8 +66,12 @@ def test_full_run_columns_fusion_and_run_record(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/r'), '--expect', 'Switch2024'])
     rows = list(csv.DictReader(open(project / 'runs/r_paper-lector_rank.csv')))
-    assert list(rows[0])[:10] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'cited_by', 'cited_pct', 'cited_at',
-                                 'Q0_main_rank', 'Q0_main_score']
+    assert list(rows[0])[:10] == ['fused_rank', 'citation', 'link', 'cited_by', 'cited_pct', 'start_pages',
+                                 'paper', 'fused_score', 'cited_at', 'Q0_main_rank']
+    assert len(rows[0]) == len(set(rows[0]))                      # every column once
+    for r in rows:                                                # fuse queries only (Q0, Q1), no repeated label
+        assert r['start_pages'] == rank.start_pages([r['Q0_main_pages'], r['Q1_subject_pages']]) != ''
+        assert all(len(c.split('; ')) == len(set(c.split('; '))) for k, c in r.items() if k.endswith('_pages'))
     assert 'Q3_context_pages' in rows[0] and not any(k.startswith('Q4') for k in rows[0])
     assert {r['paper'] for r in rows} == {'Switch2024', 'Ocean2023', 'queue2022'}   # sources key kept
     assert rows[0]['paper'] == 'Switch2024' and rows[0]['fused_rank'] == '1'
@@ -442,9 +446,9 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     rows = list(csv.DictReader(open(project / 'runs/a_paper-lector_rank.csv')))
     by = {r['paper']: r for r in rows}
     assert [r['source'] for r in rows] == ['full_text'] * 3 + ['abstract_only'] * 2     # PDFs first, then the rest
-    assert list(rows[0])[:5] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score']
+    assert list(rows[0])[:8] == ['fused_rank', 'abs_fused_rank', 'citation', 'link', 'cited_by', 'cited_pct', 'start_pages', 'paper']
     pay = by['Lovelace2025_SwitchMemorySchedulingWaitingUsers']
-    assert pay['fused_rank'] == '' and pay['Q0_main_pages'] == ''
+    assert pay['fused_rank'] == '' and pay['Q0_main_pages'] == '' and pay['start_pages'] == ''
     assert pay['abs_fused_rank'] == '1'                                    # best abstract, though it has no PDF
     assert pay['link'] == 'https://doi.org/10.9/paywalled'
     assert (pay['cited_by'], pay['cited_pct'], pay['cited_at']) == ('12', '93.7', '2026-10-18')
@@ -712,3 +716,14 @@ def test_older_log_beside_the_queries_file_still_counts(project, offline, monkey
                                                                      'question': 'x'}) + '\n')
     with pytest.raises(SystemExit, match='ranked before with a different question'):
         rank.main(['--out', str(project / 'runs/l'), '--provider', 'local', '--queries', str(q)])
+
+
+def test_start_pages_votes_once_per_query_skips_overlaps_and_breaks_ties_by_page():
+    assert rank.unique_pages('p. 7-8; p. 4-5; p. 7-8') == 'p. 7-8; p. 4-5' and rank.unique_pages('') == ''
+    # p. 7-8 twice in one cell counts once; p. 4-5 is in two cells, so it leads
+    assert rank.start_pages(['p. 7-8; p. 4-5; p. 7-8', 'p. 4-5; p. 10']) == 'p. 4-5; p. 7-8; p. 10'
+    # inclusive overlap: p. 5-6 touches p. 4-5 and is skipped, scanning goes on; ranges are never widened
+    assert rank.start_pages(['p. 4-5; p. 5-6', 'p. 4-5; p. 12; p. 1']) == 'p. 4-5; p. 1; p. 12'
+    # equal counts ordered by page number, not as strings (p. 9 before p. 10); at most k
+    assert rank.start_pages(['p. 10; p. 9; p. 2-3; p. 20']) == 'p. 2-3; p. 9; p. 10'
+    assert rank.start_pages(['p. 3']) == 'p. 3' and rank.start_pages(['', None]) == ''
