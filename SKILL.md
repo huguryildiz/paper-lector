@@ -36,7 +36,7 @@ Every script looks for `literature.json`, starting in the current folder and wal
 
 - `pdf_dirs` (required): folders searched recursively for PDFs.
 - `download_dir`: where `fetch_pdf.py` saves; defaults to the first `pdf_dirs` entry.
-- `sources` (optional): a CSV with `key`, `pdf_path` and `doi` columns. Papers listed there keep their key as id; other PDFs are named by file stem.
+- `sources` (optional): a CSV with `key`, `pdf_path` and `doi` columns. Papers listed there keep their key as id; other PDFs are named by file stem, with `-2`, `-3` added when two files share a name. If the file is missing, the scripts note it and continue without it.
 - `queries`: the frozen queries file for `rank.py`.
 - `rank` (optional): `{"provider": "voyage"}` (default) or `{"provider": "bm25"}`. `--provider` overrides it for one run.
 
@@ -104,7 +104,7 @@ If the user names papers they expect near the top, write them down with the quer
 ## Step 3: ranking
 
 1. Run `rank.py --out <prefix> --dry`. It prints counts per paper (tokens, windows, bibliography cut, abstract found) and the token estimate, with no API call. Report the estimate.
-2. Run without `--dry`. It stops before any API call if the estimate is above `--budget` (15M tokens by default). Voyage gives 200M free tokens per model; after that `voyage-4-large` costs $0.12 and `rerank-3` $0.05 per million tokens.
+2. Run without `--dry`. It stops before any API call if the estimate is above `--budget` (15M tokens by default). Embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite`, so a rerun or a run restarted after a crash pays only for new text (the estimate still counts everything). Voyage gives 200M free tokens per model; after that `voyage-4-large` costs $0.12 and `rerank-3` $0.05 per million tokens.
 3. Report the fused top 10, where it disagrees with single queries, and the sanity check result as it is.
 
 What happens inside: the whole PDF is split into 1,200-token windows with page labels (bibliography cut when found with confidence; appendices kept). For each paper and query, the 3 best windows are chosen by fusing embedding similarity (`voyage-4-large`) with BM25 on the keyword string. The reranker (`rerank-3`) then scores each paper once per query on its abstract plus those 3 windows. Adding PDFs changes BM25 statistics, so rerun the whole collection rather than ranking only the new files.

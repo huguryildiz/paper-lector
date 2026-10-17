@@ -107,7 +107,7 @@ $PY $PL/scripts/rank.py --out runs/uw --dry
 $PY $PL/scripts/rank.py --out runs/uw
 ```
 
-`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default).
+`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite`, so a rerun pays only for new text.
 
 **4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages the reranker read, which is a sensible place to start reading. `runs/uw_run.json` records the queries, models, token usage and commit, so the run can be repeated. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 

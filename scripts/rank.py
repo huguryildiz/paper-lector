@@ -12,10 +12,13 @@ Method:
   Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
   chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_bm25.csv.
 
+  Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
+  rerun or a run resumed after a crash only pays for new text.
+
   rank.py --out runs/2026-10-17 --dry     # counts and token estimate, no API call
   rank.py --out runs/2026-10-17           # writes <out>_hybrid.csv and <out>_run.json
 """
-import argparse, csv, datetime, hashlib, json, math, re, subprocess, sys, urllib.request
+import argparse, csv, datetime, hashlib, json, math, re, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
 from pathlib import Path
 
@@ -29,6 +32,7 @@ WIN, STEP, RRF_K, N_WIN, MAX_OVERLAP, HEAD = 1200, 1000, 60, 3, 0.2, 1000
 EMBED_BATCH, RERANK_BATCH = 100_000, 500_000
 TOK_URL = 'https://huggingface.co/voyageai/voyage-4-large/resolve/main/tokenizer.json'
 TOK_PATH = Path.home() / '.cache/paper-lector/voyage-4-large-tokenizer.json'
+CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
            'from into over than then which when where while what who how does do can not no'.split())
 KEY = None
@@ -37,14 +41,34 @@ KEY = None
 def call(ep, body):
     req = urllib.request.Request(f'https://api.voyageai.com/v1/{ep}', json.dumps(body).encode(),
                                  {'Authorization': 'Bearer ' + KEY, 'content-type': 'application/json'})
-    for attempt in range(4):
-        try:
-            with urllib.request.urlopen(req, timeout=600) as r:
-                return json.load(r)
-        except urllib.error.HTTPError as e:
-            if e.code not in (429, 500, 502, 503) or attempt == 3:
-                raise
-            import time; time.sleep(10 * (attempt + 1))
+    return common.open_json(req, timeout=600)
+
+
+def embed(items, input_type, usage):
+    """Unit-norm embeddings for (text, tokens) items. Cached vectors are reused; new ones are stored after each
+    API batch, so a crashed run resumes without paying again. Stored as float32 whether fresh or cached."""
+    CACHE.parent.mkdir(parents=True, exist_ok=True)
+    db = sqlite3.connect(CACHE)
+    db.execute('create table if not exists emb (key text primary key, vec blob)')
+    keys = [hashlib.sha256(f'{EMBED}\0{input_type}\0{t}'.encode()).hexdigest() for t, _ in items]
+    vec = {}
+    for k in dict.fromkeys(keys):
+        row = db.execute('select vec from emb where key = ?', (k,)).fetchone()
+        if row:
+            vec[k] = np.frombuffer(row[0], np.float32)
+    cached = len(vec)
+    todo = list({k: it for k, it in zip(keys, items) if k not in vec}.items())
+    for part in batches(todo, lambda x: x[1][1], EMBED_BATCH):
+        r = call('embeddings', {'input': [it[0] for _, it in part], 'model': EMBED, 'input_type': input_type, 'truncation': False})
+        usage['embed'] += r['usage']['total_tokens']
+        for (k, _), x in zip(part, r['data']):
+            vec[k] = np.asarray(x['embedding'], np.float32)
+        db.executemany('insert or replace into emb values (?, ?)', [(k, vec[k].tobytes()) for k, _ in part])
+        db.commit()
+    db.close()
+    usage['embed_cached'] += cached
+    E = np.array([vec[k] for k in keys], float)
+    return E / np.linalg.norm(E, axis=1, keepdims=True)
 
 
 def tokenizer():
@@ -58,18 +82,20 @@ def tokenizer():
 def find_pdfs(dirs, known, ids=None):
     """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem."""
     out = {k: v['pdf'] for k, v in known.items() if v['pdf'] and v['pdf'].is_file()}
-    taken = {p.name for p in out.values()}
+    taken = {p.resolve() for p in out.values()}
     gone = [str(d) for d in dirs if not Path(d).is_dir()]
     if gone:
         sys.exit(f'PDF folder not found: {", ".join(gone)}. Check "pdf_dirs" in the config or --dirs')
     for d in dirs:
         for p in sorted(Path(d).rglob('*.pdf')):
-            if p.name in taken:
+            if p.resolve() in taken:
                 continue
-            if p.stem in out and out[p.stem] != p:
-                print(f'note: two PDFs named {p.name}; keeping {out[p.stem]}', file=sys.stderr)
-                continue
-            out[p.stem] = p
+            pid, n = p.stem, 2
+            while pid in out:
+                pid, n = f'{p.stem}-{n}', n + 1
+            if pid != p.stem:
+                print(f'note: {p} has the same name as {out[p.stem]}; ranked as {pid}', file=sys.stderr)
+            out[pid] = p; taken.add(p.resolve())
     if ids:
         missing = [i for i in ids if i not in out]
         if missing:
@@ -234,14 +260,8 @@ def main(argv=None):
         if estimate > a.budget:
             sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
         KEY = common.api_key('VOYAGE_API_KEY', cfg)
-        E = []
-        for part in batches(W, lambda w: w['n'], EMBED_BATCH):
-            r = call('embeddings', {'input': [w['text'] for w in part], 'model': EMBED, 'input_type': 'document', 'truncation': False})
-            E += [x['embedding'] for x in r['data']]; usage['embed'] += r['usage']['total_tokens']
-        E = np.array(E, float); E /= np.linalg.norm(E, axis=1, keepdims=True)
-        r = call('embeddings', {'input': [q['text'] for q in Q.values()], 'model': EMBED, 'input_type': 'query', 'truncation': False})
-        QE = np.array([x['embedding'] for x in r['data']], float); QE /= np.linalg.norm(QE, axis=1, keepdims=True)
-        usage['embed'] += r['usage']['total_tokens']
+        E = embed([(w['text'], w['n']) for w in W], 'document', usage)
+        QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage)
 
     outputs = {}
     for variant in variants:
@@ -314,7 +334,8 @@ def main(argv=None):
            'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P]},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
     Path(f'{a.out}_run.json').write_text(json.dumps(run, indent=1, ensure_ascii=False))
-    print(f'tokens: embed {usage["embed"]:,}, rerank {usage["rerank"]:,} -> {a.out}_run.json', file=sys.stderr)
+    print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '
+          f'-> {a.out}_run.json', file=sys.stderr)
 
 
 if __name__ == '__main__':

@@ -72,3 +72,29 @@ def test_queries_validation(tmp_path, bad, msg):
     p.write_text(json.dumps(bad))
     with pytest.raises(SystemExit, match=msg):
         common.load_queries(p)
+
+
+def test_missing_sources_table_is_skipped(project, capsys):
+    (project / 'sources.csv').unlink()
+    assert common.sources(common.load_config(start=project)) == {}
+    assert 'not found' in capsys.readouterr().err
+
+
+def test_open_json_retries_network_errors(monkeypatch):
+    import io, urllib.error
+    calls = []
+    def fake(req, timeout):
+        calls.append(1)
+        if len(calls) < 3:
+            raise urllib.error.URLError('connection reset') if len(calls) == 1 else TimeoutError()
+        return io.BytesIO(b'{"ok": 1}')
+    monkeypatch.setattr(common.urllib.request, 'urlopen', fake)
+    monkeypatch.setattr(common.time, 'sleep', lambda s: None)
+    assert common.open_json('req', timeout=1) == {'ok': 1} and len(calls) == 3
+    calls.clear()
+    def bad(req, timeout):
+        calls.append(1); raise urllib.error.HTTPError('u', 404, 'nf', {}, None)
+    monkeypatch.setattr(common.urllib.request, 'urlopen', bad)
+    with pytest.raises(urllib.error.HTTPError):
+        common.open_json('req', timeout=1)
+    assert len(calls) == 1                                       # 404 is not retried

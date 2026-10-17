@@ -8,8 +8,9 @@ from conftest import FakeVoyage, WordTokenizer
 
 
 @pytest.fixture
-def offline(monkeypatch):
+def offline(monkeypatch, tmp_path):
     fake = FakeVoyage()
+    monkeypatch.setattr(rank, 'CACHE', tmp_path / 'cache' / 'embeddings.sqlite')
     monkeypatch.setattr(rank, 'call', fake)
     monkeypatch.setattr(rank, 'tokenizer', WordTokenizer)
     monkeypatch.setattr(rank, 'WIN', 60)
@@ -142,3 +143,29 @@ def test_empty_pdf_folder_fails(project, offline, monkeypatch):
     (project / 'literature.json').write_text('{"pdf_dirs": ["empty"], "queries": "queries.json"}')
     with pytest.raises(SystemExit, match='no PDFs in'):
         rank.main(['--out', str(project / 'runs/x'), '--dry'])
+
+
+def test_embedding_cache_skips_paid_calls_on_rerun(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/c1')])
+    first = [e for e, _ in offline.calls].count('embeddings')
+    offline.calls.clear()
+    rank.main(['--out', str(project / 'runs/c2')])
+    assert first > 0 and [e for e, _ in offline.calls].count('embeddings') == 0
+    assert open(project / 'runs/c1_hybrid.csv').read() == open(project / 'runs/c2_hybrid.csv').read()
+    run = json.load(open(project / 'runs/c2_run.json'))
+    assert run['usage'].get('embed', 0) == 0 and run['usage']['embed_cached'] > 0
+
+
+def test_same_file_name_in_two_folders_keeps_both(project, monkeypatch, capsys):
+    from conftest import make_pdf
+    other = project / 'papers' / 'other'
+    other.mkdir()
+    make_pdf(other / 'Ocean2023.pdf', [['A different paper about ocean acoustics']])
+    make_pdf(other / 'Queue2022.pdf', [['Not the sources-table queue paper']])
+    known = {'queue2022': {'pdf': project / 'papers/topic/Queue2022.pdf', 'doi': ''}}
+    out = rank.find_pdfs([project / 'papers'], known)
+    assert out['queue2022'] == project / 'papers/topic/Queue2022.pdf'
+    assert out['Queue2022'] == other / 'Queue2022.pdf'           # same basename as a sources PDF, still ranked
+    assert {out['Ocean2023'], out['Ocean2023-2']} == {other / 'Ocean2023.pdf', project / 'papers/topic/Ocean2023.pdf'}
+    assert 'ranked as Ocean2023-2' in capsys.readouterr().err

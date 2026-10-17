@@ -24,8 +24,7 @@ FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location
 def get(path, params):
     req = urllib.request.Request(f'{API}/{path}?{urllib.parse.urlencode(params)}',
                                  headers={'Authorization': 'Bearer ' + KEY})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return json.load(r)
+    return common.open_json(req, timeout=120)
 
 
 def work_id(x):
@@ -96,6 +95,7 @@ def main():
         works = works[:a.max]
 
     held = held_dois(cfg)
+    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     with open(a.out, 'w', encoding='utf-8') as f:
         for w in works:
             f.write(json.dumps(record(w, held), ensure_ascii=False) + '\n')

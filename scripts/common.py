@@ -1,5 +1,5 @@
-"""Shared helpers: project config (literature.json), API keys, sources table, queries file."""
-import csv, json, os, re, sys
+"""Shared helpers: project config (literature.json), API keys, sources table, queries file, HTTP retries."""
+import csv, json, os, re, sys, time, urllib.error, urllib.request
 from pathlib import Path
 
 CONFIG_NAME = 'literature.json'
@@ -74,9 +74,27 @@ def api_key(name, cfg=None):
     sys.exit(f'{name} is not set. Put it in the environment, in the project .env, or in ~/.config/paper-lector/.env')
 
 
+def open_json(req, timeout, tries=4):
+    """urlopen and parse JSON; retry on 429/5xx, timeouts and dropped connections, raise anything else."""
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            if attempt == tries - 1:
+                raise
+        time.sleep(10 * (attempt + 1))
+
+
 def sources(cfg):
     """Optional table of known papers: key -> {'pdf': Path or None, 'doi': str}."""
     if not cfg or not cfg['sources']:
+        return {}
+    if not cfg['sources'].is_file():
+        print(f'note: sources table {cfg["sources"]} not found; continuing without it', file=sys.stderr)
         return {}
     with open(cfg['sources'], encoding='utf-8-sig') as f:
         rows = list(csv.DictReader(f))
