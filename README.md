@@ -136,6 +136,23 @@ Ranking scored the 73 PDFs on full text and 149 papers on their abstracts; 76 of
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
+**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 30 seconds) gave [`runs/2026-10-18_0246_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0246_entanglement-scheduling_rank-local.csv). Its order agrees with Voyage at Spearman 0.71 on full text and 0.72 on abstracts (139 papers), but the two top 10s share only 4 papers. Voyage's top 10 with the place each paper got from the local run:
+
+| Voyage | Local | Paper |
+| ---: | ---: | --- |
+| 1 | 5 | Ni & Ho (2026), Scheduling concurrent entanglement requests in quantum networks |
+| 2 | 2 | Li et al. (2021), Effective routing design for remote entanglement generation |
+| 3 | 25 | Ni et al. (2025), Entanglement request scheduling using deep Q-network |
+| 4 | 22 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
+| 5 | 6 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
+| 6 | 4 | Kumar et al. (2026), Making quantum networks work: routing |
+| 7 | 31 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
+| 8 | 34 | Halder et al. (2024), Optimal routing and end-to-end entanglement distribution |
+| 9 | 19 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
+| 10 | 44 | Tran et al. (2026), Dynamic entanglement packet scheduling |
+
+The local run keeps the papers that share the question's words, but loses several that answer its specific part, scheduling among many users: three scheduling papers drop from the top 4 and top 10 to places 22 to 44, and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 47. Its first place is a general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 22nd. Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
+
 ## Search modes
 
 `openalex_search.py` finds papers in OpenAlex in four ways. With an agent, ask for a search ("find papers on energy-aware routing in underwater networks") and it asks which modes to use, then shows the queries it wrote for you to approve.
