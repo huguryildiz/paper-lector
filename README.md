@@ -131,3 +131,7 @@ BM25 only matches words, so a paper that says "relay" when the query says "next 
 ```
 
 The tests run offline: small generated PDFs, a word tokenizer and a fake Voyage API.
+
+## License
+
+[MIT](LICENSE)
