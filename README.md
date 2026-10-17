@@ -137,7 +137,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 
 `<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers; you can run both.
 
-[`examples/qnet`](examples/qnet/papers.md) is a whole run from a keyword search: 47 works found, 18 open-access PDFs ranked on full text and all 33 distinct papers ranked on their abstracts (`--abstracts`).
+[`examples/qnet`](examples/qnet/papers.md) is a whole run from a keyword search: 47 works found, 18 open-access PDFs ranked on full text and all 34 distinct papers ranked on their abstracts (`--abstracts`).
 
 ## How ranking works
 
