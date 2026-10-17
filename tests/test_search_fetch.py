@@ -6,11 +6,13 @@ def test_record_rebuilds_abstract_and_marks_known_doi():
     w = {'id': 'https://openalex.org/W1', 'doi': 'https://doi.org/10.1/Q', 'display_name': 'T', 'publication_year': 2022,
          'primary_location': {'source': {'display_name': 'Venue'}}, 'best_oa_location': {'pdf_url': 'http://x/p.pdf'},
          'locations': [{'landing_page_url': 'https://arxiv.org/abs/2205.06300'}],
-         'authorships': [{'author': {'display_name': 'A. Chandra'}}],
+         'authorships': [{'author': {'display_name': 'A. Chandra'}}, {'author': {'display_name': 'B. Roy'}}],
+         'biblio': {'volume': '12', 'issue': None, 'first_page': '3', 'last_page': '9'},
          'abstract_inverted_index': {'world': [1], 'hello': [0]}}
     r = openalex_search.record(w, {'10.1/q': 'queue2022'})
     assert r['abstract'] == 'hello world' and r['in_sources'] == 'queue2022'
     assert r['arxiv'] == '2205.06300' and r['oa_pdf'] == 'http://x/p.pdf' and r['openalex'] == 'W1'
+    assert r['authors'] == ['A. Chandra', 'B. Roy'] and r['biblio'] == {'volume': '12', 'first_page': '3', 'last_page': '9'}
 
 
 def test_pdf_name_and_candidate_order():

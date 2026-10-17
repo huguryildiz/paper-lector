@@ -1,6 +1,6 @@
 {
- "created": "2026-10-17T23:04:46",
- "paper_lector_commit": "c1b6846",
+ "created": "2026-10-17T23:12:54",
+ "paper_lector_commit": "c4fcd47",
  "question": "Çok kullanıcılı bir kuantum ağında entanglement dağıtımını zamanlamak için hangi yöntemler (optimizasyon, heuristik, RL) kullanılmış ve hangi metriklerle karşılaştırılmış?",
  "queries": {
   "Q0": {
@@ -187,7 +187,7 @@
  "estimate": 766525,
  "outputs": {
   "hybrid": {
-   "csv": "runs/qnet_abs_2026-10-17_hybrid.csv",
+   "csv": "runs/qnet_abs2_2026-10-17_hybrid.csv",
    "fused_top10": [
     "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
     "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
@@ -218,42 +218,42 @@
   "files": [
    {
     "path": "runs/search_v2_filtered.jsonl",
-    "sha256": "ec597ad0bdaccf360c67f425cb93cc7722f71c3ab033ff85b6e49df66bd79ba8"
+    "sha256": "7cc0ceb43941e8ec3febda1931cd478abee34e7364dd277096d848f821f39ab3"
    }
   ],
   "papers": 33,
   "ranked": 32,
   "abstract_only": [
-   "10.1109/iwcmc65282.2025.11059451",
-   "10.1109/infocom42981.2021.9488850",
-   "10.1109/icdcs60910.2024.00033",
-   "10.1109/icasi57738.2023.10179513",
-   "W3157943800",
-   "10.1109/tnet.2023.3285093",
-   "10.1109/iwcmc65282.2025.11059641",
-   "10.1109/globecom52923.2024.10901422",
-   "10.1109/globecom52923.2024.10901779",
-   "10.1109/qcnc69040.2026.00045",
-   "10.1109/ton.2026.3683478",
-   "W3172189854",
-   "10.1007/978-3-032-32636-2_41",
-   "10.1088/1674-1056/aeab5d",
-   "10.1109/jetcas.2024.3425712"
+   "Liu2025_QuantumNetworkRoutingDesignDynamic",
+   "Zhao2021_RedundantEntanglementProvisioningSelectionThroughput",
+   "Zeng2024_MultiUserEntanglementRoutingDesign",
+   "Huang2023_HeuristicEntanglementRoutingQuantumNetworks",
+   "Leone2021_QuNetCostVectorAnalysisMulti",
+   "Chen2023_QDDCADecentralizedDynamicCongestion",
+   "Yang2025_SwappingBoostOptimizingEntanglementRoutingMitigating",
+   "Ho2024_OnlineTransitEntanglementRoutingQuantum",
+   "Huang2024_AuthorizableTripartiteEntanglementRouting3",
+   "Yang2026_OnlineSchedulingDistributionQuantumCircuits",
+   "Wang2026_DeepReinforcementLearningBasedDeferred",
+   "Skrzypczyk2020_DynamicTimeDivisionMultipleAccess",
+   "Tian2026_RADARQResourceAwareDistributed",
+   "Hu2026_ResourceEffcientQuantumBeneNetworks",
+   "Jia2024_FidelityOrientedEntanglementDistributionQuantum"
   ],
   "no_abstract": [
-   "10.1007/978-3-032-32636-2_41"
+   "Tian2026_RADARQResourceAwareDistributed"
   ],
   "top10": [
-   "10.1109/iwcmc65282.2025.11059451",
+   "Liu2025_QuantumNetworkRoutingDesignDynamic",
    "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
    "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
-   "10.1109/jetcas.2024.3425712",
-   "10.1109/iwcmc65282.2025.11059641",
-   "10.1109/ton.2026.3683478",
+   "Jia2024_FidelityOrientedEntanglementDistributionQuantum",
+   "Yang2025_SwappingBoostOptimizingEntanglementRoutingMitigating",
+   "Wang2026_DeepReinforcementLearningBasedDeferred",
    "Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b",
-   "W3157943800",
-   "W3172189854",
-   "10.1109/icasi57738.2023.10179513"
+   "Skrzypczyk2020_DynamicTimeDivisionMultipleAccess",
+   "Leone2021_QuNetCostVectorAnalysisMulti",
+   "Huang2023_HeuristicEntanglementRoutingQuantumNetworks"
   ]
  }
 }

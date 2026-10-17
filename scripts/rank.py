@@ -322,6 +322,42 @@ def words(s):
     return ' '.join(re.findall(r'[a-z0-9]+', s.lower()))
 
 
+def link(r, doi=None):
+    """A clickable link: the DOI, else the arXiv page, else the OpenAlex page."""
+    doi = (r or {}).get('doi') or doi
+    if doi:
+        return 'https://doi.org/' + doi
+    if (r or {}).get('arxiv'):
+        return 'https://arxiv.org/abs/' + r['arxiv']
+    return 'https://openalex.org/' + r['openalex'] if (r or {}).get('openalex') else ''
+
+
+def citation(r):
+    """Authors (year). Title. Venue, volume(issue), pages. Only what the search record holds."""
+    if not r:
+        return ''
+    names = r.get('authors') or ([r['first_author']] if r.get('first_author') else [])
+    who = ', '.join(names[:3]) + (' et al.' if len(names) > 3 else '')
+    b = r.get('biblio') or {}
+    where = '' if not r.get('venue') else r['venue'] + (f", {b['volume']}" if b.get('volume') else '') + (f"({b['issue']})" if b.get('issue') else '') \
+        + (f", {b['first_page']}" if b.get('first_page') else '') \
+        + (f"\u2013{b['last_page']}" if b.get('last_page') and b.get('last_page') != b.get('first_page') else '')
+    return ' '.join(x for x in (f'{who} ({r.get("year") or "n.d."}).' if who else f'({r.get("year") or "n.d."}).',
+                                (r.get('title') or '').rstrip('.') + '.', where.strip(', ') + '.' if where.strip(', ') else '') if x)
+
+
+def short_id(r, taken):
+    """Surname, year and five title words, like the PDF names fetch_pdf.py writes (without the hash)."""
+    surname = re.sub(r'\W', '', (r.get('first_author') or (r.get('authors') or ['Anon'])[0] or 'Anon').split()[-1])
+    stop = {'a', 'an', 'the', 'of', 'for', 'and', 'in', 'on', 'with', 'to', 'via', 'under', 'by', 'at'}
+    w = [x for x in re.findall(r'[A-Za-z0-9]+', r.get('title') or '') if x.lower() not in stop][:5]
+    base = f"{surname}{r.get('year') or ''}_{''.join(x[:1].upper() + x[1:] for x in w)}"
+    pid, n = base, 2
+    while pid in taken:
+        pid, n = f'{base}-{n}', n + 1
+    return pid
+
+
 def abstract_corpus(paths, P, W, cfg, dirs):
     """Papers for the abstract order: every PDF paper (its search record's abstract, else the abstract read from the
     PDF) and every search record with no PDF (abstract_only). A record belongs to a PDF through the sources table's
@@ -358,7 +394,8 @@ def abstract_corpus(paths, P, W, cfg, dirs):
         t = set(t.split())
         best = max(((len(t & v) / len(t), k) for k, v in first.items()), default=(0, None))
         return best[1] if len(t) >= 4 and best[0] >= 0.8 else None
-    A, taken = {p['id']: {'id': p['id'], 'source': 'full_text', 'title': '', 'text': p['head'], 'from': 'pdf'} for p in P}, {}
+    A, taken = {p['id']: {'id': p['id'], 'source': 'full_text', 'title': '', 'text': p['head'], 'from': 'pdf', 'rec': None}
+                for p in P}, {}
     for r, ids in recs:
         pid = next((owner[i] for i in ids if i in owner), None)
         t = words(r.get('title') or '')
@@ -366,15 +403,15 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             pid = by_title(t)
         if pid is not None and pid not in taken:
             taken[pid] = True
-            A[pid]['title'] = r.get('title') or ''
+            A[pid].update(title=r.get('title') or '', rec=r)
             if r.get('abstract'):
                 A[pid].update(text=r['abstract'], **{'from': 'search'})
             continue
         if pid is not None:
             continue                                      # a second record for a paper already matched
-        aid = r.get('doi') or r.get('openalex') or r.get('arxiv')
+        aid = short_id(r, A)
         A[aid] = {'id': aid, 'source': 'abstract_only', 'title': r.get('title') or '', 'text': r.get('abstract') or '',
-                  'from': 'search' if r.get('abstract') else ''}
+                  'from': 'search' if r.get('abstract') else '', 'rec': r}
     return list(A.values())
 
 
@@ -584,13 +621,16 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         first = cols[next(iter(Q))]
         order = sorted(rows.values(), key=lambda r: (-r['_fs'], r[f'{first}_rank'], r['paper']))
         meta = {p['id']: p for p in P}
-        head = ['paper', 'fused_rank', 'fused_score'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
+        head = ['paper', 'link', 'citation', 'fused_rank', 'fused_score'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
             + [f'{c}_pages' for c in cols.values()] + ['tokens', 'bib_cut', 'abstract_found', 'source']
         if a.abstracts:
             head += ['abs_fused_rank', 'abs_fused_score'] + [f'{c}_abs_{s}' for c in cols.values() for s in ('rank', 'score')] \
-                + ['abstract_from', 'title']
-        info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], title=x['title'], source=x['source'])
-                for x in A}
+                + ['abstract_from']
+        known = common.sources(cfg)
+        info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], source=x['source'],
+                              link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec'])) for x in A}
+        for pid in meta:
+            info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),
                        key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
         path = Path(f'{a.out}_{variant}.csv'); path.parent.mkdir(parents=True, exist_ok=True)

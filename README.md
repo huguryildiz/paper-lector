@@ -196,7 +196,7 @@ All three scripts look for `literature.json` from the current folder up to the p
 | | `--provider voyage\|bm25` | Override `rank.provider` for this run |
 | | `--queries FILE` / `--dirs A,B` | Override `queries` or `pdf_dirs` from the config |
 | | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus). With a `sha256` column (copy it from `corpus.files` in `_run.json`) a changed file under the same id stops the run. An empty list stops it too |
-| | `--abstracts FILE[,FILE]` | Search JSONL files: rank every paper on its abstract alone as well (`abs_fused_rank`), including search results with no PDF (`source` = `abstract_only`, listed after the PDFs). A record is tied to its PDF through the sources DOI, an `OK` line in `fetch_log.jsonl` or its title on the PDF's first page. The two orders are kept apart: abstract-only scores run lower than full-text ones |
+| | `--abstracts FILE[,FILE]` | Search JSONL files: rank every paper on its abstract alone as well (`abs_fused_rank`), including search results with no PDF (`source` = `abstract_only`, listed after the PDFs and named like the PDFs `fetch_pdf.py` saves). Each row also gets a `link` (DOI, else arXiv or OpenAlex) and a `citation` from the search record. A record is tied to its PDF through the sources DOI, an `OK` line in `fetch_log.jsonl` or its title on the PDF's first page. The two orders are kept apart: abstract-only scores run lower than full-text ones |
 | | `--expect A,B` | Paper ids you expect in the first query's top 10, written down before the run |
 | | `--variants hybrid,dense` | Add a dense-only ablation (voyage only) |
 

@@ -18,7 +18,7 @@ import common
 
 API = 'https://api.openalex.org'
 KEY = None
-FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location,locations,authorships,abstract_inverted_index,type'
+FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location,locations,authorships,abstract_inverted_index,type,biblio'
 
 
 def get(path, params):
@@ -53,6 +53,8 @@ def record(w, held):
         'openalex': w['id'].split('/')[-1], 'doi': doi, 'arxiv': arxiv,
         'title': w.get('display_name'), 'year': w.get('publication_year'), 'venue': src,
         'first_author': next((a['author']['display_name'] for a in w.get('authorships') or []), None),
+        'authors': [a['author']['display_name'] for a in w.get('authorships') or [] if a.get('author', {}).get('display_name')],
+        'biblio': {k: v for k, v in (w.get('biblio') or {}).items() if v},
         'oa_pdf': (w.get('best_oa_location') or {}).get('pdf_url'),
         'relevance': w.get('relevance_score'),
         'in_sources': held.get(doi),  # key in the sources table, if any

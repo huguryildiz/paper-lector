@@ -65,7 +65,7 @@ def test_full_run_columns_fusion_and_run_record(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/r'), '--expect', 'Switch2024'])
     rows = list(csv.DictReader(open(project / 'runs/r_hybrid.csv')))
-    assert list(rows[0])[:5] == ['paper', 'fused_rank', 'fused_score', 'Q0_main_rank', 'Q0_main_score']
+    assert list(rows[0])[:7] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'Q0_main_rank', 'Q0_main_score']
     assert 'Q3_context_pages' in rows[0] and not any(k.startswith('Q4') for k in rows[0])
     assert {r['paper'] for r in rows} == {'Switch2024', 'Ocean2023', 'queue2022'}   # sources key kept
     assert rows[0]['paper'] == 'Switch2024' and rows[0]['fused_rank'] == '1'
@@ -369,9 +369,11 @@ def search_file(project):
         {'doi': '10.1/q', 'title': 'LIFO for noisy memories', 'abstract': 'Requests wait in a buffer; LIFO serves the youngest pair.'},
         {'openalex': 'W1', 'title': 'Age based scheduling at a quantum switch', 'abstract': 'Which user receives a stored entangled pair at a switch.'},
         {'arxiv': '2205.06300', 'title': 'Seawater links', 'abstract': ''},
-        {'doi': '10.9/paywalled', 'title': 'Switch memory scheduling for waiting users',
+        {'doi': '10.9/paywalled', 'title': 'Switch memory scheduling for waiting users', 'year': 2025, 'venue': 'IEEE TQE',
+         'authors': ['Ada Lovelace', 'Bo Li', 'Cy Young', 'Di Wu'], 'first_author': 'Ada Lovelace',
+         'biblio': {'volume': '6', 'issue': '2', 'first_page': '10', 'last_page': '19'},
          'abstract': 'Which user receives a stored entangled pair when requests wait at a quantum switch with memories.'},
-        {'openalex': 'W7', 'title': 'No abstract here', 'abstract': ''},
+        {'openalex': 'W7', 'title': 'No abstract here', 'year': 2024, 'first_author': 'Ed Ng', 'abstract': ''},
     ]
     path = project / 'search.jsonl'
     path.write_text(''.join(json.dumps(r) + '\n' for r in recs))
@@ -388,16 +390,24 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     rows = list(csv.DictReader(open(project / 'runs/a_hybrid.csv')))
     by = {r['paper']: r for r in rows}
     assert [r['source'] for r in rows] == ['full_text'] * 3 + ['abstract_only'] * 2     # PDFs first, then the rest
-    assert by['10.9/paywalled']['fused_rank'] == '' and by['10.9/paywalled']['Q0_main_pages'] == ''
-    assert by['10.9/paywalled']['abs_fused_rank'] == '1'                  # best abstract, though it has no PDF
-    assert by['W7']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'W7'  # no abstract: listed, not ranked
+    assert list(rows[0])[:5] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score']
+    pay = by['Lovelace2025_SwitchMemorySchedulingWaitingUsers']
+    assert pay['fused_rank'] == '' and pay['Q0_main_pages'] == ''
+    assert pay['abs_fused_rank'] == '1'                                    # best abstract, though it has no PDF
+    assert pay['link'] == 'https://doi.org/10.9/paywalled'
+    assert pay['citation'] == ('Ada Lovelace, Bo Li, Cy Young et al. (2025). Switch memory scheduling for waiting users. '
+                               'IEEE TQE, 6(2), 10\u201319.')
+    assert by['Ng2024_NoAbstractHere']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'Ng2024_NoAbstractHere'
+    assert by['Ng2024_NoAbstractHere']['link'] == 'https://openalex.org/W7'
+    assert by['queue2022']['link'] == 'https://doi.org/10.1/q'
     assert by['queue2022']['abstract_from'] == 'search'                   # matched through the sources DOI
     assert by['Switch2024']['abstract_from'] == 'search'                  # matched through its title on page 1
     assert by['Ocean2023']['abstract_from'] == 'pdf'                      # fetch_log match, record had no abstract
-    assert by['Ocean2023']['title'] == 'Seawater links'
+    assert by['Ocean2023']['citation'] == '(n.d.). Seawater links.' and by['Ocean2023']['link'] == 'https://arxiv.org/abs/2205.06300'
     assert sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank']) == [1, 2, 3, 4]
     run = json.load(open(project / 'runs/a_run.json'))
-    assert run['abstracts']['abstract_only'] == ['10.9/paywalled', 'W7'] and run['abstracts']['no_abstract'] == ['W7']
+    assert run['abstracts']['abstract_only'] == ['Lovelace2025_SwitchMemorySchedulingWaitingUsers', 'Ng2024_NoAbstractHere']
+    assert run['abstracts']['no_abstract'] == ['Ng2024_NoAbstractHere']
     assert run['usage']['rerank'] <= run['estimate']
     rank.main(['--out', str(project / 'runs/a2'), '--ids', str(project / 'runs/a_hybrid.csv')])   # PDF rows only
     assert len(list(csv.DictReader(open(project / 'runs/a2_hybrid.csv')))) == 3
@@ -408,7 +418,8 @@ def test_abstracts_with_bm25_and_without_flag(project, offline, monkeypatch):
     rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--abstracts', str(search_file(project))])
     assert offline.calls == []
     rows = list(csv.DictReader(open(project / 'runs/b_bm25.csv')))
-    assert {r['paper']: r['abs_fused_rank'] for r in rows}['10.9/paywalled'] != ''
+    assert {r['paper']: r['abs_fused_rank'] for r in rows}['Lovelace2025_SwitchMemorySchedulingWaitingUsers'] != ''
     rank.main(['--out', str(project / 'runs/c')])
     rows = list(csv.DictReader(open(project / 'runs/c_hybrid.csv')))
     assert all(r['source'] == 'full_text' for r in rows) and 'abs_fused_rank' not in rows[0]
+    assert {r['paper']: r['link'] for r in rows} == {'queue2022': 'https://doi.org/10.1/q', 'Switch2024': '', 'Ocean2023': ''}
