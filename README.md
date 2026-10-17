@@ -118,8 +118,8 @@ PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/nul
 PY=$PL/.venv/bin/python
 
 # find papers and download the open-access ones
-$PY $PL/scripts/openalex_search.py --exact '("underwater acoustic" OR "underwater sensor") AND (routing OR routes OR relay*)'   # writes runs/2026-10-18_1420_exact.jsonl
-$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_1420_exact.jsonl
+$PY $PL/scripts/openalex_search.py --exact '("underwater acoustic" OR "underwater sensor") AND (routing OR routes OR relay*)' --name underwater-routing
+$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_1420_underwater-routing_exact.jsonl
 
 # count tokens without calling the API, then rank
 $PY $PL/scripts/rank.py --dry
@@ -190,7 +190,8 @@ All three scripts look for `literature.json` from the current folder up to the p
 | `openalex_search.py` | `--semantic TEXT` | Meaning-based search; at most 50 results and not reproducible |
 | | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`schedul*` for scheduling and schedules); all pages; a query OpenAlex would misread (OR mixed with AND at one level, more than 5 operators) is refused; writes `<out>.query.json` with the query and counts. The same query on the same OpenAlex snapshot gives the same list |
 | | `--cites ID` / `--refs ID` | Works citing ID, or all works ID references (DOI, arXiv id or OpenAlex W id) |
-| | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources`. Default: `runs/<date>_<time>_<mode>.jsonl` next to the config (mode is `exact`, `semantic`, `cites` or `refs`), with `-2` added when that minute is taken |
+| | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources`. Default: `runs/<date>_<time>_<name>_<mode>.jsonl` next to the config (mode is `exact`, `semantic`, `cites` or `refs`), with `-2` added when that minute is taken |
+| | `--name NAME` | Topic name in the default file name, the same short name the queries file will carry (lowercase, hyphens, at most 25 characters). Without it the file is `<date>_<time>_<mode>.jsonl` |
 | | `--max N` | Stop after N records (0 = all) |
 | `fetch_pdf.py` | `ID ...` | Fetch the listed works (DOI, arXiv id or OpenAlex W id, also as doi.org or arxiv.org URLs) |
 | | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |

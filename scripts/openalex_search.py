@@ -9,8 +9,9 @@ Modes (pick one):
 Run anywhere inside a project (the key comes from the environment, the project .env or
 ~/.config/paper-lector/.env; literature.json, when present, marks works already in the sources table):
   python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)'
-Without --out the records go to runs/<date>_<time>_<mode>.jsonl next to literature.json (else in the current folder),
-for example runs/2026-10-18_1420_exact.jsonl, with -2 added when that minute is taken.
+Without --out the records go to runs/<date>_<time>_<name>_<mode>.jsonl next to literature.json (else in the current
+folder), for example runs/2026-10-18_1420_entanglement-scheduling_exact.jsonl, with -2 added when that minute is taken.
+<name> is --name, the same short name the queries file will carry; without --name the file is <date>_<time>_<mode>.jsonl.
 """
 import argparse, datetime, json, re, sys, urllib.error, urllib.parse
 from pathlib import Path
@@ -56,6 +57,7 @@ def query_issues(q):
     issues = [f'{t}: no * or ? inside quotes in a boolean query (OpenAlex answers 400); list the forms'
               for t in tokens if t.startswith('"') and re.search(r'[*?]', t)] if len(tokens) > 1 else []
     levels, prev, closed_or = [set()], None, False
+    glued = []                                   # per open group: did it follow a term with no operator?
     for t in tokens:
         if t in ('AND', 'OR', 'NOT'):
             levels[-1].add('or' if t == 'OR' else 'and')
@@ -66,12 +68,17 @@ def query_issues(q):
                 issues.append('a group with OR sits next to a term or group with no operator; write AND between them')
             levels[-1].add('and')
         if t == '(':
+            glued.append(prev == 'term')
             levels.append(set())
             prev, closed_or = 'open', False
         elif t == ')':
             if len(levels) == 1:
                 return ['unbalanced parentheses']
             closed_or = 'or' in levels.pop()
+            if closed_or and glued.pop():          # c (a OR b): the mirror of (a OR b) c
+                issues.append('a group with OR sits next to a term or group with no operator; write AND between them')
+            elif not closed_or:
+                glued.pop()
             prev = 'term'
         else:
             prev, closed_or = 'term', False
@@ -111,10 +118,13 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     m = ap.add_mutually_exclusive_group(required=True)
     m.add_argument('--semantic'); m.add_argument('--exact'); m.add_argument('--cites'); m.add_argument('--refs')
-    ap.add_argument('--out', help='JSONL file (default: runs/<date>_<time>_<mode>.jsonl next to the config)')
+    ap.add_argument('--out', help='JSONL file (default: runs/<date>_<time>_<name>_<mode>.jsonl next to the config)')
+    ap.add_argument('--name', help='topic name for the default file name, as in the queries file (e.g. entanglement-scheduling)')
     ap.add_argument('--config', help='path to literature.json (default: searched upward)')
     ap.add_argument('--max', type=int, default=0, help='stop after this many records (0 = all)')
     a = ap.parse_args(argv)
+    if a.name is not None and not common.valid_name(a.name):
+        sys.exit(f'--name must be lowercase letters, digits and single hyphens, at most {common.NAME_MAX} characters')
     if a.exact and (issues := query_issues(a.exact)):
         sys.exit('query not sent: ' + '; '.join(issues))
     global KEY
@@ -123,9 +133,10 @@ def main(argv=None):
     mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k))
     if not a.out:
         base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
-        a.out, n = f'{base}_{mode}.jsonl', 2
-        while Path(a.out).exists():                 # same mode in the same minute
-            a.out, n = f'{base}-{n}_{mode}.jsonl', n + 1
+        tail = f'_{a.name}_{mode}.jsonl' if a.name else f'_{mode}.jsonl'
+        a.out, n = f'{base}{tail}', 2
+        while Path(a.out).exists():                 # same name and mode in the same minute
+            a.out, n = f'{base}-{n}{tail}', n + 1
 
     if a.semantic:
         r = get('works', {'search.semantic': a.semantic, 'per_page': 50, 'select': FIELDS + ',relevance_score'})
@@ -162,7 +173,7 @@ def main(argv=None):
     Path(a.out).with_suffix('.query.json').write_text(json.dumps({
         'mode': mode, 'query': getattr(a, mode), 'date': datetime.datetime.now().isoformat(timespec='seconds'),
         'count': meta.get('count'), 'written': len(works), 'already_in_sources': n_held, 'max': a.max or None,
-        'keyless': not KEY, 'out': Path(a.out).name}, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        'keyless': not KEY, 'name': a.name, 'out': Path(a.out).name}, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     if not KEY and (meta.get('count') or 0) > len(works) and not a.max:
         print(f'no OPENALEX_API_KEY: only the first {len(works)} of {meta["count"]} were written; a free key gets them all',
               file=sys.stderr)
