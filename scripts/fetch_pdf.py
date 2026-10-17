@@ -6,7 +6,8 @@ are reported as MANUAL with their landing URL: ask a person to download them.
 Existing files are never overwritten. A DOI already in the sources table counts as held, and a download that is
 byte-identical to a PDF already in the folders is not saved. Only http(s) URLs on public addresses are fetched (every
 redirect is checked too), at most 100 MB and 5 minutes per file. Each saved PDF gets a line in fetch_log.jsonl in the
-download folder: id, URL, file and SHA-256. Exit status 1 if any paper was not obtained or skipped.
+download folder (status OK: id, URL, file and SHA-256), and so does each MANUAL paper (id, title, landing URL).
+Exit status 1 if any paper was not obtained or skipped.
 File names end in a short hash of the DOI, so two papers with the same author, year and title words don't collide.
 
   python fetch_pdf.py 10.1109/JSAC.2024.1234567 2601.11698
@@ -122,6 +123,13 @@ def save(out, data):
         part.unlink(missing_ok=True)
 
 
+def log_line(dest, rec):
+    """Append one record to fetch_log.jsonl in the download folder: OK for a saved PDF, MANUAL for one to get by hand."""
+    rec['fetched'] = datetime.datetime.now().isoformat(timespec='seconds')
+    with open(dest / 'fetch_log.jsonl', 'a', encoding='utf-8') as log:
+        log.write(json.dumps(rec) + '\n')
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('ids', nargs='*', help='DOIs, arXiv ids or OpenAlex W ids')
@@ -178,15 +186,14 @@ def main(argv=None):
                 if not save(out, data):
                     print(f'HAVE    {ident} -> {out}'); count['HAVE'] += 1; break
                 digests[d] = out
-                with open(dest / 'fetch_log.jsonl', 'a', encoding='utf-8') as log:
-                    log.write(json.dumps({'id': ident, 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data),
-                                          'fetched': datetime.datetime.now().isoformat(timespec='seconds')}) + '\n')
+                log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data)})
                 print(f'OK      {ident} -> {out}  ({len(data) // 1024} kB, {url})'); count['OK'] += 1; break
             print(f'  fail  {url}: not a PDF', file=sys.stderr)
         else:
             if failed:
                 print(f'ERROR   {ident}: OpenAlex lookup failed ({failed})'); count['ERROR'] += 1; continue
             land = ((w or {}).get('primary_location') or {}).get('landing_page_url') or (f'https://doi.org/{doi}' if doi else ident)
+            log_line(dest, {'id': ident, 'status': 'MANUAL', 'title': (w or {}).get('display_name'), 'url': land})
             print(f'MANUAL  {ident}: {land}'); count['MANUAL'] += 1
     print('  '.join(f'{k.lower()} {v}' for k, v in count.items()), file=sys.stderr)
     if count['MANUAL'] or count['ERROR'] or count['SKIP']:

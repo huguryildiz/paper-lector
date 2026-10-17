@@ -103,6 +103,23 @@ def test_jsonl_records_with_openalex_or_arxiv_only(project, monkeypatch, capsys,
     assert 'arxiv.org/pdf/2205.06300' in log and '"sha256"' in log
 
 
+def test_manual_papers_are_logged_with_status(project, monkeypatch, capsys):
+    import json
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    works = {'W9': {'display_name': 'Paywalled paper', 'locations': [],
+                    'primary_location': {'landing_page_url': 'https://publisher.example/w9'}}}
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: works.get(ident, {'display_name': ident, 'locations': []}))
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: b'%PDF-1.4 ' + url.encode())
+    with pytest.raises(SystemExit):
+        fetch_pdf.main(['W9', '2205.06300'])
+    rows = [json.loads(l) for l in (project / 'papers/new/fetch_log.jsonl').read_text().splitlines()]
+    manual = [r for r in rows if r['status'] == 'MANUAL']
+    assert manual == [{'id': 'W9', 'status': 'MANUAL', 'title': 'Paywalled paper',
+                       'url': 'https://publisher.example/w9', 'fetched': manual[0]['fetched']}]
+    assert [r['id'] for r in rows if r['status'] == 'OK'] == ['2205.06300']
+
+
 def test_lookup_error_is_not_reported_as_missing(project, monkeypatch, capsys):
     import urllib.error
     monkeypatch.chdir(project)

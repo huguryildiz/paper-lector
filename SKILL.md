@@ -17,7 +17,7 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 | Step | Command | Output |
 | --- | --- | --- |
 | Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: write `rout*` to match routing and routes |
-| Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (source URL, SHA-256); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
+| Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (status `OK` with source URL and SHA-256, or `MANUAL` with title and landing URL); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
 | Rank | `$PY $PL/scripts/rank.py --out <prefix> --dry`, then without `--dry` | `<prefix>_hybrid.csv` and `<prefix>_run.json` |
 
 Write outputs outside the project's tracked files (a scratch or `runs/` folder) unless the user asks to keep them.
