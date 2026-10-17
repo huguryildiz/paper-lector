@@ -21,7 +21,7 @@ import common
 
 API = 'https://api.openalex.org'
 KEY = None
-FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location,locations,authorships,abstract_inverted_index,type,biblio'
+FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location,locations,authorships,abstract_inverted_index,type,biblio,cited_by_count,citation_normalized_percentile'
 
 
 def get(path, params):
@@ -107,6 +107,10 @@ def record(w, held):
         'first_author': next((a['author']['display_name'] for a in w.get('authorships') or []), None),
         'authors': [a['author']['display_name'] for a in w.get('authorships') or [] if a.get('author', {}).get('display_name')],
         'biblio': {k: v for k, v in (w.get('biblio') or {}).items() if v},
+        # citations change over time: keep the count, its percentile among works of the same field and year, and the date
+        'cited_by': w.get('cited_by_count'),
+        'cited_pct': round(100 * pct, 1) if (pct := (w.get('citation_normalized_percentile') or {}).get('value')) is not None else None,
+        'cited_at': datetime.date.today().isoformat(),
         'oa_pdf': (w.get('best_oa_location') or {}).get('pdf_url'),
         'relevance': w.get('relevance_score'),
         'in_sources': held.get(doi),  # key in the sources table, if any

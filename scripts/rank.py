@@ -463,6 +463,9 @@ def abstract_corpus(paths, P, W, cfg, dirs):
         if twin is not None:
             print(f'note: {r.get("doi") or r.get("openalex")} has the title of {same[twin]} (another version); '
                   f'counted once', file=sys.stderr)
+            held = A[same[twin]]
+            if (r.get('cited_by') or 0) > ((held['rec'] or {}).get('cited_by') or 0):   # citations of the most cited version
+                held['rec'] = dict(held['rec'] or {}, **{k: r.get(k) for k in ('cited_by', 'cited_pct', 'cited_at')})
             continue
         pid = by_title(t)
         if pid is not None and pid not in taken:
@@ -729,14 +732,15 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         first = cols[next(iter(Q))]
         order = sorted(rows.values(), key=lambda r: (-r['_fs'], r[f'{first}_rank'], r['paper']))
         meta = {p['id']: p for p in P}
-        head = ['paper', 'link', 'citation', 'fused_rank', 'fused_score'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
+        head = ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'cited_by', 'cited_pct', 'cited_at'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
             + [f'{c}_pages' for c in cols.values()] + ['tokens', 'bib_cut', 'abstract_found', 'source']
         if a.abstracts:
             head += ['abs_fused_rank', 'abs_fused_score'] + [f'{c}_abs_{s}' for c in cols.values() for s in ('rank', 'score')] \
                 + ['abstract_from']
         known = common.sources(cfg)
         info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], source=x['source'],
-                              link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec'])) for x in A}
+                              link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec']),
+                              **{k: (x['rec'] or {}).get(k) for k in ('cited_by', 'cited_pct', 'cited_at')}) for x in A}
         for pid in meta:
             info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),

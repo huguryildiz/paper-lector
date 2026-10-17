@@ -65,7 +65,8 @@ def test_full_run_columns_fusion_and_run_record(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/r'), '--expect', 'Switch2024'])
     rows = list(csv.DictReader(open(project / 'runs/r_paper-lector.csv')))
-    assert list(rows[0])[:7] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'Q0_main_rank', 'Q0_main_score']
+    assert list(rows[0])[:10] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'cited_by', 'cited_pct', 'cited_at',
+                                 'Q0_main_rank', 'Q0_main_score']
     assert 'Q3_context_pages' in rows[0] and not any(k.startswith('Q4') for k in rows[0])
     assert {r['paper'] for r in rows} == {'Switch2024', 'Ocean2023', 'queue2022'}   # sources key kept
     assert rows[0]['paper'] == 'Switch2024' and rows[0]['fused_rank'] == '1'
@@ -388,6 +389,7 @@ def search_file(project):
         {'doi': '10.9/paywalled', 'title': 'Switch memory scheduling for waiting users', 'year': 2025, 'venue': 'IEEE TQE',
          'authors': ['Ada Lovelace', 'Bo Li', 'Cy Young', 'Di Wu'], 'first_author': 'Ada Lovelace',
          'biblio': {'volume': '6', 'issue': '2', 'first_page': '10', 'last_page': '19'},
+         'cited_by': 12, 'cited_pct': 93.7, 'cited_at': '2026-10-18',
          'abstract': 'Which user receives a stored entangled pair when requests wait at a quantum switch with memories.'},
         {'openalex': 'W7', 'title': 'No abstract here', 'year': 2024, 'first_author': 'Ed Ng', 'abstract': ''},
     ]
@@ -411,6 +413,8 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert pay['fused_rank'] == '' and pay['Q0_main_pages'] == ''
     assert pay['abs_fused_rank'] == '1'                                    # best abstract, though it has no PDF
     assert pay['link'] == 'https://doi.org/10.9/paywalled'
+    assert (pay['cited_by'], pay['cited_pct'], pay['cited_at']) == ('12', '93.7', '2026-10-18')
+    assert by['queue2022']['cited_by'] == ''                              # record without the fields
     assert pay['citation'] == ('Ada Lovelace, Bo Li, Cy Young et al. (2025). Switch memory scheduling for waiting users. '
                                'IEEE TQE, 6(2), 10\u201319.')
     assert by['Ng2024_NoAbstractHere']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'Ng2024_NoAbstractHere'
@@ -499,11 +503,12 @@ def test_abstract_matching_edge_cases(project, offline, monkeypatch):
     (other / 'Switch2024.pdf').write_bytes((project / 'papers/topic/Ocean2023.pdf').read_bytes() + b'\n% other copy\n')
     (other / 'fetch_log.jsonl').write_text(json.dumps({'id': '10.5/other', 'status': 'OK', 'file': 'Switch2024.pdf'}) + '\n')
     (project / 'sources.csv').write_text('key,pdf_path,doi\nqueue2022,papers/topic/Queue2022.pdf,10.1/q\ngone,papers/gone.pdf,10.7/gone\n')
-    recs = [{'doi': '10.5/other', 'title': 'Another copy of seawater links', 'abstract': 'seawater copy'},
+    recs = [{'doi': '10.5/other', 'title': 'Another copy of seawater links', 'abstract': 'seawater copy', 'cited_by': 2},
             {'doi': '10.7/gone', 'title': 'The gone paper on switch queues', 'abstract': 'a paper whose PDF is not here'},
             {'openalex': 'W5', 'title': None, 'abstract': 'no title at all'},
             {'openalex': 'W6', 'title': 'Age based scheduling at a classical switch', 'abstract': 'similar title, other paper'},
-            {'doi': '10.6/print', 'title': 'Another copy of seawater link', 'abstract': 'the printed version of the logged preprint'},
+            {'doi': '10.6/print', 'title': 'Another copy of seawater link', 'abstract': 'the printed version of the logged preprint',
+             'cited_by': 40, 'cited_pct': 91.0, 'cited_at': '2026-10-18'},
             {'doi': '10.8/a', 'title': 'The gone paper on switch queues.', 'abstract': 'a second record of a paper with no PDF'}]
     (project / 's.jsonl').write_text(''.join(json.dumps(r) + '\n' for r in recs))
     rank.main(['--out', str(project / 'runs/e'), '--abstracts', str(project / 's.jsonl')])
@@ -513,6 +518,7 @@ def test_abstract_matching_edge_cases(project, offline, monkeypatch):
     twin = next(k for k, v in path.items() if v.endswith('topic/Switch2024.pdf'))
     assert by[mine]['citation'] == '(n.d.). Another copy of seawater links.'                 # the log in papers/other names that file
     assert by[twin]['citation'] == ''                                    # not the same-named file in papers/topic
+    assert (by[mine]['cited_by'], by[mine]['cited_pct']) == ('40', '91.0')   # the printed version's citations
     only = {r['citation']: r['source'] for r in by.values() if r['source'] == 'abstract_only'}
     assert only == {'(n.d.). The gone paper on switch queues.': 'abstract_only', '(n.d.).': 'abstract_only',
                     '(n.d.). Age based scheduling at a classical switch.': 'abstract_only'}
