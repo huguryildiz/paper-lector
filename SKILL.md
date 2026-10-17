@@ -118,6 +118,14 @@ Run each approved search with `--name <name>` and without `--out`: the script na
 
 When it prints `LOW OVERLAP` (under half of the semantic works are in the keyword results), the keyword query probably misses words the field uses. Read the `only semantic` titles and abstracts, name the words the relevant ones share that the query lacks (a synonym, a narrower task, the abbreviation's plural), and write one revised keyword query under the same rules. Show it with the words it adds on the approval screen: "Run the revised search" (recommended), "Edit it", or "Keep the first". The revised search goes to a new file and the first stays; fetch from the revised file and the semantic one. Revise once; if the overlap stays low, report it and move on. Say that semantic stops at 50, so the overlap is a check, not a count of what was missed.
 
+After every fetch, report in this order, from the last line `fetch_pdf.py` prints (`ok N  have N  manual N  error N  skip N`), adding up the lines when several files were fetched:
+
+1. One sentence with all five numbers out of the works tried, in the user's language: "Of 35 works, 18 PDFs were downloaded, 2 were already in the collection, 15 are on publisher sites, 0 lookups failed, 0 records had no id." Name the folder the new PDFs went to.
+2. The `MANUAL` table (rules under "What to tell the user" below), or "none".
+3. Each `ERROR` and `SKIP` line with its reason, or nothing when there are none.
+
+Then the PDF count for ranking: the PDFs now in `pdf_dirs`. When `manual` is not 0, the "Missing PDFs" screen comes next.
+
 ## Step 2: writing the queries
 
 Fill all six slots and the fuse choice on question screens before writing any query text. Use the host's multiple-choice question tool: `AskUserQuestion` in Claude Code, `request_user_input` (or `request_user_input_async`) in Codex, the equivalent in other agents.
