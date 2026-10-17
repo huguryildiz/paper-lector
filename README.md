@@ -71,7 +71,7 @@ ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 
 The symlink is what lets the agent find the skill; make the one for the agent you use, or both.
 
-API keys: copy `.env.example` to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`, and fill in `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank with the default `voyage` provider). Lookup order: the environment, then the project's `.env`, then `~/.config/paper-lector/.env`.
+API keys: copy `.env.example` to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`, and fill in `OPENALEX_API_KEY` (search, fetch; without it, search returns only the first 200 works and the daily budget is small) and `VOYAGE_API_KEY` (rank with the default `voyage` provider). Lookup order: the environment, then the project's `.env`, then `~/.config/paper-lector/.env`.
 
 ```bash
 mkdir -p ~/.config/paper-lector

@@ -30,8 +30,7 @@ def openalex(ident):
     kind, v = common.norm_id(ident)
     path = 'works/' + (v if kind == 'openalex' else 'doi:' + urllib.parse.quote(common.doi_of(ident)))
     try:
-        return common.open_json(urllib.request.Request(f'https://api.openalex.org/{path}',
-                                                       headers={'Authorization': 'Bearer ' + KEY}), timeout=60)
+        return common.openalex_json(f'https://api.openalex.org/{path}', KEY, timeout=60)
     except urllib.error.HTTPError as e:
         if e.code == 404:
             return None
@@ -150,7 +149,7 @@ def main(argv=None):
                 print(f'SKIP    line {n}: no doi, arxiv or openalex id ({r.get("title")})'); skips += 1
     global KEY
     cfg = common.load_config(a.config, required=not a.dest)
-    KEY = common.api_key('OPENALEX_API_KEY', cfg)
+    KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
     dest = Path(a.dest) if a.dest else cfg['download_dir']
     dest.mkdir(parents=True, exist_ok=True)
     roots = [dest] + ([d for d in cfg['pdf_dirs'] if d != dest] if cfg else [])

@@ -198,3 +198,27 @@ def test_only_skipped_records_exit_with_failure(project, monkeypatch, tmp_path):
     with pytest.raises(SystemExit) as e:
         fetch_pdf.main(['--from', str(src)])
     assert e.value.code == 1
+
+
+def test_search_without_key_stops_after_first_page(project, monkeypatch, tmp_path, capsys):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('HOME', str(tmp_path / 'home'))
+    monkeypatch.delenv('OPENALEX_API_KEY', raising=False)
+    calls = []
+
+    def fake(url, key, timeout):
+        calls.append(key)
+        return {'results': [{'id': 'https://openalex.org/W1'}], 'meta': {'count': 500, 'next_cursor': 'abc'}}
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', fake)
+    openalex_search.main(['--exact', 'quantum switch', '--out', str(tmp_path / 's.jsonl')])
+    assert calls == [None]                                  # one keyless request, no second page
+    assert 'only the first 1 of 500 were written' in capsys.readouterr().err
+
+
+def test_spent_daily_budget_stops_with_reset_time(monkeypatch):
+    import io, urllib.error, pytest
+    err = urllib.error.HTTPError('u', 429, 'Too Many', {'Retry-After': '11400'}, io.BytesIO(b''))
+    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', lambda *a, **k: (_ for _ in ()).throw(err))
+    monkeypatch.setattr(openalex_search.common.time, 'sleep', lambda s: pytest.fail('waited for a spent budget'))
+    with pytest.raises(SystemExit, match='resets in about 4 h.*free OPENALEX_API_KEY'):
+        openalex_search.common.openalex_json('https://api.openalex.org/works', None, timeout=5)

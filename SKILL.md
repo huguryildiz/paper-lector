@@ -58,7 +58,7 @@ Before Step 2, count the PDFs: `find <each pdf_dirs folder> -name '*.pdf' | wc -
 
 Drop steps 2–4 when the collection already has PDFs, and stop after step 4 for a search-only request. Add a step for anything extra the user asked for (for example ✂️ screening abstracts before the download).
 
-Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
+Keys: `OPENALEX_API_KEY` (search, fetch; optional but recommended) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
 
 Check the keys in step ⚙️, before any search or question screen. This prints only `found` or `missing`, never a value:
 
@@ -78,7 +78,9 @@ Check only the keys the run needs: OpenAlex for search and fetch, Voyage for ran
 mkdir -p ~/.config/paper-lector && read -rs "k?<NAME>: " && echo "<NAME>=$k" >> ~/.config/paper-lector/.env && unset k
 ```
 
-In bash the `read` part is `read -rsp "<NAME>: " k`. Options: "I added it, continue" (recommended; run the check again, and ask again if it is still missing), "Use bm25 instead" (Voyage only, see "No Voyage key" below), "Stop". If OpenAlex answers 401 or 403 later, the key is there but wrong: say so and show the same screen.
+In bash the `read` part is `read -rsp "<NAME>: " k`. Options: "I added it, continue" (recommended; run the check again, and ask again if it is still missing), "Use bm25 instead" (Voyage only, see "No Voyage key" below), "Continue without a key" (OpenAlex only), "Stop". If OpenAlex answers 401 or 403 later, the key is there but wrong: say so and show the same screen.
+
+OpenAlex without a key: fetch works, and search returns only the first page, at most 200 works per keyword or citing search. The daily budget is about 100 searches, shared by everyone on the same IP address. The free key (openalex.org, a few minutes) removes the page limit and gives ten times the budget. Say this in the "Continue without a key" description. When a keyless search prints `only the first N of M were written`, report both numbers. When a script stops with `daily budget is used up`, report the reset time and show the key screen.
 
 ## Searching OpenAlex
 

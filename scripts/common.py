@@ -63,14 +63,17 @@ def _read_env(path):
     return vals
 
 
-def api_key(name, cfg=None):
-    """Process environment first, then the project's .env, then ~/.config/paper-lector/.env."""
+def api_key(name, cfg=None, required=True):
+    """Process environment first, then the project's .env, then ~/.config/paper-lector/.env. Missing: exit, or None
+    when not required."""
     if os.environ.get(name):
         return os.environ[name]
     for p in ([cfg['root'] / '.env'] if cfg else []) + [Path.home() / '.config/paper-lector/.env']:
         v = _read_env(p).get(name)
         if v:
             return v
+    if not required:
+        return None
     sys.exit(f'{name} is not set. Put it in the environment, in the project .env, or in ~/.config/paper-lector/.env')
 
 
@@ -83,12 +86,33 @@ def retry(fn, tries=4, wait=10):
         try:
             return fn()
         except urllib.error.HTTPError as e:
-            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1:
+            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1 or retry_after(e) > 120:
                 raise
         except TRANSIENT:
             if attempt == tries - 1:
                 raise
         time.sleep(wait * (attempt + 1))
+
+
+def retry_after(e):
+    """Seconds an HTTP error's Retry-After header asks to wait (0 if none); hours means a spent daily budget."""
+    try:
+        return int((e.headers or {}).get('Retry-After') or 0)
+    except ValueError:
+        return 0
+
+
+def openalex_json(url, key, timeout):
+    """GET an OpenAlex URL, keyless when key is None. A spent daily budget stops the run with the reset time."""
+    req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + key} if key else {})
+    try:
+        return open_json(req, timeout)
+    except urllib.error.HTTPError as e:
+        if e.code == 429 and retry_after(e) > 120:
+            sys.exit(f'OpenAlex daily budget is used up; it resets in about {retry_after(e) // 3600 + 1} h.'
+                     + ('' if key else ' Without a key the budget is about 100 searches a day, shared by everyone on'
+                        ' this IP address; a free OPENALEX_API_KEY gives ten times that.'))
+        raise
 
 
 def open_json(req, timeout, tries=4):

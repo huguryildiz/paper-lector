@@ -10,7 +10,7 @@ Run anywhere inside a project (the key comes from the environment, the project .
 ~/.config/paper-lector/.env; literature.json, when present, marks works already in the sources table):
   python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)' --out runs/x17.jsonl
 """
-import argparse, json, sys, urllib.error, urllib.parse, urllib.request
+import argparse, json, sys, urllib.error, urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -22,9 +22,7 @@ FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location
 
 
 def get(path, params):
-    req = urllib.request.Request(f'{API}/{path}?{urllib.parse.urlencode(params)}',
-                                 headers={'Authorization': 'Bearer ' + KEY})
-    return common.open_json(req, timeout=120)
+    return common.openalex_json(f'{API}/{path}?{urllib.parse.urlencode(params)}', KEY, timeout=120)
 
 
 def work_id(x):
@@ -72,7 +70,7 @@ def main(argv=None):
     a = ap.parse_args(argv)
     global KEY
     cfg = common.load_config(a.config, required=False)
-    KEY = common.api_key('OPENALEX_API_KEY', cfg)
+    KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
 
     if a.semantic:
         r = get('works', {'search.semantic': a.semantic, 'per_page': 50, 'select': FIELDS + ',relevance_score'})
@@ -91,7 +89,7 @@ def main(argv=None):
         while cur:
             r = get('works', dict(params, per_page=200, cursor=cur, select=FIELDS))
             works += r['results']; meta = r['meta']
-            cur = meta.get('next_cursor') if r['results'] else None
+            cur = meta.get('next_cursor') if r['results'] and KEY else None   # without a key only page 1 works
             if a.max and len(works) >= a.max:
                 break
     if a.max:
@@ -106,6 +104,9 @@ def main(argv=None):
     if a.refs:
         print(f'references: listed {meta["count"]}, written {len(works)}', file=sys.stderr)
     print(f"count {meta.get('count')}  written {len(works)}  already in sources.csv {n_held}  -> {a.out}", file=sys.stderr)
+    if not KEY and (meta.get('count') or 0) > len(works) and not a.max:
+        print(f'no OPENALEX_API_KEY: only the first {len(works)} of {meta["count"]} were written; a free key gets them all',
+              file=sys.stderr)
 
 
 if __name__ == '__main__':
