@@ -82,15 +82,15 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 }
 ```
 
-`rank` is optional; `voyage` is the default. An optional `sources` CSV (the papers you already hold, with `key`, `pdf_path` and `doi` columns) can be added too; [`examples/literature.json`](examples/literature.json) shows it.
+`rank` is optional; `voyage` is the default. An optional `sources` CSV (the papers you already hold, with `key`, `pdf_path` and `doi` columns) can be added too; [`examples/literature.json`](examples/literature.json) shows it. If the CSV is missing, the scripts say so and carry on without it.
 
-**2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run. `rank.py` never overwrites an existing `_run.json`; rank each run into a new `--out`. Papers whose PDF has no text (scanned or protected) are listed under `corpus.skipped` in `_run.json`.
+**2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run.
 
 **3a. With an agent.** Open the project in Claude Code or Codex and ask:
 
 > Rank my PDFs for this question: which next hop should a node in an underwater acoustic sensor network choose so that the network lives longer?
 
-The agent asks for the six query slots on two question screens: for each slot you take its suggestion, type your own, or leave it empty (`main` is required). It then writes the queries and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
+The agent first checks that the PDF folders hold PDFs; if they are empty, it offers to search OpenAlex and download open-access papers. Then it asks seven questions in a fixed order: the six query slots, then which slots to fuse. Each screen holds as many questions as the agent's question tool allows, so Claude Code shows two screens and Codex may show three. For each slot you take the agent's suggestion, type your own wording, or leave it empty (`main` is required). The agent writes the queries from your answers and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
 
 **3b. From the shell.** The same steps by hand, run from anywhere inside the project:
 
@@ -105,11 +105,14 @@ $PY $PL/scripts/fetch_pdf.py --from runs/uw.jsonl
 # count tokens without calling the API, then rank
 $PY $PL/scripts/rank.py --out runs/uw --dry
 $PY $PL/scripts/rank.py --out runs/uw
+
+# later, after adding PDFs: same queries, new --out; cached embeddings are reused
+$PY $PL/scripts/rank.py --out runs/uw-2026-10-20
 ```
 
-`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite`, so a rerun pays only for new text.
+`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite` after each batch, so a rerun, or a run restarted after a crash, pays only for new text; the estimate still counts everything. Dropped connections, timeouts and HTTP 429/5xx are retried.
 
-**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages the reranker read, which is a sensible place to start reading. `runs/uw_run.json` records the queries, models, token usage and commit, so the run can be repeated. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
+**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. `runs/uw_run.json` records the question, queries, fuse list, models, token usage, commit and any PDFs skipped for having no text (scanned or protected, under `corpus.skipped`), so the run can be repeated. `rank.py` never overwrites a run: a second run into the same `--out` stops, and so does one whose question, queries or fuse list differ from the saved run. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
 See [`SKILL.md`](SKILL.md) for the query-writing rules, the optional `sources` CSV, and the other options (`--cites`, `--refs`, `--expect`, `--ids`, `--variants`).
 
