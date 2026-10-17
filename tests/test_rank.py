@@ -233,3 +233,18 @@ def test_turkish_abstract_bibliography_and_terms():
     assert cut and 'Yazar' not in body and 'ek tablo' in body
     s = rank.bm25_scores(['güç tüketimi düşük', 'power routing', 'GÜÇ TÜKETİMİ'], 'güç tüketimi')
     assert s[0] > 0 and s[1] == 0 and s[2] > 0
+
+
+@pytest.mark.parametrize('ab, intro, bib, app, ref', [
+    ('Zusammenfassung', '1 Einleitung', 'Literaturverzeichnis', 'Anhang A', 'Müller, K. (2019). Titel. Verlag.'),
+    ('RÉSUMÉ', 'INTRODUCTION', 'RÉFÉRENCES', 'ANNEXES', 'Dupont, J. (2018). Titre. Revue.'),
+    ('Resumen', 'Introducción', 'Referencias bibliográficas', 'Apéndice A', 'García, L. (2020). Título. Revista.'),
+    ('Riassunto', 'Introduzione', 'Bibliografia', 'Appendice', 'Rossi, M. (2017). Titolo. Rivista.'),
+    ('Resumo', 'Introdução', 'Referências', 'Anexo A', 'Silva, P. (2021). Título. Revista.'),
+    ('Аннотация', 'Введение', 'Список литературы', 'Приложение А', 'Иванов И.И. Название // Журнал. 2020. Т. 5.'),
+])
+def test_headings_in_other_languages(ab, intro, bib, app, ref):
+    assert rank.abstract(f'Title\n{ab}\n' + 'word ' * 80 + f'\n{intro}\nbody\n').startswith('word')
+    refs = '\n'.join(f'{i}. {ref}' for i in range(1, 6))
+    body, cut, _ = rank.clean('line text\n' * 400 + bib + '\n' + refs + '\n' + app + '\nappendix table\n')
+    assert cut and ref not in body and 'appendix table' in body

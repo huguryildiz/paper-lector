@@ -137,24 +137,39 @@ def find_pdfs(dirs, known, ids=None):
     return out
 
 
+# Section headings by language: English, Turkish, German, French, Spanish, Italian, Portuguese, Russian.
+# The ' ?' variants cover pdftotext splitting a spaced-out first letter ("R EFERENCES").
+BIB = (r'r ?eferences|b ?ibliography|kaynaklar|kaynakça|literatur|literaturverzeichnis|quellenverzeichnis'
+       r'|r[ée]f[ée]rences(?: bibliographiques)?|bibliographie|referencias(?: bibliogr[aá]ficas)?|bibliograf[ií]a'
+       r'|riferimenti(?: bibliografici)?|refer[êe]ncias(?: bibliogr[aá]ficas)?|литература|список литературы'
+       r'|библиография|список использованных источников')
+APPENDIX = (r'a ?ppendix\b|a ?ppendices\b|s ?upplementary material\b|ekler\b|ek\s*[A-Z0-9]?\s*$|anhang\b|annexes?\b'
+            r'|ap[ée]ndices?\b|anexos?\b|appendice\b|ap[êe]ndices?\b|приложени[ея]\b')
+ABSTRACT = r'abstract|özet|öz|zusammenfassung|kurzfassung|r[ée]sum[ée]|resumen|riassunto|resumo|аннотация|реферат'
+INTRO = (r'i ?ntroduction|g[iİ]r[iİ][şŞ]|einleitung|einführung|introducci[oó]n|introduzione|introdu[çc][ãa]o'
+         r'|введение')
+CITES = [r'(?m)^\s*\[\d+\]', r'\(\d{4}\)|, \d{4}\.', r'(?m)^\s*\d{1,3}\.\s+\S.*\b(?:19|20)\d{2}\b']
+
+
 def clean(text):
-    """Cut the bibliography if a References heading in the second half is followed by citation entries; keep appendices."""
-    heads = [m for m in re.finditer(r'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?(r ?eferences|b ?ibliography|kaynaklar|kaynakça)\s*$', text, re.I)
+    """Cut the bibliography if a References heading (in any language in BIB) in the second half is followed by
+    citation entries; keep appendices."""
+    heads = [m for m in re.finditer(rf'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?({BIB})\s*:?\s*$', text, re.I)
              if m.start() > len(text) * 0.5]
     if not heads:
         return text, False, None
     start = heads[-1].start()
     tail = text[start:start + 5000]
-    if len(re.findall(r'(?m)^\s*\[\d+\]', tail)) < 3 and len(re.findall(r'\(\d{4}\)|, \d{4}\.', tail)) < 3:
+    if all(len(re.findall(c, tail)) < 3 for c in CITES):
         return text, False, None
-    app = re.search(r'(?m)^\s*(?:[A-Z]\.?\s*)?(a ?ppendix|a ?ppendices|s ?upplementary material|ekler\b|ek\s*[A-Z0-9]?\s*$)', text[start:], re.I)
+    app = re.search(rf'(?m)^\s*(?:[A-Z]\.?\s*)?({APPENDIX})', text[start:], re.I)
     if not app:
         return text[:start], True, None
     return text[:start] + text[start + app.start():], True, (start, app.start())
 
 
 def abstract(text):
-    m = re.search(r'\b(?:abstract|özet|öz)\b\W{0,3}(.{300,3000}?)(?=\b(?:I\.|1\.?)?\s*(?:i ?ntroduction|g[iİ]r[iİ][şŞ])\b)',
+    m = re.search(rf'\b(?:{ABSTRACT})\b\W{{0,3}}(.{{300,3000}}?)(?=\b(?:I\.|1\.?)?\s*(?:{INTRO})\b)',
                   text[:15000], re.I | re.S)
     return m.group(1).strip() if m else None
 
