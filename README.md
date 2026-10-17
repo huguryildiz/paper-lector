@@ -1,6 +1,40 @@
-# paper-lector
+<!-- markdownlint-disable MD033 MD041 -->
 
-Ranks research PDFs and suggests starting pages; reading leads, not evidence.
+<p align="center">
+  <img src="assets/icon.svg" alt="paper-lector logo" width="120" height="120">
+</p>
+
+<h1 align="center">paper-lector</h1>
+
+<p align="center">
+  <strong>Claude Code Skill for Reading Leads</strong><br>
+  <sub>Ranks research PDFs and suggests starting pages; reading leads, not evidence.</sub>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python_3.12-0b1220?style=for-the-badge&logo=python&logoColor=3776AB" alt="Python 3.12">
+  <img src="https://img.shields.io/badge/Claude_Code_Skill-0b1220?style=for-the-badge&logo=claude&logoColor=D97757" alt="Claude Code skill">
+  <img src="https://img.shields.io/badge/OpenAlex-0b1220?style=for-the-badge&logo=openaccess&logoColor=F68212" alt="OpenAlex">
+  <img src="https://img.shields.io/badge/Voyage_AI_%C2%B7_BM25-0b1220?style=for-the-badge&logo=databricks&logoColor=F2B544" alt="Voyage AI and BM25">
+  <img src="https://img.shields.io/badge/pdftotext-0b1220?style=for-the-badge&logo=files&logoColor=EC1C24" alt="pdftotext">
+  <img src="https://img.shields.io/badge/pytest-0b1220?style=for-the-badge&logo=pytest&logoColor=0A9EDC" alt="pytest">
+</p>
+
+<h3 align="center">
+  <a href="#overview">Overview</a>
+  &nbsp;·&nbsp;
+  <a href="#install">Install</a>
+  &nbsp;·&nbsp;
+  <a href="#example-underwater-routing-papers">Example</a>
+  &nbsp;·&nbsp;
+  <a href="#ranking-providers">Providers</a>
+  &nbsp;·&nbsp;
+  <a href="#tests">Tests</a>
+</h3>
+
+---
+
+## Overview
 
 paper-lector is a Claude Code skill with three scripts:
 
