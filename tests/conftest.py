@@ -98,7 +98,8 @@ def project(tmp_path):
         ['Last in first out service discipline for noisy memories', 'Abstract', 'Requests wait in a buffer.'] + filler,
         ['LIFO with pushout maximizes average fidelity'] + filler])
     (root / 'sources.csv').write_text('key,pdf_path,doi\nqueue2022,papers/topic/Queue2022.pdf,10.1/q\n')
-    (root / 'queries.json').write_text('''{
+    (root / 'queries').mkdir()
+    (root / 'queries/queries.json').write_text('''{
  "question": "Which user should receive an ageing stored entangled pair?",
  "queries": {
   "Q0": {"label": "main", "text": "Which user receives a stored entangled pair at a quantum switch", "keywords": "user stored entangled pair switch"},
@@ -108,5 +109,5 @@ def project(tmp_path):
   "Q4": {"label": "comparison", "text": "", "keywords": ""}
  }
 }''')
-    (root / 'literature.json').write_text('{"pdf_dirs": ["papers"], "download_dir": "papers/new", "sources": "sources.csv", "queries": "queries.json"}')
+    (root / 'literature.json').write_text('{"pdf_dirs": ["papers"], "download_dir": "papers/new", "sources": "sources.csv", "queries": "queries/queries.json"}')
     return root

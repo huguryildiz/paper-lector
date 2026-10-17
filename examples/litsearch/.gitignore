@@ -1,5 +1,5 @@
 pdfs/
 # the example ships its config, queries and run record
 !literature.json
-!queries.json
+!queries/
 !runs/

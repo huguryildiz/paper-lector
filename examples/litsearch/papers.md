@@ -57,7 +57,7 @@ The 35 distractors are the first 5 arXiv API relevance results (2018 to 2021, go
 cd examples/litsearch
 # download the 40 PDFs listed above into pdfs/ (arXiv ids, nie2019 from the ACL Anthology)
 python ../../scripts/rank.py --out runs/<new-name> --expect maynez2020_2005-00661,zhou2020_2011-02593,nie2019_P19-1256,pagnoni2021_2104-13346,kryscinski2019_1910-12840
-python make_svg.py runs/<new-name>_hybrid.csv ../../assets/example-output.svg
+python make_svg.py runs/<new-name>_paper-lector_rank.csv ../../assets/example-output.svg
 ```
 
-`runs/litsearch_hybrid.csv` and `runs/litsearch_run.json` are the run behind the README image.
+`runs/litsearch_hybrid.csv` and `runs/litsearch_run.json` are the run behind the README image, made with an earlier version under the names it gave its outputs then.

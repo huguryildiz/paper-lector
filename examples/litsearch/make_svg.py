@@ -1,6 +1,6 @@
 """Draw the README example image from a rank.py CSV.
 
-Every number in the image comes from the CSV and its _run.json; titles, authors and gold labels come from papers.json.
+Every number in the image comes from the CSV and its run record (_rank_run.json, or _run.json for older runs); titles, authors and gold labels come from papers.json.
 
   python make_svg.py runs/litsearch_hybrid.csv ../../assets/example-output.svg
 """
@@ -29,10 +29,11 @@ def wrap(s, n=86):
 
 def main(csv_path, out_path):
     rows = list(csv.DictReader(open(csv_path, encoding='utf-8')))
-    run = json.load(open(csv_path.rsplit('_', 1)[0] + '_run.json'))['models']
+    record = csv_path[:-len('.csv')] + '_run.json' if csv_path.endswith('_rank.csv') else csv_path.rsplit('_', 1)[0] + '_run.json'
+    run = json.load(open(record))['models']                     # x_<name>_rank_run.json; older runs x_run.json
     models = f'{run["embed"]} + {run["rerank"]}' if run['embed'] else run['provider']
     meta = {p['file']: p for p in json.load(open(HERE / 'papers.json'))}
-    question = json.load(open(HERE / 'queries.json'))['question']
+    question = json.load(open(HERE / 'queries/queries.json'))['question']
     main_col = next(c[:-5] for c in rows[0] if c.endswith('_rank') and c != 'fused_rank')
     subj_col = [c[:-5] for c in rows[0] if c.endswith('_rank') and c != 'fused_rank'][1]
     rows.sort(key=lambda r: int(r['fused_rank']))

@@ -342,11 +342,11 @@ def test_search_default_out_is_dated_by_mode(project, monkeypatch):
     monkeypatch.setenv('OPENALEX_API_KEY', 'test')
     monkeypatch.setattr(openalex_search, 'get', lambda path, params: {'results': [], 'meta': {'count': 0}})
     openalex_search.main(['--semantic', 'switch scheduling'])
-    out = list((project / 'runs').glob('*_semantic.jsonl'))
-    assert len(out) == 1 and re.fullmatch(r'\d{4}-\d\d-\d\d_\d{4}_semantic\.jsonl', out[0].name)
+    out = list((project / 'runs').glob('*_semantic_search.jsonl'))
+    assert len(out) == 1 and re.fullmatch(r'\d{4}-\d\d-\d\d_\d{4}_semantic_search\.jsonl', out[0].name)
     assert json.loads(out[0].with_suffix('.query.json').read_text())['mode'] == 'semantic'
     openalex_search.main(['--semantic', 'switch scheduling'])          # same minute: a second file, not an overwrite
-    assert len(list((project / 'runs').glob('*_semantic.jsonl'))) == 2
+    assert len(list((project / 'runs').glob('*_semantic_search.jsonl'))) == 2
 
 
 def test_search_name_goes_into_default_out(project, monkeypatch):
@@ -354,7 +354,7 @@ def test_search_name_goes_into_default_out(project, monkeypatch):
     monkeypatch.setenv('OPENALEX_API_KEY', 'test')
     monkeypatch.setattr(openalex_search, 'get', lambda path, params: {'results': [], 'meta': {'count': 0}})
     openalex_search.main(['--exact', 'switch AND scheduling', '--name', 'switch-scheduling'])
-    out, = (project / 'runs').glob('*_switch-scheduling_exact.jsonl')
+    out, = (project / 'runs').glob('*_switch-scheduling_exact_search.jsonl')
     assert json.loads(out.with_suffix('.query.json').read_text())['name'] == 'switch-scheduling'
     with pytest.raises(SystemExit, match='--name'):
         openalex_search.main(['--exact', 'switch', '--name', 'Switch Scheduling'])

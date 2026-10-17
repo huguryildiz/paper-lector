@@ -4,9 +4,9 @@ Question:
 
 > Çok kullanıcılı bir kuantum ağında entanglement dağıtımını zamanlamak için hangi yöntemler (optimizasyon, heuristik, RL) kullanılmış ve hangi metriklerle karşılaştırılmış?
 
-A real run from search to ranking. An OpenAlex keyword search found 47 works (`runs/search_v2.jsonl`). Reading the abstracts, 12 were off topic and dropped, leaving 35 (`runs/search_v2_filtered.jsonl`). `fetch_pdf.py` got 18 open-access PDFs, most of them arXiv preprints; the rest sit behind publisher sites (`MANUAL` lines in `literature/pdfs/fetch_log.jsonl`). The PDFs are not in the repository.
+A real run from search to ranking. An OpenAlex keyword search found 47 works (`runs/search_v2.jsonl`). Reading the abstracts, 12 were off topic and dropped, leaving 35 (`runs/search_v2_filtered.jsonl`). `fetch_pdf.py` got 18 open-access PDFs, most of them arXiv preprints; the rest sit behind publisher sites (`MANUAL` lines in `pdfs/fetch_log.jsonl`). The PDFs are not in the repository.
 
-`rank.py --abstracts runs/search_v2_filtered.jsonl` ranked the 18 PDFs on full text (`fused_rank`, with starting pages in the CSV) and all 34 distinct papers on their abstracts alone (`abs_fused_rank`). The two orders are separate: abstract-only scores run lower than full-text ones. Queries are in `literature/queries.json` (fused: main, subject, approach, outcome); the run record is `runs/2026-10-18_0024_run.json; every run is also logged in `literature/questions.jsonl``.
+`rank.py --abstracts runs/search_v2_filtered.jsonl` ranked the 18 PDFs on full text (`fused_rank`, with starting pages in the CSV) and all 34 distinct papers on their abstracts alone (`abs_fused_rank`). The two orders are separate: abstract-only scores run lower than full-text ones. Queries are in `queries/queries.json` (fused: main, subject, approach, outcome); the CSV is `runs/2026-10-18_0024_paper-lector_rank.csv`, the run record `runs/2026-10-18_0024_paper-lector_rank_run.json`, and every run is also logged in `queries/questions.jsonl`. The run was made before the folders were renamed (`literature/queries.json`, `literature/pdfs/`, outputs without the `_rank` suffix); only the file names and paths changed since.
 
 Two `MANUAL` lines in the fetch log are not missing papers: W3021951002 is the Lee et al. PDF, fetched earlier by its arXiv id, and 2105.00418 (QuNet) is withdrawn.
 

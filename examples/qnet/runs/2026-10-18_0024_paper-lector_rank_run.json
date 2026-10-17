@@ -87,92 +87,92 @@
   "files": [
    {
     "id": "Chakraborty2019_DistributedRoutingQuantumInternet_1b6baa",
-    "path": "literature/pdfs/Chakraborty2019_DistributedRoutingQuantumInternet_1b6baa.pdf",
+    "path": "pdfs/Chakraborty2019_DistributedRoutingQuantumInternet_1b6baa.pdf",
     "sha256": "8e5e7fb1440f39bc6d0f4bfe651ed4071100216da5fd9405ed1cd953da6eac8c"
    },
    {
     "id": "Chen2026_QuantumRoutingBeyondPathfindingMultipartite_d6d174",
-    "path": "literature/pdfs/Chen2026_QuantumRoutingBeyondPathfindingMultipartite_d6d174.pdf",
+    "path": "pdfs/Chen2026_QuantumRoutingBeyondPathfindingMultipartite_d6d174.pdf",
     "sha256": "8f69bc3665e6e99a3544d1964056433a61fb772823e7d130e281397738e71815"
    },
    {
     "id": "Daud2024_ScalingNetworkTopologiesMultiUser_1f372b",
-    "path": "literature/pdfs/Daud2024_ScalingNetworkTopologiesMultiUser_1f372b.pdf",
+    "path": "pdfs/Daud2024_ScalingNetworkTopologiesMultiUser_1f372b.pdf",
     "sha256": "8ffe7e4aea53edebf860092edaf22dc7f72d24f1511614c4306b40f1b330890d"
    },
    {
     "id": "Fan2025_NearOptimalTechniquesDistributedEntanglement_f71671",
-    "path": "literature/pdfs/Fan2025_NearOptimalTechniquesDistributedEntanglement_f71671.pdf",
+    "path": "pdfs/Fan2025_NearOptimalTechniquesDistributedEntanglement_f71671.pdf",
     "sha256": "b986e18819a8774554c2b86290c70ac003ff5f938b0f1ac3cb1b350637445e25"
    },
    {
     "id": "Lee2022_QuantumRouterArchitectureHighFidelity_7d3ffb",
-    "path": "literature/pdfs/Lee2022_QuantumRouterArchitectureHighFidelity_7d3ffb.pdf",
+    "path": "pdfs/Lee2022_QuantumRouterArchitectureHighFidelity_7d3ffb.pdf",
     "sha256": "0020dd9828b67b88fbc87f2858edbe4fcf5074456f065f7c5d95d11a91e4aca0"
    },
    {
     "id": "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
-    "path": "literature/pdfs/Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4.pdf",
+    "path": "pdfs/Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4.pdf",
     "sha256": "cb1714bca3967ecbe2cee3ac83297d9a34009c56afead547f2707301272325d3"
    },
    {
     "id": "Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b",
-    "path": "literature/pdfs/Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b.pdf",
+    "path": "pdfs/Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b.pdf",
     "sha256": "b0c2059d369dcd38841d13faff0fb05a54ee5ef4f8c085ad06263189365188b9"
    },
    {
     "id": "Mannalath2023_MultipartyEntanglementRoutingQuantumNetworks_07d7f2",
-    "path": "literature/pdfs/Mannalath2023_MultipartyEntanglementRoutingQuantumNetworks_07d7f2.pdf",
+    "path": "pdfs/Mannalath2023_MultipartyEntanglementRoutingQuantumNetworks_07d7f2.pdf",
     "sha256": "dd164b5edf18f30647ae8a8b1f96ad5cd4349b9b9bbffc1926182350bdd5a5bb"
    },
    {
     "id": "Ooi2026_ImpactTopologyMultipartiteEntanglementDistribution_a89d05",
-    "path": "literature/pdfs/Ooi2026_ImpactTopologyMultipartiteEntanglementDistribution_a89d05.pdf",
+    "path": "pdfs/Ooi2026_ImpactTopologyMultipartiteEntanglementDistribution_a89d05.pdf",
     "sha256": "0c4ed1026faefb24d8a5f27083b0c415870867b0e013a5e78f91572d14bacf16"
    },
    {
     "id": "Piparo2025_QualityServiceAggregatedQuantumNetworks_4105be",
-    "path": "literature/pdfs/Piparo2025_QualityServiceAggregatedQuantumNetworks_4105be.pdf",
+    "path": "pdfs/Piparo2025_QualityServiceAggregatedQuantumNetworks_4105be.pdf",
     "sha256": "78ffbc1a7e34ab66cdb0e4675893610c2ccb1b77e6bc39ac9fcb880318ee4089"
    },
    {
     "id": "Shi2026_QUASARQuantumSatelliteArchitectureRouting_b2fd21",
-    "path": "literature/pdfs/Shi2026_QUASARQuantumSatelliteArchitectureRouting_b2fd21.pdf",
+    "path": "pdfs/Shi2026_QUASARQuantumSatelliteArchitectureRouting_b2fd21.pdf",
     "sha256": "b90d13ea8cf49c02fa2fb95616798f47468064502f2a9413dd0e7da46f7a5188"
    },
    {
     "id": "Smith2026_ToolsReducingServiceTimeNear_8421fd",
-    "path": "literature/pdfs/Smith2026_ToolsReducingServiceTimeNear_8421fd.pdf",
+    "path": "pdfs/Smith2026_ToolsReducingServiceTimeNear_8421fd.pdf",
     "sha256": "ecf1565e8c018be6be81a17e4bfa2eb0182198296c9398b66b0b52cd46ecf20c"
    },
    {
     "id": "Sutcliffe2023_MultiuserEntanglementDistributionQuantumNetworks_746bbb",
-    "path": "literature/pdfs/Sutcliffe2023_MultiuserEntanglementDistributionQuantumNetworks_746bbb.pdf",
+    "path": "pdfs/Sutcliffe2023_MultiuserEntanglementDistributionQuantumNetworks_746bbb.pdf",
     "sha256": "520112c4e2b766d14fbd0ad87fe73c7b47a2583d2d5ba7cc8fcde847d3d5ee1e"
    },
    {
     "id": "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
-    "path": "literature/pdfs/Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3.pdf",
+    "path": "pdfs/Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3.pdf",
     "sha256": "f914bded693d5f5e434a65a8c7267c7c5bc375898ba7ba82829c80f7047688ff"
    },
    {
     "id": "Wang2026_DynamicEntanglementDistributionMultiUser_71778f",
-    "path": "literature/pdfs/Wang2026_DynamicEntanglementDistributionMultiUser_71778f.pdf",
+    "path": "pdfs/Wang2026_DynamicEntanglementDistributionMultiUser_71778f.pdf",
     "sha256": "30941307db066eee6aed8714019298fe99f84fa8838d20e32b02032587626d90"
    },
    {
     "id": "Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af",
-    "path": "literature/pdfs/Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af.pdf",
+    "path": "pdfs/Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af.pdf",
     "sha256": "29e679c15e56e0c29a1cc19478131a43e48a488b34f64868e2cf7f248647c941"
    },
    {
     "id": "Yang2023_ReconfigurableQuantumInternetServiceProvider_2ff403",
-    "path": "literature/pdfs/Yang2023_ReconfigurableQuantumInternetServiceProvider_2ff403.pdf",
+    "path": "pdfs/Yang2023_ReconfigurableQuantumInternetServiceProvider_2ff403.pdf",
     "sha256": "74e3b91cd5ea4957c04ad7d386e1efa05a693798a6ede4179804a58938ebd525"
    },
    {
     "id": "Zhang2026_OptimizedSourcePlacementMultipartiteState_f4b780",
-    "path": "literature/pdfs/Zhang2026_OptimizedSourcePlacementMultipartiteState_f4b780.pdf",
+    "path": "pdfs/Zhang2026_OptimizedSourcePlacementMultipartiteState_f4b780.pdf",
     "sha256": "90c93e407cfe75b10d3384d024773b1c4a458ccb913cc311a83ec5e8c64a28fe"
    }
   ],
@@ -187,7 +187,7 @@
  "estimate": 709924,
  "outputs": {
   "hybrid": {
-   "csv": "runs/2026-10-18_0024_paper-lector.csv",
+   "csv": "runs/2026-10-18_0024_paper-lector_rank.csv",
    "fused_top10": [
     "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
     "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",

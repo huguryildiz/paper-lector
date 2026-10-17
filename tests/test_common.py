@@ -11,7 +11,7 @@ def test_config_found_from_subfolder_and_paths_resolved(project):
     assert cfg['path'] == project / 'literature.json'
     assert cfg['pdf_dirs'] == [project / 'papers']
     assert cfg['download_dir'] == project / 'papers' / 'new'
-    assert cfg['queries'] == project / 'queries.json'
+    assert cfg['queries'] == project / 'queries/queries.json'
 
 
 def test_config_search_stops_at_project_root(tmp_path):
@@ -55,7 +55,7 @@ def test_api_key_order(project, monkeypatch, tmp_path):
 
 
 def test_queries_default_fuse_and_empty_slot(project):
-    question, Q, fuse = common.load_queries(project / 'queries.json')
+    question, Q, fuse = common.load_queries(project / 'queries/queries.json')
     assert list(Q) == ['Q0', 'Q1', 'Q2', 'Q3']          # empty Q4 skipped
     assert fuse == ['Q0', 'Q1']                         # main and subject
     assert question.startswith('Which user')

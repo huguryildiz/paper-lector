@@ -1,5 +1,1 @@
-literature/pdfs/*.pdf
-# the example ships its config, queries, search results, fetch log and run record
-!literature.json
-!queries.json
-!runs/
+pdfs/*.pdf

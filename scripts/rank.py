@@ -3,7 +3,8 @@
 Method:
   1. Whole PDF through pdftotext; the bibliography is cut after a References heading or, with none, from the
      first numbered entry in the second half that more entries follow; appendices and supplementary material stay.
-  2. 1,200-token windows with 200-token overlap (Voyage's tokenizer), each labelled with its PDF pages.
+  2. 1,200-token windows with 200-token overlap (Voyage's tokenizer), each labelled with its PDF pages. Windows leave
+     out the head of step 4 (the abstract, or the opening 1,000 tokens), which the reranker reads first anyway.
   3. Per paper and query, windows are ranked by Reciprocal Rank Fusion (k = 60) of voyage-4-large cosine
      and BM25 on the query's keyword string ("hybrid"), or by cosine alone ("dense"); the top 3 are kept.
   4. rerank-3 scores every paper once per query on its abstract (from --abstracts when the paper is in the search
@@ -14,14 +15,15 @@ Method:
      orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
   Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
-  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_<name>-bm25.csv.
+  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_<name>_rank-bm25.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
-  rerun or a run resumed after a crash only pays for new text.
+  rerun or a run resumed after a crash only pays for new text. Table src ties each vector to its PDF's SHA-256 and
+  window number and pages (or to the queries hash and query id).
 
   rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
   rank.py --dry                           # counts and token estimate, no API call
-  rank.py                                 # writes runs/<date>_<time>_<name>.csv and _run.json, logs questions.jsonl
+  rank.py                                 # writes runs/<date>_<time>_<name>_rank.csv and _rank_run.json, logs questions.jsonl
 """
 import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
@@ -35,6 +37,7 @@ import common
 EMBED, RERANK = 'voyage-4-large', 'rerank-3'
 WIN, STEP, RRF_K, N_WIN, MAX_OVERLAP, HEAD = 1200, 1000, 60, 3, 0.2, 1000
 EMBED_BATCH, RERANK_BATCH, MAX_ITEMS = 100_000, 500_000, 1000     # Voyage: at most 1,000 inputs or documents per call
+RERANK_PAIR = 32_000                                                 # rerank-3 context: query + one document
 PDFTOTEXT_SECONDS = 300
 TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
 TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
@@ -53,12 +56,17 @@ def call(ep, body):
     return common.open_json(req, timeout=600)
 
 
-def embed(items, input_type, usage):
+def embed(items, input_type, usage, srcs):
     """Unit-norm embeddings for (text, tokens) items. Cached vectors are reused; new ones are stored after each
-    API batch, so a crashed run resumes without paying again. Stored as float32 whether fresh or cached."""
+    API batch, so a crashed run resumes without paying again. Stored as float32 whether fresh or cached.
+    srcs gives each item's origin, (ref, part, pages): a window is (PDF SHA-256, window number in that PDF, its pages),
+    a query is (queries hash, query id, ''). They go to table src, cached items too, so a vector can be traced back to
+    a paper; one text met in two PDFs has one vector and two src rows."""
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(CACHE)
     db.execute('create table if not exists emb (key text primary key, vec blob)')
+    db.execute('create table if not exists src (key text, kind text, ref text, part text, pages text, tokens integer, '
+               'first_seen text, primary key (key, ref, part))')
     keys = [hashlib.sha256(f'{EMBED}\0{input_type}\0{t}'.encode()).hexdigest() for t, _ in items]
     vec = {}
     for k in dict.fromkeys(keys):
@@ -74,6 +82,10 @@ def embed(items, input_type, usage):
             vec[k] = np.asarray(x['embedding'], np.float32)
         db.executemany('insert or replace into emb values (?, ?)', [(k, vec[k].tobytes()) for k, _ in part])
         db.commit()
+    now = datetime.datetime.now().isoformat(timespec='seconds')      # after the vectors, so every src row has one
+    db.executemany('insert or ignore into src values (?, ?, ?, ?, ?, ?, ?)',
+                   [(k, input_type, ref, str(i), pages, n, now) for k, (_, n), (ref, i, pages) in zip(keys, items, srcs)])
+    db.commit()
     db.close()
     usage['embed_cached'] += cached
     E = np.array([vec[k] for k in keys], float)
@@ -203,9 +215,10 @@ def clean(text):
 
 
 def abstract(text):
+    """The abstract and its character span in text, or (None, None)."""
     m = re.search(rf'\b(?:{ABSTRACT})\b\W{{0,3}}(.{{300,3000}}?)(?=\b(?:I\.|1\.?)?\s*(?:{INTRO})\b)',
                   text[:15000], re.I | re.S)
-    return m.group(1).strip() if m else None
+    return (m.group(1).strip(), m.span(1)) if m else (None, None)
 
 
 class ExtractError(Exception):
@@ -236,17 +249,31 @@ def windows(path, tok):
     enc = tok.encode(body, add_special_tokens=False)
     orig = lambda c: c + shift[1] if shift and c >= shift[0] else c
     page_of = lambda c: sum(1 for s in starts if s <= orig(c))
-    wins = []
-    for i in range(0, max(1, len(enc.ids) - WIN + STEP), STEP):
-        span = enc.offsets[i:i + WIN]
-        if not span:
-            break
-        a, b = span[0][0], span[-1][1]
+    ab, ab_span = abstract(body)
+    head = ab if ab else tok.decode(enc.ids[:HEAD])
+    # The reranker reads the head before the windows, so a window leaves out the head's tokens [h0, h1) (the abstract,
+    # or the opening HEAD tokens when none is found): its text, token spans and page label cover only the rest, and
+    # 'full' keeps the whole window. A window that is all head stays whole.
+    off = enc.offsets
+    if ab_span:
+        h0 = next((k for k, o in enumerate(off) if o[1] > ab_span[0]), len(off))
+        h1 = next((k for k, o in enumerate(off) if o[0] >= ab_span[1]), len(off))
+    else:
+        h0, h1 = 0, min(HEAD, len(off))
+
+    def piece(spans):
+        a, b = off[spans[0][0]][0], off[spans[-1][1] - 1][1]
         p0, p1 = page_of(a), page_of(b - 1)
-        wins.append({'text': re.sub(r'\s+', ' ', body[a:b]).strip(), 'pages': f'p. {p0}' if p0 == p1 else f'p. {p0}-{p1}',
-                     'span': (i, i + len(span))})
-    ab = abstract(body)
-    head = ab if ab else tok.decode(tok.encode(body, add_special_tokens=False).ids[:HEAD])
+        return {'text': ' '.join(re.sub(r'\s+', ' ', body[off[x][0]:off[y - 1][1]]).strip() for x, y in spans),
+                'spans': spans, 'pages': f'p. {p0}' if p0 == p1 else f'p. {p0}-{p1}'}
+    wins = []
+    for i in range(0, max(1, len(off) - WIN + STEP), STEP):
+        e = min(i + WIN, len(off))
+        if i >= e:
+            break
+        full = piece([(i, e)])
+        rest = [(x, y) for x, y in ((i, min(e, h0)), (max(i, h1), e)) if x < y]
+        wins.append(dict(piece(rest) if rest else full, full=full))
     return [w for w in wins if w['text']], head, cut, ab is not None, len(enc.ids)
 
 
@@ -287,11 +314,13 @@ def min_ranks(x):
 
 
 def pick(wins, score):
+    """The N_WIN best windows, each sharing less than MAX_OVERLAP of the smaller one's tokens with any chosen one."""
+    size = lambda x: sum(b - a for a, b in x)
+    shared = lambda x, y: sum(max(0, min(b, d) - max(a, c)) for a, b in x for c, d in y)
     chosen = []
     for j in sorted(range(len(wins)), key=lambda j: -score[j]):
-        s = wins[j]['span']
-        ok = all(max(0, min(s[1], wins[c]['span'][1]) - max(s[0], wins[c]['span'][0]))
-                 / min(s[1] - s[0], wins[c]['span'][1] - wins[c]['span'][0]) < MAX_OVERLAP for c in chosen)
+        s = wins[j]['spans']
+        ok = all(shared(s, wins[c]['spans']) / min(size(s), size(wins[c]['spans'])) < MAX_OVERLAP for c in chosen)
         if ok:
             chosen.append(j)
         if len(chosen) == N_WIN:
@@ -432,7 +461,7 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
             if e.get('status', 'OK') == 'OK' and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
                 owner[rid(e['id'])] = p['id']             # the logged file, in the log's own folder, unchanged
-    first = {p['id']: words(W[p['wins'][0]]['text']).split()[:40] for p in P}    # title and authors
+    first = {p['id']: words(W[p['wins'][0]]['full']['text']).split()[:40] for p in P}    # title and authors
 
     def by_title(t):
         """The one PDF whose opening holds, in order, at least 80% of the title's content words (titles change a
@@ -491,9 +520,14 @@ def rel(path, cfg):
 
 
 def csv_name(out, name, variant):
-    """<out>_<name>.csv for the default hybrid run (name from the queries file, else paper-lector); dense and bm25
-    runs keep their variant in the file name."""
-    return f'{out}_{name}.csv' if variant == 'hybrid' else f'{out}_{name}-{variant}.csv'
+    """<out>_<name>_rank.csv for the default hybrid run (name from the queries file, else paper-lector); dense and
+    bm25 runs keep their variant in the file name."""
+    return f'{out}_{name}_rank.csv' if variant == 'hybrid' else f'{out}_{name}_rank-{variant}.csv'
+
+
+def run_name(out, name, ext='json'):
+    """<out>_<name>_rank_run.json, the run record (and with ext='lock' the lock beside it)."""
+    return f'{out}_{name}_rank_run.{ext}'
 
 
 def stamp():
@@ -556,7 +590,14 @@ def main(argv=None):
         a.out, n = str(base), 2
         while any(Path(a.out).parent.glob(Path(a.out).name + '_*')):
             a.out, n = f'{base}-{n}', n + 1
-    prev = Path(f'{a.out}_run.json')
+    stem, parent = Path(a.out).name, Path(a.out).parent      # one --out holds the runs of one queries name only
+    names = {f.name[len(stem) + 1:].rsplit('_rank_run.', 1)[0] for f in (parent.iterdir() if parent.is_dir() else [])
+             if f.name.startswith(stem + '_') and f.name.endswith(('_rank_run.json', '_rank_run.lock'))}
+    other = sorted(n for n in names - {a.name} if common.valid_name(n))
+    if other or Path(f'{a.out}_run.json').exists():
+        sys.exit(f'--out {a.out} already holds ' + (f'a run of "{other[0]}"' if other else 'a run of an older paper-lector')
+                 + '; rank into a new --out')
+    prev = Path(run_name(a.out, a.name))
     if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != qsha:
         sys.exit(f'{prev} was made with a different question, queries or fuse list. A frozen queries file is not edited: '
                  f'write a new queries file and rank it with a new --out')
@@ -570,8 +611,8 @@ def main(argv=None):
         variants = ['bm25']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
-    outs = [Path(f'{a.out}_run.json')] + [Path(csv_name(a.out, a.name, v)) for v in variants]
-    lock = Path(f'{a.out}_run.lock')
+    outs = [Path(run_name(a.out, a.name))] + [Path(csv_name(a.out, a.name, v)) for v in variants]
+    lock = Path(run_name(a.out, a.name, 'lock'))
     if not a.dry:
         if any(p.exists() for p in outs):
             sys.exit(f'{", ".join(str(p) for p in outs if p.exists())} already exists. Rank into a new --out '
@@ -625,25 +666,41 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     dupes = near_duplicates(P)
     for x, y in dupes:
         print(f'note: {x} and {y} look like the same paper (preprint and published, or two names); both ranked', file=sys.stderr)
-    for w in W:
-        w['n'] = ntok(w['text'])
-        w['label_n'] = ntok(f"\n\n[{w['pages']}] ")
     A = abstract_corpus(a.abstracts.split(','), P, W, cfg, dirs) if a.abstracts else []
     AR = [x for x in A if x['text']]
     byid = {p['id']: p for p in P}
     for x in A:
         x['doc'] = 'Abstract: ' + (x['title'] + '. ' if x['from'] == 'search' and x['title'] else '') + x['text']
         if x['source'] == 'full_text' and x['from'] == 'search':
-            byid[x['id']]['head'] = x['text']        # the search record's abstract beats one guessed from the PDF
+            p = byid[x['id']]
+            # The text the windows left out is no longer the head: the PDF's opening, or a PDF abstract that the
+            # search abstract does not cover (a different version, or a cut abstract). Then the windows get it back.
+            left_out = set(words(p['head']).split()) if p['abstract_found'] else {''}
+            if len(left_out - set(words(x['text']).split())) > 0.1 * len(left_out):
+                for j in p['wins']:
+                    W[j].update(W[j]['full'])
+            p['head'] = x['text']                    # the search record's abstract beats one guessed from the PDF
+    for w in W:
+        w['n'] = ntok(w['text'])
+        w['label_n'] = ntok(f"\n\n[{w['pages']}] ")
     # Upper bound per rerank package: "Abstract: " + head + the N_WIN largest windows with their page labels.
     head_n = [ntok('Abstract: ' + p['head']) for p in P]
-    pkg = sum(h + sum(sorted((W[j]['n'] + W[j]['label_n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P))
+    pkg_n = [h + sum(sorted((W[j]['n'] + W[j]['label_n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P)]
+    pkg = sum(pkg_n)
     estimate = sum(w['n'] for w in W) + sum(ntok(q['text']) for q in Q.values()) \
         + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values()) \
         + sum(sum(ntok(x['doc']) for x in AR) + ntok(q['text']) * len(AR) for q in Q.values())
     print(f'{len(P)} papers, {len(W)} windows, bibliography cut in {sum(p["bib_cut"] for p in P)}, '
           f'abstract found in {sum(p["abstract_found"] for p in P)}; {len(Q)} queries, fuse {fuse}; '
           + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider bm25, no API call'), file=sys.stderr)
+    if provider == 'voyage':                 # stop before any paid call rather than on the API's refusal half-way
+        qmax = max((ntok(q['text']) for q in Q.values()), default=0)
+        long = [(p['id'], n) for p, n in zip(P, pkg_n) if n + qmax > RERANK_PAIR] \
+            + [(x['id'], ntok(x['doc'])) for x in AR if ntok(x['doc']) + qmax > RERANK_PAIR]
+        if long:
+            sys.exit('no API call made: rerank-3 takes at most {:,} tokens per query and document; too long with the '
+                     'longest query: {}. A search record\'s abstract is usually the cause: shorten or drop it in the '
+                     'search file'.format(RERANK_PAIR, ', '.join(f'{i} ({n + qmax:,})' for i, n in long)))
     if a.abstracts:
         print(f'abstracts: {len(A)} papers, {sum(x["source"] == "abstract_only" for x in A)} without a PDF, '
               f'{sum(bool(x["title"]) for x in A if x["source"] == "full_text")} of {len(P)} PDFs matched to a search record, '
@@ -662,8 +719,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
         KEY = common.api_key('VOYAGE_API_KEY', cfg)
         if W:
-            E = embed([(w['text'], w['n']) for w in W], 'document', usage)
-            QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage)
+            E = embed([(w['text'], w['n']) for w in W], 'document', usage,
+                      [(P[w['paper']]['sha256'], j - P[w['paper']]['wins'][0], w['pages']) for j, w in enumerate(W)])
+            QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage, [(qsha, i, '') for i in Q])
 
     abs_rows = {}
     if AR:
@@ -782,10 +840,10 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                             'abstract_only': [x['id'] for x in A if x['source'] == 'abstract_only'],
                             'no_abstract': [x['id'] for x in A if not x['text']],
                             'top10': [k for k, _ in sorted(abs_rows.items(), key=lambda kv: kv[1]['abs_fused_rank'])[:10]]}
-    with open(f'{a.out}_run.json', 'x', encoding='utf-8') as f:
+    with open(run_name(a.out, a.name), 'x', encoding='utf-8') as f:
         f.write(json.dumps(run, indent=1, ensure_ascii=False))
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '
-          f'-> {a.out}_run.json', file=sys.stderr)
+          f'-> {run_name(a.out, a.name)}', file=sys.stderr)
 
 
 if __name__ == '__main__':

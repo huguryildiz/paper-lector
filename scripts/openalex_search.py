@@ -9,9 +9,10 @@ Modes (pick one):
 Run anywhere inside a project (the key comes from the environment, the project .env or
 ~/.config/paper-lector/.env; literature.json, when present, marks works already in the sources table):
   python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)'
-Without --out the records go to runs/<date>_<time>_<name>_<mode>.jsonl next to literature.json (else in the current
-folder), for example runs/2026-10-18_1420_entanglement-scheduling_exact.jsonl, with -2 added when that minute is taken.
-<name> is --name, the same short name the queries file will carry; without --name the file is <date>_<time>_<mode>.jsonl.
+Without --out the records go to runs/<date>_<time>_<name>_<mode>_search.jsonl next to literature.json (else in the
+current folder), for example runs/2026-10-18_1420_entanglement-scheduling_exact_search.jsonl, with -2 added when that
+minute is taken. <name> is --name, the same short name the queries file will carry; without --name the file is
+<date>_<time>_<mode>_search.jsonl.
 """
 import argparse, datetime, json, re, sys, urllib.error, urllib.parse
 from pathlib import Path
@@ -145,7 +146,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     m = ap.add_mutually_exclusive_group(required=True)
     m.add_argument('--semantic'); m.add_argument('--exact'); m.add_argument('--cites'); m.add_argument('--refs')
-    ap.add_argument('--out', help='JSONL file (default: runs/<date>_<time>_<name>_<mode>.jsonl next to the config)')
+    ap.add_argument('--out', help='JSONL file (default: runs/<date>_<time>_<name>_<mode>_search.jsonl next to the config)')
     ap.add_argument('--name', help='topic name for the default file name, as in the queries file (e.g. entanglement-scheduling)')
     ap.add_argument('--config', help='path to literature.json (default: searched upward)')
     ap.add_argument('--max', type=int, default=0, help='stop after this many records (0 = all)')
@@ -164,7 +165,7 @@ def main(argv=None):
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
     if not a.out:
         base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
-        tail = f'_{a.name}_{mode}.jsonl' if a.name else f'_{mode}.jsonl'
+        tail = f'_{a.name}_{mode}_search.jsonl' if a.name else f'_{mode}_search.jsonl'
         a.out, n = f'{base}{tail}', 2
         while not reserve(a.out):                   # same name and mode in the same minute, or another run
             a.out, n = f'{base}-{n}{tail}', n + 1

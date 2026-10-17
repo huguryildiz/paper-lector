@@ -88,14 +88,14 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 
 ```json
 {
-  "pdf_dirs": ["literature/pdfs"],
-  "download_dir": "literature/pdfs/new",
-  "queries": "literature/queries.json",
+  "pdf_dirs": ["pdfs"],
+  "download_dir": "pdfs/new",
+  "queries": "queries/underwater-routing.json",
   "rank": {"provider": "voyage"}
 }
 ```
 
-**2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, ...), each with a full sentence and a keyword string. [`examples/queries.json`](examples/queries.json) is the file for this example. Once you have seen results from a queries file, don't edit it; write a new one.
+**2. Queries.** `queries/underwater-routing.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, ...), each with a full sentence and a keyword string. [`examples/queries/underwater-routing.json`](examples/queries/underwater-routing.json) is the file for this example. Once you have seen results from a queries file, don't edit it; write a new one.
 
 **3a. With an agent.** Open the project in Claude Code or Codex and ask:
 
@@ -111,16 +111,16 @@ PY=$PL/.venv/bin/python
 
 # find papers and download the open-access ones
 $PY $PL/scripts/openalex_search.py --exact '("underwater acoustic" OR "underwater sensor") AND (routing OR routes OR relay*)' --name underwater-routing
-$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_1420_underwater-routing_exact.jsonl
+$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_1420_underwater-routing_exact_search.jsonl
 
 # count tokens without calling the API, then rank
 $PY $PL/scripts/rank.py --dry
-$PY $PL/scripts/rank.py                 # writes runs/2026-10-17_2315_<name>.csv and _run.json
+$PY $PL/scripts/rank.py                 # writes runs/2026-10-17_2315_<name>_rank.csv and _rank_run.json
 ```
 
 `fetch_pdf.py` prints a `MANUAL` line for each paper it could not get; download those yourself. `rank.py` stops before any API call if the token estimate is above 15M, and caches embeddings so a rerun pays only for new text.
 
-**4. Read the output.** The CSV has one row per paper, sorted by `fused_rank`; the `<query>_pages` columns give the pages to start reading. `_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_run.json`.
+**4. Read the output.** The CSV has one row per paper, sorted by `fused_rank`; the `<query>_pages` columns give the pages to start reading. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 

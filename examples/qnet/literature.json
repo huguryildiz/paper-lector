@@ -1,6 +1,6 @@
 {
-  "pdf_dirs": ["literature/pdfs"],
-  "download_dir": "literature/pdfs",
-  "queries": "literature/queries.json",
+  "pdf_dirs": ["pdfs"],
+  "download_dir": "pdfs",
+  "queries": "queries/queries.json",
   "rank": {"provider": "voyage"}
 }

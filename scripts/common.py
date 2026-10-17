@@ -30,7 +30,7 @@ def load_config(explicit=None, required=True, start=None):
     if path is None:
         if required:
             sys.exit(f'No {CONFIG_NAME} found from {Path(start or os.getcwd()).resolve()} up to the project root.\n'
-                     f'Create one, for example: {{"pdf_dirs": ["pdfs"], "download_dir": "pdfs", "queries": "queries.json"}}')
+                     f'Create one, for example: {{"pdf_dirs": ["pdfs"], "download_dir": "pdfs", "queries": "queries/my-topic.json"}}')
         return None
     try:
         cfg = json.load(open(path, encoding='utf-8'))

@@ -3,7 +3,7 @@
     "pdfs"
   ],
   "download_dir": "pdfs",
-  "queries": "queries.json",
+  "queries": "queries/queries.json",
   "rank": {
     "provider": "voyage"
   }
