@@ -127,7 +127,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 | `fetch_pdf.py` | `ID ...` | Fetch the listed works (DOI, arXiv id or OpenAlex W id, also as doi.org or arxiv.org URLs) |
 | | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |
 | | `--dest DIR` | Save here instead of `download_dir` |
-| `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer, exit |
+| `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer (with `--provider local` also the local model), exit |
 | | `--out PREFIX` | Output prefix for `_<name>_rank.csv` (or `_<name>_rank-local.csv`, `_<name>_rank-dense.csv`) and `_<name>_rank_run.json`; `<name>` is the queries file's `"name"`, else `paper-lector`. Default: `runs/<date>_<time>` next to the config, with `-2` added when that minute is taken |
 | | `--dry` | Build windows, print counts and the token estimate; no API call |
 | | `--budget N` | Stop before any API call if the estimate is above N tokens (default 15M) |
@@ -140,7 +140,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 
 ## Ranking providers
 
-For now, `rank.py` supports one API: Voyage (`voyage-4-large` embeddings and `rerank-3`). Other embedding or rerank services, such as OpenAI, Cohere or a local Ollama model, are not supported yet. Adding one means a new name in `PROVIDERS` in `scripts/common.py`, a matching request and response format in `call()` in `scripts/rank.py`, and its own API key name. If you need one, open an issue.
+Besides the `local` provider below, `rank.py` supports one API: Voyage (`voyage-4-large` embeddings and `rerank-3`). Other embedding or rerank services, such as OpenAI, Cohere or an Ollama model, are not supported yet. Adding one means a new name in `PROVIDERS` in `scripts/common.py`, a matching request and response format in `call()` in `scripts/rank.py`, and its own API key name. If you need one, open an issue.
 
 The `local` provider needs no key and makes no API call (apart from the one-time downloads). It uses [`potion-multilingual-128M`](https://huggingface.co/minishlab/potion-multilingual-128M), a [model2vec](https://github.com/MinishLab/model2vec) model: one fixed vector per token, so a text's vector is the mean of its tokens' vectors, computed with numpy and no neural network at run time. Windows are chosen as in step 3, by RRF of this model's cosine and BM25; each paper is then scored by the cosine between the query `text` and its abstract plus those windows, in place of `rerank-3`. 18 PDFs take a few seconds. The output is `<out>_<name>_rank-local.csv` with the same columns, and `_rank_run.json` records the provider and the model with its revision. Expect a rougher order than voyage: on [`examples/qnet`](examples/qnet), 18 PDFs, its fused order agreed with the voyage run at Spearman 0.56 and its abstract order at 0.64 (BM25 alone, the provider it replaces, gave 0.49 and 0.34). The `bm25` provider is gone; a config that names it stops and asks for `local`.
 
@@ -152,4 +152,4 @@ The paths in `literature.json` and in the `sources` CSV are trusted: they can po
 
 ## Tests
 
-The tests run offline: small generated PDFs, sample text with headings in each supported language, a word tokenizer and a fake Voyage API. They need `pdftotext` on `PATH`. One test uses the real tokenizer and is skipped until `rank.py --setup` has run. GitHub Actions runs the suite on every push (`.github/workflows/tests.yml`).
+The tests run offline: small generated PDFs, sample text with headings in each supported language, a word tokenizer, a fake Voyage API and a fake local model. They need `pdftotext` on `PATH`. One test uses the real tokenizer and is skipped until `rank.py --setup` has run; one uses the real local model and is skipped until `rank.py --setup --provider local` has run. GitHub Actions runs the suite on every push (`.github/workflows/tests.yml`).

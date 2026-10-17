@@ -80,6 +80,8 @@ Then, once and while online, check `pdftotext` and download the pinned tokenizer
 .venv/bin/python scripts/rank.py --setup
 ```
 
+Without a Voyage key, add `--provider local` to that command; it also downloads the local model (531 MB).
+
 ## Example: underwater routing papers
 
 Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor networks, and the question is which next hop a node should pick so the network lives longer.
