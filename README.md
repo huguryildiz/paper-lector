@@ -210,7 +210,7 @@ For now, `rank.py` supports one API: Voyage (`voyage-4-large` embeddings and `re
 
 ### Ranking without an API key
 
-Set `"rank": {"provider": "bm25"}` in `literature.json`, or pass `--provider bm25` for a single run. No key and no API call (apart from the one-time tokenizer download): windows are chosen by BM25 on each query's keyword string, and each paper is scored by BM25 on its abstract plus those windows. The output is `<out>_paper-lector-bm25.csv` with the same columns, and `_run.json` records the provider.
+Set `"rank": {"provider": "bm25"}` in `literature.json`, or pass `--provider bm25` for a single run. No key and no API call (apart from the one-time tokenizer download): windows are chosen by BM25 on each query's keyword string, and each paper is scored by BM25 on its abstract plus those windows. The output is `<out>_<name>-bm25.csv` with the same columns, and `_run.json` records the provider.
 
 BM25 only matches words, so a paper that says "relay" when the query says "next hop" scores low. Expect a rougher order than with Voyage, and don't compare scores between the two providers.
 
