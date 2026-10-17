@@ -80,7 +80,7 @@ Then, once and while online, check `pdftotext` and download the pinned tokenizer
 .venv/bin/python scripts/rank.py --setup
 ```
 
-Without a Voyage key, add `--provider local` to that command; it also downloads the local model (531 MB).
+Without a Voyage key, add `--provider local` to that command; it also downloads the local model, [`potion-multilingual-128M`](https://huggingface.co/minishlab/potion-multilingual-128M) (531 MB).
 
 ## Example: underwater routing papers
 
@@ -149,7 +149,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 4. `rerank-3` scores each paper on its abstract plus those windows.
 5. The per-query ranks are combined with Reciprocal Rank Fusion into `fused_rank`.
 
-Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call, a one-time 531 MB model download, and a rougher order than Voyage. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
+Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call; ranking uses the model2vec model `potion-multilingual-128M` (a one-time 531 MB download) and gives a rougher order than Voyage. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
 
 ## Tests
 
