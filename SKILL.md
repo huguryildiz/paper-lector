@@ -46,9 +46,7 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 
 ## Step 2: writing the queries
 
-Settle the research question before drafting any query. Suggest 2 or 3 candidate questions, each one neutral sentence, built from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`). Ask with the AskUserQuestion tool: one option per candidate, recommended one first; the tool's free-text "Other" lets the user write their own. Without that tool, list the candidates numbered and ask the user to pick one or type their own. Use the chosen or written question word for word; if the user edits a candidate, the edited text wins.
-
-Draft the queries from that question, show them as a table, let the user edit, and freeze the file only after their approval. Never change a frozen file after seeing results; a revision is a new file and a new run.
+Settle the research question before drafting any query. Suggest 2 or 3 candidate questions, each one neutral sentence, built from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`). Ask with the AskUserQuestion tool: one option per candidate, recommended one first; the tool's free-text "Other" lets the user write their own. Without that tool, list the candidates numbered and ask the user to pick one or type their own. Use the chosen or written question word for word; if the user edits a candidate, the edited text wins. It becomes the `question` field and the `main` slot.
 
 Six labels, all optional except `main`:
 
@@ -61,13 +59,22 @@ Six labels, all optional except `main`:
 | `context` | Where or under which conditions | Underwater links, delayed control |
 | `comparison` | Alternatives or baselines | First-come-first-served, random choice |
 
+Then fill the other five slots the same way, on question screens, before writing any query text. One AskUserQuestion call takes at most 4 questions, so use two calls:
+
+1. `subject`, `approach`, `outcome`, `context`.
+2. `comparison`, then the `fuse` choice (multiSelect over the filled slots, `main` + `subject` marked recommended).
+
+Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. Options: one or two suggestions drawn from the question, written like the example column (a short phrase, recommended first, the description saying why it fits), plus "Leave empty". The tool's free-text "Other" takes the user's own wording, which is used as given. Without the tool, ask the same questions in chat, one numbered list per slot.
+
+From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run.
+
 Rules for drafting:
 
 - Each `text` is one English sentence of about 20 to 50 words; each `keywords` is a short BM25 string of the same meaning.
 - Spread the vocabularies of neighbouring fields across the set (for example queueing: service discipline, LIFO, buffer; decision theory: policy, Markov decision process). A relevant paper may use another field's words.
 - Put the decision ("which X") in `main`. Do not put a solver in `approach` unless the user intends it.
 - Leave a slot empty rather than padding it. Use two queries with the same label if one slot really needs two angles.
-- `fuse` lists the query ids combined into `fused_rank`. Default: the non-empty `main` and `subject`. Propose adding other slots per question and record the user's choice; `context` and `comparison` are often better read on their own columns.
+- `fuse` lists the query ids combined into `fused_rank`. Default: the non-empty `main` and `subject`; the user's choice on the fuse screen overrides it. `context` and `comparison` are often better read on their own columns.
 
 ```json
 {
@@ -105,7 +112,7 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 ## Examples
 
-**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Offer candidate questions (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?") and take the user's pick or their own wording. Draft `main`, `subject`, `approach`, `outcome`, `context` from the question, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
+**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Offer candidate questions (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?") and take the user's pick or their own wording. Ask the slot screens (`subject` suggestion: "Underwater acoustic sensor network nodes on battery"; `comparison`: "Depth-based routing" or "Leave empty"), write the queries from the answers, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
 
 **Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection, compare with the previous `_run.json` and report papers that entered or left the fused top 10.
 
