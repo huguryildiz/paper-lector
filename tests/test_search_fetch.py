@@ -1,6 +1,7 @@
 import json
 import re
 import urllib.error
+from pathlib import Path
 import fetch_pdf
 import openalex_search
 
@@ -262,7 +263,10 @@ def test_long_retry_after_on_503_is_still_retried(monkeypatch):
     ('("quantum switch" OR "quantum network*") AND schedul*', 'inside quotes'),
     ('"quantum network*"', None), ('("quantum network*")', None),
     ('("quantum switch" OR "quantum network") AND (schedul* OR "operations research")', None),
-    ('quantum switch scheduling', None), ('(a OR b) NOT c', None), ('a AND NOT b', None)])
+    ('quantum switch scheduling', None), ('(a OR b) NOT c', None), ('a AND NOT b', None),
+    ('a AND (b OR c d)', 'mixed'), ('a AND (b AND (c OR d e))', 'mixed'), ('((a OR b) AND (c d OR e))', 'mixed'),
+    ('""', 'empty quotes'), ('a AND " "', 'empty quotes'),
+    ('(' * 1000 + 'a' + ')' * 1000, 'nested 1000 deep'), ('(' * 10 + 'a' + ')' * 10, None)])
 def test_query_issues(q, bad):
     issues = openalex_search.query_issues(q)
     assert (not issues) if bad is None else any(bad in i for i in issues)
@@ -304,8 +308,8 @@ def test_out_is_never_overwritten_and_must_be_jsonl(project, monkeypatch, tmp_pa
                         {'results': [], 'meta': {'count': 0, 'next_cursor': None}})
     (tmp_path / 'old.jsonl').write_text('')
     (tmp_path / 'side.query.json').write_text('{}')
-    for out in ('old.jsonl', 'side.jsonl', 'r.csv'):
-        with pytest.raises(SystemExit, match='must be a new .jsonl'):
+    for out in ('old.jsonl', 'side.jsonl', 'r.csv', 'r.JSONL'):
+        with pytest.raises(SystemExit, match='must be a'):
             openalex_search.main(['--exact', 'switch', '--out', str(tmp_path / out)])
     with pytest.raises(SystemExit, match='--semantic is empty'):
         openalex_search.main(['--semantic', ' ', '--out', str(tmp_path / 'e.jsonl')])
@@ -350,3 +354,49 @@ def test_search_name_goes_into_default_out(project, monkeypatch):
     assert json.loads(out.with_suffix('.query.json').read_text())['name'] == 'switch-scheduling'
     with pytest.raises(SystemExit, match='--name'):
         openalex_search.main(['--exact', 'switch', '--name', 'Switch Scheduling'])
+
+
+def test_a_second_run_on_the_same_out_is_refused_while_the_first_runs(project, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    out = str(tmp_path / 'x.jsonl')
+    refused = []
+
+    def fake(url, key, timeout):
+        if not refused:                                   # the first run is between reserving and writing
+            with pytest.raises(SystemExit, match='must be a new file'):
+                openalex_search.main(['--exact', 'other', '--out', out])
+            refused.append(1)
+        return {'results': [{'id': 'https://openalex.org/W1'}], 'meta': {'count': 1, 'next_cursor': None}}
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', fake)
+    openalex_search.main(['--exact', 'first', '--out', out])
+    assert refused and json.loads(Path(out).with_suffix('.query.json').read_text())['query'] == 'first'
+
+
+def test_failed_search_removes_its_reserved_files(project, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', _raise(ConnectionError('down')))
+    with pytest.raises(ConnectionError):
+        openalex_search.main(['--exact', 'x', '--out', str(tmp_path / 'f.jsonl')])
+    assert not list(tmp_path.glob('f.*'))
+
+
+def test_retry_after_as_http_date_stops_on_spent_budget(monkeypatch):
+    import datetime, email.utils, io
+    later = email.utils.format_datetime(datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=3), usegmt=True)
+    err = urllib.error.HTTPError('u', 429, 'Too Many', {'Retry-After': later}, io.BytesIO(b''))
+    assert 10700 < openalex_search.common.retry_after(err) <= 10800
+    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', _raise(err))
+    monkeypatch.setattr(openalex_search.common.time, 'sleep', lambda s: pytest.fail('waited for a spent budget'))
+    monkeypatch.setattr(openalex_search, 'KEY', 'k')
+    with pytest.raises(SystemExit, match='resets in about 3 h'):
+        openalex_search.get('works', {})
+
+
+@pytest.mark.parametrize('body,msg', [(b'{"message": null}', 'refused the request$'), (b'{"message": 42}', 'refused the request$'),
+                                      (b'{"message": []}', 'refused the request$'), (b'[1]', None), (b'oops', None)])
+def test_openalex_error_bodies(body, msg):
+    import io
+    got = openalex_search.common.openalex_error(urllib.error.HTTPError('u', 400, 'Bad', {}, io.BytesIO(body)), 'k')
+    assert got is None if msg is None else re.search(msg, got)

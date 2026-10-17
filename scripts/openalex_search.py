@@ -49,6 +49,7 @@ def held_dois(cfg):
 
 
 MAX_OPERATORS = 5
+MAX_DEPTH = 10
 
 
 def query_issues(q):
@@ -62,7 +63,13 @@ def query_issues(q):
     if q.count('"') % 2:
         return ['unbalanced quotes']
     tokens = re.findall(r'"[^"]*"|\(|\)|[^\s()"]+', q)
-    issues = []
+    depth = deepest = 0
+    for t in tokens:
+        depth += (t == '(') - (t == ')')
+        deepest = max(deepest, depth)
+    if deepest > MAX_DEPTH:
+        return [f'brackets nested {deepest} deep; at most {MAX_DEPTH}']
+    issues = ['empty quotes'] if any(t.startswith('"') and not t.strip('" ') for t in tokens) else []
 
     def group(i):
         """Check operands and operators up to the matching ')'; return the index there."""
@@ -145,8 +152,8 @@ def main(argv=None):
         sys.exit(f'--{mode} is empty')
     if a.exact and (issues := query_issues(a.exact)):
         sys.exit('query not sent: ' + '; '.join(issues))
-    if a.out and (not a.out.endswith('.jsonl') or Path(a.out).exists() or Path(a.out).with_suffix('.query.json').exists()):
-        sys.exit(f'{a.out}: --out must be a new .jsonl file (it and its .query.json are never overwritten)')
+    if a.out and not a.out.endswith('.jsonl'):
+        sys.exit(f'{a.out}: --out must be a .jsonl file')
     global KEY
     cfg = common.load_config(a.config, required=False)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
@@ -154,8 +161,35 @@ def main(argv=None):
         base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
         tail = f'_{a.name}_{mode}.jsonl' if a.name else f'_{mode}.jsonl'
         a.out, n = f'{base}{tail}', 2
-        while Path(a.out).exists() or Path(a.out).with_suffix('.query.json').exists():   # same name and mode in the same minute
+        while not reserve(a.out):                   # same name and mode in the same minute, or another run
             a.out, n = f'{base}-{n}{tail}', n + 1
+    elif not reserve(a.out):
+        sys.exit(f'{a.out}: --out must be a new file (it and its .query.json are never overwritten)')
+    try:
+        search(a, cfg, mode)
+    except BaseException:
+        for f in (Path(a.out), Path(a.out).with_suffix('.query.json')):   # both reserved by this run
+            f.unlink(missing_ok=True)
+        raise
+
+
+def reserve(out):
+    """Create out and its .query.json, both or neither, so no other run can write them; False if either exists."""
+    side = Path(out).with_suffix('.query.json')
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    try:
+        open(out, 'x').close()
+    except FileExistsError:
+        return False
+    try:
+        open(side, 'x').close()
+    except FileExistsError:
+        Path(out).unlink()
+        return False
+    return True
+
+
+def search(a, cfg, mode):
 
     if a.semantic:
         r = get('works', {'search.semantic': a.semantic, 'per_page': 50, 'select': FIELDS + ',relevance_score'})
@@ -181,7 +215,6 @@ def main(argv=None):
         works = works[:a.max]
 
     held = held_dois(cfg)
-    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     with open(a.out, 'w', encoding='utf-8') as f:
         for w in works:
             f.write(json.dumps(record(w, held), ensure_ascii=False) + '\n')

@@ -1,5 +1,5 @@
 """Shared helpers: project config (literature.json), API keys, sources table, queries file, HTTP retries."""
-import csv, hashlib, http.client, json, os, re, sys, time, urllib.error, urllib.request
+import csv, datetime, email.utils, hashlib, http.client, json, os, re, sys, time, urllib.error, urllib.request
 from pathlib import Path
 
 CONFIG_NAME = 'literature.json'
@@ -96,9 +96,12 @@ def retry(fn, tries=4, wait=10):
 
 def retry_after(e):
     """Seconds an HTTP error's Retry-After header asks to wait (0 if none); hours means a spent daily budget."""
-    try:
-        return int((e.headers or {}).get('Retry-After') or 0)
-    except ValueError:
+    v = ((e.headers or {}).get('Retry-After') or '').strip()
+    if v.isdigit():
+        return int(v)
+    try:                                          # or an HTTP date
+        return max(0, int((email.utils.parsedate_to_datetime(v) - datetime.datetime.now(datetime.timezone.utc)).total_seconds()))
+    except (TypeError, ValueError):
         return 0
 
 
@@ -117,9 +120,10 @@ def openalex_error(e, key):
                    ' this IP address; a free OPENALEX_API_KEY gives ten times that.'))
     if e.code == 400:
         try:
-            return 'OpenAlex refused the request: ' + json.load(e).get('message', '')
+            msg = json.load(e).get('message')
         except (ValueError, AttributeError):
             return None
+        return 'OpenAlex refused the request' + (': ' + msg if isinstance(msg, str) and msg else '')
     return None
 
 
