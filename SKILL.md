@@ -50,7 +50,7 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 
 ## Searching OpenAlex
 
-`openalex_search.py` has four modes. Before any search, ask which one with the question tool (single choice), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
+`openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
 
 | Option | Flag | Tell the user |
 | --- | --- | --- |
@@ -59,9 +59,9 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 | Citing works | `--cites <DOI, arXiv id or W id>` | Papers that cite one paper; forward in time |
 | References | `--refs <DOI, arXiv id or W id>` | Papers one paper cites; back in time |
 
-Then write the search from the user's topic: a boolean query for keyword (unstemmed: `rout*` for routing and routes; neighbouring fields' words joined with OR), one plain sentence for semantic, or the seed paper's DOI for citing and references. Show it and ask, on the same kind of screen, "Run this search" (recommended), "Edit it" (the user types the new text in the free-text field), or "Change the mode". Run only after the user approves; never run a query the user has not seen.
+Then write one search per chosen mode from the user's topic: a boolean query for keyword (unstemmed: `rout*` for routing and routes; neighbouring fields' words joined with OR), one plain sentence for semantic, or the seed paper's DOI for citing and references (ask for the seed if the user has not named one). Show them all together and ask, on a single-choice screen, "Run this search" (recommended), "Edit it" (the user types the new text in the free-text field), or "Change the mode". Run only after the user approves; never run a query the user has not seen.
 
-Report the `count` and `written` numbers and how many were already in `sources`. For semantic, say that only the 50 closest works came back. A user can run a keyword search and a semantic one on the same topic and fetch from both files.
+Run each approved search into its own `--out` file. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
 
 ## Step 2: writing the queries
 

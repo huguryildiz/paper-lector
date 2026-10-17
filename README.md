@@ -142,7 +142,7 @@ See [`SKILL.md`](SKILL.md) for the query-writing rules and the full agent workfl
 
 ## Search modes
 
-`openalex_search.py` finds papers in OpenAlex in four ways. With an agent, ask for a search ("find papers on energy-aware routing in underwater networks") and it asks which mode, then shows the query it wrote for you to run, edit or change. If your request already names the mode ("papers citing ..."), it skips that question.
+`openalex_search.py` finds papers in OpenAlex in four ways. With an agent, ask for a search ("find papers on energy-aware routing in underwater networks") and it asks which modes (you can pick more than one), then shows the queries it wrote for you to run, edit or change. If your request already names the mode ("papers citing ..."), it skips that question.
 
 | Mode | Flag | What you get | Use it when |
 | --- | --- | --- | --- |
