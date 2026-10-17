@@ -128,3 +128,17 @@ def test_changed_queries_refuse_previous_out(project, offline, monkeypatch):
     with pytest.raises(SystemExit, match='different queries'):
         rank.main(['--out', out, '--provider', 'bm25', '--dry'])
     rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])   # new --out is fine
+
+
+def test_missing_pdf_folder_fails(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    with pytest.raises(SystemExit, match='PDF folder not found'):
+        rank.main(['--out', str(project / 'runs/x'), '--dry', '--dirs', str(project / 'nope')])
+
+
+def test_empty_pdf_folder_fails(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    (project / 'empty').mkdir()
+    (project / 'literature.json').write_text('{"pdf_dirs": ["empty"], "queries": "queries.json"}')
+    with pytest.raises(SystemExit, match='no PDFs in'):
+        rank.main(['--out', str(project / 'runs/x'), '--dry'])

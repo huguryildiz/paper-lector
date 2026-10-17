@@ -59,6 +59,9 @@ def find_pdfs(dirs, known, ids=None):
     """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem."""
     out = {k: v['pdf'] for k, v in known.items() if v['pdf'] and v['pdf'].is_file()}
     taken = {p.name for p in out.values()}
+    gone = [str(d) for d in dirs if not Path(d).is_dir()]
+    if gone:
+        sys.exit(f'PDF folder not found: {", ".join(gone)}. Check "pdf_dirs" in the config or --dirs')
     for d in dirs:
         for p in sorted(Path(d).rglob('*.pdf')):
             if p.name in taken:
@@ -72,6 +75,8 @@ def find_pdfs(dirs, known, ids=None):
         if missing:
             sys.exit(f'no PDF for {missing}')
         out = {i: out[i] for i in ids}
+    if not out:
+        sys.exit(f'no PDFs in {", ".join(map(str, dirs))}. Add PDFs there, or search and fetch them first')
     return out
 
 
