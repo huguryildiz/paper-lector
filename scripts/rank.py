@@ -185,6 +185,10 @@ def main(argv=None):
     if not qpath:
         sys.exit('no queries file: pass --queries or set "queries" in the config')
     question, Q, fuse = common.load_queries(qpath)
+    prev = Path(f'{a.out}_run.json')
+    if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != sha(json.dumps(Q, sort_keys=True)):
+        sys.exit(f'{prev} was made with different queries. A frozen queries file is not edited: '
+                 f'write a new queries file and rank it with a new --out')
     provider = a.provider or (cfg and cfg['provider']) or 'voyage'
     variants = a.variants.split(',')
     if any(v not in ('hybrid', 'dense') for v in variants):

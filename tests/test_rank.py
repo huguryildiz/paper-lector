@@ -116,3 +116,15 @@ def test_bm25_rejects_variants(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     with pytest.raises(SystemExit, match='voyage provider only'):
         rank.main(['--out', str(project / 'runs/v'), '--provider', 'bm25', '--variants', 'dense'])
+
+
+def test_changed_queries_refuse_previous_out(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    out = str(project / 'runs/q')
+    rank.main(['--out', out, '--provider', 'bm25'])
+    rank.main(['--out', out, '--provider', 'bm25'])                   # same queries: rerun allowed
+    q = project / 'queries.json'
+    q.write_text(q.read_text().replace('underwater seawater ocean links', 'ocean links'))
+    with pytest.raises(SystemExit, match='different queries'):
+        rank.main(['--out', out, '--provider', 'bm25', '--dry'])
+    rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])   # new --out is fine

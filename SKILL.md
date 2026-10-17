@@ -76,7 +76,7 @@ Each slot question names the slot and what it asks, for example "approach: what 
 
 Without such a tool, ask the same questions in chat, one numbered list per slot, and wait for the reply.
 
-From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run.
+From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run. `rank.py` backs this up: if `<prefix>_run.json` exists and was made with different queries, it stops; use a new queries file and a new `--out`.
 
 Rules for drafting:
 

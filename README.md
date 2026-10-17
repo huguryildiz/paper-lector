@@ -81,7 +81,7 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 
 `rank` is optional; `voyage` is the default.
 
-**2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run.
+**2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run. `rank.py` refuses to reuse an `--out` prefix whose `_run.json` was made with different queries.
 
 **3a. With Claude.** Open the project in Claude Code and ask:
 
