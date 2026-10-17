@@ -44,11 +44,11 @@ PDFTOTEXT_SECONDS = 300
 TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
 TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
 TOK_SHA = 'c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539'
-TOK_PATH = Path.home() / '.cache/paper-lector/voyage-4-large-tokenizer.json'
+TOK_PATH = Path.home() / f'.cache/paper-lector/voyage-4-large-tokenizer-{TOK_REV[:7]}.json'   # a new revision, a new file
 LOCAL, LOCAL_REV = 'minishlab/potion-multilingual-128M', '73908c3438cf03b6a01bcb9611d62b23d0726f08'
 LOCAL_FILES = {'model.safetensors': '14b5eb39cb4ce5666da8ad1f3dc6be4346e9b2d601c073302fa0a31bf7943397',
                'tokenizer.json': '19f1909063da3cfe3bd83a782381f040dccea475f4816de11116444a73e1b6a1'}
-LOCAL_DIR = Path.home() / '.cache/paper-lector/potion-multilingual-128M'
+LOCAL_DIR = Path.home() / f'.cache/paper-lector/potion-multilingual-128M/{LOCAL_REV[:7]}'
 CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
            'from into over than then which when where while what who how does do can not no '

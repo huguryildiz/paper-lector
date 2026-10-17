@@ -19,7 +19,7 @@ The details behind the [README](README.md): what each script writes, how runs ar
 
 API keys are looked up in the environment, then the project's `.env`, then `~/.config/paper-lector/.env`. `OPENALEX_API_KEY` is used by search and fetch; without it, keyword and citing searches return only the first 200 works (references and semantic are not cut) and the daily budget is about 100 searches, shared by everyone on the same IP address. `VOYAGE_API_KEY` is used by `rank.py` with the default `voyage` provider.
 
-`rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `local` provider. `rank.py --setup --provider local` also downloads the local model (`minishlab/potion-multilingual-128M`, 531 MB) into `~/.cache/paper-lector/potion-multilingual-128M/`, pinned the same way and checked against its SHA-256 on every load; after that, the `local` provider works fully offline. A local run without the model downloads it first. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
+`rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `local` provider. `rank.py --setup --provider local` also downloads the local model (`minishlab/potion-multilingual-128M`, 531 MB) into `~/.cache/paper-lector/potion-multilingual-128M/<revision>/`, pinned the same way and checked against its SHA-256 on every load; after that, the `local` provider works fully offline. A local run without the model downloads it first. The tokenizer's file name and the model's folder carry the first 7 characters of their pinned revision, so when a paper-lector update pins a newer one, the next run downloads it beside the old copy instead of stopping on a SHA-256 mismatch; the old file or folder can then be deleted. Runs made with different revisions give different scores; `_rank_run.json` records both revisions. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
 ## Project layout
 
@@ -40,8 +40,8 @@ API keys are looked up in the environment, then the project's `.env`, then `~/.c
 
 ~/.cache/paper-lector/         shared by every project on the machine
 ├── embeddings.sqlite          vectors (table emb) and where each came from (table src)
-├── voyage-4-large-tokenizer.json
-└── potion-multilingual-128M/     the local provider's model, 531 MB
+├── voyage-4-large-tokenizer-<revision>.json
+└── potion-multilingual-128M/<revision>/   the local provider's model, 531 MB
 ```
 
 Only `literature.json` has a fixed name. The other paths come from it (`pdf_dirs`, `download_dir`, `sources`, `queries`), so another layout works too; this one is what the agent writes for a new project. Search and rank outputs go to `runs/` next to the config unless `--out` says otherwise, and sort by time, so a search and the rank that used it sit together. `runs/` is reproducible from the logs and usually stays out of git, like the PDFs; [`examples/qnet`](examples/qnet) keeps its runs as a worked example.

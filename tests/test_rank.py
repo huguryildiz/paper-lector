@@ -368,6 +368,10 @@ def test_id_that_really_starts_with_a_quote_is_kept(project, offline, monkeypatc
     assert json.load(open(project / 'runs/q_paper-lector_rank_run.json'))['corpus']['ids'] == ["'=x"]
 
 
+def test_cache_paths_carry_the_pinned_revision():
+    assert rank.TOK_REV[:7] in rank.TOK_PATH.name and rank.LOCAL_DIR.name == rank.LOCAL_REV[:7]
+
+
 def test_local_model_download_fails_cleanly(monkeypatch, tmp_path):
     import urllib.request
     monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path / 'm')
