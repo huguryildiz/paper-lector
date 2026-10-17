@@ -185,3 +185,21 @@ def test_unreadable_pdf_recorded_and_fails_frozen_ids(project, offline, monkeypa
     (project / 'ids.csv').write_text('paper\nScan2020\nOcean2023\n')
     with pytest.raises(SystemExit, match='frozen corpus is incomplete'):
         rank.main(['--out', str(project / 'runs/s2'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+
+
+def test_identical_copy_skipped_and_near_duplicate_reported(project, offline, monkeypatch):
+    from conftest import make_pdf
+    monkeypatch.chdir(project)
+    src = project / 'papers/topic/Switch2024.pdf'
+    (project / 'papers/copy').mkdir()
+    (project / 'papers/copy/SwitchCopy.pdf').write_bytes(src.read_bytes())
+    make_pdf(project / 'papers/copy/SwitchPreprint.pdf', [
+        ['Age based scheduling at a quantum switch (preprint)', 'Abstract',
+         'We study which user receives a stored entangled pair.'] + ['lorem ipsum dolor sit amet consectetur'] * 40,
+        ['Our policy serves the youngest stored pair first', 'threshold structure of the optimal policy']])
+    rank.main(['--out', str(project / 'runs/dup'), '--provider', 'bm25'])
+    run = json.load(open(project / 'runs/dup_run.json'))
+    kept = [i for i in run['corpus']['ids'] if i in ('Switch2024', 'SwitchCopy')]
+    assert len(kept) == 1                                                  # byte-identical copy not ranked twice
+    assert sorted([kept[0], 'SwitchPreprint']) in [sorted(p) for p in run['corpus']['possible_duplicates']]
+    assert not any('Ocean2023' in p or 'queue2022' in p for p in run['corpus']['possible_duplicates'])

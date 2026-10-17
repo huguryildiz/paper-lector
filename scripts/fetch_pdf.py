@@ -3,7 +3,8 @@
 Order tried: arXiv, then every OpenAlex location that lists a pdf_url.
 A file is kept only if it starts with %PDF. Publisher pages that answer 403
 are reported as MANUAL with their landing URL: ask a person to download them.
-Existing files are never overwritten. A DOI already in the sources table counts as held.
+Existing files are never overwritten. A DOI already in the sources table counts as held, and a download that is
+byte-identical to a PDF already in the folders is not saved.
 File names end in a short hash of the DOI, so two papers with the same author, year and title words don't collide.
 
   python fetch_pdf.py 10.1109/JSAC.2024.1234567 2601.11698
@@ -76,6 +77,7 @@ def main(argv=None):
     dest.mkdir(parents=True, exist_ok=True)
     roots = [dest] + ([d for d in cfg['pdf_dirs'] if d != dest] if cfg else [])
     held = {v['doi']: k for k, v in common.sources(cfg).items() if v['doi']}
+    digests = None
     for ident in ids:
         if held.get(ident.lower()):
             print(f'HAVE    {ident} -> sources key {held[ident.lower()]}'); continue
@@ -94,6 +96,12 @@ def main(argv=None):
             except Exception as e:
                 print(f'  fail  {url}: {e}', file=sys.stderr); continue
             if data:
+                if digests is None:
+                    digests = {hashlib.sha256(h.read_bytes()).hexdigest(): h for r in roots for h in r.rglob('*.pdf')}
+                same = digests.get(hashlib.sha256(data).hexdigest())
+                if same:
+                    print(f'HAVE    {ident} -> {same} (same file)'); break
+                digests[hashlib.sha256(data).hexdigest()] = out
                 out.write_bytes(data); print(f'OK      {ident} -> {out}  ({len(data) // 1024} kB)'); break
             print(f'  fail  {url}: not a PDF', file=sys.stderr)
         else:

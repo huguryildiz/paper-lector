@@ -79,10 +79,22 @@ def tokenizer():
     return Tokenizer.from_file(str(TOK_PATH))
 
 
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
 def find_pdfs(dirs, known, ids=None):
-    """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem."""
+    """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem.
+    A byte-identical copy of a PDF already found is skipped with a note."""
     out = {k: v['pdf'] for k, v in known.items() if v['pdf'] and v['pdf'].is_file()}
     taken = {p.resolve() for p in out.values()}
+    seen = {}
+    for k, p in list(out.items()):
+        d = digest(p)
+        if d in seen:
+            print(f'note: {p} is the same file as {out[seen[d]]}; skipped', file=sys.stderr); del out[k]
+        else:
+            seen[d] = k
     gone = [str(d) for d in dirs if not Path(d).is_dir()]
     if gone:
         sys.exit(f'PDF folder not found: {", ".join(gone)}. Check "pdf_dirs" in the config or --dirs')
@@ -90,12 +102,15 @@ def find_pdfs(dirs, known, ids=None):
         for p in sorted(Path(d).rglob('*.pdf')):
             if p.resolve() in taken:
                 continue
+            d = digest(p)
+            if d in seen:
+                print(f'note: {p} is the same file as {out[seen[d]]}; skipped', file=sys.stderr); continue
             pid, n = p.stem, 2
             while pid in out:
                 pid, n = f'{p.stem}-{n}', n + 1
             if pid != p.stem:
                 print(f'note: {p} has the same name as {out[p.stem]}; ranked as {pid}', file=sys.stderr)
-            out[pid] = p; taken.add(p.resolve())
+            out[pid] = p; taken.add(p.resolve()); seen[d] = pid
     if ids:
         missing = [i for i in ids if i not in out]
         if missing:
@@ -148,6 +163,18 @@ def windows(path, tok):
     ab = abstract(body)
     head = ab if ab else tok.decode(tok.encode(body, add_special_tokens=False).ids[:HEAD])
     return [w for w in wins if w['text']], head, cut, ab is not None, len(enc.ids)
+
+
+def near_duplicates(P, threshold=0.8):
+    """Pairs of papers whose abstracts (or opening text) share most of their words: often a preprint and its
+    published version, or one paper saved under two names. Reported, never dropped."""
+    words = [set(w for w in re.findall(r'[a-z]{4,}', p['head'].lower()) if w not in STOP) for p in P]
+    pairs = []
+    for i in range(len(P)):
+        for j in range(i + 1, len(P)):
+            if words[i] and words[j] and len(words[i] & words[j]) / len(words[i] | words[j]) >= threshold:
+                pairs.append([P[i]['id'], P[j]['id']])
+    return pairs
 
 
 def bm25_scores(docs, query, k1=1.2, b=0.75):
@@ -247,6 +274,9 @@ def main(argv=None):
         sys.exit('no PDFs with extractable text')
     if ids and skipped:
         sys.exit(f'--ids lists papers with no extractable text: {[x["id"] for x in skipped]}; the frozen corpus is incomplete')
+    dupes = near_duplicates(P)
+    for x, y in dupes:
+        print(f'note: {x} and {y} look like the same paper (preprint and published, or two names); both ranked', file=sys.stderr)
     for w in W:
         w['n'] = ntok(w['text'])
     head_n = [ntok(p['head']) for p in P]
@@ -260,6 +290,8 @@ def main(argv=None):
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
         for x in skipped:
             print(x['id'], 'skipped: no text', sep='\t')
+        for x, y in dupes:
+            print(x, f'possible duplicate of {y}', sep='\t')
         return
     if prev.is_file():
         sys.exit(f'{prev} already exists. Rank into a new --out (for example with today\'s date) and compare the two runs')
@@ -339,7 +371,8 @@ def main(argv=None):
            'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else None,
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},
-           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P], 'skipped': skipped},
+           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P], 'skipped': skipped,
+                      'possible_duplicates': dupes},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
     Path(f'{a.out}_run.json').write_text(json.dumps(run, indent=1, ensure_ascii=False))
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '

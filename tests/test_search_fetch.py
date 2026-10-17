@@ -31,9 +31,21 @@ def test_fetch_skips_held_doi_and_keeps_same_title_papers_apart(project, monkeyp
                      'best_oa_location': {'pdf_url': 'http://oa/' + doi}, 'locations': []}
     fetched = []
     monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: w(ident))
-    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: fetched.append(url) or b'%PDF-1.4 x')
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: fetched.append(url) or b'%PDF-1.4 ' + url.encode())
     fetch_pdf.main(['10.1/q', '10.9/a', '10.9/b'])
     out = capsys.readouterr().out
     assert 'HAVE    10.1/q -> sources key queue2022' in out           # held DOI: no lookup, no download
     assert fetched == ['http://oa/10.9/a', 'http://oa/10.9/b']
     assert len(list((project / 'papers/new').glob('Zhang2023_DeepRouting_*.pdf'))) == 2
+
+
+def test_fetch_does_not_save_a_byte_identical_copy(project, monkeypatch, capsys):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    held = (project / 'papers/topic/Ocean2023.pdf').read_bytes()
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: {'doi': 'https://doi.org/' + ident, 'display_name': 'Ocean',
+                                                              'best_oa_location': {'pdf_url': 'http://oa/x'}, 'locations': []})
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: held)
+    fetch_pdf.main(['10.9/ocean'])
+    assert '(same file)' in capsys.readouterr().out
+    assert not list((project / 'papers/new').glob('*.pdf'))
