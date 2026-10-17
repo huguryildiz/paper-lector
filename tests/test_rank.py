@@ -64,7 +64,7 @@ def test_budget_stops_before_api(project, offline, monkeypatch):
 def test_full_run_columns_fusion_and_run_record(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/r'), '--expect', 'Switch2024'])
-    rows = list(csv.DictReader(open(project / 'runs/r_hybrid.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/r_paper-lector.csv')))
     assert list(rows[0])[:7] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score', 'Q0_main_rank', 'Q0_main_score']
     assert 'Q3_context_pages' in rows[0] and not any(k.startswith('Q4') for k in rows[0])
     assert {r['paper'] for r in rows} == {'Switch2024', 'Ocean2023', 'queue2022'}   # sources key kept
@@ -81,7 +81,7 @@ def test_dense_variant_and_ids_filter(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     (project / 'ids.csv').write_text('paper\nqueue2022\nOcean2023\n')
     rank.main(['--out', str(project / 'runs/d'), '--variants', 'dense', '--ids', str(project / 'ids.csv')])
-    rows = list(csv.DictReader(open(project / 'runs/d_dense.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/d_paper-lector-dense.csv')))
     assert {r['paper'] for r in rows} == {'queue2022', 'Ocean2023'}
 
 
@@ -100,7 +100,7 @@ def test_bm25_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_pa
                                              '"rank": {"provider": "bm25"}}')
     rank.main(['--out', str(project / 'runs/b'), '--budget', '10'])   # budget only guards API tokens
     assert offline.calls == []
-    rows = list(csv.DictReader(open(project / 'runs/b_bm25.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector-bm25.csv')))
     assert rows[0]['paper'] == 'Switch2024'
     assert {r['paper']: int(r['Q3_context_rank']) for r in rows}['Ocean2023'] == 1
     assert all(r['Q0_main_pages'] for r in rows)
@@ -111,7 +111,7 @@ def test_bm25_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_pa
 def test_provider_flag_overrides_config(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/f'), '--provider', 'bm25'])
-    assert offline.calls == [] and (project / 'runs/f_bm25.csv').exists()
+    assert offline.calls == [] and (project / 'runs/f_paper-lector-bm25.csv').exists()
 
 
 def test_bm25_rejects_variants(project, offline, monkeypatch):
@@ -142,7 +142,7 @@ def test_default_out_is_dated_and_each_run_is_logged(project, offline, monkeypat
     monkeypatch.setattr(rank, 'stamp', lambda: '2026-10-17_2315')
     rank.main(['--provider', 'bm25'])
     rank.main(['--provider', 'bm25'])                                   # same minute: a suffix, never an overwrite
-    assert sorted(p.name for p in (project / 'runs').glob('*.csv')) == ['2026-10-17_2315-2_bm25.csv', '2026-10-17_2315_bm25.csv']
+    assert sorted(p.name for p in (project / 'runs').glob('*.csv')) == ['2026-10-17_2315-2_paper-lector-bm25.csv', '2026-10-17_2315_paper-lector-bm25.csv']
     log = [json.loads(l) for l in open(project / 'questions.jsonl')]
     assert [e['out'] for e in log] == ['runs/2026-10-17_2315', 'runs/2026-10-17_2315-2']
     assert log[0]['question'].startswith('Which user should receive') and log[0]['queries'] == 'queries.json'
@@ -171,7 +171,7 @@ def test_embedding_cache_skips_paid_calls_on_rerun(project, offline, monkeypatch
     offline.calls.clear()
     rank.main(['--out', str(project / 'runs/c2')])
     assert first > 0 and [e for e, _ in offline.calls].count('embeddings') == 0
-    assert open(project / 'runs/c1_hybrid.csv').read() == open(project / 'runs/c2_hybrid.csv').read()
+    assert open(project / 'runs/c1_paper-lector.csv').read() == open(project / 'runs/c2_paper-lector.csv').read()
     run = json.load(open(project / 'runs/c2_run.json'))
     assert run['usage'].get('embed', 0) == 0 and run['usage']['embed_cached'] > 0
 
@@ -321,10 +321,10 @@ def test_ids_with_sha256_catch_a_changed_file(project, offline, monkeypatch):
 def test_partial_outputs_and_lock_stop_a_second_run(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     (project / 'runs').mkdir()
-    (project / 'runs/p_hybrid.csv').write_text('half written')          # crashed before _run.json
+    (project / 'runs/p_paper-lector.csv').write_text('half written')          # crashed before _run.json
     with pytest.raises(SystemExit, match='already exists'):
         rank.main(['--out', str(project / 'runs/p')])
-    assert (project / 'runs/p_hybrid.csv').read_text() == 'half written'
+    assert (project / 'runs/p_paper-lector.csv').read_text() == 'half written'
     (project / 'runs/q_run.lock').write_text('')                        # a run in progress
     with pytest.raises(SystemExit, match='another run'):
         rank.main(['--out', str(project / 'runs/q')])
@@ -350,9 +350,9 @@ def test_formula_like_paper_id_is_escaped_in_csv(project, offline, monkeypatch):
     src = project / 'papers/topic/Ocean2023.pdf'
     src.rename(src.with_name('=1+1.pdf'))
     rank.main(['--out', str(project / 'runs/x'), '--provider', 'bm25'])
-    rows = list(csv.DictReader(open(project / 'runs/x_bm25.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/x_paper-lector-bm25.csv')))
     assert "'=1+1" in {r['paper'] for r in rows}
-    rank.main(['--out', str(project / 'runs/y'), '--provider', 'bm25', '--ids', str(project / 'runs/x_bm25.csv')])
+    rank.main(['--out', str(project / 'runs/y'), '--provider', 'bm25', '--ids', str(project / 'runs/x_paper-lector-bm25.csv')])
     assert '=1+1' in json.load(open(project / 'runs/y_run.json'))['corpus']['ids']      # the CSV works as --ids again
 
 
@@ -403,7 +403,7 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/a'), '--abstracts', str(search_file(project))])
     assert 'abstracts: 5 papers, 2 without a PDF, 3 of 3 PDFs matched' in capsys.readouterr().err
-    rows = list(csv.DictReader(open(project / 'runs/a_hybrid.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/a_paper-lector.csv')))
     by = {r['paper']: r for r in rows}
     assert [r['source'] for r in rows] == ['full_text'] * 3 + ['abstract_only'] * 2     # PDFs first, then the rest
     assert list(rows[0])[:5] == ['paper', 'link', 'citation', 'fused_rank', 'fused_score']
@@ -427,17 +427,17 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert run['abstracts']['abstract_only'] == ['Lovelace2025_SwitchMemorySchedulingWaitingUsers', 'Ng2024_NoAbstractHere']
     assert run['abstracts']['no_abstract'] == ['Ng2024_NoAbstractHere']
     assert run['usage']['rerank'] <= run['estimate']
-    rank.main(['--out', str(project / 'runs/a2'), '--ids', str(project / 'runs/a_hybrid.csv')])   # PDF rows only
-    assert len(list(csv.DictReader(open(project / 'runs/a2_hybrid.csv')))) == 3
+    rank.main(['--out', str(project / 'runs/a2'), '--ids', str(project / 'runs/a_paper-lector.csv')])   # PDF rows only
+    assert len(list(csv.DictReader(open(project / 'runs/a2_paper-lector.csv')))) == 3
 
 
 def test_abstracts_with_bm25_and_without_flag(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--abstracts', str(search_file(project))])
     assert offline.calls == []
-    rows = list(csv.DictReader(open(project / 'runs/b_bm25.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/b_paper-lector-bm25.csv')))
     assert {r['paper']: r['abs_fused_rank'] for r in rows}['Lovelace2025_SwitchMemorySchedulingWaitingUsers'] != ''
     rank.main(['--out', str(project / 'runs/c')])
-    rows = list(csv.DictReader(open(project / 'runs/c_hybrid.csv')))
+    rows = list(csv.DictReader(open(project / 'runs/c_paper-lector.csv')))
     assert all(r['source'] == 'full_text' for r in rows) and 'abs_fused_rank' not in rows[0]
     assert {r['paper']: r['link'] for r in rows} == {'queue2022': 'https://doi.org/10.1/q', 'Switch2024': '', 'Ocean2023': ''}

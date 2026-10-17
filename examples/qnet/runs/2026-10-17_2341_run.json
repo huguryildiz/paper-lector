@@ -188,7 +188,7 @@
  "estimate": 718780,
  "outputs": {
   "hybrid": {
-   "csv": "runs/2026-10-17_2341_hybrid.csv",
+   "csv": "runs/2026-10-17_2341_paper-lector.csv",
    "fused_top10": [
     "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
     "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",

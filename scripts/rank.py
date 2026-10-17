@@ -14,14 +14,14 @@ Method:
      orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
   Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
-  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_bm25.csv.
+  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_paper-lector-bm25.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
   rerun or a run resumed after a crash only pays for new text.
 
   rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
   rank.py --dry                           # counts and token estimate, no API call
-  rank.py                                 # writes runs/<date>_<time>_hybrid.csv and _run.json, logs questions.jsonl
+  rank.py                                 # writes runs/<date>_<time>_paper-lector.csv and _run.json, logs questions.jsonl
 """
 import argparse, csv, datetime, hashlib, json, math, re, shutil, sqlite3, subprocess, sys, urllib.request
 from collections import Counter
@@ -425,6 +425,11 @@ def rel(path, cfg):
     return str(path.relative_to(root)) if path.is_relative_to(root) else str(path)
 
 
+def csv_name(out, variant):
+    """<out>_paper-lector.csv for the default hybrid run; dense and bm25 runs keep their name in the file."""
+    return f'{out}_paper-lector.csv' if variant == 'hybrid' else f'{out}_paper-lector-{variant}.csv'
+
+
 def stamp():
     return datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
 
@@ -492,7 +497,7 @@ def main(argv=None):
         variants = ['bm25']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
-    outs = [Path(f'{a.out}_run.json')] + [Path(f'{a.out}_{v}.csv') for v in variants]
+    outs = [Path(f'{a.out}_run.json')] + [Path(csv_name(a.out, v)) for v in variants]
     lock = Path(f'{a.out}_run.lock')
     if not a.dry:
         if any(p.exists() for p in outs):
@@ -663,7 +668,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),
                        key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
-        path = Path(f'{a.out}_{variant}.csv'); path.parent.mkdir(parents=True, exist_ok=True)
+        path = Path(csv_name(a.out, variant)); path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, 'x', newline='', encoding='utf-8') as f:
             w = csv.writer(f); w.writerow(head)
             for r in order:
