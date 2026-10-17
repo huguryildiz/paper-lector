@@ -46,6 +46,18 @@ If there is no `literature.json`, ask the user once where their PDFs are, then w
 
 Before Step 2, count the PDFs: `find <each pdf_dirs folder> -name '*.pdf' | wc -l`, plus the rows of `sources` whose file exists. If a folder is missing or the count is 0, stop and ask with AskUserQuestion: "Search OpenAlex and download open-access PDFs" (recommended; "Searching OpenAlex" below, then Fetch, then come back here), "Point to another PDF folder" (update `pdf_dirs`), or "Stop". Do not start the question screens for an empty collection.
 
+**Progress list.** If the host has a task-list tool (the plan list or TodoWrite in Claude Code, `update_plan` in Codex), show the run as a list before the first step and tick each step off as it finishes. One emoji per step, step names in the user's language:
+
+1. ⚙️ Check config and PDF folders
+2. 🔎 Choose search modes and approve the queries
+3. 🌐 Search OpenAlex
+4. 📥 Download PDFs
+5. ✍️ Fill the query slots
+6. 🧮 Dry run and token estimate
+7. 🏆 Rank and report
+
+Drop steps 2–4 when the collection already has PDFs, and stop after step 4 for a search-only request. Add a step for anything extra the user asked for (for example ✂️ screening abstracts before the download).
+
 Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
 
 ## Searching OpenAlex
