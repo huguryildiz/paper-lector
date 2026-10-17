@@ -161,9 +161,15 @@ These modes only find papers. Ranking your own PDFs is a separate step (`rank.py
 
 1. `pdftotext` extracts the whole PDF. The bibliography is cut when a References heading in the second half is followed by citation entries, or, with no heading (APS and Nature styles), from the first `[1]` or `1. Author ... year` entry in the second half that more entries follow; appendices and supplementary material stay.
 2. The text is split into 1,200-token windows with 200 tokens of overlap, each labelled with the PDF pages it covers.
-3. For each paper and query, windows are ordered by Reciprocal Rank Fusion (k = 60) of `voyage-4-large` cosine similarity and BM25 on the query's keyword string. The best 3 are kept.
-4. `rerank-3` scores each paper once per query on its abstract (or its first 1,000 tokens when no abstract is found) plus those 3 windows.
+3. For each paper and query, windows are ordered by Reciprocal Rank Fusion (RRF, below) of their rank by `voyage-4-large` cosine similarity and their rank by BM25 on the query's keyword string. The best 3 are kept, with at most 20% overlap between any two. This step only picks what the reranker reads; it does not rank papers.
+4. `rerank-3` scores each paper once per query on its abstract (from `--abstracts` when the paper is in the search results, else read from the PDF, else its first 1,000 tokens) plus those 3 windows. These scores give the per-query ranks (`Q0_main_rank`, ...).
 5. `fused_rank` is RRF over the queries in `fuse`.
+
+RRF adds up reciprocal ranks with k = 60 (Cormack, Clarke and Büttcher, SIGIR 2009):
+
+$$\text{fused score}(d) = \sum_{q \in \text{fuse}} \frac{1}{60 + \text{rank}_q(d)}$$
+
+A paper ranked 3rd, 3rd, 1st and 4th on four fused queries scores 1/63 + 1/63 + 1/61 + 1/64 = 0.063764. Ranks are summed rather than scores because reranker scores sit on different scales from one query to the next; the price is that a large score gap and a small one count the same. Tied scores share the better rank. The window choice in step 3 uses the same formula over two ranks, cosine and BM25 (a window with no keyword match gets no BM25 term). The `dense` variant drops BM25 from step 3; the `bm25` provider replaces the embeddings in step 3 and the reranker in step 4 with BM25.
 
 BM25 statistics depend on the whole collection, so after adding PDFs rerank everything rather than only the new files.
 
