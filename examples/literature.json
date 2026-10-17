@@ -2,6 +2,6 @@
   "pdf_dirs": ["pdfs"],
   "download_dir": "pdfs/new",
   "sources": "sources.csv",
-  "queries": "queries/underwater-routing.json",
+  "queries": "queries/queries.json",
   "rank": {"provider": "voyage"}
 }

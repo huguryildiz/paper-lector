@@ -3,7 +3,7 @@
 A work is the same in two files when they give the same OpenAlex id, DOI or arXiv id. The mode of each file comes
 from its .query.json. With a keyword and a semantic file, it prints the share of semantic works the keyword file
 also holds, LOW OVERLAP when that share is under half (the keyword query probably misses words the field uses:
-measured on the qnet example, 3 of 50), and the titles of the semantic works the keyword file lacks.
+measured on the entanglement-scheduling example, 20 of 50), and the titles of the semantic works the keyword file lacks.
 
 Usage: search_overlap.py <file>_search.jsonl <file>_search.jsonl [...]
 """

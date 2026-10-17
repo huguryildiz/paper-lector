@@ -84,7 +84,7 @@ Without a Voyage key, add `--provider local` to that command; it also downloads 
 
 ## Example: quantum network scheduling
 
-[`examples/qnet`](examples/qnet) is a complete run made with these scripts. The question:
+[`examples/entanglement-scheduling`](examples/entanglement-scheduling) is a complete run made with these scripts. The question:
 
 > Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?
 
@@ -99,7 +99,7 @@ Without a Voyage key, add `--provider local` to that command; it also downloads 
 }
 ```
 
-**2. Queries.** [`queries/queries.json`](examples/qnet/queries/queries.json) holds the question and five labelled queries (`main`, `subject`, `approach`, `outcome`, `comparison`), each written as a full sentence with a keyword string; the first four are fused. Once a queries file has produced results, it stays as it is; a changed question gets a new file.
+**2. Queries.** [`queries/queries.json`](examples/entanglement-scheduling/queries/queries.json) holds the question and five labelled queries (`main`, `subject`, `approach`, `outcome`, `comparison`), each written as a full sentence with a keyword string; the first four are fused. Once a queries file has produced results, it stays as it is; a changed question gets a new file.
 
 **3a. With an agent.** Open the project in Claude Code or Codex and ask:
 
@@ -132,7 +132,7 @@ The keyword search returned 137 works and the semantic search the 50 closest. Th
 
 Ranking scored the 73 PDFs on full text and 149 papers on their abstracts; 76 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.59M tokens and every embedding came from the cache: a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
 
-**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/qnet/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
+**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
@@ -147,7 +147,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 | Citing works | `--cites <id>` | Works that cite one paper (all pages need `OPENALEX_API_KEY`; without it, the first 200) | You want what came after a key paper |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
 
-`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the qnet question it was 20 of 50, under half, and the agent then names the words the keyword query lacks and proposes a revised query.
+`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the entanglement-scheduling example it was 20 of 50, under half, and the agent then names the words the keyword query lacks and proposes a revised query.
 
 ## How ranking works
 
