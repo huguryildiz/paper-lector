@@ -266,7 +266,11 @@ def test_long_retry_after_on_503_is_still_retried(monkeypatch):
     ('quantum switch scheduling', None), ('(a OR b) NOT c', None), ('a AND NOT b', None),
     ('a AND (b OR c d)', 'mixed'), ('a AND (b AND (c OR d e))', 'mixed'), ('((a OR b) AND (c d OR e))', 'mixed'),
     ('""', 'empty quotes'), ('a AND " "', 'empty quotes'),
-    ('(' * 1000 + 'a' + ')' * 1000, 'nested 1000 deep'), ('(' * 10 + 'a' + ')' * 10, None)])
+    ('(' * 1000 + 'a' + ')' * 1000, 'nested 1000 deep'), ('(' * 10 + 'a' + ')' * 10, None),
+    ('a NOT NOT b', 'NOT NOT'), ('a AND NOT NOT b', 'NOT NOT'), ('a NOT (b OR c)', None),
+    ('"quantum switch" or "quantum network"', 'or in lower case'), ('a and b', 'and in lower case'),
+    ('\u201cquantum switch\u201d OR c', None), ('(\u201cquantum network*\u201d OR a) AND b', 'inside quotes'),
+    ('\u201ca', 'unbalanced quotes')])
 def test_query_issues(q, bad):
     issues = openalex_search.query_issues(q)
     assert (not issues) if bad is None else any(bad in i for i in issues)

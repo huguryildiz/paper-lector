@@ -57,9 +57,11 @@ def query_issues(q):
     AND, NOT or plain adjacency: live 2026-10-17, '"quantum switch" scheduling OR "operations research"' returned
     the 500 works of the phrase alone, the bracketed '"quantum switch" AND (scheduling OR "operations research")' 20.
     A bracketed group next to a term with no operator is read as AND (live 2026-10-18, both orders gave 20), so it
-    passes. A quoted phrase with * inside a boolean query gets HTTP 400. Many operators slow the search."""
+    passes. Lower-case and/or/not are searched as words ('"quantum switch" or "quantum network"' gave 10), and
+    NOT NOT gets HTTP 500. A quoted phrase with * inside a boolean query gets HTTP 400. Many operators slow the search."""
     if not q.strip():
         return ['empty query']
+    q = re.sub('[\u201c\u201d\u201e\u00ab\u00bb]', '"', q)   # OpenAlex reads curly quotes as quotes (live 2026-10-18)
     if q.count('"') % 2:
         return ['unbalanced quotes']
     tokens = re.findall(r'"[^"]*"|\(|\)|[^\s()"]+', q)
@@ -70,6 +72,8 @@ def query_issues(q):
     if deepest > MAX_DEPTH:
         return [f'brackets nested {deepest} deep; at most {MAX_DEPTH}']
     issues = ['empty quotes'] if any(t.startswith('"') and not t.strip('" ') for t in tokens) else []
+    if lower := sorted({t for t in tokens if t in ('and', 'or', 'not')}):
+        issues.append(f'{", ".join(lower)} in lower case is searched as a word; write AND, OR, NOT')
 
     def group(i):
         """Check operands and operators up to the matching ')'; return the index there."""
@@ -77,8 +81,9 @@ def query_issues(q):
         while i < len(tokens) and tokens[i] != ')':
             t = tokens[i]
             if t in ('AND', 'OR', 'NOT'):
-                if expect_operand and not (t == 'NOT' and n_items):
-                    issues.append(f'{t} has no term before it')
+                if expect_operand and not (t == 'NOT' and n_items and joins[-1:] != ['NOT']):
+                    issues.append('NOT NOT (OpenAlex answers 500)' if joins[-1:] == ['NOT'] and t == 'NOT'
+                                  else f'{t} has no term before it')
                 joins.append(t)
                 expect_operand, i = True, i + 1
                 continue
