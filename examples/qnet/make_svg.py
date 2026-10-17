@@ -12,6 +12,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 TOP = 5
 W = 880
+STEP = 1.6                      # seconds the reading cursor rests on each row
+HOLD = round(100 / TOP * 0.7)   # share of a cycle a row stays lit, in percent
 TEAL, TEAL2, GOLD = '#2DD4BF', '#5EEAD4', '#F2B544'
 INK, MUTED, FAINT = '#E6EDF3', '#8B9BB4', '#5F6B7A'
 FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
@@ -30,6 +32,15 @@ def wrap(s, n=92):
         else:
             cur = f'{cur} {w}'.strip()
     return lines + [cur]
+
+
+def scan_frames():
+    """Keyframes moving the cursor row by row: rest on a row, then slide to the next, back to the top at the end."""
+    out = []
+    for i in range(TOP):
+        a, b = 100 * i / TOP, 100 * (i + 0.7) / TOP
+        out.append(f'{a:.1f}%,{b:.1f}%{{transform:translateY({56 * i}px)}}')
+    return ''.join(out) + '100%{transform:translateY(0)}'
 
 
 def links(r):
@@ -92,13 +103,13 @@ def main(csv_path, out_path):
          '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
          '</defs>',
          '<style>'
-         '.r{animation:in .6s ease-out both}'
-         '@keyframes in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}'
-         '.p{animation:pulse 2.4s ease-in-out infinite}'
-         '@keyframes pulse{0%,100%{fill-opacity:.14}50%{fill-opacity:.32}}'
-         '.scan{animation:scan 6s ease-in-out infinite}'
-         f'@keyframes scan{{0%{{transform:translateY(0)}}50%{{transform:translateY({56 * (TOP - 1)}px)}}100%{{transform:translateY(0)}}}}'
-         '@media (prefers-reduced-motion:reduce){.r,.p,.scan{animation:none}}'
+         # every row is drawn in full; the animation only moves a gold reading cursor down the rows and lights the
+         # row and page label under it, so a viewer that shows the first frame or no animation still shows the table
+         f'.hl,.p{{animation:{STEP * TOP}s ease-in-out infinite}}'
+         f'.hl{{animation-name:hl}}@keyframes hl{{0%,{HOLD}%{{stroke-opacity:.75}}{HOLD + 6}%,100%{{stroke-opacity:.18}}}}'
+         f'.p{{animation-name:pl}}@keyframes pl{{0%,{HOLD}%{{fill-opacity:.38}}{HOLD + 6}%,100%{{fill-opacity:.16}}}}'
+         f'.scan{{animation:scan {STEP * TOP}s ease-in-out infinite}}@keyframes scan{{{scan_frames()}}}'
+         '@media (prefers-reduced-motion:reduce){.hl,.p,.scan{animation:none}}'
          '</style>',
          f'<rect width="{W}" height="{height}" rx="16" fill="url(#bg)"/>',
          f'<rect x="1" y="1" width="{W - 2}" height="{height - 2}" rx="15" fill="none" stroke="{TEAL}" stroke-opacity="0.28" stroke-width="1.5"/>',
@@ -123,8 +134,10 @@ def main(csv_path, out_path):
         by = f'{names[0].split()[-1]}{" et al." if len(names) > 1 else ""}, {rec.get("year", "")}' if names else ''
         top = first + 56 * i
         mid = top + 32
-        o.append(f'<g class="r" style="animation-delay:{0.25 + 0.35 * i:.2f}s">')
-        o.append(f'<rect x="26" y="{top}" width="838" height="50" rx="9" fill="url(#row)" stroke="{TEAL}" stroke-opacity="0.18"/>')
+        delay = f'animation-delay:{STEP * i:.1f}s'
+        o.append('<g>')
+        o.append(f'<rect class="hl" x="26" y="{top}" width="838" height="50" rx="9" fill="url(#row)" stroke="{TEAL}" '
+                 f'stroke-opacity="{0.75 if i == 0 else 0.18}" style="{delay}"/>')
         o.append(f'<text x="44" y="{mid + 1}" fill="{GOLD}" font-family="{SERIF}" font-size="20" font-weight="700" '
                  f'text-anchor="middle">{r["fused_rank"]}</text>')
         o.append(f'<text x="64" y="{mid - 8}" fill="{INK}" font-size="14" font-weight="600">{escape(short(title))}</text>')
@@ -132,8 +145,8 @@ def main(csv_path, out_path):
         o.append(f'<text x="592" y="{mid}" fill="#C9D4E3" font-size="14" text-anchor="middle">{r["abs_fused_rank"] or "–"}</text>')
         o.append(f'<text x="678" y="{mid}" fill="#C9D4E3" font-size="14" text-anchor="middle">{r["cited_by"] or "–"}</text>')
         start = r['start_pages'].split(';')[0].strip()
-        o.append(f'<rect class="p" x="764" y="{mid - 17}" width="88" height="24" rx="12" fill="{GOLD}" fill-opacity="0.16" '
-                 f'stroke="{GOLD}" stroke-opacity="0.6" style="animation-delay:{0.4 * i:.1f}s"/>')
+        o.append(f'<rect class="p" x="764" y="{mid - 17}" width="88" height="24" rx="12" fill="{GOLD}" '
+                 f'fill-opacity="{0.38 if i == 0 else 0.16}" stroke="{GOLD}" stroke-opacity="0.6" style="{delay}"/>')
         o.append(f'<text x="808" y="{mid}" fill="{GOLD}" font-size="13" font-weight="600" text-anchor="middle">{escape(start)}</text>')
         o.append('</g>')
     foot = first + 56 * TOP + 22
