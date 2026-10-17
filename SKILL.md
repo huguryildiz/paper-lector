@@ -172,7 +172,7 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 - A rank is a lead, not evidence. Similarity is not quality. A claim needs someone to read the page.
 - `_pages` shows where the reranker looked; the key passage can still sit elsewhere in the paper.
-- Publisher sites often refuse downloads (HTTP 403). List the `MANUAL` lines for the user. Never work around paywalls, logins or bot checks.
+- Publisher sites often refuse downloads (HTTP 403). Show every `MANUAL` paper in a table, never only the count: title and year (from the search JSONL), the DOI as a `https://doi.org/...` link (or the arXiv or W id when there is no DOI) and the landing URL from the `MANUAL` line. Then say: put the PDFs you download into `download_dir` and rank again into a new `--out`. Never work around paywalls, logins or bot checks.
 - A preprint is not the published version; say which one was downloaded.
 
 ## Examples
