@@ -112,7 +112,7 @@ def digest(path):
     return common.sha256_file(path)
 
 
-def find_pdfs(dirs, known, ids=None):
+def find_pdfs(dirs, known, ids=None, allow_empty=False):
     """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem.
     A byte-identical copy of a PDF already found is skipped with a note."""
     out = {k: v['pdf'] for k, v in known.items() if v['pdf'] and v['pdf'].is_file()}
@@ -147,7 +147,7 @@ def find_pdfs(dirs, known, ids=None):
         if missing:
             sys.exit(f'no PDF for {missing}')
         out = {i: out[i] for i in ids}
-    if not out:
+    if not out and not allow_empty:
         sys.exit(f'no PDFs in {", ".join(map(str, dirs))}. Add PDFs there, or search and fetch them first')
     return out
 
@@ -166,6 +166,23 @@ INTRO = (r'i ?ntroduction|g[iİ]r[iİ][şŞ]|einleitung|einführung|introducci[o
 CITES = [r'(?m)^\s*\[\d+\]', r'\(\d{4}\)|, \d{4}\.', r'(?m)^\s*\d{1,3}\.\s+\S.*\b(?:19|20)\d{2}\b']
 
 
+def numbered_refs(tail):
+    """True when tail opens a reference list with no heading: entries numbered 1, 2, 3, ... in order, as "[n]" or
+    "n.", at least 3 of them, and nearly every entry holds a year. Numbered body paragraphs or lists have no years."""
+    for pat in (r'(?m)^\s*\[(\d{1,3})\]\s', r'(?m)^\s*(\d{1,3})\.\s'):
+        ms = list(re.finditer(pat, tail))
+        n = 0
+        while n < len(ms) and int(ms[n].group(1)) == n + 1:
+            n += 1
+        if n < 3:
+            continue
+        ends = [m.start() for m in ms[1:n]] + [ms[n].start() if n < len(ms) else len(tail)]
+        dated = sum(bool(re.search(r'\b(?:1[89]|20)\d{2}\b', tail[m.start():e])) for m, e in zip(ms[:n], ends))
+        if dated >= max(3, 0.8 * n):
+            return True
+    return False
+
+
 def clean(text):
     """Cut the bibliography if a References heading (in any language in BIB) in the second half is followed by
     citation entries; with no such heading (APS and Nature styles print none), cut from the first entry "[1]" or
@@ -175,8 +192,8 @@ def clean(text):
     cites = lambda at: any(len(re.findall(c, text[at:at + 5000])) >= 3 for c in CITES)
     start = heads[-1].start() if heads and cites(heads[-1].start()) else None
     if start is None:
-        start = next((m.start() for m in re.finditer(r'(?m)^\s*(?:\[1\]|1\.\s+\S.*\b(?:19|20)\d{2}\b)', text)
-                      if m.start() > len(text) * 0.5 and cites(m.start())), None)
+        start = next((m.start() for m in re.finditer(r'(?m)^\s*(?:\[1\]|1\.)\s', text)
+                      if m.start() > len(text) * 0.5 and numbered_refs(text[m.start():m.start() + 6000])), None)
     if start is None:
         return text, False, None
     app = re.search(rf'(?m)^\s*(?:[A-Z]\.?\s*)?({APPENDIX})', text[start:], re.I)
@@ -307,6 +324,8 @@ def read_ids(path):
     if not rows or 'paper' not in rows[0]:
         sys.exit(f'{path}: --ids needs a CSV with a "paper" column and at least one row')
     rows = [r for r in rows if r.get('source') != 'abstract_only']      # --ids freezes the PDF corpus only
+    if not rows:
+        sys.exit(f'{path}: --ids lists no paper with a PDF (only abstract_only rows); nothing to freeze')
     ids = [r['paper'] for r in rows]
     if not all(ids) or len(set(ids)) != len(ids):
         sys.exit(f'{path}: --ids has an empty or repeated paper id')
@@ -322,7 +341,28 @@ def rid(x):
 
 
 def words(s):
-    return ' '.join(re.findall(r'[a-z0-9]+', s.lower()))
+    return ' '.join(re.findall(r'\w+', (s or '').lower()))
+
+
+TITLE_STOP = {'a', 'an', 'the', 'of', 'for', 'and', 'or', 'in', 'on', 'with', 'to', 'via', 'under', 'by', 'at', 'from',
+              'over', 'into', 'as', 'its', 'is', 'are', 'using', 'based', 'toward', 'towards'}
+
+
+def same_title(a, b):
+    """Two versions of one paper: normalised titles at least 95% alike letter by letter ("Fidelity-Guarantee" and
+    "Fidelity-Guaranteed"); different papers with near titles stay apart (about 87% for those seen so far)."""
+    import difflib
+    return difflib.SequenceMatcher(None, a, b, autojunk=False).ratio() >= 0.95
+
+
+def title_cover(title, lead):
+    """Share of the title's content words found, in order, at the start of the PDF (lead: its first 40 words)."""
+    t = [w for w in title.split() if w not in TITLE_STOP]
+    if not t:
+        return 0.0
+    import difflib
+    m = difflib.SequenceMatcher(None, t, [w for w in lead if w not in TITLE_STOP], autojunk=False)
+    return sum(b.size for b in m.get_matching_blocks()) / len(t)
 
 
 def link(r, doi=None):
@@ -346,7 +386,7 @@ def citation(r):
         + (f", {b['first_page']}" if b.get('first_page') else '') \
         + (f"\u2013{b['last_page']}" if b.get('last_page') and b.get('last_page') != b.get('first_page') else '')
     return ' '.join(x for x in (f'{who} ({r.get("year") or "n.d."}).' if who else f'({r.get("year") or "n.d."}).',
-                                (r.get('title') or '').rstrip('.') + '.', where.strip(', ') + '.' if where.strip(', ') else '') if x)
+                                (r.get('title') or '').rstrip('.') + '.' if r.get('title') else '', where.strip(', ') + '.' if where.strip(', ') else '') if x)
 
 
 def short_id(r, taken):
@@ -378,41 +418,63 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             if not ids & seen:
                 recs.append((r, ids))
             seen |= ids
-    owner = {}                                            # normalised id -> PDF paper id
+    sel = {p['id'] for p in P}
+    owner = {}                                            # normalised id -> PDF paper id (only papers in this run)
     for key, v in common.sources(cfg).items():
-        if v['doi'] and rid(v['doi']):
+        if key in sel and v['doi'] and rid(v['doi']):
             owner[rid(v['doi'])] = key
-    by_name = {Path(p['path']).name: p['id'] for p in P}
+    by_path = {Path(p['path']).resolve(): p for p in P}
     logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
             for f in Path(d).rglob('fetch_log.jsonl')}
     for f in sorted(logs):
         for line in open(f, encoding='utf-8'):
             e = json.loads(line)
-            if e.get('status', 'OK') == 'OK' and e.get('file') in by_name and rid(e.get('id')):
-                owner[rid(e['id'])] = by_name[e['file']]
-    first = {p['id']: set(words(W[p['wins'][0]]['text']).split()[:40]) for p in P}    # title and authors
+            p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
+            if e.get('status', 'OK') == 'OK' and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
+                owner[rid(e['id'])] = p['id']             # the logged file, in the log's own folder, unchanged
+    first = {p['id']: words(W[p['wins'][0]]['text']).split()[:40] for p in P}    # title and authors
 
     def by_title(t):
-        """The PDF whose first 40 words hold at least 80% of the title's words (titles change between versions)."""
-        t = set(t.split())
-        best = max(((len(t & v) / len(t), k) for k, v in first.items()), default=(0, None))
-        return best[1] if len(t) >= 4 and best[0] >= 0.8 else None
-    A, taken = {p['id']: {'id': p['id'], 'source': 'full_text', 'title': '', 'text': p['head'], 'from': 'pdf', 'rec': None}
-                for p in P}, {}
-    for r, ids in recs:
+        """The one PDF whose opening holds, in order, at least 80% of the title's content words (titles change a
+        little between preprint and print). Short titles, ties and near ties match nothing."""
+        if len([w for w in t.split() if w not in TITLE_STOP]) < 4:
+            return None
+        cover = sorted(((title_cover(t, v), k) for k, v in first.items()), reverse=True)
+        if not cover or cover[0][0] < 0.8 or (len(cover) > 1 and cover[1][0] >= cover[0][0] - 0.1):
+            return None
+        return cover[0][1]
+    A = {p['id']: {'id': p['id'], 'source': 'full_text', 'title': '', 'text': p['head'] if p['abstract_found'] else '',
+                   'from': 'pdf' if p['abstract_found'] else '', 'rec': None} for p in P}
+    taken, left = set(), []
+    for r, ids in recs:                                   # ids first, so a title never takes a paper a DOI owns
         pid = next((owner[i] for i in ids if i in owner), None)
-        t = words(r.get('title') or '')
         if pid is None:
-            pid = by_title(t)
-        if pid is not None and pid not in taken:
-            taken[pid] = True
+            left.append(r); continue
+        if pid not in taken:
+            taken.add(pid)
             A[pid].update(title=r.get('title') or '', rec=r)
             if r.get('abstract'):
                 A[pid].update(text=r['abstract'], **{'from': 'search'})
+        # else: a second record with the same id as a paper already matched
+    same = {words(A[k]['title']): k for k in taken if A[k]['title']}   # titles already held, word for word
+    for r in left:
+        t = words(r.get('title'))
+        twin = next((k for k in same if len(t.split()) >= 4 and same_title(t, k)), None)
+        if twin is not None:
+            print(f'note: {r.get("doi") or r.get("openalex")} has the title of {same[twin]} (another version); '
+                  f'counted once', file=sys.stderr)
             continue
-        if pid is not None:
-            continue                                      # a second record for a paper already matched
+        pid = by_title(t)
+        if pid is not None and pid not in taken:
+            taken.add(pid)
+            A[pid].update(title=r.get('title') or '', rec=r)
+            if r.get('abstract'):
+                A[pid].update(text=r['abstract'], **{'from': 'search'})
+            same[t] = pid
+            continue
         aid = short_id(r, A)
+        if len(t.split()) >= 4:
+            same[t] = aid
         A[aid] = {'id': aid, 'source': 'abstract_only', 'title': r.get('title') or '', 'text': r.get('abstract') or '',
                   'from': 'search' if r.get('abstract') else '', 'rec': r}
     return list(A.values())
@@ -535,7 +597,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     tok = tokenizer()
     ntok = lambda s: len(tok.encode(s, add_special_tokens=False).ids)
     P, W, skipped = [], [], []
-    for pid, path in find_pdfs(dirs, common.sources(cfg), ids).items():
+    for pid, path in find_pdfs(dirs, common.sources(cfg), ids, allow_empty=bool(a.abstracts)).items():
         d = digest(path)
         want = want_sha.get(pid, want_sha.get(cell(pid)))
         if want and want != d:
@@ -551,8 +613,10 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         P.append({'id': pid, 'path': str(path), 'sha256': d, 'head': head, 'bib_cut': cut, 'abstract_found': has_ab, 'tokens': n,
                   'wins': list(range(len(W), len(W) + len(wins)))})
         W += [dict(w, paper=len(P) - 1) for w in wins]
-    if not P:
+    if not P and not a.abstracts:
         sys.exit('no PDFs with extractable text')
+    if not P:
+        print('note: no PDFs to rank on full text; the run gives the abstract order only', file=sys.stderr)
     if ids and skipped:
         sys.exit(f'--ids lists papers whose text could not be extracted: {[x["id"] for x in skipped]}; the frozen corpus is incomplete')
     dupes = near_duplicates(P)
@@ -594,8 +658,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         if estimate > a.budget:
             sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
         KEY = common.api_key('VOYAGE_API_KEY', cfg)
-        E = embed([(w['text'], w['n']) for w in W], 'document', usage)
-        QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage)
+        if W:
+            E = embed([(w['text'], w['n']) for w in W], 'document', usage)
+            QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage)
 
     abs_rows = {}
     if AR:
@@ -626,7 +691,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     for variant in variants:
         rows = {p['id']: {'paper': p['id']} for p in P}
         sanity = None
-        for qi, (qid, q) in enumerate(Q.items()):
+        for qi, (qid, q) in enumerate(Q.items() if P else []):      # no PDFs: abstract order only
             col = f'{qid}_{q["label"]}'
             cos = E @ QE[qi] if variant != 'bm25' else None
             lex = bm25_scores([w['text'] for w in W], q['keywords'] or q['text']) if variant != 'dense' else None

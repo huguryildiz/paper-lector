@@ -420,12 +420,13 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert any(d.startswith('Abstract: Which user receives a stored entangled pair at a switch.') for d in full)
     assert by['queue2022']['abstract_from'] == 'search'                   # matched through the sources DOI
     assert by['Switch2024']['abstract_from'] == 'search'                  # matched through its title on page 1
-    assert by['Ocean2023']['abstract_from'] == 'pdf'                      # fetch_log match, record had no abstract
+    assert by['Ocean2023']['abstract_from'] == '' and by['Ocean2023']['abs_fused_rank'] == ''   # no abstract anywhere:
+    assert by['Ocean2023']['fused_rank'] != ''                            # unranked on abstracts, ranked on full text
     assert by['Ocean2023']['citation'] == '(n.d.). Seawater links.' and by['Ocean2023']['link'] == 'https://arxiv.org/abs/2205.06300'
-    assert sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank']) == [1, 2, 3, 4]
+    assert sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank']) == [1, 2, 3]
     run = json.load(open(project / 'runs/a_run.json'))
     assert run['abstracts']['abstract_only'] == ['Lovelace2025_SwitchMemorySchedulingWaitingUsers', 'Ng2024_NoAbstractHere']
-    assert run['abstracts']['no_abstract'] == ['Ng2024_NoAbstractHere']
+    assert run['abstracts']['no_abstract'] == ['Ocean2023', 'Ng2024_NoAbstractHere']
     assert run['usage']['rerank'] <= run['estimate']
     rank.main(['--out', str(project / 'runs/a2'), '--ids', str(project / 'runs/a_paper-lector.csv')])   # PDF rows only
     assert len(list(csv.DictReader(open(project / 'runs/a2_paper-lector.csv')))) == 3
@@ -467,3 +468,74 @@ def test_bad_queries_name_is_refused(project, name):
     q.write_text(q.read_text().replace('{\n "question"', '{\n "name": ' + json.dumps(name) + ',\n "question"'))
     with pytest.raises(SystemExit, match='"name" must be lowercase'):
         rank.common.load_queries(q)
+
+
+def test_numbered_body_paragraphs_are_not_a_bibliography():
+    body = 'intro text\n' * 200
+    paras = '[1] constrains the queue length\n[2] specifies the service order\n[3] defines the cutoff\nconclusion stays here\n'
+    text, cut, _ = rank.clean(body + paras + 'more body\n' * 20)
+    assert not cut and 'conclusion stays here' in text
+    refs = '[1] A. Author, Title one, 2019.\n[2] B. Author, Title two, 2020.\n[3] C. Author, Title three, 2021.\n'
+    text, cut, _ = rank.clean(body + 'conclusion stays here\n' + refs)
+    assert cut and 'conclusion stays here' in text and 'Title one' not in text
+    text, cut, _ = rank.clean(body + '1. A. Author, Title one, 2019.\n3. B. Author, Title two, 2020.\n4. C. Author, Title, 2021.\n')
+    assert not cut                                                    # numbering out of order: not a list
+
+
+def test_title_match_needs_order_and_no_rival():
+    lead = rank.words('Routing in quantum networks with limited memory Ada Lovelace University').split()
+    assert rank.title_cover(rank.words('Entanglement in quantum networks with memory'), lead) < 0.8
+    lead = rank.words('A Quantum Router Architecture for High-Fidelity Entanglement Flows in Quantum Networks Yuan Lee').split()
+    title = rank.words('A Quantum Router Architecture for High-Fidelity Entanglement Flows in Multi-User Quantum Networks')
+    assert rank.title_cover(title, lead) >= 0.8
+    assert rank.title_cover(rank.words(None), lead) == 0.0 and rank.words('Квантовые сети') == 'квантовые сети'
+
+
+def test_abstract_matching_edge_cases(project, offline, monkeypatch):
+    """A wrong title stays apart; a fetch log counts only for its own folder and file; a source outside the run and a
+    record with no title do not crash."""
+    monkeypatch.chdir(project)
+    other = project / 'papers' / 'other'; other.mkdir()
+    (other / 'Switch2024.pdf').write_bytes((project / 'papers/topic/Ocean2023.pdf').read_bytes() + b'\n% other copy\n')
+    (other / 'fetch_log.jsonl').write_text(json.dumps({'id': '10.5/other', 'status': 'OK', 'file': 'Switch2024.pdf'}) + '\n')
+    (project / 'sources.csv').write_text('key,pdf_path,doi\nqueue2022,papers/topic/Queue2022.pdf,10.1/q\ngone,papers/gone.pdf,10.7/gone\n')
+    recs = [{'doi': '10.5/other', 'title': 'Another copy of seawater links', 'abstract': 'seawater copy'},
+            {'doi': '10.7/gone', 'title': 'The gone paper on switch queues', 'abstract': 'a paper whose PDF is not here'},
+            {'openalex': 'W5', 'title': None, 'abstract': 'no title at all'},
+            {'openalex': 'W6', 'title': 'Age based scheduling at a classical switch', 'abstract': 'similar title, other paper'},
+            {'doi': '10.6/print', 'title': 'Another copy of seawater link', 'abstract': 'the printed version of the logged preprint'},
+            {'doi': '10.8/a', 'title': 'The gone paper on switch queues.', 'abstract': 'a second record of a paper with no PDF'}]
+    (project / 's.jsonl').write_text(''.join(json.dumps(r) + '\n' for r in recs))
+    rank.main(['--out', str(project / 'runs/e'), '--abstracts', str(project / 's.jsonl')])
+    by = {r['paper']: r for r in csv.DictReader(open(project / 'runs/e_paper-lector.csv'))}
+    path = {f['id']: f['path'] for f in json.load(open(project / 'runs/e_run.json'))['corpus']['files']}
+    mine = next(k for k, v in path.items() if '/other/' in v)
+    twin = next(k for k, v in path.items() if v.endswith('topic/Switch2024.pdf'))
+    assert by[mine]['citation'] == '(n.d.). Another copy of seawater links.'                 # the log in papers/other names that file
+    assert by[twin]['citation'] == ''                                    # not the same-named file in papers/topic
+    only = {r['citation']: r['source'] for r in by.values() if r['source'] == 'abstract_only'}
+    assert only == {'(n.d.). The gone paper on switch queues.': 'abstract_only', '(n.d.).': 'abstract_only',
+                    '(n.d.). Age based scheduling at a classical switch.': 'abstract_only'}
+    assert len(by) == 4 + 3                                              # each second version counted once
+
+
+def test_ids_with_only_abstract_rows_is_refused(project, tmp_path):
+    p = tmp_path / 'ids.csv'
+    p.write_text('paper,source\nAnon_X,abstract_only\n')
+    with pytest.raises(SystemExit, match='no paper with a PDF'):
+        rank.read_ids(p)
+
+
+def test_abstract_order_without_any_pdf(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    for f in (project / 'papers/topic').glob('*.pdf'):
+        f.unlink()
+    (project / 'sources.csv').write_text('key,pdf_path,doi\n')
+    (project / 's.jsonl').write_text(json.dumps({'doi': '10.9/p', 'title': 'Switch memory scheduling', 'first_author': 'Ada Lovelace',
+                                                 'year': 2025, 'abstract': 'Which user receives a stored pair.'}) + '\n')
+    rank.main(['--out', str(project / 'runs/n'), '--abstracts', str(project / 's.jsonl')])
+    rows = list(csv.DictReader(open(project / 'runs/n_paper-lector.csv')))
+    assert [(r['paper'], r['source'], r['abs_fused_rank']) for r in rows] == [('Lovelace2025_SwitchMemoryScheduling', 'abstract_only', '1')]
+    assert not any(e == 'embeddings' for e, b in offline.calls)
+    with pytest.raises(SystemExit, match='no PDFs'):
+        rank.main(['--out', str(project / 'runs/n2')])                   # without --abstracts there is nothing to rank

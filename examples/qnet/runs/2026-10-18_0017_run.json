@@ -1,6 +1,6 @@
 {
- "created": "2026-10-17T23:42:07",
- "paper_lector_commit": "5fd20a3",
+ "created": "2026-10-18T00:17:23",
+ "paper_lector_commit": "bbdfb25",
  "question": "Çok kullanıcılı bir kuantum ağında entanglement dağıtımını zamanlamak için hangi yöntemler (optimizasyon, heuristik, RL) kullanılmış ve hangi metriklerle karşılaştırılmış?",
  "queries": {
   "Q0": {
@@ -181,21 +181,20 @@
  },
  "expect": "",
  "usage": {
-  "embed": 19973,
-  "embed_cached": 279,
-  "rerank": 386708
+  "embed_cached": 299,
+  "rerank": 377868
  },
- "estimate": 718780,
+ "estimate": 709924,
  "outputs": {
   "hybrid": {
-   "csv": "runs/2026-10-17_2341_paper-lector.csv",
+   "csv": "runs/2026-10-18_0017_paper-lector.csv",
    "fused_top10": [
     "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
     "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
-    "Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af",
     "Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b",
-    "Sutcliffe2023_MultiuserEntanglementDistributionQuantumNetworks_746bbb",
+    "Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af",
     "Piparo2025_QualityServiceAggregatedQuantumNetworks_4105be",
+    "Sutcliffe2023_MultiuserEntanglementDistributionQuantumNetworks_746bbb",
     "Zhang2026_OptimizedSourcePlacementMultipartiteState_f4b780",
     "Chakraborty2019_DistributedRoutingQuantumInternet_1b6baa",
     "Fan2025_NearOptimalTechniquesDistributedEntanglement_f71671",
@@ -222,12 +221,13 @@
     "sha256": "7cc0ceb43941e8ec3febda1931cd478abee34e7364dd277096d848f821f39ab3"
    }
   ],
-  "papers": 33,
-  "ranked": 32,
+  "papers": 34,
+  "ranked": 31,
   "abstract_only": [
    "Liu2025_QuantumNetworkRoutingDesignDynamic",
    "Zhao2021_RedundantEntanglementProvisioningSelectionThroughput",
    "Zeng2024_MultiUserEntanglementRoutingDesign",
+   "Hu2024_HighFidelityEntanglementRoutingQuantum",
    "Huang2023_HeuristicEntanglementRoutingQuantumNetworks",
    "Leone2021_QuNetCostVectorAnalysisMulti",
    "Chen2023_QDDCADecentralizedDynamicCongestion",
@@ -242,6 +242,8 @@
    "Jia2024_FidelityOrientedEntanglementDistributionQuantum"
   ],
   "no_abstract": [
+   "Daud2024_ScalingNetworkTopologiesMultiUser_1f372b",
+   "Fan2025_NearOptimalTechniquesDistributedEntanglement_f71671",
    "Tian2026_RADARQResourceAwareDistributed"
   ],
   "top10": [
@@ -250,9 +252,9 @@
    "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
    "Jia2024_FidelityOrientedEntanglementDistributionQuantum",
    "Yang2025_SwappingBoostOptimizingEntanglementRoutingMitigating",
-   "Wang2026_DeepReinforcementLearningBasedDeferred",
    "Li2021_FidelityGuaranteeEntanglementRoutingQuantum_f0e80b",
    "Leone2021_QuNetCostVectorAnalysisMulti",
+   "Wang2026_DeepReinforcementLearningBasedDeferred",
    "Skrzypczyk2020_DynamicTimeDivisionMultipleAccess",
    "Huang2023_HeuristicEntanglementRoutingQuantumNetworks"
   ]
