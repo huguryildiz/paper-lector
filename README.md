@@ -7,13 +7,13 @@
 <h1 align="center">paper-lector</h1>
 
 <p align="center">
-  <strong>Claude Code Skill for Reading Leads</strong><br>
+  <strong>Agent Skill for Claude Code and Codex</strong><br>
   <sub>Ranks research PDFs and suggests starting pages; reading leads, not evidence.</sub>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python_3.12-0b1220?style=for-the-badge&logo=python&logoColor=3776AB" alt="Python 3.12">
-  <img src="https://img.shields.io/badge/Claude_Code_Skill-0b1220?style=for-the-badge&logo=claude&logoColor=D97757" alt="Claude Code skill">
+  <img src="https://img.shields.io/badge/Claude_Code_%C2%B7_Codex_Skill-0b1220?style=for-the-badge&logo=claude&logoColor=D97757" alt="Claude Code and Codex skill">
   <img src="https://img.shields.io/badge/OpenAlex-0b1220?style=for-the-badge&logo=openaccess&logoColor=F68212" alt="OpenAlex">
   <img src="https://img.shields.io/badge/Voyage_AI_%C2%B7_BM25-0b1220?style=for-the-badge&logo=databricks&logoColor=F2B544" alt="Voyage AI and BM25">
   <img src="https://img.shields.io/badge/pdftotext-0b1220?style=for-the-badge&logo=files&logoColor=EC1C24" alt="pdftotext">
@@ -36,13 +36,13 @@
 
 ## Overview
 
-paper-lector is a Claude Code skill with three scripts:
+paper-lector is an agent skill for Claude Code and Codex with three scripts:
 
 - `openalex_search.py` searches OpenAlex (semantic, exact boolean, citing works, references).
 - `fetch_pdf.py` downloads open-access PDFs (arXiv first, then OpenAlex locations) and lists the rest for manual download.
 - `rank.py` ranks your own PDF collection against a few frozen research-question queries. It splits each PDF into page-labelled windows, picks the best windows per paper with BM25 plus `voyage-4-large` embeddings, scores each paper with `rerank-3`, and fuses the per-query ranks into a reading order. Without a Voyage key it can run on BM25 alone (see "Ranking without an API key").
 
-`SKILL.md` is the full guide that Claude reads.
+`SKILL.md` is the full guide that the agent reads.
 
 ## Install
 
@@ -52,10 +52,11 @@ You need Python 3.12 and `pdftotext` from poppler (`brew install poppler` on mac
 git clone https://github.com/huguryildiz/paper-lector ~/Documents/GitHub/paper-lector
 cd ~/Documents/GitHub/paper-lector
 python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
-ln -s ~/Documents/GitHub/paper-lector ~/.claude/skills/paper-lector
+ln -s ~/Documents/GitHub/paper-lector ~/.claude/skills/paper-lector   # Claude Code
+ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 ```
 
-The symlink is what lets Claude Code find the skill.
+The symlink is what lets the agent find the skill; make the one for the agent you use, or both.
 
 API keys: copy `.env.example` to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`, and fill in `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank with the default `voyage` provider). A key set in the environment takes precedence over both files.
 
@@ -83,16 +84,16 @@ Suppose a project folder holds a few dozen PDFs on underwater acoustic sensor ne
 
 **2. Queries.** `literature/queries.json` holds the question and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries.json`](examples/queries.json) is the complete file for this example. Once you have seen results from a queries file, don't edit it; write a new file for a revised run. `rank.py` refuses to reuse an `--out` prefix whose `_run.json` was made with different queries.
 
-**3a. With Claude.** Open the project in Claude Code and ask:
+**3a. With an agent.** Open the project in Claude Code or Codex and ask:
 
 > Rank my PDFs for this question: which next hop should a node in an underwater acoustic sensor network choose so that the network lives longer?
 
-Claude asks for the six query slots on two question screens: for each slot you take its suggestion, type your own, or leave it empty (`main` is required). It then writes the queries and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
+The agent asks for the six query slots on two question screens: for each slot you take its suggestion, type your own, or leave it empty (`main` is required). It then writes the queries and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
 
 **3b. From the shell.** The same steps by hand, run from anywhere inside the project:
 
 ```bash
-PL=~/.claude/skills/paper-lector
+PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/null | head -1)
 PY=$PL/.venv/bin/python
 
 # find papers and download the open-access ones

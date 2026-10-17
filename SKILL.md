@@ -8,7 +8,7 @@ description: Search OpenAlex, download open-access PDFs, and rank a researcher's
 Ranks research PDFs and suggests starting pages; reading leads, not evidence.
 
 ```bash
-PL=~/.claude/skills/paper-lector
+PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/null | head -1)
 PY=$PL/.venv/bin/python        # arm64 venv with numpy and tokenizers; pdftotext must be on PATH
 ```
 
