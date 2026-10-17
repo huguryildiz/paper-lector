@@ -135,7 +135,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 | Citing works | `--cites <id>` | Works that cite one paper (all pages need `OPENALEX_API_KEY`; without it, the first 200) | You want what came after a key paper |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
 
-`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers; you can run both.
+`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the qnet question it was 3 of 50: the keyword query missed papers that say "request scheduling" or "resource allocation" instead of "multi-user", and the agent proposes a revised query when the overlap is under half.
 
 [`examples/qnet`](examples/qnet/papers.md) is a whole run from a keyword search: 47 works found, 18 open-access PDFs ranked on full text and all 34 distinct papers ranked on their abstracts (`--abstracts`).
 

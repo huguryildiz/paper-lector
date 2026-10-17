@@ -17,6 +17,7 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 | Step | Command | Output |
 | --- | --- | --- |
 | Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --name <name>` | `runs/<date>_<time>_<name>_<mode>_search.jsonl` next to the config, one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: `schedul*` matches scheduling and schedules. Writes `<file>.query.json` beside it |
+| Overlap | `$PY $PL/scripts/search_overlap.py <file>_search.jsonl <file>_search.jsonl` | works per file, shared, distinct; with keyword and semantic files, the share of semantic works keyword also found (`LOW OVERLAP` under half) and the titles found only by semantic |
 | Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (status `OK` with source URL and SHA-256, or `MANUAL` with title and landing URL); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
 | Rank | `$PY $PL/scripts/rank.py --dry`, then without `--dry` | `runs/<date>_<time>_<name>_rank.csv` and `_rank_run.json` next to the config, and one line in the project's `questions.jsonl` |
 
@@ -86,12 +87,12 @@ OpenAlex without a key: fetch works. Keyword and citing searches return only the
 
 ## Searching OpenAlex
 
-`openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice; the user can also type several modes in the free-text field, such as `keyword, citing` or `all`, and every mode named there is run), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
+`openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice and mark it recommended; the user can also type several modes in the free-text field, such as `keyword, citing` or `all`, and every mode named there is run), unless the user's request already names it ("papers citing X" is citing, "X's references" is references). Recommend keyword and semantic together: semantic finds the papers written in other words, and the overlap shows what the keyword query missed (on the qnet example, 3 of 50 semantic works were in the keyword results):
 
 | Option | Flag | Tell the user |
 | --- | --- | --- |
 | Keyword (recommended) | `--exact '<boolean query>'` | Words in the title and abstract, with AND / OR / NOT and `*` wildcards. Every match, and the same list again on the same OpenAlex data. Misses papers that use other words |
-| Semantic | `--semantic '<sentence>'` | Matches by meaning, so it finds papers in other words. At most 50 results, and the list can change between runs |
+| Semantic (recommended) | `--semantic '<sentence>'` | Matches by meaning, so it finds papers in other words. At most 50 results, and the list can change between runs |
 | Citing works | `--cites <DOI, arXiv id or W id>` | Papers that cite one paper; forward in time |
 | References | `--refs <DOI, arXiv id or W id>` | Papers one paper cites; back in time |
 
@@ -113,7 +114,9 @@ A keyword query has two blocks:
 
 `openalex_search.py` refuses a query OpenAlex would misread and sends nothing: an empty query or group, an operator with no term on one side, NOT NOT, lower-case and/or/not (searched as words: write operators in capitals), OR at one level with AND, NOT or plain adjacency (`"quantum switch" scheduling OR "operations research"` returns the works of the phrase alone), empty quotes, unbalanced quotes or brackets, brackets nested more than 10 deep, `*` or `?` inside quotes when the query has more than one term, and more than 5 AND/OR/NOT. Fix the query, then show it again.
 
-Run each approved search with `--name <name>` and without `--out`: the script names the file by date, time, name and mode under `runs/`, for example `runs/2026-10-18_1420_entanglement-scheduling_exact_search.jsonl` (`-2` after the time when that minute is taken). It writes the mode, the query text, the date and the counts to `<file>.query.json` next to it, so the run can be traced and repeated. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
+Run each approved search with `--name <name>` and without `--out`: the script names the file by date, time, name and mode under `runs/`, for example `runs/2026-10-18_1420_entanglement-scheduling_exact_search.jsonl` (`-2` after the time when that minute is taken). It writes the mode, the query text, the date and the counts to `<file>.query.json` next to it, so the run can be traced and repeated. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, run `$PY $PL/scripts/search_overlap.py <file> <file> ...` and report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
+
+When it prints `LOW OVERLAP` (under half of the semantic works are in the keyword results), the keyword query probably misses words the field uses. Read the `only semantic` titles and abstracts, name the words the relevant ones share that the query lacks (a synonym, a narrower task, the abbreviation's plural), and write one revised keyword query under the same rules. Show it with the words it adds on the approval screen: "Run the revised search" (recommended), "Edit it", or "Keep the first". The revised search goes to a new file and the first stays; fetch from the revised file and the semantic one. Revise once; if the overlap stays low, report it and move on. Say that semantic stops at 50, so the overlap is a check, not a count of what was missed.
 
 ## Step 2: writing the queries
 

@@ -122,6 +122,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 | | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources`. Default: `runs/<date>_<time>_<name>_<mode>_search.jsonl` next to the config (mode is `exact`, `semantic`, `cites` or `refs`), with `-2` added when that minute is taken |
 | | `--name NAME` | Topic name in the default file name, the same short name the queries file will carry (lowercase, hyphens, at most 25 characters). Without it the file is `<date>_<time>_<mode>_search.jsonl` |
 | | `--max N` | Stop after N records (0 = all) |
+| `search_overlap.py` | `FILE FILE ...` | Works per search file, shared works and the distinct total (same OpenAlex id, DOI or arXiv id); with a keyword and a semantic file (mode read from `.query.json`), the share of semantic works the keyword file holds, `LOW OVERLAP` under half, and the titles found only by semantic |
 | `fetch_pdf.py` | `ID ...` | Fetch the listed works (DOI, arXiv id or OpenAlex W id, also as doi.org or arxiv.org URLs) |
 | | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |
 | | `--dest DIR` | Save here instead of `download_dir` |
