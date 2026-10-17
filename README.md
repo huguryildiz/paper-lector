@@ -34,6 +34,12 @@
 
 ---
 
+<p align="center">
+  <img src="assets/example-output.svg" alt="Example output: the top 5 of 40 arXiv PDFs for a question on hallucination in retrieval-augmented generation, with the pages to start reading" width="880">
+</p>
+
+<p align="center"><sub>A real run on 40 open-access arXiv PDFs. MAIN and SUBJECT are each paper's rank on those two queries; START AT is the first window the reranker read for the main query.</sub></p>
+
 ## Overview
 
 paper-lector is an agent skill for Claude Code and Codex with three scripts:
