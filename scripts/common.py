@@ -5,6 +5,7 @@ from pathlib import Path
 CONFIG_NAME = 'literature.json'
 LABELS = ('main', 'subject', 'approach', 'outcome', 'context', 'comparison')
 DEFAULT_FUSE_LABELS = ('main', 'subject')
+PROVIDERS = ('voyage', 'bm25')
 
 
 def find_config(explicit=None, start=None):
@@ -41,10 +42,14 @@ def load_config(explicit=None, required=True, start=None):
     for k in ('download_dir', 'sources', 'queries'):
         if k in cfg and not isinstance(cfg[k], str):
             sys.exit(f'{path}: "{k}" must be a path string')
+    rank = cfg.get('rank', {})
+    if not isinstance(rank, dict) or rank.get('provider', 'voyage') not in PROVIDERS:
+        sys.exit(f'{path}: "rank" must look like {{"provider": "voyage"}}; provider is one of {", ".join(PROVIDERS)}')
     out = {'root': root, 'path': path, 'pdf_dirs': [(root / d).resolve() for d in cfg['pdf_dirs']]}
     out['download_dir'] = (root / cfg['download_dir']).resolve() if 'download_dir' in cfg else out['pdf_dirs'][0]
     out['sources'] = (root / cfg['sources']).resolve() if cfg.get('sources') else None
     out['queries'] = (root / cfg['queries']).resolve() if cfg.get('queries') else None
+    out['provider'] = rank.get('provider', 'voyage')
     return out
 
 

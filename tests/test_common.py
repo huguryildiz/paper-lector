@@ -29,6 +29,13 @@ def test_config_rejects_bad_pdf_dirs(project):
         common.load_config(start=project)
 
 
+def test_config_rank_provider_default_and_validation(project):
+    assert common.load_config(start=project)['provider'] == 'voyage'
+    (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "rank": {"provider": "openai"}}')
+    with pytest.raises(SystemExit, match='provider is one of voyage, bm25'):
+        common.load_config(start=project)
+
+
 def test_sources_paths_relative_to_config(project):
     s = common.sources(common.load_config(start=project))
     assert s['queue2022']['pdf'] == project / 'papers' / 'topic' / 'Queue2022.pdf'

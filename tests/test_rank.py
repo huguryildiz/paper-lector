@@ -88,3 +88,31 @@ def test_missing_id_fails(project, offline, monkeypatch):
     (project / 'ids.csv').write_text('paper\nnope\n')
     with pytest.raises(SystemExit, match='no PDF'):
         rank.main(['--out', str(project / 'runs/x'), '--ids', str(project / 'ids.csv')])
+
+
+def test_bm25_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('HOME', str(tmp_path / 'home'))
+    monkeypatch.delenv('VOYAGE_API_KEY')
+    (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "sources": "sources.csv", "queries": "queries.json", '
+                                             '"rank": {"provider": "bm25"}}')
+    rank.main(['--out', str(project / 'runs/b'), '--budget', '10'])   # budget only guards API tokens
+    assert offline.calls == []
+    rows = list(csv.DictReader(open(project / 'runs/b_bm25.csv')))
+    assert rows[0]['paper'] == 'Switch2024'
+    assert {r['paper']: int(r['Q3_context_rank']) for r in rows}['Ocean2023'] == 1
+    assert all(r['Q0_main_pages'] for r in rows)
+    run = json.load(open(project / 'runs/b_run.json'))
+    assert run['models']['provider'] == 'bm25' and run['models']['rerank'] is None and run['usage'] == {}
+
+
+def test_provider_flag_overrides_config(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/f'), '--provider', 'bm25'])
+    assert offline.calls == [] and (project / 'runs/f_bm25.csv').exists()
+
+
+def test_bm25_rejects_variants(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    with pytest.raises(SystemExit, match='voyage provider only'):
+        rank.main(['--out', str(project / 'runs/v'), '--provider', 'bm25', '--variants', 'dense'])

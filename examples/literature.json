@@ -2,5 +2,6 @@
   "pdf_dirs": ["literature/pdfs"],
   "download_dir": "literature/pdfs/new",
   "sources": "literature/sources.csv",
-  "queries": "literature/queries.json"
+  "queries": "literature/queries.json",
+  "rank": {"provider": "voyage"}
 }

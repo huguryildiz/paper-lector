@@ -9,6 +9,9 @@ Method:
   4. rerank-3 scores every paper once per query on its abstract (or first 1,000 tokens) plus the 3 windows.
   5. fused_rank = RRF over the queries listed in "fuse" (default: main and subject). A reading order only.
 
+  Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
+  chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_bm25.csv.
+
   rank.py --out runs/2026-10-17 --dry     # counts and token estimate, no API call
   rank.py --out runs/2026-10-17           # writes <out>_hybrid.csv and <out>_run.json
 """
@@ -169,7 +172,8 @@ def main(argv=None):
     ap.add_argument('--queries', help='queries file (default: "queries" in the config)')
     ap.add_argument('--dirs', help='comma-separated PDF folders (default: "pdf_dirs" in the config)')
     ap.add_argument('--ids', help='CSV with a "paper" column: rank exactly these paper ids (frozen corpus)')
-    ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation)')
+    ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or bm25 (no API key); default: "rank" in the config, else voyage')
+    ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation); voyage only')
     ap.add_argument('--expect', default='', help='paper ids expected in the first query\'s top 10, fixed before the run')
     ap.add_argument('--budget', type=int, default=15_000_000, help='stop before any API call if the token estimate is higher')
     ap.add_argument('--dry', action='store_true', help='build windows, print counts and the token estimate; no API call')
@@ -181,9 +185,14 @@ def main(argv=None):
     if not qpath:
         sys.exit('no queries file: pass --queries or set "queries" in the config')
     question, Q, fuse = common.load_queries(qpath)
+    provider = a.provider or (cfg and cfg['provider']) or 'voyage'
     variants = a.variants.split(',')
     if any(v not in ('hybrid', 'dense') for v in variants):
         sys.exit('--variants takes hybrid and/or dense')
+    if provider == 'bm25':
+        if variants != ['hybrid']:
+            sys.exit('--variants applies to the voyage provider only')
+        variants = ['bm25']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
     ids = [r['paper'] for r in csv.DictReader(open(a.ids, encoding='utf-8-sig'))] if a.ids else None
 
@@ -206,24 +215,24 @@ def main(argv=None):
     estimate = sum(w['n'] for w in W) + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values())
     print(f'{len(P)} papers, {len(W)} windows, bibliography cut in {sum(p["bib_cut"] for p in P)}, '
           f'abstract found in {sum(p["abstract_found"] for p in P)}; {len(Q)} queries, fuse {fuse}; '
-          f'estimated {estimate:,} tokens', file=sys.stderr)
+          + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider bm25, no API call'), file=sys.stderr)
     if a.dry:
         for p in P:
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
         return
-    if estimate > a.budget:
-        sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
-    KEY = common.api_key('VOYAGE_API_KEY', cfg)
-
     usage = Counter()
-    E = []
-    for part in batches(W, lambda w: w['n'], EMBED_BATCH):
-        r = call('embeddings', {'input': [w['text'] for w in part], 'model': EMBED, 'input_type': 'document', 'truncation': False})
-        E += [x['embedding'] for x in r['data']]; usage['embed'] += r['usage']['total_tokens']
-    E = np.array(E, float); E /= np.linalg.norm(E, axis=1, keepdims=True)
-    r = call('embeddings', {'input': [q['text'] for q in Q.values()], 'model': EMBED, 'input_type': 'query', 'truncation': False})
-    QE = np.array([x['embedding'] for x in r['data']], float); QE /= np.linalg.norm(QE, axis=1, keepdims=True)
-    usage['embed'] += r['usage']['total_tokens']
+    if provider == 'voyage':
+        if estimate > a.budget:
+            sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
+        KEY = common.api_key('VOYAGE_API_KEY', cfg)
+        E = []
+        for part in batches(W, lambda w: w['n'], EMBED_BATCH):
+            r = call('embeddings', {'input': [w['text'] for w in part], 'model': EMBED, 'input_type': 'document', 'truncation': False})
+            E += [x['embedding'] for x in r['data']]; usage['embed'] += r['usage']['total_tokens']
+        E = np.array(E, float); E /= np.linalg.norm(E, axis=1, keepdims=True)
+        r = call('embeddings', {'input': [q['text'] for q in Q.values()], 'model': EMBED, 'input_type': 'query', 'truncation': False})
+        QE = np.array([x['embedding'] for x in r['data']], float); QE /= np.linalg.norm(QE, axis=1, keepdims=True)
+        usage['embed'] += r['usage']['total_tokens']
 
     outputs = {}
     for variant in variants:
@@ -231,20 +240,22 @@ def main(argv=None):
         sanity = None
         for qi, (qid, q) in enumerate(Q.items()):
             col = f'{qid}_{q["label"]}'
-            cos = E @ QE[qi]
-            lex = bm25_scores([w['text'] for w in W], q['keywords'] or q['text']) if variant == 'hybrid' else None
+            cos = E @ QE[qi] if variant != 'bm25' else None
+            lex = bm25_scores([w['text'] for w in W], q['keywords'] or q['text']) if variant != 'dense' else None
             pkgs = []
             for pi, p in enumerate(P):
                 idx = p['wins']
-                score = 1 / (RRF_K + min_ranks(cos[idx]))
-                if variant == 'hybrid':
+                score = 1 / (RRF_K + min_ranks(cos[idx])) if cos is not None else np.zeros(len(idx))
+                if lex is not None:
                     l = lex[idx]
                     score = score + np.where(l > 0, 1 / (RRF_K + min_ranks(l)), 0)
                 chosen = [idx[k] for k in pick([W[j] for j in idx], score)]
                 text = 'Abstract: ' + p['head'] + ''.join(f"\n\n[{W[j]['pages']}] {W[j]['text']}" for j in chosen)
                 pkgs.append({'pi': pi, 'text': text, 'n': ntok(text), 'pages': '; '.join(W[j]['pages'] for j in chosen)})
             qn, score = ntok(q['text']), {}
-            for part in batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH):
+            if variant == 'bm25':
+                score = {k['pi']: float(v) for k, v in zip(pkgs, bm25_scores([k['text'] for k in pkgs], q['keywords'] or q['text']))}
+            for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH) if variant != 'bm25' else []):
                 r = call('rerank', {'query': q['text'], 'documents': [k['text'] for k in part], 'model': RERANK, 'truncation': False})
                 usage['rerank'] += r['usage']['total_tokens']
                 for x in r['data']:
@@ -288,7 +299,8 @@ def main(argv=None):
         commit = ''
     run = {'created': datetime.datetime.now().isoformat(timespec='seconds'), 'paper_lector_commit': commit,
            'question': question, 'queries': Q, 'queries_sha': sha(json.dumps(Q, sort_keys=True)), 'fuse': fuse,
-           'models': {'embed': EMBED, 'rerank': RERANK, 'tokenizer': TOK_URL},
+           'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else None,
+                      'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},
            'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P]},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}

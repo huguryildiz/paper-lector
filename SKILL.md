@@ -29,7 +29,8 @@ Every script looks for `literature.json`, starting in the current folder and wal
   "pdf_dirs": ["literature/pdfs"],
   "download_dir": "literature/pdfs/new",
   "sources": "literature/sources.csv",
-  "queries": "literature/queries.json"
+  "queries": "literature/queries.json",
+  "rank": {"provider": "voyage"}
 }
 ```
 
@@ -37,14 +38,17 @@ Every script looks for `literature.json`, starting in the current folder and wal
 - `download_dir`: where `fetch_pdf.py` saves; defaults to the first `pdf_dirs` entry.
 - `sources` (optional): a CSV with `key`, `pdf_path` and `doi` columns. Papers listed there keep their key as id; other PDFs are named by file stem.
 - `queries`: the frozen queries file for `rank.py`.
+- `rank` (optional): `{"provider": "voyage"}` (default) or `{"provider": "bm25"}`. `--provider` overrides it for one run.
 
 If there is no `literature.json`, ask the user once where their PDFs are, then write the file. Do not guess.
 
-Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
+Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
 
 ## Step 2: writing the queries
 
-The user states the research question once, in their own words. Draft the queries from it, show them as a table, let the user edit, and freeze the file only after their approval. Never change a frozen file after seeing results; a revision is a new file and a new run.
+Settle the research question before drafting any query. Suggest 2 or 3 candidate questions, each one neutral sentence, built from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`). Ask with the AskUserQuestion tool: one option per candidate, recommended one first; the tool's free-text "Other" lets the user write their own. Without that tool, list the candidates numbered and ask the user to pick one or type their own. Use the chosen or written question word for word; if the user edits a candidate, the edited text wins.
+
+Draft the queries from that question, show them as a table, let the user edit, and freeze the file only after their approval. Never change a frozen file after seeing results; a revision is a new file and a new run.
 
 Six labels, all optional except `main`:
 
@@ -88,7 +92,9 @@ What happens inside: the whole PDF is split into 1,200-token windows with page l
 
 Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<label>_rank`, `_score` and `_pages` (the pages the reranker read, a place to start reading), then `tokens`, `bib_cut`, `abstract_found`. `<prefix>_run.json` records the question, queries, fuse list, models, parameters, corpus ids, token usage and the paper-lector commit.
 
-`--variants hybrid,dense` adds a dense-only ablation. `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus.
+**No Voyage key.** If `VOYAGE_API_KEY` is missing, tell the user and offer the `bm25` provider instead of stopping. It makes no API call and has no budget: windows are chosen by BM25 on the keyword string and each paper is scored by BM25 on its abstract plus 3 windows. Output is `<prefix>_bm25.csv`. Say in the report that BM25 matches words, not meaning, so synonyms are missed and the order is rougher; never compare its scores with a voyage run.
+
+`--variants hybrid,dense` adds a dense-only ablation (voyage only). `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus.
 
 ## What to tell the user
 
@@ -99,7 +105,7 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 ## Examples
 
-**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Draft `main`, `subject`, `approach`, `outcome`, `context` from the question, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
+**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Offer candidate questions (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?") and take the user's pick or their own wording. Draft `main`, `subject`, `approach`, `outcome`, `context` from the question, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
 
 **Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection, compare with the previous `_run.json` and report papers that entered or left the fused top 10.
 
