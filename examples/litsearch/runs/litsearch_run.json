@@ -1,0 +1,330 @@
+{
+ "created": "2026-10-17T22:11:05",
+ "paper_lector_commit": "6e94ec8",
+ "question": "Which studies should I look into that have explored the task of factuality in abstractive summarization and proposed ways to detect hallucinated content in generated text?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which studies should I look into that have explored the task of factuality in abstractive summarization and proposed ways to detect hallucinated content in generated text?",
+   "keywords": "factuality faithfulness abstractive summarization hallucinated content detection generated text"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Abstractive summarization and conditional text generation models whose output contains content that is not supported by the source document.",
+   "keywords": "abstractive summarization conditional generation unsupported content source document"
+  }
+ },
+ "queries_sha": "5b4bc44ab49a",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 40,
+  "windows": 491,
+  "ids": [
+   "bao2021_2105-02482",
+   "bogoychev2021_2101-00421",
+   "dong2018_1804-04589",
+   "dziri2021_2105-00071",
+   "ferreira2019_1908-09022",
+   "heinrich2021_2109-13209",
+   "jachim2021_2104-00782",
+   "kale2020_2005-10433",
+   "kamath2019_1911-00712",
+   "kasner2020_2011-01694",
+   "khashabi2021_2101-06561",
+   "kryscinski2019_1910-12840",
+   "li2020_2008-12918",
+   "li2020_2010-05202",
+   "li2021_2112-07924",
+   "liu2019_1910-09796",
+   "ma2018_1805-01089",
+   "ma2021_2110-08417",
+   "malmaud2020_2009-14780",
+   "maynez2020_2005-00661",
+   "miao2021_2105-11098",
+   "moradi2019_1903-02861",
+   "mozannar2019_1906-05394",
+   "muller2019_1911-03109",
+   "narayan2020_2004-11026",
+   "ni2021_2108-12738",
+   "nie2019_P19-1256",
+   "pagnoni2021_2104-13346",
+   "pan2021_2105-14682",
+   "pauws2018_1808-03507",
+   "pillutla2021_2102-01454",
+   "raunak2021_2104-06683",
+   "roberts2020_2012-08919",
+   "tevet2018_1810-12686",
+   "wang2020_2005-03642",
+   "yang2021_2109-11020",
+   "yu2021_2102-01226",
+   "zhao2020_2002-10348",
+   "zhou2020_2011-02593",
+   "zhu2018_1802-01886"
+  ],
+  "files": [
+   {
+    "id": "bao2021_2105-02482",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/bao2021_2105-02482.pdf",
+    "sha256": "536f34300424bcc73c9f610da086f6fa47fc326b479a672b843efa83982a0975"
+   },
+   {
+    "id": "bogoychev2021_2101-00421",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/bogoychev2021_2101-00421.pdf",
+    "sha256": "0db48f657ba5b2ec26052280908f272618aae2fe160fce13f12011bc3bb5b477"
+   },
+   {
+    "id": "dong2018_1804-04589",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/dong2018_1804-04589.pdf",
+    "sha256": "418cbda6699bd13a129c58aaf788452bb5a708862e2f113a23efb82416fe4410"
+   },
+   {
+    "id": "dziri2021_2105-00071",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/dziri2021_2105-00071.pdf",
+    "sha256": "7e7c7fe1624ed15b99b04ca4f67c58e23bc43931052ed77c61e6e847ba7d651b"
+   },
+   {
+    "id": "ferreira2019_1908-09022",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/ferreira2019_1908-09022.pdf",
+    "sha256": "84c59453a1a55acc40ef5e8309af2d26bc35bf62c6ee44b0609fe29eeb6a9d2c"
+   },
+   {
+    "id": "heinrich2021_2109-13209",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/heinrich2021_2109-13209.pdf",
+    "sha256": "a782ab6f6eb47f1172514a8c477a3c7eab5de7908a4514d1630b2097167d740b"
+   },
+   {
+    "id": "jachim2021_2104-00782",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/jachim2021_2104-00782.pdf",
+    "sha256": "84b5f5e66b63d56c0cf031b6afb3794f19b5abb9340756e015b59962016a5f98"
+   },
+   {
+    "id": "kale2020_2005-10433",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/kale2020_2005-10433.pdf",
+    "sha256": "d109eff99cac457465e42a3ade34ef9616a8fd4c47fc16b144cf82e26578d72a"
+   },
+   {
+    "id": "kamath2019_1911-00712",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/kamath2019_1911-00712.pdf",
+    "sha256": "79acbfdbe566c7c7e690a981ccff21770b98e4d9135d48f25d5f89d4e508158f"
+   },
+   {
+    "id": "kasner2020_2011-01694",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/kasner2020_2011-01694.pdf",
+    "sha256": "485265d73a696fec5ad0f2d2b8c3690d0706af1ce34c99b118bff75a319587ff"
+   },
+   {
+    "id": "khashabi2021_2101-06561",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/khashabi2021_2101-06561.pdf",
+    "sha256": "098c96794f02416aed6fa33522f07cee5b749245631a0aacd88cb4d781d600bf"
+   },
+   {
+    "id": "kryscinski2019_1910-12840",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/kryscinski2019_1910-12840.pdf",
+    "sha256": "39ebb578dc2997a7c49d9583e378b453600e76c74dc1514f25dd164d2c6ceafc"
+   },
+   {
+    "id": "li2020_2008-12918",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/li2020_2008-12918.pdf",
+    "sha256": "a8c3e563493fd9ae5647a6c99d971ea643dccb867753a41d9b33fa29fa7f80ba"
+   },
+   {
+    "id": "li2020_2010-05202",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/li2020_2010-05202.pdf",
+    "sha256": "ec18ff97ca7ccf01d7f2b63752a8d228fcada31ab2bfeecbb54ae38b92d6a6fd"
+   },
+   {
+    "id": "li2021_2112-07924",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/li2021_2112-07924.pdf",
+    "sha256": "6d48af5e7e94985037e9185d42e2dddf08642c6d09fa91277b5dc5aead6ee9e9"
+   },
+   {
+    "id": "liu2019_1910-09796",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/liu2019_1910-09796.pdf",
+    "sha256": "52482adf113bf005b48f991ba36d70f84a2489ede46d80f81b13a121029667da"
+   },
+   {
+    "id": "ma2018_1805-01089",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/ma2018_1805-01089.pdf",
+    "sha256": "f3de370721ef1552a37a1c21d4be8a02ee97eba11ff0cf5860b095c7d599d63e"
+   },
+   {
+    "id": "ma2021_2110-08417",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/ma2021_2110-08417.pdf",
+    "sha256": "1cba2a960609b12d0f6b20e51c53a5230e5c310906ac145a2e04ad0a8df50551"
+   },
+   {
+    "id": "malmaud2020_2009-14780",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/malmaud2020_2009-14780.pdf",
+    "sha256": "0ce0c2760061cd6d79dd4735a0c37051ad3d37e48ed2285502a0307170cd1e91"
+   },
+   {
+    "id": "maynez2020_2005-00661",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/maynez2020_2005-00661.pdf",
+    "sha256": "dc0eff088eaafee3937ee93f4c273995bd17c1c9199034262d4151aac8840f80"
+   },
+   {
+    "id": "miao2021_2105-11098",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/miao2021_2105-11098.pdf",
+    "sha256": "0fcf60df856670d9b81b336fa91d0853e72776051132b2ec4b05e4f101b42010"
+   },
+   {
+    "id": "moradi2019_1903-02861",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/moradi2019_1903-02861.pdf",
+    "sha256": "dbd1ae750385b4bceea9015c4b7f659f8cec76b61b7c263a327d33976edb1718"
+   },
+   {
+    "id": "mozannar2019_1906-05394",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/mozannar2019_1906-05394.pdf",
+    "sha256": "579068c0b3a61391e0bfcb3dcdf40a2a93192277f6a6d2d6dee4c1a588faddc2"
+   },
+   {
+    "id": "muller2019_1911-03109",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/muller2019_1911-03109.pdf",
+    "sha256": "c611fcb48508e74a53903840609f9aa5944ca7b6d71a92bc7141179ae26a54eb"
+   },
+   {
+    "id": "narayan2020_2004-11026",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/narayan2020_2004-11026.pdf",
+    "sha256": "d49ba0fa13d08420c7f8b60fd2318627279a8a418987757516180a043ee7ac1c"
+   },
+   {
+    "id": "ni2021_2108-12738",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/ni2021_2108-12738.pdf",
+    "sha256": "34fad30a67fa4f42c812b40d51324f1e5edf9be0c6372f84bcd9001183956174"
+   },
+   {
+    "id": "nie2019_P19-1256",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/nie2019_P19-1256.pdf",
+    "sha256": "90fbc3e870f1c051400f891970446731339c8b8783e2a4a0a4765c8ae765d36a"
+   },
+   {
+    "id": "pagnoni2021_2104-13346",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/pagnoni2021_2104-13346.pdf",
+    "sha256": "9730c87d802dd2c677c4cc2af52c7965b57e4a630c557f27c98bd7e619cabe16"
+   },
+   {
+    "id": "pan2021_2105-14682",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/pan2021_2105-14682.pdf",
+    "sha256": "bb686b2b09a1392654d0a1d5c8ae4310c5c4a735d1e13f809a5a940e04cef7ff"
+   },
+   {
+    "id": "pauws2018_1808-03507",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/pauws2018_1808-03507.pdf",
+    "sha256": "a5d2325429dbf9165d1a729ba3603da9d679ff536df4e664b91e9f5b10b3928b"
+   },
+   {
+    "id": "pillutla2021_2102-01454",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/pillutla2021_2102-01454.pdf",
+    "sha256": "0b204dc97b43aeced86f4826146b361178ab93463c17b05556c04a8f5d4ae73c"
+   },
+   {
+    "id": "raunak2021_2104-06683",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/raunak2021_2104-06683.pdf",
+    "sha256": "bd0810ef5f336fe412496af7ceb4fcf3e4523c46f44f1e9299d66ce5d47b3a05"
+   },
+   {
+    "id": "roberts2020_2012-08919",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/roberts2020_2012-08919.pdf",
+    "sha256": "37b207033bf9a7349ecaaf41de17bbb7e7e8ba6193ef050df75f54e8205e3f29"
+   },
+   {
+    "id": "tevet2018_1810-12686",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/tevet2018_1810-12686.pdf",
+    "sha256": "26b6586481591aa0975ba6a62a7b4cbaac0300d596f6f8e72f47347a8b7cec8f"
+   },
+   {
+    "id": "wang2020_2005-03642",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/wang2020_2005-03642.pdf",
+    "sha256": "8a4893e1b9d00049a59bc3f39f48f938fa2288499c4e4d52eee6e424c69e787c"
+   },
+   {
+    "id": "yang2021_2109-11020",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/yang2021_2109-11020.pdf",
+    "sha256": "a64abc7917d62125e6efe6aebf8ce9cde3c04cd6efddc166139e5e78e74aa32d"
+   },
+   {
+    "id": "yu2021_2102-01226",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/yu2021_2102-01226.pdf",
+    "sha256": "2107c27f2dd70e6271611a7e0a58a7df12730124bed17b70ab0a2976bbe5bb06"
+   },
+   {
+    "id": "zhao2020_2002-10348",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/zhao2020_2002-10348.pdf",
+    "sha256": "e9f6e6ac9d0edcafe45dfa0edf363fbbce453b518e6b4f4475fe750248591315"
+   },
+   {
+    "id": "zhou2020_2011-02593",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/zhou2020_2011-02593.pdf",
+    "sha256": "bb82eba56d5e4057807859324ce9d4e53eaa0a9aaee853a87ea621127c4a92ce"
+   },
+   {
+    "id": "zhu2018_1802-01886",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch/pdfs/zhu2018_1802-01886.pdf",
+    "sha256": "e1767a52ec286e5dbe2aa3835069cb9f76ced47bc4cd3fcf9172b9699208c1a7"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "maynez2020_2005-00661,zhou2020_2011-02593,nie2019_P19-1256,pagnoni2021_2104-13346,kryscinski2019_1910-12840",
+ "usage": {
+  "embed": 537299,
+  "embed_cached": 0,
+  "rerank": 291440
+ },
+ "estimate": 840486,
+ "outputs": {
+  "hybrid": {
+   "csv": "runs/litsearch_hybrid.csv",
+   "fused_top10": [
+    "maynez2020_2005-00661",
+    "zhou2020_2011-02593",
+    "kryscinski2019_1910-12840",
+    "pagnoni2021_2104-13346",
+    "dziri2021_2105-00071",
+    "jachim2021_2104-00782",
+    "nie2019_P19-1256",
+    "raunak2021_2104-06683",
+    "narayan2020_2004-11026",
+    "muller2019_1911-03109"
+   ],
+   "first_query_top10": [
+    "maynez2020_2005-00661",
+    "zhou2020_2011-02593",
+    "kryscinski2019_1910-12840",
+    "pagnoni2021_2104-13346",
+    "dziri2021_2105-00071",
+    "raunak2021_2104-06683",
+    "li2020_2010-05202",
+    "jachim2021_2104-00782",
+    "nie2019_P19-1256",
+    "liu2019_1910-09796"
+   ]
+  }
+ }
+}

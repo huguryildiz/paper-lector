@@ -1,0 +1,10 @@
+{
+  "pdf_dirs": [
+    "pdfs"
+  ],
+  "download_dir": "pdfs",
+  "queries": "queries.json",
+  "rank": {
+    "provider": "voyage"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "question": "Which studies should I look into that have explored the task of factuality in abstractive summarization and proposed ways to detect hallucinated content in generated text?",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which studies should I look into that have explored the task of factuality in abstractive summarization and proposed ways to detect hallucinated content in generated text?",
+      "keywords": "factuality faithfulness abstractive summarization hallucinated content detection generated text"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Abstractive summarization and conditional text generation models whose output contains content that is not supported by the source document.",
+      "keywords": "abstractive summarization conditional generation unsupported content source document"
+    }
+  }
+}
