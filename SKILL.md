@@ -46,7 +46,9 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 
 ## Step 2: writing the queries
 
-Fill all six slots on two AskUserQuestion screens before writing any query text. Each screen holds up to 4 questions, shown as tabs.
+Fill all six slots on two question screens before writing any query text. Use the host's multiple-choice question tool: `AskUserQuestion` in Claude Code, `request_user_input` (or `request_user_input_async`) in Codex, the equivalent in other agents. Put at most 4 questions on one screen.
+
+The answers are required in every host. Keep the questions open until the user answers; never fill a slot by assumption, after a timeout, or because the tool returned no answer. If the tool returns nothing, ask the same questions in chat.
 
 Six labels, all optional except `main`:
 
@@ -67,12 +69,12 @@ The two screens:
 Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. It offers three ways to fill the slot:
 
 - Claude's suggestion: one short phrase drawn from the user's request and what the project already holds (the topic they named, the titles in `sources` or the PDF folders, an existing `queries.json`), written like the example column, marked recommended, the description saying why it fits.
-- The user's own wording, typed in the tool's free-text "Other" and used as given.
+- The user's own wording, typed in the tool's free-text field ("Other" in `AskUserQuestion`) and used as given.
 - "Leave empty".
 
 `main` cannot be left empty. Its two options are candidate questions, each one neutral sentence; if the user's request already states the question, that sentence word for word is the first option. The chosen or written question becomes the `question` field and the `main` slot; if the user edits a candidate, the edited text wins.
 
-Without the tool, ask the same questions in chat, one numbered list per slot.
+Without such a tool, ask the same questions in chat, one numbered list per slot, and wait for the reply.
 
 From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run.
 
