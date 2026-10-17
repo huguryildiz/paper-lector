@@ -8,7 +8,9 @@ Modes (pick one):
 
 Run anywhere inside a project (the key comes from the environment, the project .env or
 ~/.config/paper-lector/.env; literature.json, when present, marks works already in the sources table):
-  python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)' --out runs/x17.jsonl
+  python openalex_search.py --exact '(entanglement) AND (switch OR repeater) AND (age OR cutoff)'
+Without --out the records go to runs/<date>_<time>_<mode>.jsonl next to literature.json (else in the current folder),
+for example runs/2026-10-18_1420_exact.jsonl, with -2 added when that minute is taken.
 """
 import argparse, datetime, json, re, sys, urllib.error, urllib.parse
 from pathlib import Path
@@ -109,7 +111,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     m = ap.add_mutually_exclusive_group(required=True)
     m.add_argument('--semantic'); m.add_argument('--exact'); m.add_argument('--cites'); m.add_argument('--refs')
-    ap.add_argument('--out', required=True, help='JSONL file')
+    ap.add_argument('--out', help='JSONL file (default: runs/<date>_<time>_<mode>.jsonl next to the config)')
     ap.add_argument('--config', help='path to literature.json (default: searched upward)')
     ap.add_argument('--max', type=int, default=0, help='stop after this many records (0 = all)')
     a = ap.parse_args(argv)
@@ -118,6 +120,12 @@ def main(argv=None):
     global KEY
     cfg = common.load_config(a.config, required=False)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
+    mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k))
+    if not a.out:
+        base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
+        a.out, n = f'{base}_{mode}.jsonl', 2
+        while Path(a.out).exists():                 # same mode in the same minute
+            a.out, n = f'{base}-{n}_{mode}.jsonl', n + 1
 
     if a.semantic:
         r = get('works', {'search.semantic': a.semantic, 'per_page': 50, 'select': FIELDS + ',relevance_score'})
@@ -151,7 +159,6 @@ def main(argv=None):
     if a.refs:
         print(f'references: listed {meta["count"]}, written {len(works)}', file=sys.stderr)
     print(f"count {meta.get('count')}  written {len(works)}  already in sources.csv {n_held}  -> {a.out}", file=sys.stderr)
-    mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k))
     Path(a.out).with_suffix('.query.json').write_text(json.dumps({
         'mode': mode, 'query': getattr(a, mode), 'date': datetime.datetime.now().isoformat(timespec='seconds'),
         'count': meta.get('count'), 'written': len(works), 'already_in_sources': n_held, 'max': a.max or None,

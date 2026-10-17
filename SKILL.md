@@ -16,7 +16,7 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 
 | Step | Command | Output |
 | --- | --- | --- |
-| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: `schedul*` matches scheduling and schedules. Writes `<file>.query.json` beside it |
+| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>'` | `runs/<date>_<time>_<mode>.jsonl` next to the config, one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: `schedul*` matches scheduling and schedules. Writes `<file>.query.json` beside it |
 | Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (status `OK` with source URL and SHA-256, or `MANUAL` with title and landing URL); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
 | Rank | `$PY $PL/scripts/rank.py --dry`, then without `--dry` | `runs/<date>_<time>_<name>.csv` and `_run.json` next to the config, and one line in `questions.jsonl` beside the queries file |
 
@@ -84,7 +84,7 @@ OpenAlex without a key: fetch works, and search returns only the first page, at 
 
 ## Searching OpenAlex
 
-`openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
+`openalex_search.py` has four modes. Before any search, ask which ones with the question tool, multi-select (`multiSelect: true` in Claude Code; where the tool has no multi-select, add a "Keyword + semantic" option to the single choice; the user can also type several modes in the free-text field, such as `keyword, citing` or `all`, and every mode named there is run), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
 
 | Option | Flag | Tell the user |
 | --- | --- | --- |
@@ -111,7 +111,7 @@ A keyword query has two blocks:
 
 `openalex_search.py` refuses a query OpenAlex would misread and sends nothing: OR at one level with AND, NOT or plain adjacency (`"quantum switch" scheduling OR "operations research"` returns the works of the phrase alone), a group with OR next to a term without AND, unbalanced quotes or brackets, `*` inside quotes, and more than 5 AND/OR/NOT. Fix the query, then show it again.
 
-Run each approved search into its own `--out` file; the script writes the mode, the query text, the date and the counts to `<file>.query.json` next to it, so the run can be traced and repeated. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
+Run each approved search without `--out`: the script names the file by date, time and mode under `runs/`, for example `runs/2026-10-18_1420_exact.jsonl` (`-2` after the time when that minute is taken). It writes the mode, the query text, the date and the counts to `<file>.query.json` next to it, so the run can be traced and repeated. Report the `count` and `written` numbers per mode and how many were already in `sources`. For semantic, say that only the 50 closest works came back. With more than one mode, also report how many works the files share (same DOI, arXiv id or OpenAlex id) and the number of distinct works; fetch from each file in turn, since `fetch_pdf.py` never saves the same PDF twice.
 
 ## Step 2: writing the queries
 

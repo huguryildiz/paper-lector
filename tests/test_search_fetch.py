@@ -1,4 +1,5 @@
 import json
+import re
 import fetch_pdf
 import openalex_search
 
@@ -260,3 +261,15 @@ def test_openalex_400_shows_its_message(monkeypatch):
     monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', lambda *a, **k: (_ for _ in ()).throw(err))
     with pytest.raises(SystemExit, match='OpenAlex refused the request: Wildcards do not work here'):
         openalex_search.common.openalex_json('https://api.openalex.org/works', 'k', timeout=5)
+
+
+def test_search_default_out_is_dated_by_mode(project, monkeypatch):
+    monkeypatch.chdir(project / 'papers')
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(openalex_search, 'get', lambda path, params: {'results': [], 'meta': {'count': 0}})
+    openalex_search.main(['--semantic', 'switch scheduling'])
+    out = list((project / 'runs').glob('*_semantic.jsonl'))
+    assert len(out) == 1 and re.fullmatch(r'\d{4}-\d\d-\d\d_\d{4}_semantic\.jsonl', out[0].name)
+    assert json.loads(out[0].with_suffix('.query.json').read_text())['mode'] == 'semantic'
+    openalex_search.main(['--semantic', 'switch scheduling'])          # same minute: a second file, not an overwrite
+    assert len(list((project / 'runs').glob('*_semantic.jsonl'))) == 2
