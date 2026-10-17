@@ -1,8 +1,9 @@
 # paper-lector reference
 
-The details behind the [README](../README.md): what each script writes, how runs are kept apart, how ranking picks text, and every option. [`SKILL.md`](../SKILL.md) is the agent's guide.
+The details behind the [README](README.md): what each script writes, how runs are kept apart, how ranking picks text, and every option. [`SKILL.md`](SKILL.md) is the agent's guide.
 
 - [Setup](#setup)
+- [Project layout](#project-layout)
 - [Config and queries](#config-and-queries)
 - [Fetching PDFs](#fetching-pdfs)
 - [Ranking output](#ranking-output)
@@ -20,13 +21,37 @@ API keys are looked up in the environment, then the project's `.env`, then `~/.c
 
 `rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
+## Project layout
+
+```
+<project>/
+├── literature.json            config; the scripts find it from any subfolder
+├── sources.csv                papers you already hold (optional)
+├── queries/
+│   ├── <name>.json            frozen queries files, one per question or revision
+│   └── questions.jsonl        every rank run of the project
+├── pdfs/
+│   ├── *.pdf
+│   └── fetch_log.jsonl        what fetch_pdf.py saved, and what it could not get
+└── runs/
+    ├── <date>_<time>_<name>_<mode>_search.jsonl   with its .query.json
+    ├── <date>_<time>_<name>_rank.csv              _rank-bm25.csv, _rank-dense.csv
+    └── <date>_<time>_<name>_rank_run.json
+
+~/.cache/paper-lector/         shared by every project on the machine
+├── embeddings.sqlite          vectors (table emb) and where each came from (table src)
+└── voyage-4-large-tokenizer.json
+```
+
+Only `literature.json` has a fixed name. The other paths come from it (`pdf_dirs`, `download_dir`, `sources`, `queries`), so another layout works too; this one is what the agent writes for a new project. Search and rank outputs go to `runs/` next to the config unless `--out` says otherwise, and sort by time, so a search and the rank that used it sit together. `runs/` is reproducible from the logs and usually stays out of git, like the PDFs; [`examples/qnet`](examples/qnet) keeps its runs as a worked example.
+
 ## Config and queries
 
 All three scripts look for `literature.json` from the current folder up to the project root (the first folder with `.git`); `--config` points to another one. Paths in it are relative to that file.
 
-`rank` is optional; `voyage` is the default provider. An optional `sources` CSV (the papers you already hold, with `key`, `pdf_path` and `doi` columns) can be added too; [`examples/literature.json`](../examples/literature.json) shows it. If the CSV is missing, the scripts say so and carry on without it.
+`rank` is optional; `voyage` is the default provider. An optional `sources` CSV (the papers you already hold, with `key`, `pdf_path` and `doi` columns) can be added too; [`examples/literature.json`](examples/literature.json) shows it. If the CSV is missing, the scripts say so and carry on without it.
 
-The queries file holds the question, an optional short `name` for its output files (lowercase words joined by hyphens, at most 25 characters, kept for every later run of the same question) and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries/underwater-routing.json`](../examples/queries/underwater-routing.json) is a complete file. Keep queries files in a `queries/` folder named after their `name`; the project's `questions.jsonl` (below) sits beside the config's queries file. Once you have seen results from a queries file, don't edit it; write a new file for a revised run.
+The queries file holds the question, an optional short `name` for its output files (lowercase words joined by hyphens, at most 25 characters, kept for every later run of the same question) and a few labelled queries (`main`, `subject`, `approach`, `outcome`, `context`, `comparison`). Each one has a full sentence for the embedding model and the reranker, plus a keyword string for BM25. [`examples/queries/underwater-routing.json`](examples/queries/underwater-routing.json) is a complete file. Keep queries files in a `queries/` folder named after their `name`; the project's `questions.jsonl` (below) sits beside the config's queries file. Once you have seen results from a queries file, don't edit it; write a new file for a revised run.
 
 With an agent, the agent first counts the PDFs in `pdf_dirs`. If a folder is missing or empty, it does not start the questions; it offers to search OpenAlex and download open-access papers, to point to another folder, or to stop. Then it asks seven questions in a fixed order: the six query slots, then which slots to fuse. Each screen holds as many questions as the agent's question tool allows, so Claude Code shows two screens and Codex may show three. For each slot you take the agent's suggestion, type your own wording, or leave it empty (`main` is required). The agent writes the queries from your answers and shows them as a table for you to edit. After you approve them, it freezes the file, runs a dry run to report the token estimate, runs the ranking, and reports the top 10 with the pages to start on.
 

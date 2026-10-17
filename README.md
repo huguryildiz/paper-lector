@@ -31,7 +31,7 @@
   &nbsp;·&nbsp;
   <a href="#how-ranking-works">How it works</a>
   &nbsp;·&nbsp;
-  <a href="docs/reference.md">Reference</a>
+  <a href="REFERENCE.md">Reference</a>
 </h3>
 
 ---
@@ -50,7 +50,7 @@ paper-lector is an agent skill for Claude Code and Codex with three scripts:
 - `fetch_pdf.py` downloads open-access PDFs and lists the rest for manual download.
 - `rank.py` ranks your own PDFs against a few frozen research-question queries and tells you which pages to read first.
 
-[`SKILL.md`](SKILL.md) is the guide the agent reads. [`docs/reference.md`](docs/reference.md) has every option, output file and edge case.
+[`SKILL.md`](SKILL.md) is the guide the agent reads. [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
 
 ## Install
 
@@ -147,7 +147,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 4. `rerank-3` scores each paper on its abstract plus those windows.
 5. The per-query ranks are combined with Reciprocal Rank Fusion into `fused_rank`.
 
-Without a Voyage key, set `"rank": {"provider": "bm25"}` (or `--provider bm25`): no API call, but BM25 only matches words, so expect a rougher order. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`docs/reference.md`](docs/reference.md#how-ranking-works).
+Without a Voyage key, set `"rank": {"provider": "bm25"}` (or `--provider bm25`): no API call, but BM25 only matches words, so expect a rougher order. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
 
 ## Tests
 
