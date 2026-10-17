@@ -8,6 +8,9 @@ Method:
      and BM25 on the query's keyword string ("hybrid"), or by cosine alone ("dense"); the top 3 are kept.
   4. rerank-3 scores every paper once per query on its abstract (or first 1,000 tokens) plus the 3 windows.
   5. fused_rank = RRF over the queries listed in "fuse" (default: main and subject). A reading order only.
+  6. With --abstracts <search JSONL>, every paper is also ranked on its abstract alone (abs_fused_rank), including
+     search results with no PDF (source abstract_only). Abstract-only scores run lower than full-text ones, so the two
+     orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
   Provider "bm25" (literature.json "rank": {"provider": "bm25"}, or --provider bm25) needs no API key: windows are
   chosen by BM25 alone and each paper is scored by BM25 on the same abstract plus 3 windows. Output: <out>_bm25.csv.
@@ -300,10 +303,79 @@ def read_ids(path):
     rows = list(csv.DictReader(open(path, encoding='utf-8-sig')))
     if not rows or 'paper' not in rows[0]:
         sys.exit(f'{path}: --ids needs a CSV with a "paper" column and at least one row')
+    rows = [r for r in rows if r.get('source') != 'abstract_only']      # --ids freezes the PDF corpus only
     ids = [r['paper'] for r in rows]
     if not all(ids) or len(set(ids)) != len(ids):
         sys.exit(f'{path}: --ids has an empty or repeated paper id')
     return ids, {i: r['sha256'] for i, r in zip(ids, rows) if r.get('sha256')}
+
+
+def rid(x):
+    """A normalised (kind, value) id, or None for an empty or unreadable one."""
+    try:
+        return common.norm_id(str(x)) if x else None
+    except Exception:
+        return None
+
+
+def words(s):
+    return ' '.join(re.findall(r'[a-z0-9]+', s.lower()))
+
+
+def abstract_corpus(paths, P, W, cfg, dirs):
+    """Papers for the abstract order: every PDF paper (its search record's abstract, else the abstract read from the
+    PDF) and every search record with no PDF (abstract_only). A record belongs to a PDF through the sources table's
+    DOI, an OK line in fetch_log.jsonl, or its title on the PDF's first page."""
+    recs, seen = [], set()
+    for path in paths:
+        for n, line in enumerate(open(path, encoding='utf-8'), 1):
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            ids = {i for i in (rid(r.get('doi')), rid(r.get('openalex')), rid(r.get('arxiv'))) if i}
+            if not ids:
+                print(f'note: {path} line {n}: no doi, arxiv or openalex id ({r.get("title")}); left out', file=sys.stderr)
+                continue
+            if not ids & seen:
+                recs.append((r, ids))
+            seen |= ids
+    owner = {}                                            # normalised id -> PDF paper id
+    for key, v in common.sources(cfg).items():
+        if v['doi'] and rid(v['doi']):
+            owner[rid(v['doi'])] = key
+    by_name = {Path(p['path']).name: p['id'] for p in P}
+    logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
+            for f in Path(d).rglob('fetch_log.jsonl')}
+    for f in sorted(logs):
+        for line in open(f, encoding='utf-8'):
+            e = json.loads(line)
+            if e.get('status', 'OK') == 'OK' and e.get('file') in by_name and rid(e.get('id')):
+                owner[rid(e['id'])] = by_name[e['file']]
+    first = {p['id']: set(words(W[p['wins'][0]]['text']).split()[:40]) for p in P}    # title and authors
+
+    def by_title(t):
+        """The PDF whose first 40 words hold at least 80% of the title's words (titles change between versions)."""
+        t = set(t.split())
+        best = max(((len(t & v) / len(t), k) for k, v in first.items()), default=(0, None))
+        return best[1] if len(t) >= 4 and best[0] >= 0.8 else None
+    A, taken = {p['id']: {'id': p['id'], 'source': 'full_text', 'title': '', 'text': p['head'], 'from': 'pdf'} for p in P}, {}
+    for r, ids in recs:
+        pid = next((owner[i] for i in ids if i in owner), None)
+        t = words(r.get('title') or '')
+        if pid is None:
+            pid = by_title(t)
+        if pid is not None and pid not in taken:
+            taken[pid] = True
+            A[pid]['title'] = r.get('title') or ''
+            if r.get('abstract'):
+                A[pid].update(text=r['abstract'], **{'from': 'search'})
+            continue
+        if pid is not None:
+            continue                                      # a second record for a paper already matched
+        aid = r.get('doi') or r.get('openalex') or r.get('arxiv')
+        A[aid] = {'id': aid, 'source': 'abstract_only', 'title': r.get('title') or '', 'text': r.get('abstract') or '',
+                  'from': 'search' if r.get('abstract') else ''}
+    return list(A.values())
 
 
 def versions():
@@ -325,6 +397,8 @@ def main(argv=None):
     ap.add_argument('--ids', help='CSV with a "paper" column (and optionally "sha256"): rank exactly these papers (frozen corpus)')
     ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or bm25 (no API key); default: "rank" in the config, else voyage')
     ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation); voyage only')
+    ap.add_argument('--abstracts', help='comma-separated search JSONL files: also rank every paper on its abstract, '
+                    'including results with no PDF (abs_fused_rank, source abstract_only)')
     ap.add_argument('--expect', default='', help='paper ids expected in the first query\'s top 10, fixed before the run')
     ap.add_argument('--budget', type=int, default=15_000_000, help='stop before any API call if the token estimate is higher')
     ap.add_argument('--dry', action='store_true', help='build windows, print counts and the token estimate; no API call')
@@ -410,14 +484,23 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     for w in W:
         w['n'] = ntok(w['text'])
         w['label_n'] = ntok(f"\n\n[{w['pages']}] ")
+    A = abstract_corpus(a.abstracts.split(','), P, W, cfg, dirs) if a.abstracts else []
+    AR = [x for x in A if x['text']]
+    for x in A:
+        x['doc'] = 'Abstract: ' + (x['title'] + '. ' if x['from'] == 'search' and x['title'] else '') + x['text']
     # Upper bound per rerank package: "Abstract: " + head + the N_WIN largest windows with their page labels.
     head_n = [ntok('Abstract: ' + p['head']) for p in P]
     pkg = sum(h + sum(sorted((W[j]['n'] + W[j]['label_n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P))
     estimate = sum(w['n'] for w in W) + sum(ntok(q['text']) for q in Q.values()) \
-        + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values())
+        + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values()) \
+        + sum(sum(ntok(x['doc']) for x in AR) + ntok(q['text']) * len(AR) for q in Q.values())
     print(f'{len(P)} papers, {len(W)} windows, bibliography cut in {sum(p["bib_cut"] for p in P)}, '
           f'abstract found in {sum(p["abstract_found"] for p in P)}; {len(Q)} queries, fuse {fuse}; '
           + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider bm25, no API call'), file=sys.stderr)
+    if a.abstracts:
+        print(f'abstracts: {len(A)} papers, {sum(x["source"] == "abstract_only" for x in A)} without a PDF, '
+              f'{sum(bool(x["title"]) for x in A if x["source"] == "full_text")} of {len(P)} PDFs matched to a search record, '
+              f'{len(A) - len(AR)} with no abstract (left unranked)', file=sys.stderr)
     if a.dry:
         for p in P:
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
@@ -433,6 +516,31 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         KEY = common.api_key('VOYAGE_API_KEY', cfg)
         E = embed([(w['text'], w['n']) for w in W], 'document', usage)
         QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage)
+
+    abs_rows = {}
+    if AR:
+        for qid, q in Q.items():
+            col = f'{qid}_{q["label"]}'
+            if provider == 'bm25':
+                sc = dict(enumerate(map(float, bm25_scores([x['doc'] for x in AR], q['keywords'] or q['text']))))
+            else:
+                sc, qn = {}, ntok(q['text'])
+                items = [{'i': i, 'n': ntok(x['doc']) + qn} for i, x in enumerate(AR)]
+                for part in batches(items, lambda k: k['n'], RERANK_BATCH, MAX_ITEMS):
+                    r = call('rerank', {'query': q['text'], 'documents': [AR[k['i']]['doc'] for k in part],
+                                        'model': RERANK, 'truncation': False})
+                    usage['rerank'] += r['usage']['total_tokens']
+                    for x in r['data']:
+                        sc[part[x['index']]['i']] = x['relevance_score']
+            for i, x in enumerate(AR):
+                row = abs_rows.setdefault(x['id'], {})
+                row[f'{col}_abs_rank'] = 1 + sum(1 for v in sc.values() if v > sc[i])
+                row[f'{col}_abs_score'] = round(sc[i], 4)
+        for row in abs_rows.values():
+            row['_afs'] = sum(1 / (RRF_K + row[f'{qid}_{Q[qid]["label"]}_abs_rank']) for qid in fuse)
+        for row in abs_rows.values():
+            row['abs_fused_rank'] = 1 + sum(1 for o in abs_rows.values() if o['_afs'] > row['_afs'])
+            row['abs_fused_score'] = round(row['_afs'], 6)
 
     outputs = {}
     for variant in variants:
@@ -477,13 +585,22 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         order = sorted(rows.values(), key=lambda r: (-r['_fs'], r[f'{first}_rank'], r['paper']))
         meta = {p['id']: p for p in P}
         head = ['paper', 'fused_rank', 'fused_score'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
-            + [f'{c}_pages' for c in cols.values()] + ['tokens', 'bib_cut', 'abstract_found']
+            + [f'{c}_pages' for c in cols.values()] + ['tokens', 'bib_cut', 'abstract_found', 'source']
+        if a.abstracts:
+            head += ['abs_fused_rank', 'abs_fused_score'] + [f'{c}_abs_{s}' for c in cols.values() for s in ('rank', 'score')] \
+                + ['abstract_from', 'title']
+        info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], title=x['title'], source=x['source'])
+                for x in A}
+        extra = sorted((x for x in A if x['source'] == 'abstract_only'),
+                       key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
         path = Path(f'{a.out}_{variant}.csv'); path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, 'x', newline='', encoding='utf-8') as f:
             w = csv.writer(f); w.writerow(head)
             for r in order:
-                m = meta[r['paper']]
+                m = dict(meta[r['paper']], source='full_text', **{k: v for k, v in info.get(r['paper'], {}).items() if k != 'source'})
                 w.writerow([cell(r['paper'])] + [r.get(h, m.get(h)) for h in head[1:]])
+            for x in extra:
+                w.writerow([cell(x['id'])] + [info[x['id']].get(h) for h in head[1:]])
         outputs[variant] = {'csv': str(path), 'fused_top10': [r['paper'] for r in order[:10]], 'first_query_top10': sanity}
         print(f'[{variant}] fused top 10: ' + ', '.join(r['paper'] for r in order[:10]))
         if a.expect:
@@ -507,6 +624,12 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                       'files': [{'id': p['id'], 'path': p['path'], 'sha256': p['sha256']} for p in P], 'skipped': skipped,
                       'possible_duplicates': dupes},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
+    if a.abstracts:
+        run['abstracts'] = {'files': [{'path': f, 'sha256': common.sha256_file(f)} for f in a.abstracts.split(',')],
+                            'papers': len(A), 'ranked': len(AR),
+                            'abstract_only': [x['id'] for x in A if x['source'] == 'abstract_only'],
+                            'no_abstract': [x['id'] for x in A if not x['text']],
+                            'top10': [k for k, _ in sorted(abs_rows.items(), key=lambda kv: kv[1]['abs_fused_rank'])[:10]]}
     with open(f'{a.out}_run.json', 'x', encoding='utf-8') as f:
         f.write(json.dumps(run, indent=1, ensure_ascii=False))
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '

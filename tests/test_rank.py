@@ -362,3 +362,53 @@ def test_run_record_has_files_and_versions(project, offline, monkeypatch):
     run = json.load(open(project / 'runs/v_run.json'))
     assert all(len(f['sha256']) == 64 for f in run['corpus']['files'])
     assert run['versions']['tokenizer_revision'] == rank.TOK_REV and run['versions']['pdftotext']
+
+
+def search_file(project):
+    recs = [
+        {'doi': '10.1/q', 'title': 'LIFO for noisy memories', 'abstract': 'Requests wait in a buffer; LIFO serves the youngest pair.'},
+        {'openalex': 'W1', 'title': 'Age based scheduling at a quantum switch', 'abstract': 'Which user receives a stored entangled pair at a switch.'},
+        {'arxiv': '2205.06300', 'title': 'Seawater links', 'abstract': ''},
+        {'doi': '10.9/paywalled', 'title': 'Switch memory scheduling for waiting users',
+         'abstract': 'Which user receives a stored entangled pair when requests wait at a quantum switch with memories.'},
+        {'openalex': 'W7', 'title': 'No abstract here', 'abstract': ''},
+    ]
+    path = project / 'search.jsonl'
+    path.write_text(''.join(json.dumps(r) + '\n' for r in recs))
+    (project / 'papers/topic/fetch_log.jsonl').write_text(
+        json.dumps({'id': '10.48550/arxiv.2205.06300', 'status': 'OK', 'file': 'Ocean2023.pdf'}) + '\n'
+        + json.dumps({'id': '10.9/paywalled', 'status': 'MANUAL', 'url': 'https://x.example'}) + '\n')
+    return path
+
+
+def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offline, monkeypatch, capsys):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/a'), '--abstracts', str(search_file(project))])
+    assert 'abstracts: 5 papers, 2 without a PDF, 3 of 3 PDFs matched' in capsys.readouterr().err
+    rows = list(csv.DictReader(open(project / 'runs/a_hybrid.csv')))
+    by = {r['paper']: r for r in rows}
+    assert [r['source'] for r in rows] == ['full_text'] * 3 + ['abstract_only'] * 2     # PDFs first, then the rest
+    assert by['10.9/paywalled']['fused_rank'] == '' and by['10.9/paywalled']['Q0_main_pages'] == ''
+    assert by['10.9/paywalled']['abs_fused_rank'] == '1'                  # best abstract, though it has no PDF
+    assert by['W7']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'W7'  # no abstract: listed, not ranked
+    assert by['queue2022']['abstract_from'] == 'search'                   # matched through the sources DOI
+    assert by['Switch2024']['abstract_from'] == 'search'                  # matched through its title on page 1
+    assert by['Ocean2023']['abstract_from'] == 'pdf'                      # fetch_log match, record had no abstract
+    assert by['Ocean2023']['title'] == 'Seawater links'
+    assert sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank']) == [1, 2, 3, 4]
+    run = json.load(open(project / 'runs/a_run.json'))
+    assert run['abstracts']['abstract_only'] == ['10.9/paywalled', 'W7'] and run['abstracts']['no_abstract'] == ['W7']
+    assert run['usage']['rerank'] <= run['estimate']
+    rank.main(['--out', str(project / 'runs/a2'), '--ids', str(project / 'runs/a_hybrid.csv')])   # PDF rows only
+    assert len(list(csv.DictReader(open(project / 'runs/a2_hybrid.csv')))) == 3
+
+
+def test_abstracts_with_bm25_and_without_flag(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--abstracts', str(search_file(project))])
+    assert offline.calls == []
+    rows = list(csv.DictReader(open(project / 'runs/b_bm25.csv')))
+    assert {r['paper']: r['abs_fused_rank'] for r in rows}['10.9/paywalled'] != ''
+    rank.main(['--out', str(project / 'runs/c')])
+    rows = list(csv.DictReader(open(project / 'runs/c_hybrid.csv')))
+    assert all(r['source'] == 'full_text' for r in rows) and 'abs_fused_rank' not in rows[0]

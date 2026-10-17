@@ -165,6 +165,8 @@ These modes only find papers. Ranking your own PDFs is a separate step (`rank.py
 
 BM25 statistics depend on the whole collection, so after adding PDFs rerank everything rather than only the new files.
 
+With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so papers whose PDF you could not get still get a place in an order. That order is kept apart from the full-text one. On 16 papers of one search, abstract-only scores were 0.06 lower than full-text scores on average, so a paper ranked on its abstract among full-text papers fell 3 to 5 places (up to 12) for lack of a PDF. Ranked against each other on abstracts alone, the same papers kept much of the full-text order (rank correlation 0.76 to 0.88 per query).
+
 ### PDFs in other languages
 
 `rank.py` finds abstract, introduction, bibliography and appendix headings in English, Turkish, German, French, Spanish, Italian, Portuguese and Russian (for example *Özet*, *Zusammenfassung*, *Résumé*, *Kaynaklar*, *Références*, *Литература*). Numbered reference lines with a year also count as a bibliography. In other languages it falls back to the first 1,000 tokens and keeps the bibliography; the dry run shows this as `-` in the `abs` and `bib` columns.
@@ -192,6 +194,7 @@ All three scripts look for `literature.json` from the current folder up to the p
 | | `--provider voyage\|bm25` | Override `rank.provider` for this run |
 | | `--queries FILE` / `--dirs A,B` | Override `queries` or `pdf_dirs` from the config |
 | | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus). With a `sha256` column (copy it from `corpus.files` in `_run.json`) a changed file under the same id stops the run. An empty list stops it too |
+| | `--abstracts FILE[,FILE]` | Search JSONL files: rank every paper on its abstract alone as well (`abs_fused_rank`), including search results with no PDF (`source` = `abstract_only`, listed after the PDFs). A record is tied to its PDF through the sources DOI, an `OK` line in `fetch_log.jsonl` or its title on the PDF's first page. The two orders are kept apart: abstract-only scores run lower than full-text ones |
 | | `--expect A,B` | Paper ids you expect in the first query's top 10, written down before the run |
 | | `--variants hybrid,dense` | Add a dense-only ablation (voyage only) |
 
