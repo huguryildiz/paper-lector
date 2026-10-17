@@ -118,7 +118,7 @@ Ask seven questions in this order: `main`, `subject`, `approach`, `outcome`, `co
 - 3 per screen (Codex's tool may take only 3): `main`, `subject`, `approach`; then `outcome`, `context`, `comparison`; then `fuse`.
 - Fewer: keep the order and use more screens.
 
-The `fuse` question is single choice, so it works without multi-select: "main + subject" (recommended), "main + subject + approach + outcome", "main only", or the user's own list of labels in the free-text field. Slots left empty are dropped from the chosen set.
+The `fuse` question is single choice, so it works without multi-select: "main + subject" (recommended), "main + subject + approach + outcome", "main only", or the user's own list of labels in the free-text field. Slots left empty are dropped from the chosen set. Ask it in plain words, without "fuse" or `fused_rank`, for example "Which questions should set the final reading order?" with header "Order by", and say in each description what the user gets: "your question and the system it studies; the other questions still get their own columns in the CSV", "method and metric words also count in the order", "only your question".
 
 Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. It offers three ways to fill the slot:
 
@@ -126,7 +126,7 @@ Each slot question names the slot and what it asks, for example "approach: what 
 - The user's own wording, typed in the tool's free-text field ("Other" in `AskUserQuestion`) and used as given.
 - "Leave empty".
 
-`main` cannot be left empty. Its two options are candidate questions, each one neutral sentence; if the user's request already states the question, that sentence word for word is the first option. The chosen or written question becomes the `question` field and the `main` slot; if the user edits a candidate, the edited text wins.
+`main` cannot be left empty; say so in its question ("main (required): ..."), so the user does not try the tool's Skip button. Its two options are candidate questions, each one neutral sentence; if the user's request already states the question, that sentence word for word is the first option. The chosen or written question becomes the `question` field and the `main` slot; if the user edits a candidate, the edited text wins.
 
 Without such a tool, ask the same questions in chat, one numbered list per slot, and wait for the reply.
 
