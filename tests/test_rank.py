@@ -248,3 +248,117 @@ def test_headings_in_other_languages(ab, intro, bib, app, ref):
     refs = '\n'.join(f'{i}. {ref}' for i in range(1, 6))
     body, cut, _ = rank.clean('line text\n' * 400 + bib + '\n' + refs + '\n' + app + '\nappendix table\n')
     assert cut and ref not in body and 'appendix table' in body
+
+
+def test_real_page_count_with_trailing_form_feed(project):
+    from conftest import make_pdf
+    for n in (1, 2, 3):
+        p = project / f'pages{n}.pdf'
+        make_pdf(p, [[f'page {i} text'] for i in range(1, n + 1)])
+        assert len(rank.pdf_pages(p)) == n                      # no empty page after the last form feed
+
+
+@pytest.mark.skipif(not rank.TOK_PATH.exists(), reason='real tokenizer not cached; run rank.py --setup')
+def test_last_page_label_with_real_tokenizer(project):
+    from conftest import make_pdf
+    p = project / 'two.pdf'
+    make_pdf(p, [['first page words'] * 5, ['second page words'] * 5])
+    wins, *_ = rank.windows(p, rank.tokenizer())
+    assert wins[-1]['pages'] in ('p. 2', 'p. 1-2')
+
+
+def test_pdftotext_failure_is_skipped_not_ranked(project, offline, monkeypatch):
+    import subprocess
+    monkeypatch.chdir(project)
+    real = subprocess.run
+    def fake(cmd, **kw):
+        if cmd[0] == 'pdftotext' and 'Ocean2023' in cmd[1]:
+            return subprocess.CompletedProcess(cmd, 1, 'partial text ' * 200, 'Syntax Error: broken xref')
+        return real(cmd, **kw)
+    monkeypatch.setattr(rank.subprocess, 'run', fake)
+    rank.main(['--out', str(project / 'runs/f'), '--provider', 'bm25'])
+    run = json.load(open(project / 'runs/f_run.json'))
+    assert 'Ocean2023' not in run['corpus']['ids']
+    assert 'broken xref' in run['corpus']['skipped'][0]['reason']
+
+
+def test_empty_ids_file_is_refused(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    (project / 'ids.csv').write_text('paper\n')
+    with pytest.raises(SystemExit, match='at least one row'):
+        rank.main(['--out', str(project / 'runs/x'), '--ids', str(project / 'ids.csv')])
+    assert offline.calls == []
+
+
+def test_ids_with_sha256_catch_a_changed_file(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/a'), '--provider', 'bm25'])
+    files = json.load(open(project / 'runs/a_run.json'))['corpus']['files']
+    (project / 'ids.csv').write_text('paper,sha256\n' + ''.join(f"{f['id']},{f['sha256']}\n" for f in files))
+    rank.main(['--out', str(project / 'runs/b'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+    from conftest import make_pdf
+    make_pdf(project / 'papers/topic/Ocean2023.pdf', [['a different paper now'] * 40])
+    with pytest.raises(SystemExit, match='SHA-256 differs'):
+        rank.main(['--out', str(project / 'runs/c'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+
+
+def test_partial_outputs_and_lock_stop_a_second_run(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    (project / 'runs').mkdir()
+    (project / 'runs/p_hybrid.csv').write_text('half written')          # crashed before _run.json
+    with pytest.raises(SystemExit, match='already exists'):
+        rank.main(['--out', str(project / 'runs/p')])
+    assert (project / 'runs/p_hybrid.csv').read_text() == 'half written'
+    (project / 'runs/q_run.lock').write_text('')                        # a run in progress
+    with pytest.raises(SystemExit, match='another run'):
+        rank.main(['--out', str(project / 'runs/q')])
+    rank.main(['--out', str(project / 'runs/r')])
+    assert not (project / 'runs/r_run.lock').exists()
+
+
+def test_batches_respect_item_limit():
+    parts = list(rank.batches(range(2001), lambda x: 1, 10**9))
+    assert [len(p) for p in parts] == [1000, 1000, 1]
+
+
+def test_estimate_covers_actual_usage(project, offline, monkeypatch, capsys):
+    import re
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/e')])
+    run = json.load(open(project / 'runs/e_run.json'))
+    assert run['usage']['embed'] + run['usage']['rerank'] <= run['estimate']
+
+
+def test_formula_like_paper_id_is_escaped_in_csv(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    src = project / 'papers/topic/Ocean2023.pdf'
+    src.rename(src.with_name('=1+1.pdf'))
+    rank.main(['--out', str(project / 'runs/x'), '--provider', 'bm25'])
+    rows = list(csv.DictReader(open(project / 'runs/x_bm25.csv')))
+    assert "'=1+1" in {r['paper'] for r in rows}
+    rank.main(['--out', str(project / 'runs/y'), '--provider', 'bm25', '--ids', str(project / 'runs/x_bm25.csv')])
+    assert '=1+1' in json.load(open(project / 'runs/y_run.json'))['corpus']['ids']      # the CSV works as --ids again
+
+
+def test_id_that_really_starts_with_a_quote_is_kept(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    src = project / 'papers/topic/Ocean2023.pdf'
+    src.rename(src.with_name("'=x.pdf"))
+    (project / 'ids.csv').write_text("paper\n'=x\n")
+    rank.main(['--out', str(project / 'runs/q'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])
+    assert json.load(open(project / 'runs/q_run.json'))['corpus']['ids'] == ["'=x"]
+
+
+def test_tokenizer_with_wrong_hash_is_refused(monkeypatch, tmp_path):
+    monkeypatch.setattr(rank, 'TOK_PATH', tmp_path / 'tok.json')
+    (tmp_path / 'tok.json').write_text('{}')
+    with pytest.raises(SystemExit, match='not the pinned tokenizer'):
+        rank.tokenizer()
+
+
+def test_run_record_has_files_and_versions(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/v'), '--provider', 'bm25'])
+    run = json.load(open(project / 'runs/v_run.json'))
+    assert all(len(f['sha256']) == 64 for f in run['corpus']['files'])
+    assert run['versions']['tokenizer_revision'] == rank.TOK_REV and run['versions']['pdftotext']

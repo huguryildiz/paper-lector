@@ -66,6 +66,12 @@ def test_queries_default_fuse_and_empty_slot(project):
     ({'queries': {'Q0': {'label': 'subject', 'text': 'x'}}}, 'label "main" is required'),
     ({'queries': {'A': {'label': 'main', 'text': 'x'}}}, 'must look like Q0'),
     ({'queries': {'Q0': {'label': 'main', 'text': 'x'}}, 'fuse': ['Q1']}, 'fuse'),
+    ({'queries': {'Q0': {'label': 'main', 'text': 'x'}}, 'fuse': ['Q0', 'Q0']}, 'names a query twice'),
+    ({'queries': {'Q0': {'label': 'main', 'text': 'x'}}, 'fuse': {'Q0': 1}}, 'non-empty list'),
+    ({'queries': {'Q0': {'label': 'main', 'text': 'x'}}, 'fuse': {}}, 'non-empty list'),
+    ({'queries': {'Q0': {'label': 'main', 'text': 123}}}, 'must be a string'),
+    ({'queries': {'Q0': None}}, 'must be an object'),
+    ([1, 2], 'one JSON object'),
 ])
 def test_queries_validation(tmp_path, bad, msg):
     p = tmp_path / 'q.json'
@@ -98,3 +104,36 @@ def test_open_json_retries_network_errors(monkeypatch):
     with pytest.raises(urllib.error.HTTPError):
         common.open_json('req', timeout=1)
     assert len(calls) == 1                                       # 404 is not retried
+
+
+def test_duplicate_source_keys_are_refused(project):
+    (project / 'sources.csv').write_text('key,pdf_path,doi\nk,a.pdf,10.1/a\nk,b.pdf,10.1/b\n')
+    with pytest.raises(SystemExit, match='appears twice'):
+        common.sources(common.load_config(start=project))
+
+
+@pytest.mark.parametrize('raw, want', [
+    ('10.1109/ABC.1', ('doi', '10.1109/abc.1')),
+    ('https://doi.org/10.1109/ABC.1', ('doi', '10.1109/abc.1')),
+    ('doi:10.1/x', ('doi', '10.1/x')),
+    ('10.48550/arxiv.2205.06300', ('arxiv', '2205.06300')),
+    ('10.48550/arXiv.2205.06300', ('arxiv', '2205.06300')),
+    ('arXiv:2205.06300', ('arxiv', '2205.06300')),
+    ('https://arxiv.org/abs/2205.06300v2', ('arxiv', '2205.06300v2')),
+    ('https://openalex.org/W123', ('openalex', 'W123')),
+    ('W123', ('openalex', 'W123')),
+])
+def test_norm_id(raw, want):
+    assert common.norm_id(raw) == want
+
+
+def test_retry_covers_cut_off_body(monkeypatch):
+    import http.client
+    calls = []
+    def flaky():
+        calls.append(1)
+        if len(calls) == 1:
+            raise http.client.IncompleteRead(b'part')
+        return 'ok'
+    monkeypatch.setattr(common.time, 'sleep', lambda s: None)
+    assert common.retry(flaky) == 'ok' and len(calls) == 2

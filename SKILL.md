@@ -16,8 +16,8 @@ On a new machine, run `$PY $PL/scripts/rank.py --setup` once while online. It ch
 
 | Step | Command | Output |
 | --- | --- | --- |
-| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources` |
-| Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id>` | PDFs in `download_dir`; `MANUAL` lines for the rest |
+| Search | `$PY $PL/scripts/openalex_search.py --exact '<query>' --out <file>.jsonl` | one JSON line per work: abstract, open-access PDF link, `in_sources`. `--exact` is unstemmed: write `rout*` to match routing and routes |
+| Fetch | `$PY $PL/scripts/fetch_pdf.py --from <file>.jsonl` or `... fetch_pdf.py <doi> <arxiv id> <W id>` | PDFs in `download_dir` and `fetch_log.jsonl` (source URL, SHA-256); `MANUAL` lines for the rest, `ERROR` for failed lookups; exit 1 if any paper is missing |
 | Rank | `$PY $PL/scripts/rank.py --out <prefix> --dry`, then without `--dry` | `<prefix>_hybrid.csv` and `<prefix>_run.json` |
 
 Write outputs outside the project's tracked files (a scratch or `runs/` folder) unless the user asks to keep them.
@@ -44,9 +44,24 @@ Every script looks for `literature.json`, starting in the current folder and wal
 
 If there is no `literature.json`, ask the user once where their PDFs are, then write the file. Do not guess.
 
-Before Step 2, count the PDFs: `find <each pdf_dirs folder> -name '*.pdf' | wc -l`, plus the rows of `sources` whose file exists. If a folder is missing or the count is 0, stop and ask with AskUserQuestion: "Search OpenAlex and download open-access PDFs" (recommended; Search, then Fetch, then come back here), "Point to another PDF folder" (update `pdf_dirs`), or "Stop". Do not start the question screens for an empty collection.
+Before Step 2, count the PDFs: `find <each pdf_dirs folder> -name '*.pdf' | wc -l`, plus the rows of `sources` whose file exists. If a folder is missing or the count is 0, stop and ask with AskUserQuestion: "Search OpenAlex and download open-access PDFs" (recommended; "Searching OpenAlex" below, then Fetch, then come back here), "Point to another PDF folder" (update `pdf_dirs`), or "Stop". Do not start the question screens for an empty collection.
 
 Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage provider only) are read from the environment, then the project `.env`, then `~/.config/paper-lector/.env`. Never put a key on a command line, in chat or in any other file.
+
+## Searching OpenAlex
+
+`openalex_search.py` has four modes. Before any search, ask which one with the question tool (single choice), unless the user's request already names it ("papers citing X" is citing, "X's references" is references):
+
+| Option | Flag | Tell the user |
+| --- | --- | --- |
+| Keyword (recommended) | `--exact '<boolean query>'` | Words in the title and abstract, with AND / OR / NOT and `*` wildcards. Every match, and the same list again on the same OpenAlex data. Misses papers that use other words |
+| Semantic | `--semantic '<sentence>'` | Matches by meaning, so it finds papers in other words. At most 50 results, and the list can change between runs |
+| Citing works | `--cites <DOI, arXiv id or W id>` | Papers that cite one paper; forward in time |
+| References | `--refs <DOI, arXiv id or W id>` | Papers one paper cites; back in time |
+
+Then write the search from the user's topic: a boolean query for keyword (unstemmed: `rout*` for routing and routes; neighbouring fields' words joined with OR), one plain sentence for semantic, or the seed paper's DOI for citing and references. Show it and ask, on the same kind of screen, "Run this search" (recommended), "Edit it" (the user types the new text in the free-text field), or "Change the mode". Run only after the user approves; never run a query the user has not seen.
+
+Report the `count` and `written` numbers and how many were already in `sources`. For semantic, say that only the 50 closest works came back. A user can run a keyword search and a semantic one on the same topic and fetch from both files.
 
 ## Step 2: writing the queries
 
@@ -111,7 +126,7 @@ If the user names papers they expect near the top, write them down with the quer
 
 1. Run `rank.py --out <prefix> --dry`. It prints counts per paper (tokens, windows, bibliography cut, abstract found) and the token estimate, with no API call. Report the estimate.
 2. Run without `--dry`. It stops before any API call if the estimate is above `--budget` (15M tokens by default). Embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite`, so a rerun or a run restarted after a crash pays only for new text (the estimate still counts everything). Voyage gives 200M free tokens per model; after that `voyage-4-large` costs $0.12 and `rerank-3` $0.05 per million tokens.
-3. Report the fused top 10, where it disagrees with single queries, and the sanity check result as it is. Name every paper skipped for having no text (dry-run `skipped` lines, `corpus.skipped` in `_run.json`); they are missing from the order. Name every `possible duplicate` pair (dry-run lines, `corpus.possible_duplicates`): both copies were ranked, so one paper takes two places. Ask which copy to keep and let the user move the other out of `pdf_dirs`; never delete a PDF yourself. Byte-identical copies are already skipped with a note.
+3. Report the fused top 10, where it disagrees with single queries, and the sanity check result as it is. Name every paper skipped for having no text or a failed extraction (dry-run `skipped` lines, `corpus.skipped` in `_run.json` with the reason); they are missing from the order. Name every `possible duplicate` pair (dry-run lines, `corpus.possible_duplicates`): both copies were ranked, so one paper takes two places. Ask which copy to keep and let the user move the other out of `pdf_dirs`; never delete a PDF yourself. Byte-identical copies are already skipped with a note.
 
 What happens inside: the whole PDF is split into 1,200-token windows with page labels (bibliography cut when found with confidence; appendices kept). For each paper and query, the 3 best windows are chosen by fusing embedding similarity (`voyage-4-large`) with BM25 on the keyword string. The reranker (`rerank-3`) then scores each paper once per query on its abstract plus those 3 windows. Adding PDFs changes BM25 statistics, so rerun the whole collection rather than ranking only the new files.
 
@@ -119,7 +134,7 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 **No Voyage key.** If `VOYAGE_API_KEY` is missing, tell the user and offer the `bm25` provider instead of stopping. It makes no API call and has no budget: windows are chosen by BM25 on the keyword string and each paper is scored by BM25 on its abstract plus 3 windows. Output is `<prefix>_bm25.csv`. Say in the report that BM25 matches words, not meaning, so synonyms are missed and the order is rougher; never compare its scores with a voyage run.
 
-`--variants hybrid,dense` adds a dense-only ablation (voyage only). `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus.
+`--variants hybrid,dense` adds a dense-only ablation (voyage only). `--ids <csv>` ranks exactly the listed paper ids, for comparing runs on a frozen corpus; give it a `sha256` column from `corpus.files` in the earlier `_run.json` so a different file under the same id stops the run. If a run stops with `<prefix>_run.lock exists`, check that no other rank run is going before you delete the lock; never delete a lock or partial output of a run that may still be running.
 
 ## What to tell the user
 
@@ -134,4 +149,4 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 **Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection into a new `--out` (for example with today's date), compare with the previous `_run.json` and report papers that entered or left the fused top 10.
 
-**Search and fetch only.** User: "Find papers citing Bhambay 2025 and download the open ones." `openalex_search.py --cites <doi>` (OpenAlex holds few links for very recent preprints; Semantic Scholar's citations endpoint is the fallback), then `fetch_pdf.py --from <file>.jsonl`. Report counts, how many were already in `sources`, and the `MANUAL` list.
+**Search and fetch only.** User: "Find papers citing Bhambay 2025 and download the open ones." The request names the mode, so skip the mode question; show the seed DOI for approval, then `openalex_search.py --cites <doi>` (OpenAlex holds few links for very recent preprints; Semantic Scholar's citations endpoint is the fallback), then `fetch_pdf.py --from <file>.jsonl`. Report counts, how many were already in `sources`, and the `MANUAL` list.

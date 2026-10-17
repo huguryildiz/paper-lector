@@ -1,5 +1,5 @@
 """Shared helpers: project config (literature.json), API keys, sources table, queries file, HTTP retries."""
-import csv, json, os, re, sys, time, urllib.error, urllib.request
+import csv, hashlib, http.client, json, os, re, sys, time, urllib.error, urllib.request
 from pathlib import Path
 
 CONFIG_NAME = 'literature.json'
@@ -74,19 +74,61 @@ def api_key(name, cfg=None):
     sys.exit(f'{name} is not set. Put it in the environment, in the project .env, or in ~/.config/paper-lector/.env')
 
 
-def open_json(req, timeout, tries=4):
-    """urlopen and parse JSON; retry on 429/5xx, timeouts and dropped connections, raise anything else."""
+TRANSIENT = (urllib.error.URLError, TimeoutError, ConnectionError, http.client.IncompleteRead, http.client.BadStatusLine)
+
+
+def retry(fn, tries=4, wait=10):
+    """Call fn(); retry on 429/5xx, timeouts, dropped connections and cut-off bodies, raise anything else."""
     for attempt in range(tries):
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return json.load(r)
+            return fn()
         except urllib.error.HTTPError as e:
             if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1:
                 raise
-        except (urllib.error.URLError, TimeoutError, ConnectionError):
+        except TRANSIENT:
             if attempt == tries - 1:
                 raise
-        time.sleep(10 * (attempt + 1))
+        time.sleep(wait * (attempt + 1))
+
+
+def open_json(req, timeout, tries=4):
+    """urlopen and parse JSON, with retry()."""
+    def once():
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.load(r)
+    return retry(once, tries)
+
+
+def norm_id(x):
+    """('doi', '10.x/y') or ('arxiv', '2205.06300') or ('openalex', 'W123'). DOIs are lowercased; an arXiv DOI
+    (10.48550/arXiv.N) becomes its arXiv id; doi.org, arxiv.org and openalex.org URLs and doi:/arXiv: prefixes go."""
+    x = x.strip()
+    x = re.sub(r'(?i)^(?:https?://)?(?:dx\.)?doi\.org/|^doi:', '', x)
+    m = re.match(r'(?i)^(?:https?://)?(?:www\.)?arxiv\.org/(?:abs|pdf)/(.+?)(?:\.pdf)?$', x)
+    if m:
+        return 'arxiv', m.group(1)
+    m = re.match(r'(?i)^(?:https?://)?(?:api\.)?openalex\.org/(?:works/)?(W\d+)$|^(W\d+)$', x)
+    if m:
+        return 'openalex', m.group(1) or m.group(2)
+    if x.startswith('10.'):
+        m = re.match(r'(?i)^10\.48550/arxiv\.(.+)$', x)
+        return ('arxiv', m.group(1)) if m else ('doi', x.lower())
+    return 'arxiv', re.sub(r'(?i)^arxiv:', '', x)
+
+
+def doi_of(x):
+    """The DOI OpenAlex files a DOI or arXiv id under (lowercase), or None for an OpenAlex id."""
+    kind, v = norm_id(x)
+    return v if kind == 'doi' else ('10.48550/arxiv.' + v.lower()) if kind == 'arxiv' else None
+
+
+def sha256_file(path):
+    """SHA-256 of a file, read in 1 MB chunks."""
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 20), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def sources(cfg):
@@ -102,8 +144,11 @@ def sources(cfg):
         sys.exit(f'{cfg["sources"]}: needs a "key" column')
     out = {}
     for r in rows:
+        if r['key'] in out:
+            sys.exit(f'{cfg["sources"]}: key "{r["key"]}" appears twice; keys must be unique')
         pdf = (r.get('pdf_path') or '').split(';')[0].strip()
-        out[r['key']] = {'pdf': (cfg['root'] / pdf).resolve() if pdf else None, 'doi': (r.get('doi') or '').strip().lower()}
+        doi = (r.get('doi') or '').strip()
+        out[r['key']] = {'pdf': (cfg['root'] / pdf).resolve() if pdf else None, 'doi': doi_of(doi) if doi else ''}
     return out
 
 
@@ -113,6 +158,8 @@ def load_queries(path):
         data = json.load(open(path, encoding='utf-8'))
     except (OSError, json.JSONDecodeError) as e:
         sys.exit(f'{path}: cannot read queries ({e})')
+    if not isinstance(data, dict):
+        sys.exit(f'{path}: the file must hold one JSON object with "question", "queries" and "fuse"')
     Q = data.get('queries')
     if not isinstance(Q, dict) or not Q:
         sys.exit(f'{path}: needs a "queries" object, e.g. {{"Q0": {{"label": "main", "text": "...", "keywords": "..."}}}}')
@@ -120,15 +167,24 @@ def load_queries(path):
     for qid, q in Q.items():
         if not re.fullmatch(r'Q\d+', qid):
             sys.exit(f'{path}: query id "{qid}" must look like Q0, Q1, ...')
+        if not isinstance(q, dict):
+            sys.exit(f'{path}: {qid} must be an object with "label", "text" and "keywords"')
         if q.get('label') not in LABELS:
             sys.exit(f'{path}: {qid} label "{q.get("label")}" must be one of {", ".join(LABELS)}')
+        for k in ('text', 'keywords', 'description'):
+            if q.get(k) is not None and not isinstance(q[k], str):
+                sys.exit(f'{path}: {qid} "{k}" must be a string')
         if (q.get('text') or '').strip():
             out[qid] = {'label': q['label'], 'description': q.get('description', ''), 'text': q['text'].strip(),
                         'keywords': (q.get('keywords') or '').strip()}
     if not any(q['label'] == 'main' for q in out.values()):
         sys.exit(f'{path}: a non-empty query with label "main" is required')
     out = dict(sorted(out.items(), key=lambda kv: int(kv[0][1:])))
-    fuse = data.get('fuse') or [i for i, q in out.items() if q['label'] in DEFAULT_FUSE_LABELS]
+    fuse = data['fuse'] if 'fuse' in data else [i for i, q in out.items() if q['label'] in DEFAULT_FUSE_LABELS]
+    if not isinstance(fuse, list) or not fuse or not all(isinstance(i, str) for i in fuse):
+        sys.exit(f'{path}: "fuse" must be a non-empty list of query ids, e.g. ["Q0", "Q1"]')
+    if len(set(fuse)) != len(fuse):
+        sys.exit(f'{path}: "fuse" names a query twice: {fuse}')
     bad = [i for i in fuse if i not in out]
     if bad:
         sys.exit(f'{path}: "fuse" names missing or empty queries: {bad}')

@@ -30,8 +30,11 @@ import common
 
 EMBED, RERANK = 'voyage-4-large', 'rerank-3'
 WIN, STEP, RRF_K, N_WIN, MAX_OVERLAP, HEAD = 1200, 1000, 60, 3, 0.2, 1000
-EMBED_BATCH, RERANK_BATCH = 100_000, 500_000
-TOK_URL = 'https://huggingface.co/voyageai/voyage-4-large/resolve/main/tokenizer.json'
+EMBED_BATCH, RERANK_BATCH, MAX_ITEMS = 100_000, 500_000, 1000     # Voyage: at most 1,000 inputs or documents per call
+PDFTOTEXT_SECONDS = 300
+TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
+TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
+TOK_SHA = 'c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539'
 TOK_PATH = Path.home() / '.cache/paper-lector/voyage-4-large-tokenizer.json'
 CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
@@ -60,7 +63,7 @@ def embed(items, input_type, usage):
             vec[k] = np.frombuffer(row[0], np.float32)
     cached = len(vec)
     todo = list({k: it for k, it in zip(keys, items) if k not in vec}.items())
-    for part in batches(todo, lambda x: x[1][1], EMBED_BATCH):
+    for part in batches(todo, lambda x: x[1][1], EMBED_BATCH, MAX_ITEMS):
         r = call('embeddings', {'input': [it[0] for _, it in part], 'model': EMBED, 'input_type': input_type, 'truncation': False})
         usage['embed'] += r['usage']['total_tokens']
         for (k, _), x in zip(part, r['data']):
@@ -74,7 +77,8 @@ def embed(items, input_type, usage):
 
 
 def tokenizer():
-    """Voyage's tokenizer, downloaded once into the cache. A partial download never lands at TOK_PATH."""
+    """Voyage's tokenizer at a pinned revision, downloaded once into the cache and checked against its SHA-256.
+    A partial download never lands at TOK_PATH."""
     from tokenizers import Tokenizer
     if not TOK_PATH.exists():
         TOK_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -85,7 +89,12 @@ def tokenizer():
             part.unlink(missing_ok=True)
             sys.exit(f'cannot download the tokenizer ({e}). rank.py needs it once, also with --dry and bm25: connect to the '
                      f'internet and run "rank.py --setup", or copy {TOK_URL} to {TOK_PATH}')
+        if common.sha256_file(part) != TOK_SHA:
+            part.unlink()
+            sys.exit(f'the tokenizer downloaded from {TOK_URL} does not match its pinned SHA-256; not used')
         part.replace(TOK_PATH)
+    if common.sha256_file(TOK_PATH) != TOK_SHA:
+        sys.exit(f'{TOK_PATH} is not the pinned tokenizer (revision {TOK_REV[:7]}). Delete it and run "rank.py --setup"')
     return Tokenizer.from_file(str(TOK_PATH))
 
 
@@ -96,7 +105,7 @@ def need_pdftotext():
 
 
 def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    return common.sha256_file(path)
 
 
 def find_pdfs(dirs, known, ids=None):
@@ -128,6 +137,8 @@ def find_pdfs(dirs, known, ids=None):
                 print(f'note: {p} has the same name as {out[p.stem]}; ranked as {pid}', file=sys.stderr)
             out[pid] = p; taken.add(p.resolve()); seen[d] = pid
     if ids:
+        # An id read back from our own CSV may carry the ' that cell() put in front of it.
+        ids = [i[1:] if i not in out and i[:1] == "'" and cell(i[1:]) == i and i[1:] in out else i for i in ids]
         missing = [i for i in ids if i not in out]
         if missing:
             sys.exit(f'no PDF for {missing}')
@@ -174,8 +185,27 @@ def abstract(text):
     return m.group(1).strip() if m else None
 
 
+class ExtractError(Exception):
+    pass
+
+
+def pdf_pages(path):
+    """Page texts from pdftotext. A failed or slow extraction raises ExtractError rather than ranking partial text."""
+    try:
+        r = subprocess.run(['pdftotext', str(path), '-'], capture_output=True, text=True, errors='replace',
+                           timeout=PDFTOTEXT_SECONDS)
+    except subprocess.TimeoutExpired:
+        raise ExtractError(f'pdftotext took more than {PDFTOTEXT_SECONDS} s')
+    if r.returncode:
+        raise ExtractError(f'pdftotext failed (exit {r.returncode}): {r.stderr.strip()[:200]}')
+    pages = r.stdout.split('\f')
+    if len(pages) > 1 and not pages[-1].strip():
+        pages.pop()                      # pdftotext ends every page with a form feed, so the last piece is empty
+    return pages
+
+
 def windows(path, tok):
-    pages = subprocess.run(['pdftotext', str(path), '-'], capture_output=True, text=True).stdout.split('\f')
+    pages = pdf_pages(path)
     starts, text = [], ''
     for p in pages:
         starts.append(len(text)); text += re.sub(r'[ \t]+', ' ', p) + '\n'
@@ -246,10 +276,10 @@ def pick(wins, score):
     return chosen
 
 
-def batches(items, cost, limit):
+def batches(items, cost, limit, max_items=MAX_ITEMS):
     cur, total = [], 0
     for it in items:
-        if cur and total + cost(it) > limit:
+        if cur and (total + cost(it) > limit or len(cur) == max_items):
             yield cur; cur, total = [], 0
         cur.append(it); total += cost(it)
     if cur:
@@ -260,13 +290,39 @@ def sha(s):
     return hashlib.sha256(s.encode()).hexdigest()[:12]
 
 
+def cell(s):
+    """A paper id safe to open in a spreadsheet: a leading = + - @ (a formula there) gets a ' in front."""
+    return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r') else s
+
+
+def read_ids(path):
+    """Paper ids (and SHA-256 when the CSV has that column) from a CSV with a "paper" column."""
+    rows = list(csv.DictReader(open(path, encoding='utf-8-sig')))
+    if not rows or 'paper' not in rows[0]:
+        sys.exit(f'{path}: --ids needs a CSV with a "paper" column and at least one row')
+    ids = [r['paper'] for r in rows]
+    if not all(ids) or len(set(ids)) != len(ids):
+        sys.exit(f'{path}: --ids has an empty or repeated paper id')
+    return ids, {i: r['sha256'] for i, r in zip(ids, rows) if r.get('sha256')}
+
+
+def versions():
+    """Versions that change windows or scores, for the run record."""
+    import platform, tokenizers
+    try:
+        pt = subprocess.run(['pdftotext', '-v'], capture_output=True, text=True).stderr.split('\n')[0]
+    except OSError:
+        pt = ''
+    return {'python': platform.python_version(), 'numpy': np.__version__, 'tokenizers': tokenizers.__version__,
+            'pdftotext': pt, 'tokenizer_revision': TOK_REV}
+
+
 def main(argv=None):
-    global KEY
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--config', help=f'path to {common.CONFIG_NAME} (default: searched upward from the current folder)')
     ap.add_argument('--queries', help='queries file (default: "queries" in the config)')
     ap.add_argument('--dirs', help='comma-separated PDF folders (default: "pdf_dirs" in the config)')
-    ap.add_argument('--ids', help='CSV with a "paper" column: rank exactly these paper ids (frozen corpus)')
+    ap.add_argument('--ids', help='CSV with a "paper" column (and optionally "sha256"): rank exactly these papers (frozen corpus)')
     ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or bm25 (no API key); default: "rank" in the config, else voyage')
     ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation); voyage only')
     ap.add_argument('--expect', default='', help='paper ids expected in the first query\'s top 10, fixed before the run')
@@ -302,31 +358,63 @@ def main(argv=None):
             sys.exit('--variants applies to the voyage provider only')
         variants = ['bm25']
     dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
-    ids = [r['paper'] for r in csv.DictReader(open(a.ids, encoding='utf-8-sig'))] if a.ids else None
+    ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
+    outs = [Path(f'{a.out}_run.json')] + [Path(f'{a.out}_{v}.csv') for v in variants]
+    lock = Path(f'{a.out}_run.lock')
+    if not a.dry:
+        if any(p.exists() for p in outs):
+            sys.exit(f'{", ".join(str(p) for p in outs if p.exists())} already exists. Rank into a new --out '
+                     f'(for example with today\'s date) and compare the two runs')
+        lock.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            open(lock, 'x').close()
+        except FileExistsError:
+            sys.exit(f'{lock} exists: another run into this --out is going on, or one stopped half-way. '
+                     f'Use a new --out, or delete the lock and the partial outputs if no run is going on')
+    try:
+        rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha)
+    finally:
+        if not a.dry:
+            lock.unlink(missing_ok=True)
+
+
+def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha):
+    global KEY
 
     tok = tokenizer()
     ntok = lambda s: len(tok.encode(s, add_special_tokens=False).ids)
     P, W, skipped = [], [], []
     for pid, path in find_pdfs(dirs, common.sources(cfg), ids).items():
-        wins, head, cut, has_ab, n = windows(path, tok)
+        d = digest(path)
+        want = want_sha.get(pid, want_sha.get(cell(pid)))
+        if want and want != d:
+            sys.exit(f'--ids: {pid} is now {path}, which is not the file of the frozen run (SHA-256 differs)')
+        try:
+            wins, head, cut, has_ab, n = windows(path, tok)
+        except ExtractError as e:
+            print(f'note: {path}: {e}; skipped', file=sys.stderr)
+            skipped.append({'id': pid, 'path': str(path), 'reason': str(e)}); continue
         if not wins:
             print(f'note: no text extracted from {path} (scanned or protected?); skipped', file=sys.stderr)
-            skipped.append({'id': pid, 'path': str(path)}); continue
-        P.append({'id': pid, 'path': str(path), 'head': head, 'bib_cut': cut, 'abstract_found': has_ab, 'tokens': n,
+            skipped.append({'id': pid, 'path': str(path), 'reason': 'no text'}); continue
+        P.append({'id': pid, 'path': str(path), 'sha256': d, 'head': head, 'bib_cut': cut, 'abstract_found': has_ab, 'tokens': n,
                   'wins': list(range(len(W), len(W) + len(wins)))})
         W += [dict(w, paper=len(P) - 1) for w in wins]
     if not P:
         sys.exit('no PDFs with extractable text')
     if ids and skipped:
-        sys.exit(f'--ids lists papers with no extractable text: {[x["id"] for x in skipped]}; the frozen corpus is incomplete')
+        sys.exit(f'--ids lists papers whose text could not be extracted: {[x["id"] for x in skipped]}; the frozen corpus is incomplete')
     dupes = near_duplicates(P)
     for x, y in dupes:
         print(f'note: {x} and {y} look like the same paper (preprint and published, or two names); both ranked', file=sys.stderr)
     for w in W:
         w['n'] = ntok(w['text'])
-    head_n = [ntok(p['head']) for p in P]
-    pkg = sum(h + sum(sorted((W[j]['n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P))
-    estimate = sum(w['n'] for w in W) + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values())
+        w['label_n'] = ntok(f"\n\n[{w['pages']}] ")
+    # Upper bound per rerank package: "Abstract: " + head + the N_WIN largest windows with their page labels.
+    head_n = [ntok('Abstract: ' + p['head']) for p in P]
+    pkg = sum(h + sum(sorted((W[j]['n'] + W[j]['label_n'] for j in p['wins']), reverse=True)[:N_WIN]) for h, p in zip(head_n, P))
+    estimate = sum(w['n'] for w in W) + sum(ntok(q['text']) for q in Q.values()) \
+        + len(variants) * sum(pkg + ntok(q['text']) * len(P) for q in Q.values())
     print(f'{len(P)} papers, {len(W)} windows, bibliography cut in {sum(p["bib_cut"] for p in P)}, '
           f'abstract found in {sum(p["abstract_found"] for p in P)}; {len(Q)} queries, fuse {fuse}; '
           + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider bm25, no API call'), file=sys.stderr)
@@ -334,12 +422,10 @@ def main(argv=None):
         for p in P:
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
         for x in skipped:
-            print(x['id'], 'skipped: no text', sep='\t')
+            print(x['id'], f"skipped: {x['reason']}", sep='\t')
         for x, y in dupes:
             print(x, f'possible duplicate of {y}', sep='\t')
         return
-    if prev.is_file():
-        sys.exit(f'{prev} already exists. Rank into a new --out (for example with today\'s date) and compare the two runs')
     usage = Counter()
     if provider == 'voyage':
         if estimate > a.budget:
@@ -369,7 +455,7 @@ def main(argv=None):
             qn, score = ntok(q['text']), {}
             if variant == 'bm25':
                 score = {k['pi']: float(v) for k, v in zip(pkgs, bm25_scores([k['text'] for k in pkgs], q['keywords'] or q['text']))}
-            for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH) if variant != 'bm25' else []):
+            for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH, MAX_ITEMS) if variant != 'bm25' else []):
                 r = call('rerank', {'query': q['text'], 'documents': [k['text'] for k in part], 'model': RERANK, 'truncation': False})
                 usage['rerank'] += r['usage']['total_tokens']
                 for x in r['data']:
@@ -393,11 +479,11 @@ def main(argv=None):
         head = ['paper', 'fused_rank', 'fused_score'] + [f'{c}_{s}' for c in cols.values() for s in ('rank', 'score')] \
             + [f'{c}_pages' for c in cols.values()] + ['tokens', 'bib_cut', 'abstract_found']
         path = Path(f'{a.out}_{variant}.csv'); path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'w', newline='', encoding='utf-8') as f:
+        with open(path, 'x', newline='', encoding='utf-8') as f:
             w = csv.writer(f); w.writerow(head)
             for r in order:
                 m = meta[r['paper']]
-                w.writerow([r.get(h, m.get(h)) for h in head])
+                w.writerow([cell(r['paper'])] + [r.get(h, m.get(h)) for h in head[1:]])
         outputs[variant] = {'csv': str(path), 'fused_top10': [r['paper'] for r in order[:10]], 'first_query_top10': sanity}
         print(f'[{variant}] fused top 10: ' + ', '.join(r['paper'] for r in order[:10]))
         if a.expect:
@@ -415,11 +501,14 @@ def main(argv=None):
            'question': question, 'queries': Q, 'queries_sha': qsha, 'fuse': fuse,
            'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else None,
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
+           'versions': versions(),
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},
-           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P], 'skipped': skipped,
+           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P],
+                      'files': [{'id': p['id'], 'path': p['path'], 'sha256': p['sha256']} for p in P], 'skipped': skipped,
                       'possible_duplicates': dupes},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
-    Path(f'{a.out}_run.json').write_text(json.dumps(run, indent=1, ensure_ascii=False))
+    with open(f'{a.out}_run.json', 'x', encoding='utf-8') as f:
+        f.write(json.dumps(run, indent=1, ensure_ascii=False))
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '
           f'-> {a.out}_run.json', file=sys.stderr)
 

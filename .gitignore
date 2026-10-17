@@ -3,4 +3,10 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .env
+.env.*
+!.env.example
 .DS_Store
+literature.json
+queries.json
+runs/
+*.part

@@ -27,6 +27,8 @@
   &nbsp;·&nbsp;
   <a href="#example-underwater-routing-papers">Example</a>
   &nbsp;·&nbsp;
+  <a href="#search-modes">Search modes</a>
+  &nbsp;·&nbsp;
   <a href="#how-ranking-works">How it works</a>
   &nbsp;·&nbsp;
   <a href="#script-options">Options</a>
@@ -39,10 +41,10 @@
 ---
 
 <p align="center">
-  <img src="assets/example-output.svg" alt="Example output: the top 5 of 40 arXiv PDFs for a question on hallucination in retrieval-augmented generation, with the pages to start reading" width="880">
+  <img src="assets/example-output.svg" alt="Example output: the top 5 of 40 PDFs for a LitSearch question on factuality and hallucination detection in abstractive summarization, with the pages to start reading" width="880">
 </p>
 
-<p align="center"><sub>A real run on 40 open-access arXiv PDFs. MAIN and SUBJECT are each paper's rank on those two queries; START AT is the first window the reranker read for the main query.</sub></p>
+<p align="center"><sub>A real run on 40 open-access PDFs: one <a href="https://huggingface.co/datasets/princeton-nlp/LitSearch">LitSearch</a> question, its 5 gold papers and 35 distractors from nearby topics. MAIN and SUBJECT are each paper's rank on those two queries; START AT is the first window the reranker read for the main query. The papers, the run record and the script that draws this image are in <a href="examples/litsearch">examples/litsearch</a>.</sub></p>
 
 ## Overview
 
@@ -62,6 +64,7 @@ You need Python 3.12 and `pdftotext` from poppler (`brew install poppler` on mac
 git clone https://github.com/huguryildiz/paper-lector ~/Documents/GitHub/paper-lector
 cd ~/Documents/GitHub/paper-lector
 python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
+mkdir -p ~/.claude/skills ~/.codex/skills
 ln -s ~/Documents/GitHub/paper-lector ~/.claude/skills/paper-lector   # Claude Code
 ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 ```
@@ -81,7 +84,7 @@ Then, once and while online:
 .venv/bin/python scripts/rank.py --setup
 ```
 
-It checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
+It checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
 ## Example: underwater routing papers
 
@@ -115,7 +118,7 @@ PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/nul
 PY=$PL/.venv/bin/python
 
 # find papers and download the open-access ones
-$PY $PL/scripts/openalex_search.py --exact '(underwater acoustic) AND (routing OR relay) AND (lifetime OR energy)' --out runs/uw.jsonl
+$PY $PL/scripts/openalex_search.py --exact '(underwater AND acoustic) AND (rout* OR relay*) AND (lifetime OR energy)' --out runs/uw.jsonl
 $PY $PL/scripts/fetch_pdf.py --from runs/uw.jsonl
 
 # count tokens without calling the API, then rank
@@ -126,16 +129,31 @@ $PY $PL/scripts/rank.py --out runs/uw
 $PY $PL/scripts/rank.py --out runs/uw-2026-10-20
 ```
 
-`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite` after each batch, so a rerun, or a run restarted after a crash, pays only for new text; the estimate still counts everything. Dropped connections, timeouts and HTTP 429/5xx are retried.
+`fetch_pdf.py` saves into `download_dir` and prints a `MANUAL` line for each paper it could not get (often a publisher returning 403); download those yourself. An `ERROR` line means the OpenAlex lookup itself failed (a bad key, a dropped connection), and a `SKIP` line a JSONL record with no DOI, arXiv or OpenAlex id. It ends with a count of each and exits with status 1 if any paper was not obtained. Every saved PDF gets a line in `fetch_log.jsonl` in the download folder with the id, the URL it came from (so you can tell a preprint from the published version), the file name and its SHA-256. It skips DOIs already in the `sources` table, and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. `rank.py` refuses to call the API if the estimate is above `--budget` (15M tokens by default). The estimate is an upper bound computed before any call: every window, the queries, and each rerank package with its abstract, page labels and query. `--budget` checks that estimate; it does not meter the run as it goes. Voyage embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite` after each batch, so a rerun, or a run restarted after a crash, pays only for new text; the estimate still counts everything. Dropped connections, timeouts, cut-off responses and HTTP 429/5xx are retried, for API calls and PDF downloads alike.
 
-**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. `runs/uw_run.json` records the question, queries, fuse list, models, parameters, corpus ids, token usage and the paper-lector commit, so the run can be repeated. `rank.py` never overwrites a run: a second run into the same `--out` stops, and so does one whose question, queries or fuse list differ from the saved run. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
+**4. Read the output.** `runs/uw_hybrid.csv` has one row per paper, sorted by `fused_rank`, which combines only the queries listed in `fuse`; each query also has its own `_rank` and `_score` columns. The `<query>_pages` columns give the pages that were scored, which is a sensible place to start reading. Paper ids are the `sources` key or the file name; two files with the same name become `Name` and `Name-2`. An id that starts with `=`, `+`, `-` or `@` gets a `'` in front in the CSV, so a spreadsheet does not run it as a formula. `runs/uw_run.json` records the question, queries, fuse list, models, parameters, each paper's id, path and SHA-256, token usage, the paper-lector commit and the versions of Python, numpy, tokenizers, pdftotext and the tokenizer, so the run can be repeated. `rank.py` never overwrites a run: it stops if any output of that `--out` already exists (also a CSV left by a run that crashed before writing `_run.json`), and so does a run whose question, queries or fuse list differ from the saved run. While a run is going, `<out>_run.lock` keeps a second run from using the same `--out`; if a run is killed, the lock stays, and the error says to delete it. A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
 **5. Check what was left out or counted twice.** Both the dry run and `_run.json` report two kinds of problem paper:
 
-- PDFs with no extractable text (scanned images or protected files) are skipped and listed under `corpus.skipped`. They are missing from the order; run OCR on them or read them yourself. A `--ids` run stops if any listed paper has no text, since its frozen corpus would be incomplete.
+- PDFs with no extractable text (scanned images or protected files), and PDFs on which `pdftotext` fails or runs longer than 5 minutes, are skipped and listed under `corpus.skipped` with the reason. Partial text from a failed extraction is never ranked. They are missing from the order; run OCR on them or read them yourself. A `--ids` run stops if any listed paper has no text, since its frozen corpus would be incomplete.
 - Byte-identical copies of a PDF are skipped with a note. Papers whose abstracts share most of their words (often a preprint and its published version) are ranked both times and listed under `corpus.possible_duplicates`. Move one copy out of `pdf_dirs` and rerun into a new `--out`.
 
 See [`SKILL.md`](SKILL.md) for the query-writing rules and the full agent workflow.
+
+## Search modes
+
+`openalex_search.py` finds papers in OpenAlex in four ways. With an agent, ask for a search ("find papers on energy-aware routing in underwater networks") and it asks which mode, then shows the query it wrote for you to run, edit or change. If your request already names the mode ("papers citing ..."), it skips that question.
+
+| Mode | Flag | What you get | Use it when |
+| --- | --- | --- | --- |
+| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (`rout*` matches routing and routes). The same query on the same OpenAlex data gives the same list | You want a complete, repeatable search and know the field's words |
+| Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning to a sentence, even when they use other words. The list can change between runs | You are new to a field, or its papers use many names for one idea |
+| Citing works | `--cites <id>` | Works that cite one paper | You have a key paper and want what came after it |
+| References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
+
+`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from, and records which works are already in your `sources` table. A keyword search and a semantic one on the same topic catch different papers; you can run both and fetch from both files.
+
+These modes only find papers. Ranking your own PDFs is a separate step (`rank.py`) and always reads by meaning with the Voyage provider, whichever mode found the papers.
 
 ## How ranking works
 
@@ -160,12 +178,12 @@ All three scripts look for `literature.json` from the current folder up to the p
 | Script | Option | What it does |
 | --- | --- | --- |
 | `openalex_search.py` | `--semantic TEXT` | Meaning-based search; at most 50 results and not reproducible |
-| | `--exact QUERY` | Boolean query on title and abstract; all pages, reproducible |
-| | `--cites ID` / `--refs ID` | Works citing ID, or works ID references (DOI, arXiv id or OpenAlex W id) |
+| | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`rout*` for routing and routes); all pages. The same query on the same OpenAlex snapshot gives the same list |
+| | `--cites ID` / `--refs ID` | Works citing ID, or all works ID references (DOI, arXiv id or OpenAlex W id) |
 | | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources` |
 | | `--max N` | Stop after N records (0 = all) |
-| `fetch_pdf.py` | `DOI ...` / `ARXIV_ID ...` | Fetch the listed works |
-| | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py` |
+| `fetch_pdf.py` | `ID ...` | Fetch the listed works (DOI, arXiv id or OpenAlex W id, also as doi.org or arxiv.org URLs) |
+| | `--from FILE` | Fetch every work in a JSONL from `openalex_search.py`; records without any id get a `SKIP` line |
 | | `--dest DIR` | Save here instead of `download_dir` |
 | `rank.py` | `--setup` | Check `pdftotext`, download the tokenizer, exit |
 | | `--out PREFIX` | Output prefix for `_hybrid.csv` (or `_bm25.csv`) and `_run.json` |
@@ -173,11 +191,13 @@ All three scripts look for `literature.json` from the current folder up to the p
 | | `--budget N` | Stop before any API call if the estimate is above N tokens (default 15M) |
 | | `--provider voyage\|bm25` | Override `rank.provider` for this run |
 | | `--queries FILE` / `--dirs A,B` | Override `queries` or `pdf_dirs` from the config |
-| | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus) |
+| | `--ids CSV` | Rank exactly the ids in the CSV's `paper` column (frozen corpus). With a `sha256` column (copy it from `corpus.files` in `_run.json`) a changed file under the same id stops the run. An empty list stops it too |
 | | `--expect A,B` | Paper ids you expect in the first query's top 10, written down before the run |
 | | `--variants hybrid,dense` | Add a dense-only ablation (voyage only) |
 
-`fetch_pdf.py` keeps a file only if it starts with `%PDF`, never overwrites an existing file, and does not save a download that is byte-identical to a PDF already in the folders. It never works around paywalls, logins or bot checks.
+`fetch_pdf.py` keeps a file only if it starts with `%PDF`, never overwrites an existing file, and does not save a download that is byte-identical to a PDF already in the folders. It writes to a temporary file first, so a crash never leaves a half PDF under the final name. It fetches only http(s) URLs whose host resolves to a public address, and checks every redirect the same way, so a URL in OpenAlex data cannot point it at local files, this machine or the local network. The check resolves the name before connecting; a DNS server that answers differently a moment later is not covered. Each download stops at 100 MB, or after 5 minutes counting all retries; a response shorter than its declared length is retried and never saved. It never works around paywalls, logins or bot checks.
+
+The paths in `literature.json` and in the `sources` CSV are trusted: they can point anywhere on disk, and the scripts read what they name. Do not run the scripts on a project config you have not read.
 
 ## Ranking providers
 
@@ -196,7 +216,7 @@ BM25 only matches words, so a paper that says "relay" when the query says "next 
 .venv/bin/python -m pytest -q
 ```
 
-The tests run offline: small generated PDFs, sample text with headings in each supported language, a word tokenizer and a fake Voyage API. They need `pdftotext` on `PATH`.
+The tests run offline: small generated PDFs, sample text with headings in each supported language, a word tokenizer and a fake Voyage API. They need `pdftotext` on `PATH`. One test uses the real tokenizer and is skipped until `rank.py --setup` has run. GitHub Actions runs the suite on every push (`.github/workflows/tests.yml`).
 
 ## License
 

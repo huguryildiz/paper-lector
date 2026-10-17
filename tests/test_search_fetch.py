@@ -49,3 +49,133 @@ def test_fetch_does_not_save_a_byte_identical_copy(project, monkeypatch, capsys)
     fetch_pdf.main(['10.9/ocean'])
     assert '(same file)' in capsys.readouterr().out
     assert not list((project / 'papers/new').glob('*.pdf'))
+
+
+import pytest
+
+
+@pytest.mark.parametrize('url', ['file:///etc/passwd', 'data:application/pdf,%PDF', 'http://127.0.0.1/x.pdf',
+                                 'http://10.0.0.5/x.pdf', 'http://169.254.169.254/latest', 'http://[::1]/x.pdf'])
+def test_fetch_refuses_local_and_non_http_urls(url):
+    with pytest.raises(ValueError):
+        fetch_pdf.fetch(url)
+
+
+def test_redirect_to_private_address_is_refused():
+    import urllib.request
+    h = fetch_pdf.CheckedRedirect()
+    with pytest.raises(ValueError):
+        h.redirect_request(urllib.request.Request('https://example.org/a'), None, 302, 'Found', {}, 'http://192.168.1.1/x')
+
+
+def test_fetch_stops_at_size_limit(monkeypatch):
+    import io
+    class R(io.BytesIO):
+        headers = {}
+    monkeypatch.setattr(fetch_pdf, 'check_url', lambda u: None)
+    monkeypatch.setattr(fetch_pdf, 'MAX_BYTES', 10)
+    monkeypatch.setattr(fetch_pdf.OPENER, 'open', lambda req, timeout: R(b'%PDF' + b'x' * 100))
+    with pytest.raises(ValueError, match='larger than'):
+        fetch_pdf.fetch('https://example.org/big.pdf')
+
+
+def test_arxiv_doi_and_doi_url_candidates():
+    assert fetch_pdf.candidates('10.48550/arxiv.2205.06300', None) == ['https://arxiv.org/pdf/2205.06300']
+    assert fetch_pdf.candidates('https://doi.org/10.1109/X.1', None) == []
+
+
+def test_jsonl_records_with_openalex_or_arxiv_only(project, monkeypatch, capsys, tmp_path):
+    import json
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    src = tmp_path / 'r.jsonl'
+    src.write_text('\n'.join(json.dumps(r) for r in [
+        {'openalex': 'W9', 'title': 'No DOI'}, {'arxiv': '2205.06300', 'title': 'arXiv only'}, {'title': 'Nothing'}]) + '\n')
+    seen = []
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: seen.append(ident) or {'display_name': ident, 'locations': []})
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: b'%PDF-1.4 ' + url.encode())
+    with pytest.raises(SystemExit):              # W9 has no PDF link: MANUAL, so exit status 1
+        fetch_pdf.main(['--from', str(src)])
+    out = capsys.readouterr().out
+    assert seen == ['W9', '2205.06300']
+    assert 'SKIP    line 3' in out and 'MANUAL  W9' in out and 'OK      2205.06300' in out
+    log = (project / 'papers/new/fetch_log.jsonl').read_text()
+    assert 'arxiv.org/pdf/2205.06300' in log and '"sha256"' in log
+
+
+def test_lookup_error_is_not_reported_as_missing(project, monkeypatch, capsys):
+    import urllib.error
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    def denied(ident):
+        raise urllib.error.HTTPError('u', 401, 'Unauthorized', {}, None)
+    monkeypatch.setattr(fetch_pdf, 'openalex', denied)
+    with pytest.raises(SystemExit):
+        fetch_pdf.main(['10.9/x'])
+    assert 'ERROR   10.9/x: OpenAlex lookup failed' in capsys.readouterr().out
+
+
+def test_save_never_replaces_a_file(tmp_path):
+    out = tmp_path / 'a.pdf'
+    assert fetch_pdf.save(out, b'%PDF one') and not fetch_pdf.save(out, b'%PDF two')
+    assert out.read_bytes() == b'%PDF one' and [p.name for p in tmp_path.iterdir()] == ['a.pdf']
+
+
+def test_refs_fetched_in_chunks_of_100(monkeypatch, tmp_path, capsys):
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(openalex_search.common, 'load_config', lambda *a, **k: None)
+    refs = [f'https://openalex.org/W{i}' for i in range(250)]
+    calls = []
+    def get(path, params):
+        calls.append(params)
+        if path.startswith('works/W'):
+            return {'referenced_works': refs}
+        ids = params['filter'].removeprefix('ids.openalex:').split('|')
+        return {'results': [{'id': 'https://openalex.org/' + i} for i in ids]}
+    monkeypatch.setattr(openalex_search, 'get', get)
+    openalex_search.main(['--refs', 'W1', '--out', str(tmp_path / 'r.jsonl')])
+    assert len((tmp_path / 'r.jsonl').read_text().splitlines()) == 250
+    assert [len(c['filter'].split('|')) for c in calls[1:]] == [100, 100, 50]
+
+
+def test_exact_uses_unstemmed_search(monkeypatch, tmp_path):
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(openalex_search.common, 'load_config', lambda *a, **k: None)
+    calls = []
+    monkeypatch.setattr(openalex_search, 'get', lambda path, params: calls.append(params) or
+                        {'results': [], 'meta': {'count': 0}})
+    openalex_search.main(['--exact', 'rout* AND energy', '--out', str(tmp_path / 'e.jsonl')])
+    assert calls[0]['search.title_and_abstract.exact'] == 'rout* AND energy' and 'filter' not in calls[0]
+
+
+def test_cut_off_download_is_retried_not_saved(monkeypatch):
+    import http.client, io
+    class R(io.BytesIO):
+        headers = {'Content-Length': '1000'}
+    bodies = [b'%PDF', b'%PDF' + b'x' * 996]
+    monkeypatch.setattr(fetch_pdf, 'check_url', lambda u: None)
+    monkeypatch.setattr(fetch_pdf.common.time, 'sleep', lambda s: None)
+    monkeypatch.setattr(fetch_pdf.OPENER, 'open', lambda req, timeout: R(bodies.pop(0)))
+    assert len(fetch_pdf.fetch('https://example.org/p.pdf')) == 1000
+
+
+def test_arxiv_fetched_even_when_openalex_fails(project, monkeypatch, capsys):
+    import urllib.error
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    def denied(ident):
+        raise urllib.error.HTTPError('u', 401, 'Unauthorized', {}, None)
+    monkeypatch.setattr(fetch_pdf, 'openalex', denied)
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: b'%PDF-1.4 ' + url.encode())
+    fetch_pdf.main(['2205.06300'])
+    assert 'OK      2205.06300' in capsys.readouterr().out
+
+
+def test_only_skipped_records_exit_with_failure(project, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    src = tmp_path / 'r.jsonl'
+    src.write_text('{"title": "no id"}\n')
+    with pytest.raises(SystemExit) as e:
+        fetch_pdf.main(['--from', str(src)])
+    assert e.value.code == 1
