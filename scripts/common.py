@@ -86,7 +86,7 @@ def retry(fn, tries=4, wait=10):
         try:
             return fn()
         except urllib.error.HTTPError as e:
-            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1 or retry_after(e) > 120:
+            if e.code not in (429, 500, 502, 503, 504) or attempt == tries - 1 or (e.code == 429 and retry_after(e) > 120):
                 raise
         except TRANSIENT:
             if attempt == tries - 1:
@@ -103,21 +103,24 @@ def retry_after(e):
 
 
 def openalex_json(url, key, timeout):
-    """GET an OpenAlex URL, keyless when key is None. A spent daily budget stops the run with the reset time."""
+    """GET an OpenAlex URL, keyless when key is None. A 429 with a Retry-After of hours (a spent daily budget) is
+    raised at once, not retried."""
     req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + key} if key else {})
-    try:
-        return open_json(req, timeout)
-    except urllib.error.HTTPError as e:
-        if e.code == 429 and retry_after(e) > 120:
-            sys.exit(f'OpenAlex daily budget is used up; it resets in about {retry_after(e) // 3600 + 1} h.'
-                     + ('' if key else ' Without a key the budget is about 100 searches a day, shared by everyone on'
-                        ' this IP address; a free OPENALEX_API_KEY gives ten times that.'))
-        if e.code == 400:
-            try:
-                sys.exit('OpenAlex refused the request: ' + json.load(e).get('message', ''))
-            except ValueError:
-                pass
-        raise
+    return open_json(req, timeout)
+
+
+def openalex_error(e, key):
+    """A message for an OpenAlex HTTPError worth stopping a search on (spent budget, refused query), else None."""
+    if e.code == 429 and retry_after(e) > 120:
+        return (f'OpenAlex daily budget is used up; it resets in about {retry_after(e) // 3600 + 1} h.'
+                + ('' if key else ' Without a key the budget is about 100 searches a day, shared by everyone on'
+                   ' this IP address; a free OPENALEX_API_KEY gives ten times that.'))
+    if e.code == 400:
+        try:
+            return 'OpenAlex refused the request: ' + json.load(e).get('message', '')
+        except (ValueError, AttributeError):
+            return None
+    return None
 
 
 def open_json(req, timeout, tries=4):

@@ -25,7 +25,12 @@ FIELDS = 'id,doi,display_name,publication_year,primary_location,best_oa_location
 
 
 def get(path, params):
-    return common.openalex_json(f'{API}/{path}?{urllib.parse.urlencode(params)}', KEY, timeout=120)
+    try:
+        return common.openalex_json(f'{API}/{path}?{urllib.parse.urlencode(params)}', KEY, timeout=120)
+    except urllib.error.HTTPError as e:
+        if msg := common.openalex_error(e, KEY):
+            sys.exit(msg)
+        raise
 
 
 def work_id(x):
@@ -47,47 +52,53 @@ MAX_OPERATORS = 5
 
 
 def query_issues(q):
-    """What OpenAlex would get wrong without saying so. It reads OR wrongly when OR shares a level with AND, NOT or
-    plain adjacency, or when a group holding OR sits next to a term with no operator: live 2026-10-17,
-    '"quantum switch" scheduling OR "operations research"' returned the 500 works of the phrase alone, the bracketed
-    '"quantum switch" AND (scheduling OR "operations research")' 20. It also slows searches with many operators."""
+    """What OpenAlex would get wrong without saying so, or refuse. It reads OR wrongly when OR shares a level with
+    AND, NOT or plain adjacency: live 2026-10-17, '"quantum switch" scheduling OR "operations research"' returned
+    the 500 works of the phrase alone, the bracketed '"quantum switch" AND (scheduling OR "operations research")' 20.
+    A bracketed group next to a term with no operator is read as AND (live 2026-10-18, both orders gave 20), so it
+    passes. A quoted phrase with * inside a boolean query gets HTTP 400. Many operators slow the search."""
+    if not q.strip():
+        return ['empty query']
     if q.count('"') % 2:
         return ['unbalanced quotes']
     tokens = re.findall(r'"[^"]*"|\(|\)|[^\s()"]+', q)
-    issues = [f'{t}: no * or ? inside quotes in a boolean query (OpenAlex answers 400); list the forms'
-              for t in tokens if t.startswith('"') and re.search(r'[*?]', t)] if len(tokens) > 1 else []
-    levels, prev, closed_or = [set()], None, False
-    glued = []                                   # per open group: did it follow a term with no operator?
-    for t in tokens:
-        if t in ('AND', 'OR', 'NOT'):
-            levels[-1].add('or' if t == 'OR' else 'and')
-            prev, closed_or = 'op', False
-            continue
-        if prev == 'term' and t != ')':          # two operands side by side: OpenAlex reads AND
-            if closed_or:
-                issues.append('a group with OR sits next to a term or group with no operator; write AND between them')
-            levels[-1].add('and')
-        if t == '(':
-            glued.append(prev == 'term')
-            levels.append(set())
-            prev, closed_or = 'open', False
-        elif t == ')':
-            if len(levels) == 1:
-                return ['unbalanced parentheses']
-            closed_or = 'or' in levels.pop()
-            if closed_or and glued.pop():          # c (a OR b): the mirror of (a OR b) c
-                issues.append('a group with OR sits next to a term or group with no operator; write AND between them')
-            elif not closed_or:
-                glued.pop()
-            prev = 'term'
-        else:
-            prev, closed_or = 'term', False
-        if {'or', 'and'} <= levels[-1]:
+    issues = []
+
+    def group(i):
+        """Check operands and operators up to the matching ')'; return the index there."""
+        n_items, joins, expect_operand = 0, [], True
+        while i < len(tokens) and tokens[i] != ')':
+            t = tokens[i]
+            if t in ('AND', 'OR', 'NOT'):
+                if expect_operand and not (t == 'NOT' and n_items):
+                    issues.append(f'{t} has no term before it')
+                joins.append(t)
+                expect_operand, i = True, i + 1
+                continue
+            if not expect_operand:                # two operands side by side: OpenAlex reads AND
+                joins.append('')
+            if t == '(':
+                i = group(i + 1)
+                if i >= len(tokens):
+                    issues.append('unbalanced parentheses')
+                    return i
+            i += 1
+            n_items, expect_operand = n_items + 1, False
+        if not n_items:
+            issues.append('empty group' if i < len(tokens) else 'empty query')
+        elif expect_operand:
+            issues.append(f'{joins[-1]} has no term after it')
+        if 'OR' in joins and any(j != 'OR' for j in joins):
             issues.append('OR is mixed with AND, NOT or adjacency at one level; put each OR list in its own parentheses')
-    if len(levels) != 1:
+        return i
+
+    i = group(0)
+    if i < len(tokens):
         issues.append('unbalanced parentheses')
-    if {'or', 'and'} <= levels[0]:
-        issues.append('OR is mixed with AND, NOT or adjacency at one level; put each OR list in its own parentheses')
+    operands = [t for t in tokens if t not in ('AND', 'OR', 'NOT', '(', ')')]
+    if len(operands) > 1:
+        issues += [f'{t}: no * or ? inside quotes in a boolean query (OpenAlex answers 400); list the forms'
+                   for t in operands if t.startswith('"') and re.search(r'[*?]', t)]
     n = sum(t in ('AND', 'OR', 'NOT') for t in tokens)
     if n > MAX_OPERATORS:
         issues.append(f'{n} AND/OR/NOT operators; at most {MAX_OPERATORS} (6 terms in two blocks)')
@@ -129,17 +140,21 @@ def main(argv=None):
     a = ap.parse_args(argv)
     if a.name is not None and not common.valid_name(a.name):
         sys.exit(f'--name must be lowercase letters, digits and single hyphens, at most {common.NAME_MAX} characters')
+    mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k) is not None)
+    if not getattr(a, mode).strip():
+        sys.exit(f'--{mode} is empty')
     if a.exact and (issues := query_issues(a.exact)):
         sys.exit('query not sent: ' + '; '.join(issues))
+    if a.out and (not a.out.endswith('.jsonl') or Path(a.out).exists() or Path(a.out).with_suffix('.query.json').exists()):
+        sys.exit(f'{a.out}: --out must be a new .jsonl file (it and its .query.json are never overwritten)')
     global KEY
     cfg = common.load_config(a.config, required=False)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
-    mode = next(k for k in ('exact', 'semantic', 'cites', 'refs') if getattr(a, k))
     if not a.out:
         base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
         tail = f'_{a.name}_{mode}.jsonl' if a.name else f'_{mode}.jsonl'
         a.out, n = f'{base}{tail}', 2
-        while Path(a.out).exists():                 # same name and mode in the same minute
+        while Path(a.out).exists() or Path(a.out).with_suffix('.query.json').exists():   # same name and mode in the same minute
             a.out, n = f'{base}-{n}{tail}', n + 1
 
     if a.semantic:
@@ -174,11 +189,14 @@ def main(argv=None):
     if a.refs:
         print(f'references: listed {meta["count"]}, written {len(works)}', file=sys.stderr)
     print(f"count {meta.get('count')}  written {len(works)}  already in sources.csv {n_held}  -> {a.out}", file=sys.stderr)
+    # without a key only page 1 of a keyword or citing search comes back
+    cut = not KEY and mode in ('exact', 'cites') and (meta.get('count') or 0) > len(works) and (not a.max or a.max > len(works))
     Path(a.out).with_suffix('.query.json').write_text(json.dumps({
         'mode': mode, 'query': getattr(a, mode), 'date': datetime.datetime.now().isoformat(timespec='seconds'),
         'count': meta.get('count'), 'written': len(works), 'already_in_sources': n_held, 'max': a.max or None,
-        'keyless': not KEY, 'name': a.name, 'out': Path(a.out).name}, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
-    if not KEY and (meta.get('count') or 0) > len(works) and not a.max:
+        'keyless': not KEY, 'keyless_first_page_only': cut, 'name': a.name, 'out': Path(a.out).name},
+        ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    if cut:
         print(f'no OPENALEX_API_KEY: only the first {len(works)} of {meta["count"]} were written; a free key gets them all',
               file=sys.stderr)
 

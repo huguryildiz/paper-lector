@@ -130,7 +130,7 @@ A high rank means the text resembles the question. It does not mean the paper is
 
 | Mode | Flag | What you get | Use it when |
 | --- | --- | --- | --- |
-| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards. Repeatable | You want a complete search and know the field's words |
+| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (all pages need `OPENALEX_API_KEY`; without it, the first 200). Repeatable | You want a complete search and know the field's words |
 | Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning to a sentence. Can change between runs | You are new to a field, or its papers use many names for one idea |
 | Citing works | `--cites <id>` | Works that cite one paper | You want what came after a key paper |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |

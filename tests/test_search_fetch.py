@@ -1,5 +1,6 @@
 import json
 import re
+import urllib.error
 import fetch_pdf
 import openalex_search
 
@@ -219,25 +220,49 @@ def test_search_without_key_stops_after_first_page(project, monkeypatch, tmp_pat
     assert 'only the first 1 of 500 were written' in capsys.readouterr().err
 
 
-def test_spent_daily_budget_stops_with_reset_time(monkeypatch):
-    import io, urllib.error, pytest
+def _raise(err):
+    def urlopen(*a, **k):
+        raise err
+    return urlopen
+
+
+def test_spent_daily_budget_stops_search_with_reset_time(monkeypatch):
+    import io, urllib.error
     err = urllib.error.HTTPError('u', 429, 'Too Many', {'Retry-After': '11400'}, io.BytesIO(b''))
-    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', lambda *a, **k: (_ for _ in ()).throw(err))
+    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', _raise(err))
     monkeypatch.setattr(openalex_search.common.time, 'sleep', lambda s: pytest.fail('waited for a spent budget'))
+    monkeypatch.setattr(openalex_search, 'KEY', None)
     with pytest.raises(SystemExit, match='resets in about 4 h.*free OPENALEX_API_KEY'):
-        openalex_search.common.openalex_json('https://api.openalex.org/works', None, timeout=5)
+        openalex_search.get('works', {})
+
+
+def test_long_retry_after_on_503_is_still_retried(monkeypatch):
+    import io, urllib.error
+    calls = []
+
+    def fn():
+        calls.append(1)
+        if len(calls) == 1:
+            raise urllib.error.HTTPError('u', 503, 'Busy', {'Retry-After': '180'}, io.BytesIO(b''))
+        return 'ok'
+    monkeypatch.setattr(openalex_search.common.time, 'sleep', lambda s: None)
+    assert openalex_search.common.retry(fn) == 'ok' and len(calls) == 2
 
 
 @pytest.mark.parametrize('q,bad', [
     ('"quantum switch" scheduling OR "operations research"', 'mixed'),
     ('"quantum switch" AND scheduling OR "operations research"', 'mixed'),
-    ('(a OR b) c', 'no operator'), ('c (a OR b)', 'no operator'), ('"quantum switch" (a OR (b c))', 'no operator'),
-    ('c AND (a OR b)', None), ('c (a b)', None),
+    ('(a OR b) AND c d', None), ('((a OR b) AND c) d', None),
+    ('(a OR b) c', None), ('c (a OR b)', None), ('c ((a OR b))', None),   # live 2026-10-18: read as AND
+    ('"quantum switch" (a OR (b c))', None), ('c AND (a OR b)', None), ('c (a b)', None),
     ('(a OR b OR c) AND (d OR e OR f OR g)', '6 AND/OR/NOT'),
-    ('(a OR b', 'unbalanced'), ('"a b', 'unbalanced'),
+    ('(a OR b', 'unbalanced'), ('a OR b)', 'unbalanced'), ('"a b', 'unbalanced'),
+    ('', 'empty query'), ('  ', 'empty query'), ('()', 'empty group'), ('a AND ()', 'empty group'),
+    ('a OR', 'no term after'), ('OR a', 'no term before'), ('a OR OR b', 'no term before'),
     ('("quantum switch" OR "quantum network*") AND schedul*', 'inside quotes'),
+    ('"quantum network*"', None), ('("quantum network*")', None),
     ('("quantum switch" OR "quantum network") AND (schedul* OR "operations research")', None),
-    ('quantum switch scheduling', None), ('(a OR b) NOT c', None)])
+    ('quantum switch scheduling', None), ('(a OR b) NOT c', None), ('a AND NOT b', None)])
 def test_query_issues(q, bad):
     issues = openalex_search.query_issues(q)
     assert (not issues) if bad is None else any(bad in i for i in issues)
@@ -258,12 +283,50 @@ def test_misread_query_is_not_sent_and_query_record_is_written(project, monkeypa
     assert rec['count'] == 1 and rec['written'] == 1 and rec['keyless'] is False
 
 
-def test_openalex_400_shows_its_message(monkeypatch):
+def test_openalex_400_shows_its_message_in_search_but_not_in_fetch(monkeypatch):
     import io, urllib.error
-    err = urllib.error.HTTPError('u', 400, 'Bad', {}, io.BytesIO(b'{"message": "Wildcards do not work here"}'))
-    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen', lambda *a, **k: (_ for _ in ()).throw(err))
+    body = b'{"message": "Wildcards do not work here"}'
+    monkeypatch.setattr(openalex_search.common.urllib.request, 'urlopen',
+                        _raise(urllib.error.HTTPError('u', 400, 'Bad', {}, io.BytesIO(body))))
+    monkeypatch.setattr(openalex_search, 'KEY', 'k')
     with pytest.raises(SystemExit, match='OpenAlex refused the request: Wildcards do not work here'):
-        openalex_search.common.openalex_json('https://api.openalex.org/works', 'k', timeout=5)
+        openalex_search.get('works', {})
+    monkeypatch.setattr(fetch_pdf, 'KEY', 'k')
+    with pytest.raises(urllib.error.HTTPError):        # fetch catches it and tries the direct links
+        fetch_pdf.openalex('10.1/q')
+
+
+def test_out_is_never_overwritten_and_must_be_jsonl(project, monkeypatch, tmp_path):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    sent = []
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', lambda url, key, timeout: sent.append(url) or
+                        {'results': [], 'meta': {'count': 0, 'next_cursor': None}})
+    (tmp_path / 'old.jsonl').write_text('')
+    (tmp_path / 'side.query.json').write_text('{}')
+    for out in ('old.jsonl', 'side.jsonl', 'r.csv'):
+        with pytest.raises(SystemExit, match='must be a new .jsonl'):
+            openalex_search.main(['--exact', 'switch', '--out', str(tmp_path / out)])
+    with pytest.raises(SystemExit, match='--semantic is empty'):
+        openalex_search.main(['--semantic', ' ', '--out', str(tmp_path / 'e.jsonl')])
+    assert sent == []
+
+
+def test_keyless_cut_reported_with_max_and_not_for_semantic(project, monkeypatch, tmp_path, capsys):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('HOME', str(tmp_path / 'home'))
+    monkeypatch.delenv('OPENALEX_API_KEY', raising=False)
+    page = {'results': [{'id': f'https://openalex.org/W{i}'} for i in range(200)], 'meta': {'count': 500, 'next_cursor': 'c'}}
+    monkeypatch.setattr(openalex_search.common, 'openalex_json', lambda url, key, timeout: page)
+    openalex_search.main(['--exact', 'routing', '--max', '500', '--out', str(tmp_path / 'm.jsonl')])
+    assert 'only the first 200 of 500' in capsys.readouterr().err
+    assert json.loads((tmp_path / 'm.query.json').read_text())['keyless_first_page_only'] is True
+    openalex_search.main(['--exact', 'routing', '--max', '100', '--out', str(tmp_path / 'm100.jsonl')])
+    assert 'only the first' not in capsys.readouterr().err   # the user asked for 100 and got them
+    page['results'] = page['results'][:50]
+    openalex_search.main(['--semantic', 'routing in networks', '--out', str(tmp_path / 's.jsonl')])
+    assert 'only the first' not in capsys.readouterr().err   # semantic stops at 50 with or without a key
+    assert json.loads((tmp_path / 's.query.json').read_text())['keyless_first_page_only'] is False
 
 
 def test_search_default_out_is_dated_by_mode(project, monkeypatch):

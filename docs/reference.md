@@ -16,7 +16,7 @@ The details behind the [README](../README.md): what each script writes, how runs
 
 ## Setup
 
-API keys are looked up in the environment, then the project's `.env`, then `~/.config/paper-lector/.env`. `OPENALEX_API_KEY` is used by search and fetch; without it, search returns only the first 200 works and the daily budget is small. `VOYAGE_API_KEY` is used by `rank.py` with the default `voyage` provider.
+API keys are looked up in the environment, then the project's `.env`, then `~/.config/paper-lector/.env`. `OPENALEX_API_KEY` is used by search and fetch; without it, keyword and citing searches return only the first 200 works (references and semantic are not cut) and the daily budget is about 100 searches, shared by everyone on the same IP address. `VOYAGE_API_KEY` is used by `rank.py` with the default `voyage` provider.
 
 `rank.py --setup` checks that `pdftotext` is on `PATH` (and prints the install command if not) and downloads the `voyage-4-large` tokenizer from Hugging Face into `~/.cache/paper-lector/`. The tokenizer is pinned to one Hugging Face revision and checked against its SHA-256, so two machines cut the same windows; `requirements.txt` pins the Python packages for the same reason. Every rank run needs that tokenizer to cut windows and count tokens, including `--dry` and the `bm25` provider. After `--setup`, the `bm25` provider works fully offline. If the tokenizer is missing on an offline machine, `rank.py` stops and says where to put the file; an interrupted download leaves no half-written file behind.
 
@@ -92,7 +92,7 @@ With `--abstracts`, `rerank-3` also scores every paper on its abstract alone, so
 | Script | Option | What it does |
 | --- | --- | --- |
 | `openalex_search.py` | `--semantic TEXT` | Meaning-based search; at most 50 results and not reproducible |
-| | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`schedul*` for scheduling and schedules); all pages; a query OpenAlex would misread (OR mixed with AND at one level, more than 5 operators) is refused; writes `<out>.query.json` with the query and counts. The same query on the same OpenAlex snapshot gives the same list |
+| | `--exact QUERY` | Boolean query on title and abstract, unstemmed (`schedul*` for scheduling and schedules); all pages; all pages need `OPENALEX_API_KEY`; a query OpenAlex would misread or refuse (OR mixed with AND or adjacency at one level, an empty group, an operator with no term, `*` inside quotes, more than 5 operators) is refused before sending; `--out` must be a new `.jsonl` file; writes `<out>.query.json` with the query and counts. The same query on the same OpenAlex snapshot gives the same list |
 | | `--cites ID` / `--refs ID` | Works citing ID, or all works ID references (DOI, arXiv id or OpenAlex W id) |
 | | `--out FILE` | JSONL output, one work per line, with abstract, PDF link and `in_sources`. Default: `runs/<date>_<time>_<name>_<mode>.jsonl` next to the config (mode is `exact`, `semantic`, `cites` or `refs`), with `-2` added when that minute is taken |
 | | `--name NAME` | Topic name in the default file name, the same short name the queries file will carry (lowercase, hyphens, at most 25 characters). Without it the file is `<date>_<time>_<mode>.jsonl` |
