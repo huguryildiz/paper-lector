@@ -48,7 +48,7 @@ Keys: `OPENALEX_API_KEY` (search, fetch) and `VOYAGE_API_KEY` (rank, voyage prov
 
 ## Step 2: writing the queries
 
-Fill all six slots on two question screens before writing any query text. Use the host's multiple-choice question tool: `AskUserQuestion` in Claude Code, `request_user_input` (or `request_user_input_async`) in Codex, the equivalent in other agents. Put at most 4 questions on one screen.
+Fill all six slots and the fuse choice on question screens before writing any query text. Use the host's multiple-choice question tool: `AskUserQuestion` in Claude Code, `request_user_input` (or `request_user_input_async`) in Codex, the equivalent in other agents.
 
 The answers are required in every host. Keep the questions open until the user answers; never fill a slot by assumption, after a timeout, or because the tool returned no answer. If the tool returns nothing, ask the same questions in chat.
 
@@ -63,10 +63,13 @@ Six labels, all optional except `main`:
 | `context` | Where or under which conditions | Underwater links, delayed control |
 | `comparison` | Alternatives or baselines | First-come-first-served, random choice |
 
-The two screens:
+Ask seven questions in this order: `main`, `subject`, `approach`, `outcome`, `context`, `comparison`, `fuse`. Put as many on one screen as the tool allows:
 
-1. `main`, `subject`, `approach`, `outcome`.
-2. `context`, `comparison`, then the `fuse` choice (multiSelect over the filled slots, `main` + `subject` marked recommended).
+- 4 per screen (`AskUserQuestion`): `main`, `subject`, `approach`, `outcome`; then `context`, `comparison`, `fuse`.
+- 3 per screen (Codex's tool may take only 3): `main`, `subject`, `approach`; then `outcome`, `context`, `comparison`; then `fuse`.
+- Fewer: keep the order and use more screens.
+
+The `fuse` question is single choice, so it works without multi-select: "main + subject" (recommended), "main + subject + approach + outcome", "main only", or the user's own list of labels in the free-text field. Slots left empty are dropped from the chosen set.
 
 Each slot question names the slot and what it asks, for example "approach: what is done (method, intervention, design, algorithm)?", with header = the label. It offers three ways to fill the slot:
 
@@ -78,7 +81,7 @@ Each slot question names the slot and what it asks, for example "approach: what 
 
 Without such a tool, ask the same questions in chat, one numbered list per slot, and wait for the reply.
 
-From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run. `rank.py` backs this up: if `<prefix>_run.json` exists and was made with different queries, it stops; use a new queries file and a new `--out`.
+From the answers, write each slot's `text` and `keywords` by the rules below, show the finished set as one table, and freeze the file only after the user approves it. Never change a frozen file after seeing results; a revision is a new file and a new run. `rank.py` backs this up: it never overwrites an existing `<prefix>_run.json`, and if that run was made with a different question, queries or fuse list it says so. Use a new queries file and a new `--out`.
 
 Rules for drafting:
 
@@ -105,7 +108,7 @@ If the user names papers they expect near the top, write them down with the quer
 
 1. Run `rank.py --out <prefix> --dry`. It prints counts per paper (tokens, windows, bibliography cut, abstract found) and the token estimate, with no API call. Report the estimate.
 2. Run without `--dry`. It stops before any API call if the estimate is above `--budget` (15M tokens by default). Embeddings are cached in `~/.cache/paper-lector/embeddings.sqlite`, so a rerun or a run restarted after a crash pays only for new text (the estimate still counts everything). Voyage gives 200M free tokens per model; after that `voyage-4-large` costs $0.12 and `rerank-3` $0.05 per million tokens.
-3. Report the fused top 10, where it disagrees with single queries, and the sanity check result as it is.
+3. Report the fused top 10, where it disagrees with single queries, and the sanity check result as it is. Name every paper skipped for having no text (dry-run `skipped` lines, `corpus.skipped` in `_run.json`); they are missing from the order.
 
 What happens inside: the whole PDF is split into 1,200-token windows with page labels (bibliography cut when found with confidence; appendices kept). For each paper and query, the 3 best windows are chosen by fusing embedding similarity (`voyage-4-large`) with BM25 on the keyword string. The reranker (`rerank-3`) then scores each paper once per query on its abstract plus those 3 windows. Adding PDFs changes BM25 statistics, so rerun the whole collection rather than ranking only the new files.
 
@@ -124,8 +127,8 @@ Output columns: `paper`, `fused_rank`, `fused_score`, then per query `<id>_<labe
 
 ## Examples
 
-**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Ask the two screens: `main` candidates (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?"), a suggestion for each other slot (`subject`: "Underwater acoustic sensor network nodes on battery"; `comparison`: "Depth-based routing"), each with "Leave empty" except `main`, and the user's own wording through "Other". Write the queries from the answers, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
+**New project.** User: "Rank my PDFs for energy-efficient routing in underwater acoustic sensor networks." No `literature.json`: ask where the PDFs are, write it. Ask the question screens: `main` candidates (for example "Which routing protocol minimises energy per delivered packet in an underwater acoustic sensor network?"), a suggestion for each other slot (`subject`: "Underwater acoustic sensor network nodes on battery"; `comparison`: "Depth-based routing"), each with "Leave empty" except `main`, and the user's own wording through "Other". Write the queries from the answers, show the table, apply the user's edits, freeze `queries.json`. Dry run, report the estimate, run, report the fused top 10 with starting pages.
 
-**Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection, compare with the previous `_run.json` and report papers that entered or left the fused top 10.
+**Rerun after new PDFs.** User: "Add the 12 PDFs from yesterday and rerank with the frozen queries." Use the existing config and queries file, rank the whole collection into a new `--out` (for example with today's date), compare with the previous `_run.json` and report papers that entered or left the fused top 10.
 
 **Search and fetch only.** User: "Find papers citing Bhambay 2025 and download the open ones." `openalex_search.py --cites <doi>` (OpenAlex holds few links for very recent preprints; Semantic Scholar's citations endpoint is the fallback), then `fetch_pdf.py --from <file>.jsonl`. Report counts, how many were already in `sources`, and the `MANUAL` list.

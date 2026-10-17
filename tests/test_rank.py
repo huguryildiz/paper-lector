@@ -29,6 +29,7 @@ def test_windows_cut_bibliography_and_label_pages(project):
     assert not any('Title three' in w['text'] for w in wins)
     assert {w['pages'] for w in wins} >= {'p. 1', 'p. 2'}
     assert any('youngest' in w['text'] and '2' in w['pages'] for w in wins)
+    assert 'Title three' not in head                                  # no abstract found: head comes from cleaned text
 
 
 def test_bm25_prefers_matching_doc():
@@ -123,10 +124,12 @@ def test_changed_queries_refuse_previous_out(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     out = str(project / 'runs/q')
     rank.main(['--out', out, '--provider', 'bm25'])
-    rank.main(['--out', out, '--provider', 'bm25'])                   # same queries: rerun allowed
+    with pytest.raises(SystemExit, match='already exists'):            # same queries: never overwrite a run
+        rank.main(['--out', out, '--provider', 'bm25'])
+    rank.main(['--out', out, '--provider', 'bm25', '--dry'])           # a dry run writes nothing, so it may reuse it
     q = project / 'queries.json'
-    q.write_text(q.read_text().replace('underwater seawater ocean links', 'ocean links'))
-    with pytest.raises(SystemExit, match='different queries'):
+    q.write_text(q.read_text().replace('"question"', '"fuse": ["Q0", "Q3"], "question"'))
+    with pytest.raises(SystemExit, match='different question, queries or fuse'):
         rank.main(['--out', out, '--provider', 'bm25', '--dry'])
     rank.main(['--out', str(project / 'runs/q2'), '--provider', 'bm25'])   # new --out is fine
 
@@ -169,3 +172,16 @@ def test_same_file_name_in_two_folders_keeps_both(project, monkeypatch, capsys):
     assert out['Queue2022'] == other / 'Queue2022.pdf'           # same basename as a sources PDF, still ranked
     assert {out['Ocean2023'], out['Ocean2023-2']} == {other / 'Ocean2023.pdf', project / 'papers/topic/Ocean2023.pdf'}
     assert 'ranked as Ocean2023-2' in capsys.readouterr().err
+
+
+
+def test_unreadable_pdf_recorded_and_fails_frozen_ids(project, offline, monkeypatch):
+    from conftest import make_pdf
+    monkeypatch.chdir(project)
+    make_pdf(project / 'papers/topic/Scan2020.pdf', [[]])
+    rank.main(['--out', str(project / 'runs/s'), '--provider', 'bm25'])
+    run = json.load(open(project / 'runs/s_run.json'))
+    assert run['corpus']['skipped'][0]['id'] == 'Scan2020' and 'Scan2020' not in run['corpus']['ids']
+    (project / 'ids.csv').write_text('paper\nScan2020\nOcean2023\n')
+    with pytest.raises(SystemExit, match='frozen corpus is incomplete'):
+        rank.main(['--out', str(project / 'runs/s2'), '--provider', 'bm25', '--ids', str(project / 'ids.csv')])

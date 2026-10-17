@@ -145,8 +145,8 @@ def windows(path, tok):
         p0, p1 = page_of(a), page_of(b - 1)
         wins.append({'text': re.sub(r'\s+', ' ', body[a:b]).strip(), 'pages': f'p. {p0}' if p0 == p1 else f'p. {p0}-{p1}',
                      'span': (i, i + len(span))})
-    ab = abstract(text)
-    head = ab if ab else tok.decode(tok.encode(text, add_special_tokens=False).ids[:HEAD])
+    ab = abstract(body)
+    head = ab if ab else tok.decode(tok.encode(body, add_special_tokens=False).ids[:HEAD])
     return [w for w in wins if w['text']], head, cut, ab is not None, len(enc.ids)
 
 
@@ -216,9 +216,10 @@ def main(argv=None):
     if not qpath:
         sys.exit('no queries file: pass --queries or set "queries" in the config')
     question, Q, fuse = common.load_queries(qpath)
+    qsha = sha(json.dumps({'question': question, 'queries': Q, 'fuse': fuse}, sort_keys=True))
     prev = Path(f'{a.out}_run.json')
-    if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != sha(json.dumps(Q, sort_keys=True)):
-        sys.exit(f'{prev} was made with different queries. A frozen queries file is not edited: '
+    if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != qsha:
+        sys.exit(f'{prev} was made with a different question, queries or fuse list. A frozen queries file is not edited: '
                  f'write a new queries file and rank it with a new --out')
     provider = a.provider or (cfg and cfg['provider']) or 'voyage'
     variants = a.variants.split(',')
@@ -233,16 +234,19 @@ def main(argv=None):
 
     tok = tokenizer()
     ntok = lambda s: len(tok.encode(s, add_special_tokens=False).ids)
-    P, W = [], []
+    P, W, skipped = [], [], []
     for pid, path in find_pdfs(dirs, common.sources(cfg), ids).items():
         wins, head, cut, has_ab, n = windows(path, tok)
         if not wins:
-            print(f'note: no text extracted from {path}; skipped', file=sys.stderr); continue
+            print(f'note: no text extracted from {path} (scanned or protected?); skipped', file=sys.stderr)
+            skipped.append({'id': pid, 'path': str(path)}); continue
         P.append({'id': pid, 'path': str(path), 'head': head, 'bib_cut': cut, 'abstract_found': has_ab, 'tokens': n,
                   'wins': list(range(len(W), len(W) + len(wins)))})
         W += [dict(w, paper=len(P) - 1) for w in wins]
     if not P:
         sys.exit('no PDFs with extractable text')
+    if ids and skipped:
+        sys.exit(f'--ids lists papers with no extractable text: {[x["id"] for x in skipped]}; the frozen corpus is incomplete')
     for w in W:
         w['n'] = ntok(w['text'])
     head_n = [ntok(p['head']) for p in P]
@@ -254,7 +258,11 @@ def main(argv=None):
     if a.dry:
         for p in P:
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
+        for x in skipped:
+            print(x['id'], 'skipped: no text', sep='\t')
         return
+    if prev.is_file():
+        sys.exit(f'{prev} already exists. Rank into a new --out (for example with today\'s date) and compare the two runs')
     usage = Counter()
     if provider == 'voyage':
         if estimate > a.budget:
@@ -327,11 +335,11 @@ def main(argv=None):
     except OSError:
         commit = ''
     run = {'created': datetime.datetime.now().isoformat(timespec='seconds'), 'paper_lector_commit': commit,
-           'question': question, 'queries': Q, 'queries_sha': sha(json.dumps(Q, sort_keys=True)), 'fuse': fuse,
+           'question': question, 'queries': Q, 'queries_sha': qsha, 'fuse': fuse,
            'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else None,
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},
-           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P]},
+           'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P], 'skipped': skipped},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
     Path(f'{a.out}_run.json').write_text(json.dumps(run, indent=1, ensure_ascii=False))
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '
