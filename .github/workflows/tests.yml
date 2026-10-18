@@ -2,12 +2,28 @@ name: tests
 on: [push, pull_request]
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
-      - run: pip install -r requirements.txt pytest==9.1.1
-      - run: python -m pytest -q
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - if: runner.os == 'macOS'
+        run: brew install poppler
+      - run: pip install -r requirements.txt -c constraints.txt pytest==9.1.1
+      # The tokenizer (7 MB) and the local model, kept between runs; a new pinned revision gets a new cache key.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/paper-lector
+          key: models-${{ hashFiles('scripts/rank.py') }}
+      - run: python scripts/rank.py --setup --provider local
+      # With the models in place, the real-model tests (and the end-to-end local run) must run, not skip.
+      - run: python -m pytest -q -rs
+        env:
+          PAPER_LECTOR_REQUIRE_MODELS: '1'

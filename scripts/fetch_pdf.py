@@ -25,6 +25,7 @@ KEY = None
 
 UA = {'User-Agent': 'Mozilla/5.0 (research; literature fetch)'}
 MAX_BYTES, MAX_SECONDS = 100 * 2**20, 300
+OFFLINE_STOP = 3                                 # papers in a row with no server reached: stop, the network is down
 
 
 def openalex(ident):
@@ -64,6 +65,9 @@ def candidates(ident, w):
     return urls
 
 
+NAT64 = ipaddress.ip_network('64:ff9b::/96')
+
+
 def check_url(url):
     """Refuse anything but http(s) to a public address, so a listed or redirected URL cannot reach local files,
     this machine or the local network."""
@@ -71,7 +75,10 @@ def check_url(url):
     if u.scheme not in ('http', 'https') or not u.hostname:
         raise ValueError(f'not an http(s) URL: {url}')
     for *_, addr in socket.getaddrinfo(u.hostname, u.port or (443 if u.scheme == 'https' else 80)):
-        if not ipaddress.ip_address(addr[0].split('%')[0]).is_global:
+        ip = ipaddress.ip_address(addr[0].split('%')[0])
+        if ip.version == 6 and (ip in NAT64 or int(ip) >> 32 == 0):   # 64:ff9b::a.b.c.d and ::a.b.c.d reach a.b.c.d
+            ip = ipaddress.ip_address(int(ip) & 0xFFFFFFFF)
+        if not ip.is_global:
             raise ValueError(f'{u.hostname} is not a public address ({addr[0]})')
 
 
@@ -103,6 +110,8 @@ def fetch(url):
                     raise ValueError(f'larger than {MAX_BYTES // 2**20} MB')
                 if time.monotonic() > end:
                     raise ValueError(f'download took more than {MAX_SECONDS} s')
+            if time.monotonic() > end:                 # a last read that stalled before the end of the file
+                raise ValueError(f'download took more than {MAX_SECONDS} s')
         if length and len(data) < length:
             raise http.client.IncompleteRead(bytes(data), length - len(data))
         return bytes(data)
@@ -110,26 +119,33 @@ def fetch(url):
     return data if data[:4] == b'%PDF' else None
 
 
-def save(out, data):
-    """Write data to out without ever replacing a file there: written to a .part file first, then linked into place,
-    so a crash leaves no half-written PDF under the final name. False if out already exists."""
-    part = out.with_name(f'.{out.name}.{os.getpid()}.part')
+def is_pdf(path):
     try:
-        part.write_bytes(data)
-        os.link(part, out)
-        return True
-    except FileExistsError:
+        with open(path, 'rb') as f:
+            return f.read(4) == b'%PDF'
+    except OSError:
         return False
-    finally:
-        part.unlink(missing_ok=True)
+
+
+def save(out, data):
+    """Write data to out without ever replacing a file there and without leaving a half-written PDF under that name
+    (common.write_new; also on drives with no hard links). False if out already exists."""
+    return common.write_new(out, data)
 
 
 def log_line(dest, rec):
     """Append one record to fetch_log.jsonl in the download folder: OK for a saved PDF, HAVE for a download identical
-    to a PDF already held (file: that PDF, relative to the folder), MANUAL for one to get by hand."""
+    to a PDF already held (file: that PDF, relative to the folder), MANUAL for one to get by hand. A write that fails
+    half-way (a full disk) is cut back, so the log never ends in a broken line."""
     rec['fetched'] = datetime.datetime.now().isoformat(timespec='seconds')
-    with open(dest / 'fetch_log.jsonl', 'a', encoding='utf-8') as log:
-        log.write(json.dumps(rec) + '\n')
+    common.append_line(dest / 'fetch_log.jsonl', json.dumps(rec))
+
+
+def stop(dest, msg, count):
+    """Stop the fetch on a write error (a full disk), with the counts so far."""
+    print('  '.join(f'{k.lower()} {v}' for k, v in count.items()), file=sys.stderr)
+    sys.exit(f'{msg}. The fetch stopped; PDFs saved before this have their fetch_log.jsonl line in {dest}. '
+             f'Free some space and run the same command again: PDFs already held are not fetched twice')
 
 
 def main(argv=None):
@@ -140,11 +156,18 @@ def main(argv=None):
     ap.add_argument('--config', help='path to literature.json (default: searched upward)')
     a = ap.parse_args(argv)
     ids, skips = list(a.ids), 0
+    if a.src and not Path(a.src).is_file():
+        sys.exit(f'--from {a.src}: file not found')
     if a.src:
         for n, line in enumerate(open(a.src, encoding='utf-8'), 1):
             if not line.strip():
                 continue
-            r = json.loads(line)
+            try:
+                r = json.loads(line)
+                if not isinstance(r, dict):
+                    raise ValueError('not an object')
+            except ValueError as e:
+                sys.exit(f'{a.src} line {n}: not a JSON record ({e}); nothing fetched')
             ident = r.get('doi') or r.get('arxiv') or r.get('openalex')
             if ident:
                 ids.append(ident)
@@ -154,7 +177,10 @@ def main(argv=None):
     cfg = common.load_config(a.config, required=not a.dest)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
     dest = Path(a.dest) if a.dest else cfg['download_dir']
-    dest.mkdir(parents=True, exist_ok=True)
+    try:
+        dest.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        sys.exit(f'cannot create the download folder {dest} ({e}); nothing fetched')
     roots = [dest] + ([d for d in cfg['pdf_dirs'] if d != dest] if cfg else [])
     held = {}
     for k, v in common.sources(cfg).items():
@@ -163,7 +189,14 @@ def main(argv=None):
         elif v['doi'] and v['pdf']:
             print(f'NOTE    sources key {k}: {v["pdf"]} not found; fetching its DOI again', file=sys.stderr)
     digests, count = None, {'OK': 0, 'HAVE': 0, 'MANUAL': 0, 'ERROR': 0, 'SKIP': skips}
-    for ident in ids:
+    offline = 0                                  # papers in a row that failed on the network alone
+    for n_done, ident in enumerate(ids):
+        if offline == OFFLINE_STOP:
+            left = len(ids) - n_done
+            print('  '.join(f'{k.lower()} {v}' for k, v in count.items()), file=sys.stderr)
+            sys.exit(f'{OFFLINE_STOP} papers in a row could not reach any server: the network looks down. Stopped with '
+                     f'{left} of {len(ids)} not tried; run the same command again when online (PDFs already held are '
+                     f'not fetched twice)')
         doi = common.doi_of(ident)
         if doi and held.get(doi):
             print(f'HAVE    {ident} -> sources key {held[doi]}'); count['HAVE'] += 1; continue
@@ -171,12 +204,19 @@ def main(argv=None):
             w, failed = openalex(ident), None
         except Exception as e:
             w, failed = None, e              # an arXiv id can still be fetched straight from arXiv
+        if isinstance(failed, urllib.error.HTTPError) and failed.code in (401, 403):
+            sys.exit(f'OpenAlex refused the request (HTTP {failed.code}): OPENALEX_API_KEY is wrong or expired. '
+                     f'Fix it, or remove it to fetch without a key')
         if failed:
             print(f'NOTE    {ident}: OpenAlex lookup failed ({failed})', file=sys.stderr)
         elif w is None:
             print(f'NOTE    {ident}: not in OpenAlex', file=sys.stderr)
+        net_down = isinstance(failed, OSError) and not isinstance(failed, urllib.error.HTTPError)
         out = dest / (name_for(w, ident) if w else re.sub(r'\W', '_', ident) + '.pdf')
         have = next((h for r in roots for h in r.rglob(out.name)), None)
+        if have and not is_pdf(have):
+            print(f'ERROR   {ident}: {have} exists but is not a PDF (a broken download?); move it away and run again')
+            count['ERROR'] += 1; continue
         if have:
             print(f'HAVE    {ident} -> {have}'); count['HAVE'] += 1; continue
         urls, answered = candidates(ident, w), False       # answered: a server replied (an HTTP error, not a PDF)
@@ -187,28 +227,47 @@ def main(argv=None):
                 answered = answered or not isinstance(e, OSError) or isinstance(e, urllib.error.HTTPError)
                 print(f'  fail  {url}: {e}', file=sys.stderr); continue
             answered = True
+            offline = 0
             if data:
                 if digests is None:
                     digests = {common.sha256_file(h): h for r in roots for h in r.rglob('*.pdf', case_sensitive=False)}
                 d = hashlib.sha256(data).hexdigest()
                 if d in digests:
-                    log_line(dest, {'id': ident, 'status': 'HAVE', 'url': url, 'file': os.path.relpath(digests[d], dest),
-                                    'sha256': d})
+                    try:
+                        log_line(dest, {'id': ident, 'status': 'HAVE', 'url': url,
+                                        'file': os.path.relpath(digests[d], dest), 'sha256': d})
+                    except OSError as e:
+                        stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
                     print(f'HAVE    {ident} -> {digests[d]} (same file)'); count['HAVE'] += 1; break
-                if not save(out, data):
-                    print(f'HAVE    {ident} -> {out}'); count['HAVE'] += 1; break
+                try:
+                    if not save(out, data):
+                        print(f'HAVE    {ident} -> {out}'); count['HAVE'] += 1; break
+                except OSError as e:
+                    stop(dest, f'cannot save {out} ({e})', count)
+                try:
+                    log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data)})
+                except OSError as e:
+                    out.unlink(missing_ok=True)       # a PDF with no OK line would lose its source URL and id
+                    stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e}); {out.name} removed again', count)
                 digests[d] = out
-                log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data)})
                 print(f'OK      {ident} -> {out}  ({len(data) // 1024} kB, {url})'); count['OK'] += 1; break
             print(f'  fail  {url}: not a PDF', file=sys.stderr)
         else:
+            if not answered and (net_down or urls):
+                offline += 1
+            else:
+                offline = 0
             if failed:
                 print(f'ERROR   {ident}: OpenAlex lookup failed ({failed})'); count['ERROR'] += 1; continue
             if urls and not answered:                       # every URL failed on the network: try again later
                 print(f'ERROR   {ident}: no PDF URL could be reached (network)'); count['ERROR'] += 1; continue
             land = ((w or {}).get('primary_location') or {}).get('landing_page_url') or (f'https://doi.org/{doi}' if doi else ident)
-            log_line(dest, {'id': ident, 'status': 'MANUAL', 'title': (w or {}).get('display_name'), 'url': land})
+            try:
+                log_line(dest, {'id': ident, 'status': 'MANUAL', 'title': (w or {}).get('display_name'), 'url': land})
+            except OSError as e:
+                stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
             print(f'MANUAL  {ident}: {land}'); count['MANUAL'] += 1
+    sys.stdout.flush()                               # the counts come last, after every paper's line
     print('  '.join(f'{k.lower()} {v}' for k, v in count.items()), file=sys.stderr)
     if count['MANUAL'] or count['ERROR'] or count['SKIP']:
         sys.exit(1)

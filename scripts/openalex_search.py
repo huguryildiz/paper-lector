@@ -14,7 +14,7 @@ current folder), for example runs/2026-10-18_1420_entanglement-scheduling_exact_
 minute is taken. <name> is --name, the same short name the queries file will carry; without --name the file is
 <date>_<time>_<mode>_search.jsonl.
 """
-import argparse, datetime, json, re, sys, urllib.error, urllib.parse
+import argparse, datetime, json, os, re, sys, urllib.error, urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -31,7 +31,16 @@ def get(path, params):
     except urllib.error.HTTPError as e:
         if msg := common.openalex_error(e, KEY):
             sys.exit(msg)
-        raise
+        if e.code in (401, 403):
+            sys.exit(f'OpenAlex refused the request (HTTP {e.code}): OPENALEX_API_KEY is wrong or expired. '
+                     f'Fix it, or remove it to search without a key')
+        if e.code == 404:
+            raise
+        sys.exit(f'OpenAlex answered HTTP {e.code} after retries; nothing written. Try again later')
+    except common.TRANSIENT as e:
+        sys.exit(f'cannot reach api.openalex.org ({e}); nothing written. Check the connection and run again')
+    except ValueError as e:
+        sys.exit(f'OpenAlex sent an answer that is not JSON ({e}); nothing written. Try again later')
 
 
 def work_id(x):
@@ -163,19 +172,26 @@ def main(argv=None):
     global KEY
     cfg = common.load_config(a.config, required=False)
     KEY = common.api_key('OPENALEX_API_KEY', cfg, required=False)
-    if not a.out:
-        base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
-        tail = f'_{a.name}_{mode}_search.jsonl' if a.name else f'_{mode}_search.jsonl'
-        a.out, n = f'{base}{tail}', 2
-        while not reserve(a.out):                   # same name and mode in the same minute, or another run
-            a.out, n = f'{base}-{n}{tail}', n + 1
-    elif not reserve(a.out):
-        sys.exit(f'{a.out}: --out must be a new file (it and its .query.json are never overwritten)')
+    try:
+        if not a.out:
+            base = (cfg['root'] if cfg else Path.cwd()) / 'runs' / datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
+            tail = f'_{a.name}_{mode}_search.jsonl' if a.name else f'_{mode}_search.jsonl'
+            a.out, n = f'{base}{tail}', 2
+            while not reserve(a.out):               # same name and mode in the same minute, or another run
+                a.out, n = f'{base}-{n}{tail}', n + 1
+        elif not reserve(a.out):
+            sys.exit(f'{a.out}: --out must be a new file (it and its .query.json are never overwritten)')
+    except OSError as e:
+        sys.exit(f'cannot create {a.out} ({e}); nothing searched')
     try:
         search(a, cfg, mode)
-    except BaseException:
+    except BaseException as e:
         for f in (Path(a.out), Path(a.out).with_suffix('.query.json')):   # both reserved by this run
             f.unlink(missing_ok=True)
+        if isinstance(e, urllib.error.HTTPError) and e.code == 404:
+            sys.exit(f'{getattr(a, mode)}: not found in OpenAlex; nothing written')
+        if isinstance(e, OSError) and not isinstance(e, urllib.error.URLError):
+            sys.exit(f'cannot write {a.out} ({e}); nothing kept. Free some space and run the search again')
         raise
 
 
@@ -189,10 +205,22 @@ def reserve(out):
         return False
     try:
         open(side, 'x').close()
-    except FileExistsError:
+    except BaseException as e:
         Path(out).unlink()
-        return False
+        if isinstance(e, FileExistsError):
+            return False
+        raise
     return True
+
+
+def replace(path, text):
+    """Fill a file this run reserved: the text goes to a temporary file first, then replaces the empty one."""
+    tmp = Path(f'{path}.{os.getpid()}.part')
+    try:
+        tmp.write_text(text, encoding='utf-8')
+        os.replace(tmp, path)
+    finally:
+        tmp.unlink(missing_ok=True)
 
 
 def search(a, cfg, mode):
@@ -221,20 +249,24 @@ def search(a, cfg, mode):
         works = works[:a.max]
 
     held = held_dois(cfg)
-    with open(a.out, 'w', encoding='utf-8') as f:
-        for w in works:
-            f.write(json.dumps(record(w, held), ensure_ascii=False) + '\n')
-    n_held = sum(1 for w in works if held.get((w.get('doi') or '').removeprefix('https://doi.org/').lower()))
+    # Written whole to a temporary file and moved over the empty reserved one, so a full disk never leaves a cut list
+    try:
+        lines = ''.join(json.dumps(record(w, held), ensure_ascii=False) + '\n' for w in works)
+        n_held = sum(1 for w in works if held.get((w.get('doi') or '').removeprefix('https://doi.org/').lower()))
+    except (KeyError, TypeError, AttributeError, ValueError) as e:
+        sys.exit(f'OpenAlex sent a work in an unexpected shape ({type(e).__name__}: {e}); nothing written. '
+                 f'Try again later, or report it (CONTRIBUTING.md)')
+    replace(a.out, lines)
     if a.refs:
         print(f'references: listed {meta["count"]}, written {len(works)}', file=sys.stderr)
     print(f"count {meta.get('count')}  written {len(works)}  already in sources.csv {n_held}  -> {a.out}", file=sys.stderr)
     # without a key only page 1 of a keyword or citing search comes back
     cut = not KEY and mode in ('exact', 'cites') and (meta.get('count') or 0) > len(works) and (not a.max or a.max > len(works))
-    Path(a.out).with_suffix('.query.json').write_text(json.dumps({
+    replace(Path(a.out).with_suffix('.query.json'), json.dumps({
         'mode': mode, 'query': getattr(a, mode), 'date': datetime.datetime.now().isoformat(timespec='seconds'),
         'count': meta.get('count'), 'written': len(works), 'already_in_sources': n_held, 'max': a.max or None,
         'keyless': not KEY, 'keyless_first_page_only': cut, 'name': a.name, 'out': Path(a.out).name},
-        ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        ensure_ascii=False, indent=1) + '\n')
     if cut:
         print(f'no OPENALEX_API_KEY: only the first {len(works)} of {meta["count"]} were written; a free key gets them all',
               file=sys.stderr)

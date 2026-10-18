@@ -1,7 +1,13 @@
 """Shared helpers: project config (literature.json), API keys, sources table, queries file, HTTP retries."""
-import csv, datetime, email.utils, hashlib, http.client, json, os, re, sys, time, urllib.error, urllib.request
+import csv, datetime, email.utils, hashlib, http.client, json, os, re, stat, sys, time, urllib.error, urllib.request
 from pathlib import Path
 
+try:
+    import fcntl
+except ImportError:                                   # not on Windows
+    fcntl = None
+
+VERSION = '0.1.0'
 CONFIG_NAME = 'literature.json'
 LABELS = ('main', 'subject', 'approach', 'outcome', 'context', 'comparison')
 DEFAULT_FUSE_LABELS = ('main', 'subject')
@@ -34,8 +40,10 @@ def load_config(explicit=None, required=True, start=None):
         return None
     try:
         cfg = json.load(open(path, encoding='utf-8'))
-    except json.JSONDecodeError as e:
-        sys.exit(f'{path}: not valid JSON ({e})')
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        sys.exit(f'{path}: not valid JSON in UTF-8 ({e})')
+    if not isinstance(cfg, dict):
+        sys.exit(f'{path}: the config must be one JSON object, for example {{"pdf_dirs": ["pdfs"]}}')
     root = path.parent
     if not isinstance(cfg.get('pdf_dirs'), list) or not cfg['pdf_dirs'] or not all(isinstance(x, str) for x in cfg['pdf_dirs']):
         sys.exit(f'{path}: "pdf_dirs" must be a non-empty list of folder paths')
@@ -74,6 +82,8 @@ def api_key(name, cfg=None, required=True):
     for p in ([cfg['root'] / '.env'] if cfg else []) + [Path.home() / '.config/paper-lector/.env']:
         v = _read_env(p).get(name)
         if v:
+            if os.name == 'posix' and p.stat().st_mode & (stat.S_IRWXG | stat.S_IRWXO):
+                print(f'note: {p} holds {name} and other users can read it; run "chmod 600 {p}"', file=sys.stderr)
             return v
     if not required:
         return None
@@ -111,8 +121,7 @@ def retry_after(e):
 def openalex_json(url, key, timeout):
     """GET an OpenAlex URL, keyless when key is None. A 429 with a Retry-After of hours (a spent daily budget) is
     raised at once, not retried."""
-    req = urllib.request.Request(url, headers={'Authorization': 'Bearer ' + key} if key else {})
-    return open_json(req, timeout)
+    return open_json(authorized(urllib.request.Request(url), key), timeout)
 
 
 def openalex_error(e, key):
@@ -126,7 +135,7 @@ def openalex_error(e, key):
             msg = json.load(e).get('message')
         except (ValueError, AttributeError):
             return None
-        return 'OpenAlex refused the request' + (': ' + msg if isinstance(msg, str) and msg else '')
+        return 'OpenAlex refused the request' + (': ' + redact(msg, key) if isinstance(msg, str) and msg else '')
     return None
 
 
@@ -136,6 +145,66 @@ def open_json(req, timeout, tries=4):
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return json.load(r)
     return retry(once, tries)
+
+
+def write_new(path, data):
+    """Write bytes to path, which must not exist yet, so that a crash or a full disk never leaves a partial file
+    under that name: written whole to a .part file, then hard-linked into place, which fails if path exists. Where
+    hard links are not supported (FAT and exFAT drives, some network or synced folders) the .part file is renamed into
+    place after a check that path is still free; only a second process writing the same name at that moment could
+    then be replaced. False if path already exists; any other OSError (a full disk) is raised with nothing left."""
+    path = Path(path)
+    part = path.with_name(f'.{path.name}.{os.getpid()}.part')
+    try:
+        part.write_bytes(data)
+        try:
+            os.link(part, path)
+            return True
+        except FileExistsError:
+            return False
+        except OSError:
+            pass                                      # no hard links here
+        if path.exists():
+            return False
+        os.rename(part, path)
+        return True
+    finally:
+        part.unlink(missing_ok=True)
+
+
+def append_line(path, line):
+    """Append one line to a log file, or nothing: written unbuffered, and on a failure (a full disk, a size limit)
+    the file is cut back to its old length, so the log never ends in a broken line."""
+    fd = os.open(path, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
+    try:
+        if fcntl:
+            fcntl.flock(fd, fcntl.LOCK_EX)            # another run appending meanwhile would be cut back with us
+        size = os.fstat(fd).st_size
+        data = (line.rstrip('\n') + '\n').encode('utf-8')
+        try:
+            while data:
+                data = data[os.write(fd, data):]
+        except OSError:
+            os.ftruncate(fd, size)
+            raise
+    finally:
+        os.close(fd)
+
+
+def redact(text, *secrets):
+    """text with every given secret (an API key) replaced by ***, for messages that quote a server's answer."""
+    for k in secrets:
+        if k and len(k) >= 8:                         # a real key; a short test value would blank ordinary words
+            text = text.replace(k, '***')
+    return text
+
+
+def authorized(req, key):
+    """Add the key as a Bearer header that urllib does not copy onto a redirected request, so a redirect to another
+    host never carries it."""
+    if key:
+        req.add_unredirected_header('Authorization', 'Bearer ' + key)
+    return req
 
 
 def norm_id(x):

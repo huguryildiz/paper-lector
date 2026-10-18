@@ -1,11 +1,18 @@
 """Offline fixtures: tiny real PDFs, a whitespace tokenizer, a fake Voyage API and a fake local model."""
-import hashlib, re, sys
+import hashlib, os, re, sys
 from pathlib import Path
 
 import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
+
+
+def needs(path, setup):
+    """Skip a test that needs a downloaded model until it is there. CI sets PAPER_LECTOR_REQUIRE_MODELS=1 after
+    running the setup, so there the test always runs: it downloads a missing model, or fails offline."""
+    return pytest.mark.skipif(not Path(path).exists() and not os.environ.get('PAPER_LECTOR_REQUIRE_MODELS'),
+                              reason=f'not cached; run {setup}')
 
 
 def make_pdf(path, pages):
@@ -70,10 +77,11 @@ def local_vecs(texts):
 class FakeVoyage:
     """Embeddings = hashed bag of words; rerank score = share of query words found in the document."""
     def __init__(self):
-        self.calls = []
+        self.calls, self.sent = [], []
 
-    def __call__(self, ep, body):
+    def __call__(self, ep, body, n=None):
         self.calls.append((ep, body))
+        self.sent.append(n)
         if ep == 'embeddings':
             return {'data': [{'embedding': bag(t)} for t in body['input']],
                     'usage': {'total_tokens': sum(len(t.split()) for t in body['input'])}}

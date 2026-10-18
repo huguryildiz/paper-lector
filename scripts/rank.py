@@ -20,14 +20,15 @@ Method:
   abstract plus 3 windows. Output: <out>_<name>_rank-local.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
-  rerun or a run resumed after a crash only pays for new text. Table src ties each vector to its PDF's SHA-256 and
+  rerun or a run resumed after a crash does not pay for them again; reranking is paid in full on every run. Every
+  request, retries included, counts against --budget. Outputs are written at the end, all or none. Table src ties each vector to its PDF's SHA-256 and
   window number and pages (or to the queries hash and query id).
 
   rank.py --setup                         # once, online: checks pdftotext, downloads the tokenizer
   rank.py --dry                           # counts and token estimate, no API call
   rank.py                                 # writes runs/<date>_<time>_<name>_rank.csv and _rank_run.json, logs questions.jsonl
 """
-import argparse, csv, datetime, hashlib, json, math, os, re, shutil, sqlite3, subprocess, sys, urllib.request
+import argparse, csv, datetime, functools, hashlib, io, json, math, os, re, shutil, sqlite3, subprocess, sys, urllib.error, urllib.request
 from collections import Counter
 from pathlib import Path
 
@@ -39,7 +40,8 @@ import common
 EMBED, RERANK = 'voyage-4-large', 'rerank-3'
 WIN, STEP, RRF_K, N_WIN, MAX_OVERLAP, HEAD = 1200, 1000, 60, 3, 0.2, 1000
 EMBED_BATCH, RERANK_BATCH, MAX_ITEMS = 100_000, 500_000, 1000     # Voyage: at most 1,000 inputs or documents per call
-RERANK_PAIR = 32_000                                                 # rerank-3 context: query + one document
+RERANK_PAIR, RERANK_QUERY = 32_000, 8_000                           # rerank-3: query + one document, query alone
+# A rerank request costs query tokens x documents + document tokens, at most 600K for rerank-3; RERANK_BATCH stays below.
 PDFTOTEXT_SECONDS = 300
 TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
 TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
@@ -54,22 +56,100 @@ STOP = set('a an the of for and or in on with to via under by at as is are be be
            'from into over than then which when where while what who how does do can not no '
            've ile bir bu şu için da de olan olarak gibi daha en çok her ise veya ya ki ne'.split())
 KEY = None
+SENT, BUDGET = 0, math.inf                      # tokens sent to Voyage in this run, and --budget
 LIGATURES = str.maketrans({'\ufb00': 'ff', '\ufb01': 'fi', '\ufb02': 'fl', '\ufb03': 'ffi', '\ufb04': 'ffl',
                            '\ufb05': 'st', '\ufb06': 'st'})       # pdftotext keeps a font's ligature glyphs
 
 
-def call(ep, body):
-    req = urllib.request.Request(f'https://api.voyageai.com/v1/{ep}', json.dumps(body).encode(),
-                                 {'Authorization': 'Bearer ' + KEY, 'content-type': 'application/json'})
-    return common.open_json(req, timeout=600)
+def call(ep, body, n):
+    """One Voyage request of n tokens (counted with Voyage's tokenizer, as in the estimate). Every attempt, retries
+    included, counts n against --budget before it is sent, since a request lost on the way back may still be billed;
+    an attempt that would pass the budget is not sent. Errors stop the run with a message."""
+    global SENT
+    req = common.authorized(urllib.request.Request(f'https://api.voyageai.com/v1/{ep}', json.dumps(body).encode(),
+                                                   {'content-type': 'application/json'}), KEY)
+
+    def once():
+        global SENT
+        if SENT + n > BUDGET:
+            sys.exit(f'stopped: the next Voyage request ({n:,} tokens) would bring the tokens sent to {SENT + n:,}, '
+                     f'above --budget {BUDGET:,} (retries count too). Nothing written; embeddings already received '
+                     f'are cached, so a rerun does not pay for them again')
+        SENT += n
+        with urllib.request.urlopen(req, timeout=600) as r:
+            return json.load(r)
+    try:
+        return common.retry(once)
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            sys.exit(f'Voyage refused the key (HTTP {e.code}): VOYAGE_API_KEY is wrong or revoked. Nothing written. '
+                     f'Fix the key (environment, project .env or ~/.config/paper-lector/.env), or use --provider local')
+        if e.code == 429:
+            sys.exit('Voyage kept answering HTTP 429 (rate limit) after the retries; nothing written, embeddings already '
+                     'received are cached. Accounts with no payment method get very low limits, too low for a batch of '
+                     'this size: add a payment method in the Voyage dashboard (the free tokens still apply), wait and '
+                     'run again, or use --provider local')
+        try:
+            detail = json.load(e).get('detail') or ''
+        except (ValueError, AttributeError, OSError):
+            detail = ''
+        sys.exit(f'Voyage answered HTTP {e.code} on {ep}' + (f': {common.redact(str(detail), KEY)[:300]}' if detail else '')
+                 + '. Nothing written; embeddings already received are cached')
+    except (common.TRANSIENT + (json.JSONDecodeError,)) as e:
+        sys.exit(f'cannot get an answer from api.voyageai.com ({e}). Nothing written; embeddings already received are '
+                 f'cached. Check the connection and run again')
 
 
-def embed(items, input_type, usage, srcs):
+def tokens_used(r):
+    """total_tokens from a Voyage answer, 0 when it holds none."""
+    u = r.get('usage') if isinstance(r, dict) else None
+    t = u.get('total_tokens') if isinstance(u, dict) else None
+    return t if isinstance(t, int) else 0
+
+
+def rerank_scores(r, n):
+    """index -> relevance score from a rerank response for n documents. A response that misses or repeats a document,
+    or gives a score that is not a finite number, stops the run: a rank built on it would be wrong."""
+    got, data = {}, r.get('data') if isinstance(r, dict) else None
+    for x in data if isinstance(data, list) else []:
+        if not isinstance(x, dict):
+            got = None
+            break
+        i, v = x.get('index'), x.get('relevance_score')
+        if not isinstance(i, int) or not 0 <= i < n or i in got or isinstance(v, bool) \
+                or not isinstance(v, (int, float)) or not math.isfinite(v):
+            got = None
+            break
+        got[i] = float(v)
+    if got is None or len(got) != n:
+        sys.exit(f'Voyage returned an incomplete or invalid rerank answer (not {n} results with one finite score each); '
+                 f'nothing written. Run again')
+    return got
+
+
+def embed(items, input_type, usage, srcs, dim=None):
     """Unit-norm embeddings for (text, tokens) items. Cached vectors are reused; new ones are stored after each
     API batch, so a crashed run resumes without paying again. Stored as float32 whether fresh or cached.
     srcs gives each item's origin, (ref, part, pages): a window is (PDF SHA-256, window number in that PDF, its pages),
     a query is (queries hash, query id, ''). They go to table src, cached items too, so a vector can be traced back to
-    a paper; one text met in two PDFs has one vector and two src rows."""
+    a paper; one text met in two PDFs has one vector and two src rows. dim is the size every vector must have (the
+    windows' size, for the queries); a vector of another size, or a zero or non-finite one, is never cached."""
+    try:
+        return _embed(items, input_type, usage, srcs, dim)
+    except sqlite3.Error as e:
+        sys.exit(f'the embedding cache {CACHE} cannot be read or written ({e}); nothing written. A full disk is the usual '
+                 f'cause: free some space and run again. If the file itself is damaged, move it away; it is rebuilt, '
+                 f'and its vectors are paid for again')
+
+
+def usable(v, dim=None):
+    """True for an embedding worth keeping: one finite, non-zero vector of at least 2 numbers (of dim numbers when
+    given)."""
+    return v.ndim == 1 and v.size >= 2 and (dim is None or v.size == dim) and bool(np.isfinite(v).all()) \
+        and bool(np.linalg.norm(v))
+
+
+def _embed(items, input_type, usage, srcs, dim):
     CACHE.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(CACHE)
     db.execute('create table if not exists emb (key text primary key, vec blob)')
@@ -79,16 +159,36 @@ def embed(items, input_type, usage, srcs):
     vec = {}
     for k in dict.fromkeys(keys):
         row = db.execute('select vec from emb where key = ?', (k,)).fetchone()
-        if row:
+        if row and len(row[0]) % 4 == 0:
             vec[k] = np.frombuffer(row[0], np.float32)
+    # Vectors of the run's one size only (the most common among cached ones); any other cached vector, or a zero or
+    # non-finite one, is not used and is fetched again, replacing it in the cache.
+    sizes = Counter(v.size for v in vec.values() if usable(v))
+    dim = dim or (sizes.most_common(1)[0][0] if sizes else None)
+    bad = [k for k, v in vec.items() if not usable(v, dim)]
+    for k in bad:
+        del vec[k]
+    if bad:
+        print(f'note: {len(bad)} cached embeddings were unusable (wrong size, zero or not finite); fetched again',
+              file=sys.stderr)
     cached = len(vec)
     todo = list({k: it for k, it in zip(keys, items) if k not in vec}.items())
     for part in batches(todo, lambda x: x[1][1], EMBED_BATCH, MAX_ITEMS):
-        r = call('embeddings', {'input': [it[0] for _, it in part], 'model': EMBED, 'input_type': input_type, 'truncation': False})
-        usage['embed'] += r['usage']['total_tokens']
-        got = {x.get('index', i): np.asarray(x['embedding'], np.float32) for i, x in enumerate(r['data'])}
-        if sorted(got) != list(range(len(part))) or any(not np.isfinite(v).all() or not np.linalg.norm(v) for v in got.values()):
-            sys.exit('Voyage returned an incomplete, zero or non-finite embedding batch; nothing ranked. Run again')
+        r = call('embeddings', {'input': [it[0] for _, it in part], 'model': EMBED, 'input_type': input_type, 'truncation': False},
+                 sum(it[1] for _, it in part))
+        r = r if isinstance(r, dict) else {}
+        usage['embed'] += tokens_used(r)
+        try:
+            data = r['data']
+            got = {x.get('index', i): np.asarray(x['embedding'], np.float32) for i, x in enumerate(data)}
+            if len(data) != len(got):
+                got = {}                             # an index given twice: one vector would replace another
+        except (KeyError, TypeError, ValueError, AttributeError):
+            got = {}
+        dim = dim or next((v.size for v in got.values() if usable(v)), None)
+        if set(got) != set(range(len(part))) or not all(usable(v, dim) for v in got.values()):
+            sys.exit('Voyage returned an incomplete or invalid embedding batch (a missing, zero, non-finite or '
+                     'wrong-sized vector); nothing written and nothing of it cached. Run again')
         for i, (k, _) in enumerate(part):
             vec[k] = got[i]
         db.executemany('insert or replace into emb values (?, ?)', [(k, vec[k].tobytes()) for k, _ in part])
@@ -117,10 +217,11 @@ def fetch(url, path, want, what, why, setup):
     """Download url to path once; a partial download or one with the wrong SHA-256 never lands at path."""
     if path.exists():
         return
-    path.parent.mkdir(parents=True, exist_ok=True)
     part = path.with_suffix('.part')
     try:
-        urllib.request.urlretrieve(url, part)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(url, timeout=120) as r, open(part, 'wb') as f:   # 120 s without data: give up
+            shutil.copyfileobj(r, f, 1 << 20)
     except OSError as e:
         part.unlink(missing_ok=True)
         sys.exit(f'cannot download {what} ({e}). {why}: connect to the internet and run "{setup}", or copy {url} to {path}')
@@ -157,7 +258,7 @@ def local_model():
 def need_pdftotext():
     if not shutil.which('pdftotext'):
         sys.exit('pdftotext not found. Install poppler: "brew install poppler" (macOS), '
-                 '"sudo apt install poppler-utils" (Debian/Ubuntu), "conda install -c conda-forge poppler" (Windows)')
+                 '"sudo apt install poppler-utils" (Debian/Ubuntu); on Windows use WSL')
 
 
 def digest(path):
@@ -390,8 +491,8 @@ class ExtractError(Exception):
 def pdf_pages(path):
     """Page texts from pdftotext. A failed or slow extraction raises ExtractError rather than ranking partial text."""
     try:
-        r = subprocess.run(['pdftotext', str(path), '-'], capture_output=True, text=True, errors='replace',
-                           timeout=PDFTOTEXT_SECONDS)
+        r = subprocess.run(['pdftotext', '-enc', 'UTF-8', str(path), '-'], capture_output=True, text=True,
+                           encoding='utf-8', errors='replace', timeout=PDFTOTEXT_SECONDS)
     except subprocess.TimeoutExpired:
         raise ExtractError(f'pdftotext took more than {PDFTOTEXT_SECONDS} s')
     if r.returncode:
@@ -518,9 +619,9 @@ def sha(s):
 
 
 def cell(s):
-    """A text cell safe to open in a spreadsheet: a leading = + - @ (a formula there) gets a ' in front, and so does a
+    """A text cell safe to open in a spreadsheet: a leading = + - @, tab, CR or LF (a formula there) gets a ' in front, and so does a
     leading ' (which a spreadsheet hides), so two different texts never give the same cell."""
-    return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r', "'") else s
+    return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r', '\n', "'") else s
 
 
 def unique_pages(s):
@@ -547,6 +648,8 @@ def start_pages(cells, k=3):
 
 def read_ids(path):
     """Paper ids (and SHA-256 when the CSV has that column) from a CSV with a "paper" column."""
+    if not Path(path).is_file():
+        sys.exit(f'--ids {path}: file not found')
     rows = list(csv.DictReader(open(path, encoding='utf-8-sig')))
     if not rows or 'paper' not in rows[0]:
         sys.exit(f'{path}: --ids needs a CSV with a "paper" column and at least one row')
@@ -567,8 +670,29 @@ def rid(x):
         return None
 
 
+@functools.lru_cache(maxsize=None)
 def words(s):
     return ' '.join(re.findall(r'\w+', (s or '').translate(LIGATURES).lower()))
+
+
+@functools.lru_cache(maxsize=None)
+def content_words(s):
+    """The words of 4 or more letters in s, stop words left out (for comparing abstracts)."""
+    return frozenset(w for w in re.findall(r'[^\W\d_]{4,}', lower(s or '')) if w not in STOP)
+
+
+@functools.lru_cache(maxsize=None)
+def numbers(s):
+    """Numbers and roman numerals among the words of s ("Part II", "5G")."""
+    return frozenset(w for w in s.split() if re.fullmatch(r'\d+|x{0,3}(?:ix|iv|v?i{0,3})', w))
+
+
+def alike(a, b, least):
+    """True when strings a and b are at least `least` alike letter by letter (difflib ratio). The cheap upper bounds
+    go first, so most pairs never reach the full comparison."""
+    import difflib
+    m = difflib.SequenceMatcher(None, a, b, autojunk=False)
+    return m.real_quick_ratio() >= least and m.quick_ratio() >= least and m.ratio() >= least
 
 
 TITLE_STOP = {'a', 'an', 'the', 'of', 'for', 'and', 'or', 'in', 'on', 'with', 'to', 'via', 'under', 'by', 'at', 'from',
@@ -578,26 +702,36 @@ TITLE_STOP = {'a', 'an', 'the', 'of', 'for', 'and', 'or', 'in', 'on', 'with', 't
 def same_title(a, b):
     """Two versions of one paper: normalised titles at least 95% alike letter by letter ("Fidelity-Guarantee" and
     "Fidelity-Guaranteed"); different papers with near titles stay apart (about 87% for those seen so far)."""
-    import difflib
-    num = lambda s: {w for w in s.split() if re.fullmatch(r'\d+|x{0,3}(?:ix|iv|v?i{0,3})', w)}
-    if num(a) != num(b):
+    if numbers(a) != numbers(b):
         return False                                      # "Part I" and "Part II": different papers
-    return difflib.SequenceMatcher(None, a, b, autojunk=False).ratio() >= 0.95
+    return alike(a, b, 0.95)
+
+
+def versions_of(r, h):
+    """Records r and h can be two versions of one paper: the same first author's surname and years at most two apart,
+    where both records give them. Two papers that only share a title stay apart."""
+    if not r or not h:
+        return True                                   # a PDF matched by its title alone: nothing to compare
+    # The first author's name words: "Angela Sara Cacciapuoti" and "CACCIAPUOTI, Angela Sara" share them, so the
+    # name order a repository uses does not matter; two people share none (initials aside).
+    name = lambda x: {w for w in words(x.get('first_author') or (x.get('authors') or [''])[0]).split() if len(w) > 1}
+    if name(r) and name(h) and not name(r) & name(h):
+        return False
+    return not (r.get('year') and h.get('year') and abs(r['year'] - h['year']) > 2)
 
 
 def retitled(r, h):
     """Records r and h are one paper retitled between preprint and print: the same first author (full name), years
     at most one apart, titles at least 85% alike with the same numbers, and abstracts sharing 80% of their words."""
-    import difflib
     if not r or not h:
         return False
-    sur = lambda x: words(x.get('first_author') or (x.get('authors') or [''])[0]).split()
-    ab = lambda x: {w for w in re.findall(r'[^\W\d_]{4,}', lower(x.get('abstract') or '')) if w not in STOP}
-    ta, tb, aa, bb = words(r.get('title')), words(h.get('title')), ab(r), ab(h)
-    num = lambda s: {w for w in s.split() if re.fullmatch(r'\d+|x{0,3}(?:ix|iv|v?i{0,3})', w)}
-    return bool(sur(r)) and sur(r) == sur(h) and r.get('year') and h.get('year') and abs(r['year'] - h['year']) <= 1 \
-        and num(ta) == num(tb) and difflib.SequenceMatcher(None, ta, tb, autojunk=False).ratio() >= 0.85 \
-        and bool(aa) and bool(bb) and len(aa & bb) / len(aa | bb) >= 0.8
+    sur = lambda x: words(x.get('first_author') or (x.get('authors') or [''])[0])
+    if not sur(r) or sur(r) != sur(h) or not r.get('year') or not h.get('year') or abs(r['year'] - h['year']) > 1:
+        return False
+    ta, tb = words(r.get('title')), words(h.get('title'))
+    aa, bb = content_words(r.get('abstract')), content_words(h.get('abstract'))
+    return numbers(ta) == numbers(tb) and bool(aa) and bool(bb) and len(aa & bb) / len(aa | bb) >= 0.8 \
+        and alike(ta, tb, 0.85)
 
 
 def title_cover(title, lead):
@@ -655,7 +789,12 @@ def abstract_corpus(paths, P, W, cfg, dirs):
         for n, line in enumerate(open(path, encoding='utf-8'), 1):
             if not line.strip():
                 continue
-            r = json.loads(line)
+            try:
+                r = json.loads(line)
+            except json.JSONDecodeError as e:
+                sys.exit(f'{path} line {n}: not a JSON record ({e}); nothing ranked')
+            if not isinstance(r, dict):
+                sys.exit(f'{path} line {n}: not a JSON record (an object with a doi, arxiv or openalex id); nothing ranked')
             ids = list(dict.fromkeys(i for i in (rid(r.get('doi')), rid(r.get('arxiv')), rid(r.get('openalex'))) if i))
             if not ids:
                 print(f'note: {path} line {n}: no doi, arxiv or openalex id ({r.get("title")}); left out', file=sys.stderr)
@@ -680,8 +819,15 @@ def abstract_corpus(paths, P, W, cfg, dirs):
     logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
             for f in Path(d).rglob('fetch_log.jsonl')}
     for f in sorted(logs):
-        for line in open(f, encoding='utf-8'):
-            e = json.loads(line)
+        for n, line in enumerate(open(f, encoding='utf-8'), 1):
+            if not line.strip():
+                continue
+            try:
+                e = json.loads(line)
+                if not isinstance(e, dict):
+                    raise ValueError('not an object')
+            except ValueError as x:
+                sys.exit(f'{f} line {n}: not a JSON record ({x}); repair or delete that line, then run again')
             p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
             p = p or by_sha.get(e.get('sha256'))          # a byte-identical copy ranked in the logged file's place
             if e.get('status', 'OK') in ('OK', 'HAVE') and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
@@ -714,14 +860,15 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             if r.get('abstract'):
                 A[pid].update(text=r['abstract'], **{'from': 'search'})
         # else: a second record with the same id as a paper already matched
-    same = {words(A[k]['title']): k for k in sorted(taken) if A[k]['title']}   # titles already held, word for word
+    same = [(words(A[k]['title']), k) for k in sorted(taken) if A[k]['title']]   # (title word for word, paper) held
     for r in left:
         t = words(r.get('title'))
-        twin = next((k for k in same if len(t.split()) >= 4 and (same_title(t, k) or retitled(r, A[same[k]]['rec']))), None)
+        twin = next((k for tt, k in same if len(t.split()) >= 4 and ((same_title(t, tt) and versions_of(r, A[k]['rec']))
+                                                                     or retitled(r, A[k]['rec']))), None)
         if twin is not None:
-            print(f'note: {r.get("doi") or r.get("openalex")} has the title of {same[twin]} (another version); '
+            print(f'note: {r.get("doi") or r.get("openalex")} has the title of {twin} (another version); '
                   f'counted once', file=sys.stderr)
-            held = A[same[twin]]
+            held = A[twin]
             if (r.get('cited_by') or 0) > ((held['rec'] or {}).get('cited_by') or 0):   # citations of the most cited version
                 held['rec'] = dict(held['rec'] or {}, **{k: r.get(k) for k in ('cited_by', 'cited_pct', 'cited_at')})
             continue
@@ -731,11 +878,11 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             A[pid].update(title=r.get('title') or '', rec=r)
             if r.get('abstract'):
                 A[pid].update(text=r['abstract'], **{'from': 'search'})
-            same[t] = pid
+            same.append((t, pid))
             continue
         aid = short_id(r, A)
         if len(t.split()) >= 4:
-            same[t] = aid
+            same.append((t, aid))
         A[aid] = {'id': aid, 'source': 'abstract_only', 'title': r.get('title') or '', 'text': r.get('abstract') or '',
                   'from': 'search' if r.get('abstract') else '', 'rec': r}
     return list(A.values())
@@ -767,6 +914,37 @@ def run_name(out, name, ext='json'):
     return f'{out}_{name}_rank_run.{ext}'
 
 
+def inputs(a, cfg, dirs):
+    """SHA-256 of every input file besides the PDFs that can change the CSV: the queries file, the config, the sources
+    table and each fetch_log.jsonl (they tie search records to PDFs and give the links)."""
+    f = lambda p: {'path': rel(p, cfg), 'sha256': common.sha256_file(p)} if p and Path(p).is_file() else None
+    logs = sorted({x for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
+                   for x in Path(d).rglob('fetch_log.jsonl')})
+    return {'queries_file': f(a.queries or (cfg and cfg['queries'])), 'config': f(cfg and cfg['path']),
+            'sources': f(cfg and cfg['sources']), 'fetch_logs': [f(x) for x in logs]}
+
+
+def publish(files):
+    """Write the run's files under their final names, all or none: each goes through common.write_new (no partial
+    file under its name), and a failure removes the ones this run already wrote, so a full disk leaves no CSV
+    without its run record."""
+    done = []
+    try:
+        for path, data in files:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if not common.write_new(path, data):
+                raise FileExistsError(f'{path} appeared during the run')
+            done.append(path)
+    except BaseException as e:                       # a full disk, or Ctrl-C half-way: keep none
+        for path in done:
+            path.unlink(missing_ok=True)
+        if not isinstance(e, OSError):
+            raise
+        sys.exit(f'cannot write the outputs ({e}); nothing of this run was kept. Free some space and run again'
+                 + ('; embeddings already received are cached' if BUDGET != math.inf else ''))
+    return done
+
+
 def stamp():
     return datetime.datetime.now().strftime('%Y-%m-%d_%H%M')
 
@@ -778,7 +956,7 @@ def versions():
         pt = subprocess.run(['pdftotext', '-v'], capture_output=True, text=True).stderr.split('\n')[0]
     except OSError:
         pt = ''
-    return {'python': platform.python_version(), 'numpy': np.__version__, 'tokenizers': tokenizers.__version__,
+    return {'os': platform.platform(), 'python': platform.python_version(), 'numpy': np.__version__, 'tokenizers': tokenizers.__version__,
             'pdftotext': pt, 'tokenizer_revision': TOK_REV}
 
 
@@ -799,6 +977,7 @@ def main(argv=None):
                     'runs/2026-10-17_2315)')
     ap.add_argument('--setup', action='store_true', help='check pdftotext and download the tokenizer once (with --provider local also the local model), then exit')
     a = ap.parse_args(argv)
+    a.argv = argv
     need_pdftotext()
     if a.setup:
         tokenizer()
@@ -819,9 +998,17 @@ def main(argv=None):
     log = questions_log(cfg, qfile)
     seen = []
     for f in dict.fromkeys([log, qfile.parent / 'questions.jsonl']):      # and an older log beside the queries file
-        for l in (open(f, encoding='utf-8') if f.is_file() else []):
+        for n, l in enumerate(open(f, encoding='utf-8') if f.is_file() else [], 1):
             if l.strip():
-                e = json.loads(l)
+                try:
+                    e = json.loads(l)
+                    if not isinstance(e, dict):
+                        raise ValueError('not an object')
+                except ValueError:
+                    sys.exit(f'{f} line {n} is not a JSON record (cut off by a crash?). Repair or delete that line, '
+                             f'then run again')
+                if not isinstance(e.get('queries', ''), str):
+                    sys.exit(f'{f} line {n}: "queries" is not a file path; repair or delete that line, then run again')
                 e['file'] = (f.parent / e.get('queries', '')).resolve()    # "queries" is relative to its log's folder
                 seen.append(e)
     if any(e['file'] == qfile and e.get('queries_sha') != qsha for e in seen):
@@ -845,7 +1032,11 @@ def main(argv=None):
         sys.exit(f'--out {a.out} already holds ' + (f'a run of "{other[0]}"' if other else 'a run of an older paper-lector')
                  + '; rank into a new --out')
     prev = Path(run_name(a.out, a.name))
-    if prev.is_file() and json.loads(prev.read_text()).get('queries_sha') != qsha:
+    try:
+        prev_sha = json.loads(prev.read_text(encoding='utf-8')).get('queries_sha') if prev.is_file() else qsha
+    except (ValueError, AttributeError):
+        sys.exit(f'{prev} is not a complete run record (an older paper-lector cut off by a crash?); rank into a new --out')
+    if prev_sha != qsha:
         sys.exit(f'{prev} was made with a different question, queries or fuse list. A frozen queries file is not edited: '
                  f'write a new queries file and rank it with a new --out')
     provider = a.provider or (cfg and cfg['provider']) or 'voyage'
@@ -861,33 +1052,44 @@ def main(argv=None):
         dirs.append(cfg['download_dir'])         # fetch_pdf.py saves there; not ranking it would drop papers unseen
         print(f'note: download_dir {cfg["download_dir"]} is outside pdf_dirs; ranked too', file=sys.stderr)
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
+    gone = [f for f in (a.abstracts.split(',') if a.abstracts else []) if not Path(f).is_file()]
+    if gone:
+        sys.exit(f'--abstracts: file not found: {", ".join(gone)}')
     outs = [Path(run_name(a.out, a.name))] + [Path(csv_name(a.out, a.name, v)) for v in variants]
     lock = Path(run_name(a.out, a.name, 'lock'))
     if not a.dry:
         if any(p.exists() for p in outs):
             sys.exit(f'{", ".join(str(p) for p in outs if p.exists())} already exists. Rank into a new --out '
                      f'(for example with today\'s date) and compare the two runs')
-        lock.parent.mkdir(parents=True, exist_ok=True)
         try:
+            lock.parent.mkdir(parents=True, exist_ok=True)
             open(lock, 'x').close()
         except FileExistsError:
             sys.exit(f'{lock} exists: another run into this --out is going on, or one stopped half-way. '
                      f'Use a new --out, or delete the lock and the partial outputs if no run is going on')
+        except OSError as e:
+            sys.exit(f'cannot create {lock} ({e}); nothing ranked. Check that the folder can be written and has space')
     try:
-        rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha)
+        done = rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha)
         if not a.dry:
-            log.parent.mkdir(parents=True, exist_ok=True)
-            with open(log, 'a', encoding='utf-8') as f:
-                f.write(json.dumps({'created': datetime.datetime.now().isoformat(timespec='seconds'), 'question': question,
-                                    'name': a.name, 'queries': os.path.relpath(qfile, log.parent), 'queries_sha': qsha, 'fuse': fuse, 'provider': provider,
-                                    'out': rel(a.out, cfg), 'abstracts': a.abstracts or ''}, ensure_ascii=False) + '\n')
+            line = json.dumps({'created': datetime.datetime.now().isoformat(timespec='seconds'), 'question': question,
+                               'name': a.name, 'queries': os.path.relpath(qfile, log.parent), 'queries_sha': qsha, 'fuse': fuse,
+                               'provider': provider, 'out': rel(a.out, cfg), 'abstracts': a.abstracts or ''}, ensure_ascii=False)
+            try:
+                log.parent.mkdir(parents=True, exist_ok=True)
+                common.append_line(log, line)         # all of the line or none of it
+            except OSError as e:
+                for path in done:
+                    path.unlink(missing_ok=True)
+                sys.exit(f'cannot add the run to {log} ({e}); its outputs were removed again, so no run stands '
+                         f'unlogged. Free some space and run again (embeddings already received are cached)')
     finally:
         if not a.dry:
             lock.unlink(missing_ok=True)
 
 
 def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sha):
-    global KEY
+    global KEY, SENT, BUDGET
 
     tok = tokenizer()
     ntok = lambda s: len(tok.encode(s, add_special_tokens=False).ids)
@@ -946,6 +1148,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
           + (f'estimated {estimate:,} tokens' if provider == 'voyage' else 'provider local, no API call'), file=sys.stderr)
     if provider == 'voyage':                 # stop before any paid call rather than on the API's refusal half-way
         qmax = max((ntok(q['text']) for q in Q.values()), default=0)
+        if qmax > RERANK_QUERY:
+            sys.exit(f'no API call made: rerank-3 takes a query of at most {RERANK_QUERY:,} tokens; the longest query '
+                     f'has {qmax:,}. Shorten its "text" in a new queries file')
         long = [(p['id'], n) for p, n in zip(P, pkg_n) if n + qmax > RERANK_PAIR] \
             + [(x['id'], ntok(x['doc'])) for x in AR if ntok(x['doc']) + qmax > RERANK_PAIR]
         if long:
@@ -960,7 +1165,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         for p in P:
             print(p['id'], p['tokens'], len(p['wins']), 'bib' if p['bib_cut'] else '-', 'abs' if p['abstract_found'] else '-', sep='\t')
         for x in skipped:
-            print(x['id'], f"skipped: {x['reason']}", sep='\t')
+            print(x['id'], 'skipped: ' + ' '.join(x['reason'].split()), sep='\t')
         for x, y in dupes:
             print(x, f'possible duplicate of {y}', sep='\t')
         return
@@ -968,11 +1173,13 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     if provider == 'voyage':
         if estimate > a.budget:
             sys.exit(f'estimate {estimate:,} tokens is above --budget {a.budget:,}; raise --budget to run')
+        SENT, BUDGET = 0, a.budget
         KEY = common.api_key('VOYAGE_API_KEY', cfg)
         if W:
             E = embed([(w['text'], w['n']) for w in W], 'document', usage,
                       [(P[w['paper']]['sha256'], j - P[w['paper']]['wins'][0], w['pages']) for j, w in enumerate(W)])
-            QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage, [(qsha, i, '') for i in Q])
+            QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage, [(qsha, i, '') for i in Q],
+                       E.shape[1])                   # the queries' vectors must have the windows' size
     else:
         vecs = local_model()
         E, QE = vecs(w['text'] for w in W), vecs(q['text'] for q in Q.values())
@@ -988,10 +1195,10 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                 items = [{'i': i, 'n': ntok(x['doc']) + qn} for i, x in enumerate(AR)]
                 for part in batches(items, lambda k: k['n'], RERANK_BATCH, MAX_ITEMS):
                     r = call('rerank', {'query': q['text'], 'documents': [AR[k['i']]['doc'] for k in part],
-                                        'model': RERANK, 'truncation': False})
-                    usage['rerank'] += r['usage']['total_tokens']
-                    for x in r['data']:
-                        sc[part[x['index']]['i']] = x['relevance_score']
+                                        'model': RERANK, 'truncation': False}, sum(k['n'] for k in part))
+                    usage['rerank'] += tokens_used(r)
+                    for i, v in rerank_scores(r, len(part)).items():
+                        sc[part[i]['i']] = v
             for i, x in enumerate(AR):
                 row = abs_rows.setdefault(x['id'], {})
                 row[f'{col}_abs_rank'] = 1 + sum(1 for v in sc.values() if v > sc[i])
@@ -1002,7 +1209,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             row['abs_fused_rank'] = 1 + sum(1 for o in abs_rows.values() if o['_afs'] > row['_afs'])
             row['abs_fused_score'] = round(row['_afs'], 6)
 
-    outputs = {}
+    outputs, files = {}, []                          # files: (path, bytes), published together at the end
     for variant in variants:
         rows = {p['id']: {'paper': p['id']} for p in P}
         sanity = None
@@ -1024,10 +1231,11 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             if variant == 'local':
                 score = {k['pi']: float(v) for k, v in zip(pkgs, vecs(k['text'] for k in pkgs) @ QE[qi])}
             for part in (batches(pkgs, lambda k: k['n'] + qn, RERANK_BATCH, MAX_ITEMS) if variant != 'local' else []):
-                r = call('rerank', {'query': q['text'], 'documents': [k['text'] for k in part], 'model': RERANK, 'truncation': False})
-                usage['rerank'] += r['usage']['total_tokens']
-                for x in r['data']:
-                    score[part[x['index']]['pi']] = x['relevance_score']
+                r = call('rerank', {'query': q['text'], 'documents': [k['text'] for k in part], 'model': RERANK, 'truncation': False},
+                         sum(k['n'] + qn for k in part))
+                usage['rerank'] += tokens_used(r)
+                for i, v in rerank_scores(r, len(part)).items():
+                    score[part[i]['pi']] = v
             for k in pkgs:
                 row = rows[P[k['pi']]['id']]
                 row[f'{col}_rank'] = 1 + sum(1 for v in score.values() if v > score[k['pi']])
@@ -1061,49 +1269,56 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),
                        key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
-        path = Path(csv_name(a.out, a.name, variant)); path.parent.mkdir(parents=True, exist_ok=True)
-        with open(path, 'x', newline='', encoding='utf-8') as f:
-            w = csv.writer(f); w.writerow(head)
-            for r in order:
-                m = dict(meta[r['paper']], source='full_text', **{k: v for k, v in info.get(r['paper'], {}).items() if k != 'source'})
-                w.writerow([val(h, r.get(h, m.get(h))) for h in head])
-            for x in extra:
-                w.writerow([val(h, dict(info[x['id']], paper=x['id']).get(h)) for h in head])
+        path = Path(csv_name(a.out, a.name, variant))
+        f = io.StringIO(newline='')
+        w = csv.writer(f); w.writerow(head)
+        for r in order:
+            m = dict(meta[r['paper']], source='full_text', **{k: v for k, v in info.get(r['paper'], {}).items() if k != 'source'})
+            w.writerow([val(h, r.get(h, m.get(h))) for h in head])
+        for x in extra:
+            w.writerow([val(h, dict(info[x['id']], paper=x['id']).get(h)) for h in head])
+        files.append((path, f.getvalue().encode('utf-8')))
         outputs[variant] = {'csv': str(path), 'fused_top10': [r['paper'] for r in order[:10]], 'first_query_top10': sanity}
-        print(f'[{variant}] fused top 10: ' + ', '.join(r['paper'] for r in order[:10]))
-        if a.expect and sanity is None:
-            print(f'[{variant}] sanity check skipped: no paper ranked on full text')
-        elif a.expect:
-            exp = [k for k in a.expect.split(',') if k]
-            print(f'[{variant}] sanity check: {sum(k in sanity for k in exp)} of {len(exp)} expected papers in '
-                  f'{next(iter(Q))} top 10; missing: {[k for k in exp if k not in sanity]}')
-        print(f'[{variant}] -> {path}', file=sys.stderr)
 
-    try:
-        commit = subprocess.run(['git', '-C', str(Path(__file__).resolve().parent), 'rev-parse', '--short', 'HEAD'],
-                                capture_output=True, text=True).stdout.strip()
+    try:     # "-dirty" when the scripts were changed after that commit, so a record never names code it did not run
+        commit = subprocess.run(['git', '-C', str(Path(__file__).resolve().parent), 'describe', '--always', '--dirty',
+                                 '--abbrev=7'], capture_output=True, text=True).stdout.strip()
     except OSError:
         commit = ''
-    run = {'created': datetime.datetime.now().isoformat(timespec='seconds'), 'paper_lector_commit': commit,
+    run = {'created': datetime.datetime.now().isoformat(timespec='seconds'), 'paper_lector_version': common.VERSION,
+           'paper_lector_commit': commit, 'argv': sys.argv[1:] if a.argv is None else a.argv, 'cwd': rel(Path.cwd(), cfg),
+           'inputs': inputs(a, cfg, dirs),
            'question': question, 'queries': Q, 'queries_sha': qsha, 'fuse': fuse,
            'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else f'{LOCAL}@{LOCAL_REV}',
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'versions': versions(),
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},
            'corpus': {'papers': len(P), 'windows': len(W), 'ids': [p['id'] for p in P],
-                      'files': [{'id': p['id'], 'path': p['path'], 'sha256': p['sha256']} for p in P], 'skipped': skipped,
+                      'files': [{'id': p['id'], 'path': rel(p['path'], cfg), 'sha256': p['sha256']} for p in P],
+                      'skipped': [dict(x, path=rel(x['path'], cfg)) for x in skipped],
                       'possible_duplicates': dupes},
            'expect': a.expect, 'usage': dict(usage), 'estimate': estimate, 'outputs': outputs}
     if a.abstracts:
-        run['abstracts'] = {'files': [{'path': f, 'sha256': common.sha256_file(f)} for f in a.abstracts.split(',')],
+        run['abstracts'] = {'files': [{'path': rel(f, cfg), 'sha256': common.sha256_file(f)} for f in a.abstracts.split(',')],
                             'papers': len(A), 'ranked': len(AR),
                             'abstract_only': [x['id'] for x in A if x['source'] == 'abstract_only'],
                             'no_abstract': [x['id'] for x in A if not x['text']],
                             'top10': [k for k, _ in sorted(abs_rows.items(), key=lambda kv: kv[1]['abs_fused_rank'])[:10]]}
-    with open(run_name(a.out, a.name), 'x', encoding='utf-8') as f:
-        f.write(json.dumps(run, indent=1, ensure_ascii=False))
+    files.append((Path(run_name(a.out, a.name)), json.dumps(run, indent=1, ensure_ascii=False).encode('utf-8')))
+    done = publish(files)
+    for v in variants:                               # only once the files are there, so no order is reported unwritten
+        print(f'[{v}] fused top 10: ' + ', '.join(outputs[v]['fused_top10']))
+        sanity = outputs[v]['first_query_top10']
+        if a.expect and sanity is None:
+            print(f'[{v}] sanity check skipped: no paper ranked on full text')
+        elif a.expect:
+            exp = [k for k in a.expect.split(',') if k]
+            print(f'[{v}] sanity check: {sum(k in sanity for k in exp)} of {len(exp)} expected papers in '
+                  f'{next(iter(Q))} top 10; missing: {[k for k in exp if k not in sanity]}')
+        print(f'[{v}] -> {outputs[v]["csv"]}', file=sys.stderr)
     print(f'tokens: embed {usage["embed"]:,} ({usage["embed_cached"]:,} texts from cache), rerank {usage["rerank"]:,} '
           f'-> {run_name(a.out, a.name)}', file=sys.stderr)
+    return done
 
 
 if __name__ == '__main__':

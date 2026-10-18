@@ -18,10 +18,26 @@ def ids(r):
 
 
 def load(path):
+    """(mode, records) of a search file; a missing file or a broken line stops with the file and line named."""
     p = Path(path)
+    if not p.is_file():
+        sys.exit(f'{path}: file not found')
     side = p.with_suffix('.query.json')
-    mode = json.loads(side.read_text()).get('mode') if side.is_file() and side.stat().st_size else None
-    return mode, [json.loads(l) for l in p.read_text(encoding='utf-8').splitlines() if l.strip()]
+    try:
+        mode = json.loads(side.read_text(encoding='utf-8')).get('mode') if side.is_file() and side.stat().st_size else None
+    except (ValueError, AttributeError):
+        sys.exit(f'{side}: not a query record (broken JSON)')
+    recs = []
+    for n, l in enumerate(p.read_text(encoding='utf-8').splitlines(), 1):
+        if l.strip():
+            try:
+                r = json.loads(l)
+                if not isinstance(r, dict):
+                    raise ValueError('not an object')
+            except ValueError as e:
+                sys.exit(f'{path} line {n}: not a JSON record ({e})')
+            recs.append(r)
+    return mode, recs
 
 
 def held_by(r, works):

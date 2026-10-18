@@ -133,11 +133,20 @@ def test_lookup_error_is_not_reported_as_missing(project, monkeypatch, capsys):
     monkeypatch.chdir(project)
     monkeypatch.setenv('OPENALEX_API_KEY', 'test')
     def denied(ident):
-        raise urllib.error.HTTPError('u', 401, 'Unauthorized', {}, None)
+        raise urllib.error.HTTPError('u', 500, 'Server Error', {}, None)
     monkeypatch.setattr(fetch_pdf, 'openalex', denied)
     with pytest.raises(SystemExit):
         fetch_pdf.main(['10.9/x'])
     assert 'ERROR   10.9/x: OpenAlex lookup failed' in capsys.readouterr().out
+
+
+def test_refused_openalex_key_stops_the_fetch(project, monkeypatch):
+    import urllib.error
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda i: (_ for _ in ()).throw(urllib.error.HTTPError('u', 401, 'Unauthorized', {}, None)))
+    with pytest.raises(SystemExit, match='OPENALEX_API_KEY is wrong'):
+        fetch_pdf.main(['10.9/x', '10.9/y'])
 
 
 def test_save_never_replaces_a_file(tmp_path):
@@ -189,7 +198,7 @@ def test_arxiv_fetched_even_when_openalex_fails(project, monkeypatch, capsys):
     monkeypatch.chdir(project)
     monkeypatch.setenv('OPENALEX_API_KEY', 'test')
     def denied(ident):
-        raise urllib.error.HTTPError('u', 401, 'Unauthorized', {}, None)
+        raise urllib.error.HTTPError('u', 500, 'Server Error', {}, None)
     monkeypatch.setattr(fetch_pdf, 'openalex', denied)
     monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: b'%PDF-1.4 ' + url.encode())
     fetch_pdf.main(['2205.06300'])
@@ -381,7 +390,7 @@ def test_failed_search_removes_its_reserved_files(project, monkeypatch, tmp_path
     monkeypatch.chdir(project)
     monkeypatch.setenv('OPENALEX_API_KEY', 'test')
     monkeypatch.setattr(openalex_search.common, 'openalex_json', _raise(ConnectionError('down')))
-    with pytest.raises(ConnectionError):
+    with pytest.raises(SystemExit, match='cannot reach api.openalex.org'):
         openalex_search.main(['--exact', 'x', '--out', str(tmp_path / 'f.jsonl')])
     assert not list(tmp_path.glob('f.*'))
 

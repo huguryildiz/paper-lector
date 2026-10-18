@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 import rank
-from conftest import FakeVoyage, WordTokenizer, local_vecs
+from conftest import FakeVoyage, WordTokenizer, local_vecs, needs
 
 
 @pytest.fixture
@@ -235,13 +235,24 @@ def test_missing_pdftotext_names_the_install(project, offline, monkeypatch):
         rank.main(['--out', str(project / 'runs/x'), '--dry'])
 
 
+class cut_download:
+    """A download that sends a few bytes, then the connection drops."""
+    def __init__(self, url, timeout=None):
+        self.left = [b'{"partial']
+    def __enter__(self):
+        return self
+    def __exit__(self, *e):
+        pass
+    def read(self, n=-1):
+        if self.left:
+            return self.left.pop()
+        raise OSError('no network')
+
+
 def test_offline_tokenizer_download_fails_cleanly(monkeypatch, tmp_path):
     import urllib.request
     monkeypatch.setattr(rank, 'TOK_PATH', tmp_path / 'tok.json')
-    def no_net(url, path):
-        open(path, 'w').write('{"partial')
-        raise OSError('no network')
-    monkeypatch.setattr(urllib.request, 'urlretrieve', no_net)
+    monkeypatch.setattr(urllib.request, 'urlopen', cut_download)
     with pytest.raises(SystemExit, match='rank.py --setup'):
         rank.tokenizer()
     assert not (tmp_path / 'tok.json').exists() and not (tmp_path / 'tok.part').exists()   # no half file left
@@ -281,7 +292,7 @@ def test_real_page_count_with_trailing_form_feed(project):
         assert len(rank.pdf_pages(p)) == n                      # no empty page after the last form feed
 
 
-@pytest.mark.skipif(not rank.TOK_PATH.exists(), reason='real tokenizer not cached; run rank.py --setup')
+@needs(rank.TOK_PATH, 'rank.py --setup')
 def test_last_page_label_with_real_tokenizer(project):
     from conftest import make_pdf
     p = project / 'two.pdf'
@@ -295,7 +306,7 @@ def test_pdftotext_failure_is_skipped_not_ranked(project, offline, monkeypatch):
     monkeypatch.chdir(project)
     real = subprocess.run
     def fake(cmd, **kw):
-        if cmd[0] == 'pdftotext' and 'Ocean2023' in cmd[1]:
+        if cmd[0] == 'pdftotext' and 'Ocean2023' in cmd[-2]:
             return subprocess.CompletedProcess(cmd, 1, 'partial text ' * 200, 'Syntax Error: broken xref')
         return real(cmd, **kw)
     monkeypatch.setattr(rank.subprocess, 'run', fake)
@@ -379,10 +390,7 @@ def test_cache_paths_carry_the_pinned_revision():
 def test_local_model_download_fails_cleanly(monkeypatch, tmp_path):
     import urllib.request
     monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path / 'm')
-    def no_net(url, path):
-        open(path, 'w').write('partial')
-        raise OSError('no network')
-    monkeypatch.setattr(urllib.request, 'urlretrieve', no_net)
+    monkeypatch.setattr(urllib.request, 'urlopen', cut_download)
     with pytest.raises(SystemExit, match='531 MB.*rank.py --setup --provider local'):
         rank.local_model()
     assert list((tmp_path / 'm').iterdir()) == []                       # no half file left
@@ -396,7 +404,7 @@ def test_local_model_with_wrong_hash_is_refused(monkeypatch, tmp_path):
         rank.local_model()
 
 
-@pytest.mark.skipif(not (rank.LOCAL_DIR / 'model.safetensors').exists(), reason='local model not cached; run rank.py --setup --provider local')
+@needs(rank.LOCAL_DIR / 'model.safetensors', 'rank.py --setup --provider local')
 def test_real_local_model_vectors():
     V = rank.local_model()(['quantum switch scheduling', 'kuantum anahtarında zamanlama', 'seawater attenuation', ''])
     assert V.shape[0] == 4 and np.allclose(np.linalg.norm(V[:3], axis=1), 1) and not V[3].any()
@@ -856,11 +864,11 @@ def test_record_naming_two_pdfs_goes_to_its_doi_and_logged_copy_found_by_sha(pro
 
 def test_embeddings_follow_the_response_index_and_refuse_zero_vectors(offline, monkeypatch):
     from collections import Counter
-    monkeypatch.setattr(rank, 'call', lambda ep, b: {'data': [{'index': 1, 'embedding': [0., 1.]}, {'index': 0, 'embedding': [1., 0.]}],
+    monkeypatch.setattr(rank, 'call', lambda ep, b, n: {'data': [{'index': 1, 'embedding': [0., 1.]}, {'index': 0, 'embedding': [1., 0.]}],
                                                     'usage': {'total_tokens': 2}})
     got = rank.embed([('alpha', 1), ('beta', 1)], 'document', Counter(), [('s', 0, 'p. 1'), ('s', 1, 'p. 1')])
     assert np.array_equal(got, np.eye(2))
-    monkeypatch.setattr(rank, 'call', lambda ep, b: {'data': [{'index': 0, 'embedding': [0., 0.]}], 'usage': {'total_tokens': 1}})
+    monkeypatch.setattr(rank, 'call', lambda ep, b, n: {'data': [{'index': 0, 'embedding': [0., 0.]}], 'usage': {'total_tokens': 1}})
     with pytest.raises(SystemExit, match='zero'):
         rank.embed([('gamma', 1)], 'document', Counter(), [('s', 2, 'p. 1')])
 
@@ -990,3 +998,17 @@ def test_merged_record_keeps_doi_first_and_full_author_names(project, tmp_path):
     a = {'title': 'Efficient scheduling of entangled pairs in quantum switch networks', 'first_author': 'Alice Smith', 'year': 2024, 'abstract': ab}
     b = dict(a, title='Efficient routing of entangled pairs in quantum switch networks', first_author='Bob Smith')
     assert not rank.retitled(a, b) and rank.retitled(a, dict(b, first_author='Alice Smith'))
+
+
+@needs(rank.TOK_PATH, 'rank.py --setup')
+@needs(rank.LOCAL_DIR / 'model.safetensors', 'rank.py --setup --provider local')
+def test_end_to_end_local_run_with_the_real_tokenizer_and_model(project, monkeypatch):
+    """A first run as a new user makes it: real tokenizer, real local model, real pdftotext, no fakes."""
+    monkeypatch.chdir(project)
+    rank.main(['--provider', 'local'])
+    run = next((project / 'runs').glob('*_paper-lector_rank_run.json'))
+    rows = list(csv.DictReader(open(next((project / 'runs').glob('*_rank-local.csv')), encoding='utf-8')))
+    assert sorted(r['paper'] for r in rows) == ['Ocean2023', 'Switch2024', 'queue2022']
+    ranks = {r['paper']: int(r['fused_rank']) for r in rows}
+    assert ranks['Switch2024'] == 1                           # the quantum switch paper leads a quantum switch question
+    assert json.loads(run.read_text())['models']['provider'] == 'local'

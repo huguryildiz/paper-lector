@@ -36,12 +36,6 @@
 
 ---
 
-<p align="center">
-  <img src="assets/example-output.svg" alt="Example output: the top 5 of 40 PDFs for a LitSearch question on factuality and hallucination detection in abstractive summarization, with the pages to start reading" width="880">
-</p>
-
-<p align="center"><sub>A real run on 40 open-access PDFs: one <a href="https://huggingface.co/datasets/princeton-nlp/LitSearch">LitSearch</a> question, its 5 gold papers and 35 distractors from nearby topics. MAIN and SUBJECT are each paper's rank on those two queries; START AT is the first window the reranker read for the main query. The papers, the run record and the script that draws this image are in <a href="examples/litsearch">examples/litsearch</a>.</sub></p>
-
 ## Overview
 
 paper-lector is an agent skill for Claude Code and Codex with three scripts:
@@ -54,12 +48,12 @@ paper-lector is an agent skill for Claude Code and Codex with three scripts:
 
 ## Install
 
-You need Python 3.12 and `pdftotext` from poppler (`brew install poppler` on macOS).
+paper-lector runs on macOS and Linux, and CI tests both. Windows is not supported: the commands below and in [`SKILL.md`](SKILL.md) assume a Unix shell, so on Windows use WSL. You need Python 3.12 and `pdftotext` from poppler: `brew install python@3.12 poppler` on macOS; `sudo apt install python3.12 python3.12-venv poppler-utils` on Ubuntu 24.04. Where the system has no Python 3.12 package (Debian 13 ships 3.13, Ubuntu 22.04 3.10), install 3.12 with pyenv or the deadsnakes PPA.
 
 ```bash
 git clone https://github.com/huguryildiz/paper-lector ~/Documents/GitHub/paper-lector
 cd ~/Documents/GitHub/paper-lector
-python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
+python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt -c constraints.txt
 mkdir -p ~/.claude/skills ~/.codex/skills
 ln -s ~/Documents/GitHub/paper-lector ~/.claude/skills/paper-lector   # Claude Code
 ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
@@ -67,11 +61,16 @@ ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 
 The symlink is what lets the agent find the skill; make the one for the agent you use, or both.
 
-Add your API keys: `OPENALEX_API_KEY` for search and fetch, `VOYAGE_API_KEY` for ranking. Put them in `~/.config/paper-lector/.env` (shared by all projects) or in a project's `.env`.
+`constraints.txt` pins every package that `requirements.txt` pulls in, so a new install gets the versions the tests ran with.
+
+Add your API keys to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`:
+
+- `OPENALEX_API_KEY` for search and fetch. It is optional but recommended. The key is free: sign up at [openalex.org/signup](https://openalex.org/signup), then copy it from [openalex.org/settings/api-key](https://openalex.org/settings/api-key).
+- `VOYAGE_API_KEY` for ranking with the default provider. Create one at [dashboard.voyageai.com](https://dashboard.voyageai.com/organization/api-keys). Voyage gives free tokens, but an account with no payment method gets low rate limits, and a run on a few dozen PDFs may stop on HTTP 429; adding a payment method in the dashboard lifts them and the free tokens still apply. Without a key, rank with `--provider local`.
 
 ```bash
 mkdir -p ~/.config/paper-lector
-cp .env.example ~/.config/paper-lector/.env
+install -m 600 .env.example ~/.config/paper-lector/.env    # readable by you only; then fill in the keys
 ```
 
 Then, once and while online, check `pdftotext` and download the pinned tokenizer:
@@ -107,32 +106,39 @@ Without a Voyage key, add `--provider local` to that command; it also downloads 
 
 The agent asks which search modes to run and shows its queries for approval. It then downloads the open-access PDFs and fills the query slots through a few questions. After a dry run it ranks the papers and reports the top 10 with the pages to start on.
 
-**3b. From the shell.**
+**3b. From the shell.** Run this in a new, empty project folder. It writes `literature.json` and `queries/queries.json` (the example's files), and every script then finds them from that folder.
 
 ```bash
 PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/null | head -1)
 PY=$PL/.venv/bin/python
+mkdir -p ~/research/entanglement-scheduling/queries && cd ~/research/entanglement-scheduling
+git init -q                           # marks the project root; the scripts look for literature.json up to here
+cp $PL/examples/entanglement-scheduling/literature.json .
+cp $PL/examples/entanglement-scheduling/queries/queries.json queries/
 
 # search OpenAlex two ways, compare, download the open-access PDFs
 $PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
     --exact '("quantum network" OR "quantum networks" OR "quantum internet") AND (entangl*) AND (schedul*)'
 $PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
     --semantic 'Scheduling entanglement distribution among multiple users in a quantum network with optimization, heuristics or reinforcement learning'
-$PY $PL/scripts/search_overlap.py runs/*_exact_search.jsonl runs/*_semantic_search.jsonl
-$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl
-$PY $PL/scripts/fetch_pdf.py --from runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl
+EX=$(ls -t runs/*_entanglement-scheduling_exact_search.jsonl | head -1)      # the files just written
+SE=$(ls -t runs/*_entanglement-scheduling_semantic_search.jsonl | head -1)
+$PY $PL/scripts/search_overlap.py $EX $SE
+$PY $PL/scripts/fetch_pdf.py --from $EX
+$PY $PL/scripts/fetch_pdf.py --from $SE
 
 # count tokens without calling the API, then rank PDFs on full text and every paper on its abstract
-A=runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl,runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl
-$PY $PL/scripts/rank.py --abstracts $A --dry
-$PY $PL/scripts/rank.py --abstracts $A
+$PY $PL/scripts/rank.py --abstracts $EX,$SE --dry
+$PY $PL/scripts/rank.py --abstracts $EX,$SE
 ```
+
+`fetch_pdf.py` exits with status 1 when some papers could not be downloaded (the `MANUAL` lines), so a script that stops on errors should not stop there. Without a Voyage key, add `--provider local` to both `rank.py` lines.
 
 The keyword search returned 137 works and the semantic search the 50 closest. They share 20, so 167 distinct works came out, and `search_overlap.py` reported LOW OVERLAP: only 40% of the semantic works were in the keyword results. `fetch_pdf.py` downloaded 73 open-access PDFs. For each paper it could not get, it wrote a `MANUAL` line with the publisher page, where the PDF can be downloaded by hand.
 
-Ranking scored the 73 PDFs on full text and 147 papers on their abstracts; 74 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.57M tokens. Embeddings are cached, so a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
+Ranking scored the 73 PDFs on full text. The abstract order listed 147 papers, 74 of them with no PDF; 8 had no abstract, so 139 were ranked on their abstracts. A first run on these files sends about 3.1M tokens to Voyage: 1.55M for embeddings and 1.57M for reranking (the dry run estimated 3.19M). Embeddings are cached, so a rerun does not pay for them again, but reranking is paid in full on every run, about half of a first run. The example's own run took most embeddings from an earlier run's cache and sent 0.11M embedding tokens. `rank.py` stops before any API call if the token estimate is above `--budget` (15M by default; at the size of this example, that is about 350 PDFs), and it counts every request, retries included, against that budget.
 
-**4. Read the output.** [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0317_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
+**4. Read the output.** [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0317_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records what is needed to repeat the run: the paper-lector version and commit, the command, the SHA-256 of every PDF and of the queries file, config, sources table and fetch logs, the models and the software versions. Runs are never overwritten. Voyage serves its models under fixed names that it may update, so a voyage rerun can differ slightly; a `local` run on the same files gives the same CSV byte for byte. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
@@ -159,7 +165,7 @@ The local run keeps the papers that share the question's words, but loses severa
 
 | Mode | Flag | What you get | Use it when |
 | --- | --- | --- | --- |
-| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (all pages need `OPENALEX_API_KEY`; without it, the first 200). Repeatable | You want a complete search and know the field's words |
+| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (all pages need `OPENALEX_API_KEY`; without it, the first 200). One query per run; run it again for another | You want a complete search and know the field's words |
 | Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning to a sentence. Can change between runs | You are new to a field, or its papers use many names for one idea |
 | Citing works | `--cites <id>` | Works that cite one paper (all pages need `OPENALEX_API_KEY`; without it, the first 200) | You want what came after a key paper |
 | References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
@@ -179,11 +185,15 @@ Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`
 ## Tests
 
 ```bash
-.venv/bin/pip install pytest
+.venv/bin/pip install pytest==9.1.1
 .venv/bin/python -m pytest -q
 ```
 
-The tests run offline and need `pdftotext` on `PATH`.
+The tests run offline and need `pdftotext` on `PATH`. Three of them use the real tokenizer and local model and are skipped until `rank.py --setup --provider local` has run; CI runs them all.
+
+## Versions and issues
+
+The version is in [`CHANGELOG.md`](CHANGELOG.md) and in every `_rank_run.json`. To report a problem, follow [`CONTRIBUTING.md`](CONTRIBUTING.md); security issues go by [`SECURITY.md`](SECURITY.md).
 
 ## License
 
