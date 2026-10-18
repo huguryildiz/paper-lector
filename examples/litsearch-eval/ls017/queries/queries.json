@@ -1,0 +1,22 @@
+{
+  "question": "Can you recommend a paper that uses an NLI model for sentence-level relation extraction using hypothesis generation and verification with entity-type constraints?",
+  "name": "ls017",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Can you recommend a paper that uses an NLI model for sentence-level relation extraction using hypothesis generation and verification with entity-type constraints?",
+      "keywords": "NLI model sentence-level relation extraction hypothesis generation verification entity type constraints"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Sentence-level relation extraction between entity pairs, cast as natural language inference where relation hypotheses are generated and verified, with constraints from entity types.",
+      "keywords": "relation extraction natural language inference NLI hypothesis verification entity types sentence-level"
+    }
+  }
+}

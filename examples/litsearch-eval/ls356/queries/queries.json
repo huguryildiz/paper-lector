@@ -1,0 +1,22 @@
+{
+  "question": "Give me a paper proposing to circumvent a single-truth target in training generative language models.",
+  "name": "ls356",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Give me a paper proposing to circumvent a single-truth target in training generative language models.",
+      "keywords": "circumvent single-truth target training generative language models"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Training of generative language models with maximum likelihood on one reference output per input, and how this single ground-truth target ignores that many different outputs can be valid.",
+      "keywords": "single reference target generative language models training multiple valid outputs one-to-many maximum likelihood"
+    }
+  }
+}

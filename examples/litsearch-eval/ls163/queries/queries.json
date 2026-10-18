@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend research that explores how the loss of spatial information impacts the effectiveness of global features in visual tasks?",
+  "name": "ls163",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend research that explores how the loss of spatial information impacts the effectiveness of global features in visual tasks?",
+      "keywords": "loss of spatial information global features visual tasks"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Image representations in computer vision, in particular global image features obtained by pooling that discard spatial layout, and how this loss of spatial information affects performance on visual tasks.",
+      "keywords": "global features spatial information loss pooling visual recognition retrieval spatial layout"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend a study that investigates graph-based modeling of interactivity among various modalities over time within non-aligned multimodal sequential datasets?",
+  "name": "ls133",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend a study that investigates graph-based modeling of interactivity among various modalities over time within non-aligned multimodal sequential datasets?",
+      "keywords": "graph modeling interactions between modalities over time non-aligned multimodal sequences"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Multimodal sequential data such as language, audio and vision streams that are not aligned in time, and the interactions between modalities across time steps modelled with graph structures.",
+      "keywords": "unaligned multimodal sequences graph neural network modality interaction temporal language audio visual sentiment"
+    }
+  }
+}

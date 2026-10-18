@@ -1,0 +1,22 @@
+{
+  "question": "What papers discuss the effect of false negatives among hard negatives in dense retriever training?",
+  "name": "ls306",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What papers discuss the effect of false negatives among hard negatives in dense retriever training?",
+      "keywords": "false negatives among hard negatives dense retriever training"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Dense retrieval models for passage search, trained with contrastive learning on hard negatives mined from the corpus, among which some are actually relevant passages that were never labelled.",
+      "keywords": "dense retriever hard negatives false negatives training passage retrieval unlabeled relevant"
+    }
+  }
+}

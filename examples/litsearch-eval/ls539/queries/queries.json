@@ -1,0 +1,22 @@
+{
+  "question": "What is the first paper that theoretically studies training neural networks under small initialization?",
+  "name": "ls539",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What is the first paper that theoretically studies training neural networks under small initialization?",
+      "keywords": "theoretically study training neural networks small initialization"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Gradient-based training dynamics of neural networks, such as two-layer networks, when the weights start from a very small initialization, analysed theoretically with convergence results.",
+      "keywords": "small initialization neural networks training dynamics theory gradient descent theoretical analysis"
+    }
+  }
+}

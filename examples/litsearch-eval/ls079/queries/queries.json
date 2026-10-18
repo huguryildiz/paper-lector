@@ -1,0 +1,22 @@
+{
+  "question": "When using pretrained transformer models for generating sentence embeddings, I've heard different strategies such as mean pooling and using the CLS token's embedding. What study shows that mean pooling outperforms CLS in semantic similarity tasks?",
+  "name": "ls079",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "When using pretrained transformer models for generating sentence embeddings, I've heard different strategies such as mean pooling and using the CLS token's embedding. What study shows that mean pooling outperforms CLS in semantic similarity tasks?",
+      "keywords": "mean pooling outperforms CLS token sentence embeddings semantic similarity"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Sentence embeddings obtained from pretrained transformer models such as BERT, comparing ways of pooling token outputs (mean pooling versus the CLS token) for semantic textual similarity tasks.",
+      "keywords": "sentence embeddings pretrained transformer mean pooling CLS token semantic textual similarity BERT"
+    }
+  }
+}

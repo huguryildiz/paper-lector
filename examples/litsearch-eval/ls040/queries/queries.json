@@ -1,0 +1,22 @@
+{
+  "question": "I am looking to understand more about sequence-to-sequence pre-training and its applications in natural language tasks. Can you suggest a significant paper that describes the denoising process for such models?",
+  "name": "ls040",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "I am looking to understand more about sequence-to-sequence pre-training and its applications in natural language tasks. Can you suggest a significant paper that describes the denoising process for such models?",
+      "keywords": "sequence-to-sequence pre-training denoising natural language tasks"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Sequence-to-sequence pretrained language models with an encoder and decoder, trained by corrupting text with noising functions and reconstructing it, then applied to generation and comprehension tasks.",
+      "keywords": "sequence-to-sequence pre-training denoising autoencoder text corruption encoder-decoder generation"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+pdfs/
+# the set ships its config, ids and frozen queries; PDFs are re-downloaded with fetch_pdf.py
+!literature.json
+!queries/
+!queries.json
+!runs/
+fetch.out
+*.log

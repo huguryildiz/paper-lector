@@ -1,0 +1,22 @@
+{
+  "question": "How to faithfully and explicitly measure the helpfulness of human explanations to language models during finetuning and inference?",
+  "name": "ls359",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "How to faithfully and explicitly measure the helpfulness of human explanations to language models during finetuning and inference?",
+      "keywords": "measure helpfulness of human explanations to language models finetuning inference"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Human-written natural language explanations attached to examples, and how much they help language models during fine-tuning and at inference time on downstream tasks.",
+      "keywords": "human explanations helpfulness language models fine-tuning inference natural language explanations measure"
+    }
+  }
+}

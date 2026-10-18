@@ -1,0 +1,22 @@
+{
+  "question": "Have any research papers suggested techniques for automatically choosing in-context examples?",
+  "name": "ls271",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Have any research papers suggested techniques for automatically choosing in-context examples?",
+      "keywords": "automatically choosing in-context examples"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "In-context learning with large language models, where the demonstration examples placed in the prompt are selected automatically from a pool of labelled examples.",
+      "keywords": "in-context examples selection demonstration retrieval automatic few-shot prompt"
+    }
+  }
+}

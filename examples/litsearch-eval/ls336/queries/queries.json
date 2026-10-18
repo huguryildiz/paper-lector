@@ -1,0 +1,22 @@
+{
+  "question": "Where can I find a database of good prompts to use for prompting language models for in-context learning?",
+  "name": "ls336",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Where can I find a database of good prompts to use for prompting language models for in-context learning?",
+      "keywords": "database collection prompts in-context learning language models"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "A public collection or database of prompts and prompt templates, covering many natural language processing datasets and tasks, that researchers can reuse when prompting large language models for in-context learning and few-shot evaluation.",
+      "keywords": "prompt collection database templates datasets in-context learning few-shot large language models"
+    }
+  }
+}

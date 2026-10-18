@@ -1,0 +1,22 @@
+{
+  "question": "Where can I find a multilingual corpus that includes reviews on DVDs, music, and books for the purposes of cross-language sentiment classification research?",
+  "name": "ls084",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Where can I find a multilingual corpus that includes reviews on DVDs, music, and books for the purposes of cross-language sentiment classification research?",
+      "keywords": "multilingual corpus reviews DVDs music books cross-language sentiment classification"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "A multilingual collection of Amazon-style product reviews in several languages, covering the categories DVDs, music and books, built for cross-language sentiment classification research.",
+      "keywords": "multilingual corpus product reviews DVD music books cross-language sentiment classification"
+    }
+  }
+}

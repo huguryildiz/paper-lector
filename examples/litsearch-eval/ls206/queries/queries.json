@@ -1,0 +1,22 @@
+{
+  "question": "Could you suggest research on detecting common errors like additions and omissions in machine translation?",
+  "name": "ls206",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you suggest research on detecting common errors like additions and omissions in machine translation?",
+      "keywords": "detecting additions and omissions errors machine translation"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Machine translation output and the errors it contains, particularly content added to or omitted from the source sentence, such as hallucinated additions and missing source words.",
+      "keywords": "machine translation errors addition omission detection hallucination under-translation over-translation"
+    }
+  }
+}

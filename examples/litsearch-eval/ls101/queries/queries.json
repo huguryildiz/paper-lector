@@ -1,0 +1,22 @@
+{
+  "question": "Are there any research papers investigating the improvement of radiology report summarization through the application of graph neural networks in conjunction with biomedical entity extraction?",
+  "name": "ls101",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Are there any research papers investigating the improvement of radiology report summarization through the application of graph neural networks in conjunction with biomedical entity extraction?",
+      "keywords": "radiology report summarization graph neural networks biomedical entity extraction"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Automatic summarization of radiology reports, turning the findings section into an impression, using graph neural networks built over biomedical entities extracted from the report text.",
+      "keywords": "radiology report summarization graph neural network biomedical entity extraction findings impression"
+    }
+  }
+}

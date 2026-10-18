@@ -1,0 +1,22 @@
+{
+  "question": "What concerns or key points have been highlighted in scholarly articles about employing random divisions in machine learning datasets, especially with respect to contamination of the test set?",
+  "name": "ls302",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What concerns or key points have been highlighted in scholarly articles about employing random divisions in machine learning datasets, especially with respect to contamination of the test set?",
+      "keywords": "random splits machine learning datasets test set contamination"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Machine learning benchmark datasets divided into training, development and test sets by random splitting, and the resulting problems of leakage or contamination between the training data and the test set.",
+      "keywords": "random splits train test datasets test set contamination leakage benchmark evaluation"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Is there a paper that uses Explainable AI techniques to investigate how language models represent the expression of morality?",
+  "name": "ls375",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there a paper that uses Explainable AI techniques to investigate how language models represent the expression of morality?",
+      "keywords": "Explainable AI techniques how language models represent morality"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Pretrained language models and how they represent and express morality and moral values in text, examined with explainability methods that attribute predictions to inputs or hidden units.",
+      "keywords": "explainable AI language models morality moral values representation interpretability"
+    }
+  }
+}

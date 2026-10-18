@@ -1,0 +1,22 @@
+{
+  "question": "What research has been conducted on the impact of intervening at intermediate layers in pretrained language models to alter the resulting text?",
+  "name": "ls324",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What research has been conducted on the impact of intervening at intermediate layers in pretrained language models to alter the resulting text?",
+      "keywords": "intervening intermediate layers pretrained language models alter generated text"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Pretrained language models whose hidden states at intermediate layers are modified during text generation in order to change or steer the generated text.",
+      "keywords": "intermediate layers intervention activation steering hidden states pretrained language models text generation control"
+    }
+  }
+}

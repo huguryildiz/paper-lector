@@ -1,0 +1,22 @@
+{
+  "question": "What are some recent advancements in training systems to parse complex multi-hop questions into a sequence of simpler query steps for improved question answering?",
+  "name": "ls067",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What are some recent advancements in training systems to parse complex multi-hop questions into a sequence of simpler query steps for improved question answering?",
+      "keywords": "train systems parse complex multi-hop questions into simpler query steps question answering"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Complex multi-hop questions, and question decomposition systems that break them into a sequence of simpler sub-questions or query steps for question answering.",
+      "keywords": "multi-hop question decomposition sub-questions simpler queries question answering sequence"
+    }
+  }
+}

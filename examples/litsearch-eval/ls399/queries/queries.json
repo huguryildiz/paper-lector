@@ -1,0 +1,22 @@
+{
+  "question": "Is there any paper that investigates backdoor attacks across various types of tasks, not limited to classification, in language models?",
+  "name": "ls399",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there any paper that investigates backdoor attacks across various types of tasks, not limited to classification, in language models?",
+      "keywords": "backdoor attacks language models various tasks beyond classification generation"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Backdoor attacks that poison the training data or weights of pretrained language models, studied across many kinds of natural language processing tasks such as generation, translation, question answering and tagging rather than classification alone.",
+      "keywords": "backdoor poisoning trigger language models NLP tasks generation translation question answering"
+    }
+  }
+}

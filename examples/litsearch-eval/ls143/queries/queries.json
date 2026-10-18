@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend a study that investigates the improvement of knowledge representation learning by incorporating global context into graph attention networks?",
+  "name": "ls143",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend a study that investigates the improvement of knowledge representation learning by incorporating global context into graph attention networks?",
+      "keywords": "knowledge representation learning global context graph attention networks"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Knowledge graph embedding and representation learning for entities and relations, using graph attention networks over the neighbourhood of each entity within a knowledge graph.",
+      "keywords": "knowledge graph embedding representation learning graph attention network entities relations link prediction"
+    }
+  }
+}

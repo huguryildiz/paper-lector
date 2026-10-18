@@ -1,0 +1,22 @@
+{
+  "question": "I'm exploring ways to enhance question answering systems through domain adaptation. Could you point me towards research that specifically focuses on synthetic data generation for this purpose?",
+  "name": "ls045",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "I'm exploring ways to enhance question answering systems through domain adaptation. Could you point me towards research that specifically focuses on synthetic data generation for this purpose?",
+      "keywords": "question answering domain adaptation synthetic data generation"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Question answering systems moved to a new target domain, where synthetic question and answer data are generated automatically for the domain because annotated data there is scarce.",
+      "keywords": "question answering domain adaptation synthetic data generation question generation target domain"
+    }
+  }
+}

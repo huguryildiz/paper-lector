@@ -1,0 +1,22 @@
+{
+  "question": "Is there a paper that uses similarity scores to check knowledge in diffusion models",
+  "name": "ls378",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there a paper that uses similarity scores to check knowledge in diffusion models",
+      "keywords": "similarity scores check knowledge in diffusion models"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Text-to-image diffusion models and the knowledge they contain, such as concepts or facts about objects, probed with similarity scores between generated images and references.",
+      "keywords": "diffusion models knowledge probing similarity score text-to-image concepts"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Which paper proposes to use rewriting based approaches to defending against adversarial attacks in text classification?",
+  "name": "ls485",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which paper proposes to use rewriting based approaches to defending against adversarial attacks in text classification?",
+      "keywords": "rewriting defend adversarial attacks text classification"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Text classifiers for natural language, attacked with adversarial word or character perturbations, and defences that rewrite or reformulate the input text before it reaches the classifier.",
+      "keywords": "adversarial attacks defense text classification input rewriting paraphrase purification robustness"
+    }
+  }
+}

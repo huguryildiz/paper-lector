@@ -1,0 +1,22 @@
+{
+  "question": "Which paper in human motion generation can control the spatial location of any joints of the human with either dense or sparse 3D points?",
+  "name": "ls587",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which paper in human motion generation can control the spatial location of any joints of the human with either dense or sparse 3D points?",
+      "keywords": "human motion generation control joints spatial location dense sparse 3D points"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Text-conditioned human motion generation, where a generative model produces body motion sequences and the spatial positions of arbitrary joints can be specified as dense or sparse three-dimensional control signals.",
+      "keywords": "human motion generation text-to-motion spatial control joints trajectory sparse dense 3D diffusion"
+    }
+  }
+}

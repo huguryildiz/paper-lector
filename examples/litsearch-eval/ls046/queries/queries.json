@@ -1,0 +1,22 @@
+{
+  "question": "I'm interested in understanding how perplexity is utilized in identifying misinformation or fact-checking. Are there studies discussing this application of perplexity?",
+  "name": "ls046",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "I'm interested in understanding how perplexity is utilized in identifying misinformation or fact-checking. Are there studies discussing this application of perplexity?",
+      "keywords": "perplexity misinformation fact-checking"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Language model perplexity used as a signal for detecting misinformation, false claims or fake news in automated fact-checking pipelines, applied to claims and the evidence retrieved for them.",
+      "keywords": "perplexity misinformation fact-checking fake news claims language model detection"
+    }
+  }
+}

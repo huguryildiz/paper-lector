@@ -1,0 +1,22 @@
+{
+  "question": "Which paper first shows that large language models can be prompted to act like professional annotators to evaluate text generation quality?",
+  "name": "ls463",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which paper first shows that large language models can be prompted to act like professional annotators to evaluate text generation quality?",
+      "keywords": "large language models prompted annotators evaluate text generation quality"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Large language models used as human-like evaluators of natural language generation output, such as summaries, dialogue responses and translations, where the model is asked to rate quality in place of crowd or expert annotators.",
+      "keywords": "LLM evaluator human annotators text generation quality evaluation summarization dialogue ratings"
+    }
+  }
+}

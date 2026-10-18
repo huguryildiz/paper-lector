@@ -1,0 +1,22 @@
+{
+  "question": "Are there any papers that use a world model for planning to ensure that decisions meet constraints?",
+  "name": "ls510",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Are there any papers that use a world model for planning to ensure that decisions meet constraints?",
+      "keywords": "world model planning decisions satisfy constraints"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Agents or reinforcement learning systems that learn a world model of their environment and use it to plan action sequences while making sure that the resulting decisions satisfy safety or other constraints.",
+      "keywords": "world model planning constraints safe reinforcement learning constrained model-based decision making"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "What paper first proposes that simply reversing the output can significantly enhance the sample efficiency and the performance of the arithmetic capability of a decoder-only Transformer model?",
+  "name": "ls549",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What paper first proposes that simply reversing the output can significantly enhance the sample efficiency and the performance of the arithmetic capability of a decoder-only Transformer model?",
+      "keywords": "reversing output improves sample efficiency arithmetic decoder-only Transformer"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Arithmetic ability of decoder-only Transformer language models, such as addition and multiplication of multi-digit numbers, and how the format in which the answer digits are written affects training sample efficiency.",
+      "keywords": "arithmetic decoder-only Transformer addition multiplication digits reverse order output format sample efficiency"
+    }
+  }
+}

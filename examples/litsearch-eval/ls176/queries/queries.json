@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend research that investigates the impact of randomly removing words from sentences as a data augmentation strategy to mitigate overfitting in NLP models?",
+  "name": "ls176",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend research that investigates the impact of randomly removing words from sentences as a data augmentation strategy to mitigate overfitting in NLP models?",
+      "keywords": "randomly removing words data augmentation reduce overfitting NLP"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Data augmentation for NLP models trained on small text datasets, where random deletion of words from sentences produces extra training examples and may reduce overfitting.",
+      "keywords": "word dropout random deletion data augmentation overfitting NLP sentences"
+    }
+  }
+}

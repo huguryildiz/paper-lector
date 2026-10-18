@@ -1,0 +1,22 @@
+{
+  "question": "Is there any paper that combines causal inference and finetuning for language models?",
+  "name": "ls394",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there any paper that combines causal inference and finetuning for language models?",
+      "keywords": "combines causal inference finetuning language models"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Language models that are fine-tuned on downstream tasks, and the use of causal inference concepts such as interventions, confounders and counterfactuals within that fine-tuning.",
+      "keywords": "causal inference fine-tuning language models counterfactual intervention confounder spurious"
+    }
+  }
+}

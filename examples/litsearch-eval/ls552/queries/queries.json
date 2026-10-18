@@ -1,0 +1,22 @@
+{
+  "question": "What paper first uses decoupled workers in distributed RL system?",
+  "name": "ls552",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What paper first uses decoupled workers in distributed RL system?",
+      "keywords": "decoupled workers distributed reinforcement learning system"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Distributed reinforcement learning systems in which the tasks of acting in the environment, sampling and learning are performed by separate, decoupled worker processes.",
+      "keywords": "distributed reinforcement learning decoupled workers actors learners asynchronous system"
+    }
+  }
+}

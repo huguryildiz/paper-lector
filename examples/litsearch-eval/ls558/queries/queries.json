@@ -1,0 +1,22 @@
+{
+  "question": "What paper showed first that one can build a fully differentiable mixture of experts layer with no increase in time complexity?",
+  "name": "ls558",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What paper showed first that one can build a fully differentiable mixture of experts layer with no increase in time complexity?",
+      "keywords": "fully differentiable mixture of experts layer no increase in time complexity"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Mixture of experts layers inside neural networks, where a router selects among expert subnetworks, and the discrete routing prevents fully differentiable training.",
+      "keywords": "mixture of experts layer differentiable routing gating sparse experts time complexity"
+    }
+  }
+}

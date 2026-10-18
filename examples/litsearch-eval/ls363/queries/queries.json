@@ -1,0 +1,22 @@
+{
+  "question": "Is there a dataset that allows to perform aspect-based sentiment classification on French news?",
+  "name": "ls363",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there a dataset that allows to perform aspect-based sentiment classification on French news?",
+      "keywords": "dataset aspect-based sentiment classification French news"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Aspect-based sentiment analysis of French-language news articles, which requires an annotated dataset that marks aspects and sentiment polarity in news text.",
+      "keywords": "aspect-based sentiment classification French news dataset annotated"
+    }
+  }
+}

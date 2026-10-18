@@ -1,0 +1,22 @@
+{
+  "question": "In multi-hop question answering, is there a paper that explores \"per-hop\" retrieval evaluation that treats each hop of retrieval independently?",
+  "name": "ls279",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "In multi-hop question answering, is there a paper that explores \"per-hop\" retrieval evaluation that treats each hop of retrieval independently?",
+      "keywords": "multi-hop question answering per-hop retrieval evaluation each hop independently"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Multi-hop question answering, in which answering needs several chained retrieval steps over documents, and how retrieval quality at each separate hop is measured.",
+      "keywords": "multi-hop question answering retrieval evaluation per-hop each hop independent"
+    }
+  }
+}

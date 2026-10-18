@@ -1,0 +1,22 @@
+{
+  "question": "Which papers develop methods to make in-context learning more computationally efficient?",
+  "name": "ls495",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which papers develop methods to make in-context learning more computationally efficient?",
+      "keywords": "make in-context learning computationally efficient"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "In-context learning with large language models, where long prompts of demonstration examples make inference computationally expensive in time and memory.",
+      "keywords": "in-context learning efficiency computational cost demonstrations prompt compression inference speed"
+    }
+  }
+}

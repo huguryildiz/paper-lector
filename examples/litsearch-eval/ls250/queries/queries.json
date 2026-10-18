@@ -1,0 +1,22 @@
+{
+  "question": "Could you suggest some work that develops multimodal models with contrastive learning approaches?",
+  "name": "ls250",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you suggest some work that develops multimodal models with contrastive learning approaches?",
+      "keywords": "multimodal models contrastive learning"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Multimodal representation learning models that align images and text, or other modalities, in a shared embedding space, trained at scale with contrastive objectives on paired data.",
+      "keywords": "multimodal contrastive learning image text embedding vision-language pretraining alignment"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "What are some methods for solving the class-incremetal continual learning problems?",
+  "name": "ls423",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "What are some methods for solving the class-incremetal continual learning problems?",
+      "keywords": "methods class-incremental continual learning"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Continual learning for classification, where new classes arrive in sequence and the model must learn them without forgetting the previously learned classes.",
+      "keywords": "class-incremental continual learning catastrophic forgetting new classes sequential"
+    }
+  }
+}

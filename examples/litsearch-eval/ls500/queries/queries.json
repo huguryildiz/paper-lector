@@ -1,0 +1,22 @@
+{
+  "question": "Which vision-language model paper in 2023 developed techniques that reduce input tokens to improve model inference speed?",
+  "name": "ls500",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which vision-language model paper in 2023 developed techniques that reduce input tokens to improve model inference speed?",
+      "keywords": "vision-language model 2023 reduce input tokens faster inference"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Vision-language models that take image tokens as input to a language model, and methods that cut the number of visual tokens to speed up inference.",
+      "keywords": "vision-language model reduce visual tokens token pruning merging inference speed 2023"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Where can I find a corpus of CCG annotations for natural language processing tasks, and what notable work has leveraged this corpus specifically in the domain of supertagging?",
+  "name": "ls080",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Where can I find a corpus of CCG annotations for natural language processing tasks, and what notable work has leveraged this corpus specifically in the domain of supertagging?",
+      "keywords": "corpus CCG annotations supertagging combinatory categorial grammar"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "A treebank or corpus annotated with Combinatory Categorial Grammar derivations for natural language processing, and the supertagging models that assign CCG lexical categories to words using it.",
+      "keywords": "CCG corpus CCGbank combinatory categorial grammar annotations supertagging treebank"
+    }
+  }
+}

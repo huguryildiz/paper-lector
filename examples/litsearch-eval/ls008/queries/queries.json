@@ -1,0 +1,22 @@
+{
+  "question": "Can you list some publications that discuss the evaluation metrics used in semantic role labeling tasks, specifically focusing on precision and evaluation scripts used in shared tasks like SemEval?",
+  "name": "ls008",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Can you list some publications that discuss the evaluation metrics used in semantic role labeling tasks, specifically focusing on precision and evaluation scripts used in shared tasks like SemEval?",
+      "keywords": "evaluation metrics semantic role labeling precision evaluation scripts shared tasks SemEval"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Semantic role labeling systems and the metrics, precision and official evaluation scripts used to score them in shared tasks such as CoNLL and SemEval.",
+      "keywords": "semantic role labeling evaluation metrics precision evaluation script shared task SemEval CoNLL"
+    }
+  }
+}

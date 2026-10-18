@@ -1,0 +1,22 @@
+{
+  "question": "Which paper first found that REINFORCE works better than actor critic algorithms like PPO for RL finetuning of pretrained chemistry language models (Transformers and RNNs)?",
+  "name": "ls575",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which paper first found that REINFORCE works better than actor critic algorithms like PPO for RL finetuning of pretrained chemistry language models (Transformers and RNNs)?",
+      "keywords": "REINFORCE better than PPO actor critic RL finetuning pretrained chemistry language models"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Pretrained chemistry language models, both Transformers and RNNs, that generate molecules as strings and are fine-tuned with reinforcement learning algorithms such as REINFORCE and PPO.",
+      "keywords": "chemistry language models molecule generation SMILES reinforcement learning REINFORCE PPO fine-tuning Transformer RNN"
+    }
+  }
+}

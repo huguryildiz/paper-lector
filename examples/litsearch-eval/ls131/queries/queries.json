@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend a study that investigates enhancing prompt engineering techniques for generative models using meta-learning strategies?",
+  "name": "ls131",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend a study that investigates enhancing prompt engineering techniques for generative models using meta-learning strategies?",
+      "keywords": "prompt engineering generative models meta-learning"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Prompt design for generative models such as large language models and text-to-image models, where prompts are produced or tuned through meta-learning strategies.",
+      "keywords": "prompt engineering generative models meta-learning prompt tuning learn to prompt"
+    }
+  }
+}

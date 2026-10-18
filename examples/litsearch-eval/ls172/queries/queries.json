@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend research that investigates merging speech and text modalities in a unified representation space for processing spoken language through encoder-decoder models?",
+  "name": "ls172",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend research that investigates merging speech and text modalities in a unified representation space for processing spoken language through encoder-decoder models?",
+      "keywords": "merging speech and text modalities unified representation space encoder-decoder spoken language"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Spoken language processing models that put speech and text inputs into a single shared representation space, built on encoder-decoder architectures for tasks such as recognition and translation.",
+      "keywords": "speech text unified representation shared space encoder-decoder pre-training spoken language"
+    }
+  }
+}

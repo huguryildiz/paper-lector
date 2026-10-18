@@ -1,0 +1,22 @@
+{
+  "question": "Could you recommend a study that investigates how a subset with clean, annotated datasets improve denoising methods?",
+  "name": "ls135",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you recommend a study that investigates how a subset with clean, annotated datasets improve denoising methods?",
+      "keywords": "clean annotated subset improves denoising methods noisy labels"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Training datasets with noisy or automatically generated labels, such as distantly supervised data, where a small subset of clean human-annotated examples is available to guide the denoising of the rest.",
+      "keywords": "noisy labels denoising clean annotated subset distant supervision weak supervision"
+    }
+  }
+}

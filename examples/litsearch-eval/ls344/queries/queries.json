@@ -1,0 +1,22 @@
+{
+  "question": "Which work introduces sparse attention modules and evaluate specifically on summarization?",
+  "name": "ls344",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Which work introduces sparse attention modules and evaluate specifically on summarization?",
+      "keywords": "sparse attention modules evaluated on summarization"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Transformer models with sparse attention patterns that handle long input sequences efficiently, with evaluation focused specifically on abstractive summarization of long documents.",
+      "keywords": "sparse attention Transformer long documents summarization efficient attention"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "question": "Could you suggest research that tries to interpret how bi-directional RNNs manage to carry out Named Entity Recognition (NER) tasks?",
+  "name": "ls249",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Could you suggest research that tries to interpret how bi-directional RNNs manage to carry out Named Entity Recognition (NER) tasks?",
+      "keywords": "interpret bi-directional RNN named entity recognition"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Bidirectional recurrent neural networks, such as BiLSTMs, applied to named entity recognition in text, and how their internal states and computations produce entity predictions.",
+      "keywords": "bidirectional RNN BiLSTM named entity recognition NER interpretability analysis"
+    }
+  }
+}

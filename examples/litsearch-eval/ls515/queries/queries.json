@@ -1,0 +1,22 @@
+{
+  "question": "Can you find a research paper that discusses using structured pruning techniques to scale down language models, where the original model being pruned has billions of parameters?",
+  "name": "ls515",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Can you find a research paper that discusses using structured pruning techniques to scale down language models, where the original model being pruned has billions of parameters?",
+      "keywords": "structured pruning scale down language models billions of parameters"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Large language models with billions of parameters being compressed into smaller models by removing structured components such as layers, heads, or hidden dimensions.",
+      "keywords": "structured pruning large language models billions parameters compression smaller model"
+    }
+  }
+}

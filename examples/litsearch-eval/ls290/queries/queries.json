@@ -1,0 +1,22 @@
+{
+  "question": "Is there research examining if multilingual pre-trained models utilize identical sets of neural units to encode morphosyntactic features in various languages?",
+  "name": "ls290",
+  "fuse": [
+    "Q0",
+    "Q1"
+  ],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question (LitSearch wording)",
+      "text": "Is there research examining if multilingual pre-trained models utilize identical sets of neural units to encode morphosyntactic features in various languages?",
+      "keywords": "multilingual pre-trained models same neurons morphosyntactic features languages"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "what is studied",
+      "text": "Multilingual pretrained language models such as mBERT and XLM-R, and the individual neurons or hidden units inside them that encode morphosyntactic features like number, gender, case and tense across many different languages.",
+      "keywords": "multilingual pretrained models neurons morphosyntactic features number gender case tense mBERT XLM-R cross-lingual probing"
+    }
+  }
+}
