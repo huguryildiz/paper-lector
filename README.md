@@ -79,7 +79,7 @@ Then, once and while online, check `pdftotext` and download the pinned tokenizer
 .venv/bin/python scripts/rank.py --setup
 ```
 
-Without a Voyage key, add `--provider local` to that command; it also downloads the local model, [`potion-multilingual-128M`](https://huggingface.co/minishlab/potion-multilingual-128M) (531 MB).
+Without a Voyage key, add `--provider local` to that command; it also downloads the local model, [`potion-science-32M`](https://huggingface.co/minishlab/potion-science-32M) (130 MB, English).
 
 ## Example: quantum network scheduling
 
@@ -142,22 +142,22 @@ Ranking scored the 73 PDFs on full text. The abstract order listed 147 papers, 7
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
-**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 30 seconds) gave [`runs/2026-10-18_0318_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0318_entanglement-scheduling_rank-local.csv). Its order agrees with Voyage at Spearman 0.70 on full text and 0.71 on abstracts (139 papers), but the two top 10s share only 5 papers. Voyage's top 10 with the place each paper got from the local run:
+**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 25 seconds) gave [`runs/2026-10-18_0541_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0541_entanglement-scheduling_rank-local.csv) with the default model, `potion-science-32M`, and [`runs/2026-10-18_0542_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0542_entanglement-scheduling_rank-local.csv) with `--local-model retrieval`. Against Voyage, the science order agrees at Spearman 0.79 on full text and 0.78 on abstracts (139 papers), the retrieval order at 0.81 and 0.75; the earlier default, `potion-multilingual-128M` (531 MB), gave 0.70 and 0.71 (its run is in version 0.1.0, commit `ea3cd4d`). Voyage's top 10 with the place each paper got from the local runs:
 
-| Voyage | Local | Paper |
-| ---: | ---: | --- |
-| 1 | 5 | Ni & Ho (2026), Scheduling concurrent entanglement requests in quantum networks |
-| 2 | 2 | Li et al. (2021), Effective routing design for remote entanglement generation |
-| 3 | 25 | Ni et al. (2025), Entanglement request scheduling using deep Q-network |
-| 4 | 6 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
-| 5 | 19 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
-| 6 | 4 | Kumar et al. (2026), Making quantum networks work: routing |
-| 7 | 51 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
-| 8 | 8 | Fittipaldi et al. (2023), Linear algebraic framework for dynamic scheduling |
-| 9 | 18 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
-| 10 | 38 | Tran et al. (2026), Dynamic entanglement packet scheduling |
+| Voyage | Science | Retrieval | Paper |
+| ---: | ---: | ---: | --- |
+| 1 | 1 | 1 | Ni & Ho (2026), Scheduling concurrent entanglement requests in quantum networks |
+| 2 | 5 | 2 | Li et al. (2021), Effective routing design for remote entanglement generation |
+| 3 | 8 | 11 | Ni et al. (2025), Entanglement request scheduling using deep Q-network |
+| 4 | 2 | 3 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
+| 5 | 13 | 20 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
+| 6 | 6 | 6 | Kumar et al. (2026), Making quantum networks work: routing |
+| 7 | 26 | 35 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
+| 8 | 20 | 12 | Fittipaldi et al. (2023), Linear algebraic framework for dynamic scheduling |
+| 9 | 21 | 33 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
+| 10 | 23 | 24 | Tran et al. (2026), Dynamic entanglement packet scheduling |
 
-The local run keeps the papers that share the question's words, but loses several that answer its specific part, scheduling among many users: four scheduling papers drop from the top 10 to places 19 to 51, and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 46. Its first place is a general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 23rd. Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
+The two top 10s share 5 papers (science) or 4 (retrieval). The local runs keep the papers that share the question's words, but lose some that answer its specific part, scheduling among many users: three scheduling papers drop from the top 10 to places 13 to 26 with science (with retrieval all four, to places 11 to 35), and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 40. A general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 23rd, comes 9th (4th with retrieval). Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
 
 ## Search modes
 
@@ -180,7 +180,7 @@ The local run keeps the papers that share the question's words, but loses severa
 4. `rerank-3` scores each paper on its abstract plus those windows.
 5. The per-query ranks are combined with Reciprocal Rank Fusion into `fused_rank`.
 
-Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call; ranking uses the model2vec model `potion-multilingual-128M` (a one-time 531 MB download) and gives a rougher order than Voyage. PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
+Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call; ranking uses the English model2vec model `potion-science-32M` (a one-time 130 MB download; `"model": "retrieval"` picks `potion-retrieval-32M`) and gives a rougher order than Voyage. With Voyage, PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too; the local models are English only. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
 
 ## Tests
 
@@ -189,7 +189,7 @@ Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`
 .venv/bin/python -m pytest -q
 ```
 
-The tests run offline and need `pdftotext` on `PATH`. Three of them use the real tokenizer and local model and are skipped until `rank.py --setup --provider local` has run; CI runs them all.
+The tests run offline and need `pdftotext` on `PATH`. Four of them use the real tokenizer and local models and are skipped until `rank.py --setup --provider local` (and `--local-model retrieval`) has run; CI runs them all.
 
 ## Versions and issues
 

@@ -2,6 +2,13 @@
 
 Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_rank_run.json` records the version and the commit (`-dirty` when a tracked file of the checkout differed from it).
 
+## 0.2.0 (2026-10-18)
+
+- The `local` provider uses `potion-science-32M` (130 MB, English) instead of `potion-multilingual-128M` (531 MB). `"rank": {"provider": "local", "model": "retrieval"}` or `--local-model retrieval` picks `potion-retrieval-32M` (131 MB) instead. On the 73 PDFs of `examples/entanglement-scheduling`, Spearman against the voyage run (full text, abstracts) went from 0.70 and 0.71 to 0.79 and 0.78 (science) or 0.81 and 0.75 (retrieval).
+- The local models are English only. For PDFs in other languages use the voyage provider.
+- The old model's folder, `~/.cache/paper-lector/potion-multilingual-128M/` (531 MB), is no longer used and can be deleted.
+- `examples/entanglement-scheduling` has one local run per model (`2026-10-18_0541`, science; `2026-10-18_0542`, retrieval), replacing the multilingual run.
+
 ## 0.1.0 (2026-10-18)
 
 First release for use outside the author's projects.
