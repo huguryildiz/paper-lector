@@ -67,6 +67,8 @@ With an agent, the agent first counts the PDFs in `pdf_dirs`. If a folder is mis
 - `ERROR`: the OpenAlex lookup itself failed (a bad key, a dropped connection).
 - `SKIP`: a JSONL record with no DOI, arXiv or OpenAlex id.
 
+arXiv is tried first. The arXiv id comes from the id given, or else from an OpenAlex location whose landing page is on `arxiv.org` or `export.arxiv.org` (`/abs/` or `/pdf/`) or `arxiv-vanity.com/papers/`.
+
 It ends with a count of each and exits with status 1 if any paper was not obtained. Every saved PDF gets a line in `fetch_log.jsonl` in the download folder with status `OK`, the id, the URL it came from (so you can tell a preprint from the published version), the file name and its SHA-256. Every `MANUAL` paper gets a line there too, with its title and landing URL, so the list of papers to download by hand outlives the terminal. A download byte-identical to a PDF already in the folders is not saved; it gets a `HAVE` line with the id, the URL, that PDF's path relative to the download folder and its SHA-256, so `rank.py --abstracts` can still tie the id to the PDF.
 
 It skips DOIs already in the `sources` table whose PDF is there (a row whose `pdf_path` is missing is noted and fetched again), and file names end in a short hash of the DOI so two papers with the same author, year and title words don't overwrite each other. Dropped connections, timeouts, cut-off responses and HTTP 429/5xx are retried, for API calls and PDF downloads alike.

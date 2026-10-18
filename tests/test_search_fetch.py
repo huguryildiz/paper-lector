@@ -92,6 +92,22 @@ def test_arxiv_doi_and_doi_url_candidates():
     assert fetch_pdf.candidates('https://doi.org/10.1109/X.1', None) == []
 
 
+@pytest.mark.parametrize('land, arx', [
+    ('https://export.arxiv.org/abs/2205.06300', '2205.06300'),
+    ('http://arxiv.org/pdf/2205.06300v2.pdf', '2205.06300v2'),
+    ('https://www.arxiv-vanity.com/papers/2205.06300/', '2205.06300'),
+    ('https://arxiv.org/abs/quant-ph/0101001?context=cs', 'quant-ph/0101001'),
+])
+def test_arxiv_id_from_landing_url(land, arx):
+    w = {'locations': [{'landing_page_url': land}]}
+    assert fetch_pdf.candidates('10.1109/X.1', w) == [f'https://arxiv.org/pdf/{arx}']
+
+
+def test_lookalike_landing_url_is_not_arxiv():
+    w = {'locations': [{'landing_page_url': 'https://notarxiv.org/abs/2205.06300'}]}
+    assert fetch_pdf.candidates('10.1109/X.1', w) == []
+
+
 def test_jsonl_records_with_openalex_or_arxiv_only(project, monkeypatch, capsys, tmp_path):
     import json
     monkeypatch.chdir(project)

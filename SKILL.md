@@ -185,7 +185,7 @@ Rules for drafting:
 }
 ```
 
-If the user names papers they expect near the top, write their ids down before the run and pass them as `--expect id1,id2`. `rank.py` checks them against the top 10 of the first query in the file (the lowest id with text, usually `Q0`, the `main` one) only, not against the fused order or any other query. An id that names no paper is reported as missing, so copy ids from the dry run. They are a sanity check, not a test, once their ranks have been seen.
+If the user names papers they expect near the top, write their ids down before the run and pass them as `--expect id1,id2`. When you ask for them, offer only "none" and the free-text field for the user's own papers; never suggest papers yourself, since a check built from your picks tests nothing. `rank.py` checks them against the top 10 of the first query in the file (the lowest id with text, usually `Q0`, the `main` one) only, not against the fused order or any other query. An id that names no paper is reported as missing, so copy ids from the dry run. They are a sanity check, not a test, once their ranks have been seen.
 
 ## Step 3: ranking
 

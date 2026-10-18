@@ -2,6 +2,12 @@
 
 Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_rank_run.json` records the version and the commit (`-dirty` when a tracked file of the checkout differed from it).
 
+## Unreleased
+
+- `fetch_pdf.py` reads the arXiv id from more landing pages: `export.arxiv.org`, `arxiv.org/pdf/` and `arxiv-vanity.com/papers/`, with any query string dropped. A look-alike host such as `notarxiv.org` no longer counts.
+- SKILL: when asking for papers to expect near the top, the agent offers only "none" and the user's own papers.
+- README shortened, with a Benchmarks section.
+
 ## 0.2.0 (2026-10-18)
 
 - The `local` provider uses `potion-science-32M` (130 MB, English) instead of `potion-multilingual-128M` (531 MB). `"rank": {"provider": "local", "model": "retrieval"}` or `--local-model retrieval` picks `potion-retrieval-32M` (131 MB) instead. On the 73 PDFs of `examples/entanglement-scheduling`, Spearman against the voyage run (full text, abstracts) went from 0.70 and 0.71 to 0.79 and 0.78 (science) or 0.81 and 0.75 (retrieval).

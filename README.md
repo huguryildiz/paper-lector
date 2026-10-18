@@ -25,11 +25,9 @@
   &nbsp;·&nbsp;
   <a href="#install">Install</a>
   &nbsp;·&nbsp;
-  <a href="#example-quantum-network-scheduling">Example</a>
+  <a href="#example">Example</a>
   &nbsp;·&nbsp;
-  <a href="#search-modes">Search modes</a>
-  &nbsp;·&nbsp;
-  <a href="#how-ranking-works">How it works</a>
+  <a href="#benchmarks">Benchmarks</a>
   &nbsp;·&nbsp;
   <a href="REFERENCE.md">Reference</a>
 </h3>
@@ -40,15 +38,15 @@
 
 paper-lector is an agent skill for Claude Code and Codex with three scripts:
 
-- `openalex_search.py` searches OpenAlex (keyword, semantic, citing works, references).
+- `openalex_search.py` searches OpenAlex: keyword, semantic, citing works, references.
 - `fetch_pdf.py` downloads open-access PDFs and lists the rest for manual download.
 - `rank.py` ranks your own PDFs against a few frozen research-question queries and tells you which pages to read first.
 
-[`SKILL.md`](SKILL.md) is the guide the agent reads. [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
+A high rank means the text resembles the question, not that the paper is good or answers it. [`SKILL.md`](SKILL.md) is the guide the agent reads; [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
 
 ## Install
 
-paper-lector runs on macOS and Linux, and CI tests both. Windows is not supported: the commands below and in [`SKILL.md`](SKILL.md) assume a Unix shell, so on Windows use WSL. You need Python 3.12 and `pdftotext` from poppler: `brew install python@3.12 poppler` on macOS; `sudo apt install python3.12 python3.12-venv poppler-utils` on Ubuntu 24.04. Where the system has no Python 3.12 package (Debian 13 ships 3.13, Ubuntu 22.04 3.10), install 3.12 with pyenv or the deadsnakes PPA.
+macOS or Linux (on Windows, use WSL), Python 3.12 and `pdftotext` from poppler: `brew install python@3.12 poppler` on macOS, `sudo apt install python3.12 python3.12-venv poppler-utils` on Ubuntu 24.04.
 
 ```bash
 git clone https://github.com/huguryildiz/paper-lector ~/Documents/GitHub/paper-lector
@@ -59,128 +57,79 @@ ln -s ~/Documents/GitHub/paper-lector ~/.claude/skills/paper-lector   # Claude C
 ln -s ~/Documents/GitHub/paper-lector ~/.codex/skills/paper-lector    # Codex
 ```
 
-The symlink is what lets the agent find the skill; make the one for the agent you use, or both.
+Put API keys in `~/.config/paper-lector/.env` (all projects) or a project's `.env`:
 
-`constraints.txt` pins every package that `requirements.txt` pulls in, so a new install gets the versions the tests ran with.
-
-Add your API keys to `~/.config/paper-lector/.env` (shared by all projects) or to a project's `.env`:
-
-- `OPENALEX_API_KEY` for search and fetch. It is optional but recommended. The key is free: sign up at [openalex.org/signup](https://openalex.org/signup), then copy it from [openalex.org/settings/api-key](https://openalex.org/settings/api-key).
-- `VOYAGE_API_KEY` for ranking with the default provider. Create one at [dashboard.voyageai.com](https://dashboard.voyageai.com/organization/api-keys). Voyage gives free tokens, but an account with no payment method gets low rate limits, and a run on a few dozen PDFs may stop on HTTP 429; adding a payment method in the dashboard lifts them and the free tokens still apply. Without a key, rank with `--provider local`.
+- `OPENALEX_API_KEY`, free and optional, for complete searches: [openalex.org/signup](https://openalex.org/signup).
+- `VOYAGE_API_KEY` for ranking with the default provider: [dashboard.voyageai.com](https://dashboard.voyageai.com/organization/api-keys). An account with no payment method gets low rate limits and may stop on HTTP 429; the free tokens apply either way. Without a key, rank with `--provider local`.
 
 ```bash
 mkdir -p ~/.config/paper-lector
-install -m 600 .env.example ~/.config/paper-lector/.env    # readable by you only; then fill in the keys
+install -m 600 .env.example ~/.config/paper-lector/.env    # then fill in the keys
+.venv/bin/python scripts/rank.py --setup                   # once, online; add --provider local without a Voyage key
 ```
 
-Then, once and while online, check `pdftotext` and download the pinned tokenizer:
+## Example
 
-```bash
-.venv/bin/python scripts/rank.py --setup
-```
-
-Without a Voyage key, add `--provider local` to that command; it also downloads the local model, [`potion-science-32M`](https://huggingface.co/minishlab/potion-science-32M) (130 MB, English).
-
-## Example: quantum network scheduling
-
-[`examples/entanglement-scheduling`](examples/entanglement-scheduling) is a complete run made with these scripts. The question:
+[`examples/entanglement-scheduling`](examples/entanglement-scheduling) is a complete run on this question:
 
 > Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?
 
-**1. Config.** `literature.json` sits at the project root, and its paths are relative to it.
+With an agent, open a project folder in Claude Code or Codex and ask for it in your own words, for example "find and rank papers on how entanglement distribution is scheduled among many users of a quantum network". The agent proposes search queries, downloads the open-access PDFs, asks a few questions to fill the query slots, runs a dry run for the token estimate, and reports the top 10 with the pages to start on.
 
-```json
-{
-  "pdf_dirs": ["pdfs"],
-  "download_dir": "pdfs",
-  "queries": "queries/queries.json",
-  "rank": {"provider": "voyage"}
-}
-```
-
-**2. Queries.** [`queries/queries.json`](examples/entanglement-scheduling/queries/queries.json) holds the question and five labelled queries (`main`, `subject`, `approach`, `outcome`, `comparison`), each written as a full sentence with a keyword string; the first four are fused. Once a queries file has produced results, it stays as it is; a changed question gets a new file.
-
-**3a. With an agent.** Open the project in Claude Code or Codex and ask:
-
-> Find and rank papers on how entanglement distribution is scheduled among many users of a quantum network.
-
-The agent asks which search modes to run and shows its queries for approval. It then downloads the open-access PDFs and fills the query slots through a few questions. After a dry run it ranks the papers and reports the top 10 with the pages to start on.
-
-**3b. From the shell.** Run this in a new, empty project folder. It writes `literature.json` and `queries/queries.json` (the example's files), and every script then finds them from that folder.
+From the shell, in a new empty folder:
 
 ```bash
 PL=$(ls -d ~/.claude/skills/paper-lector ~/.codex/skills/paper-lector 2>/dev/null | head -1)
 PY=$PL/.venv/bin/python
 mkdir -p ~/research/entanglement-scheduling/queries && cd ~/research/entanglement-scheduling
-git init -q                           # marks the project root; the scripts look for literature.json up to here
+git init -q                           # marks the project root
 cp $PL/examples/entanglement-scheduling/literature.json .
 cp $PL/examples/entanglement-scheduling/queries/queries.json queries/
 
-# search OpenAlex two ways, compare, download the open-access PDFs
 $PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
     --exact '("quantum network" OR "quantum networks" OR "quantum internet") AND (entangl*) AND (schedul*)'
 $PY $PL/scripts/openalex_search.py --name entanglement-scheduling \
     --semantic 'Scheduling entanglement distribution among multiple users in a quantum network with optimization, heuristics or reinforcement learning'
-EX=$(ls -t runs/*_entanglement-scheduling_exact_search.jsonl | head -1)      # the files just written
-SE=$(ls -t runs/*_entanglement-scheduling_semantic_search.jsonl | head -1)
-$PY $PL/scripts/search_overlap.py $EX $SE
-$PY $PL/scripts/fetch_pdf.py --from $EX
-$PY $PL/scripts/fetch_pdf.py --from $SE
-
-# count tokens without calling the API, then rank PDFs on full text and every paper on its abstract
-$PY $PL/scripts/rank.py --abstracts $EX,$SE --dry
+EX=$(ls -t runs/*_exact_search.jsonl | head -1); SE=$(ls -t runs/*_semantic_search.jsonl | head -1)
+$PY $PL/scripts/fetch_pdf.py --from $EX; $PY $PL/scripts/fetch_pdf.py --from $SE
+$PY $PL/scripts/rank.py --abstracts $EX,$SE --dry      # token estimate, no API call
 $PY $PL/scripts/rank.py --abstracts $EX,$SE
 ```
 
-`fetch_pdf.py` exits with status 1 when some papers could not be downloaded (the `MANUAL` lines), so a script that stops on errors should not stop there. Without a Voyage key, add `--provider local` to both `rank.py` lines.
+The two searches gave 167 distinct works and 73 open-access PDFs; the rest came back as `MANUAL` lines with the publisher page. `fetch_pdf.py` exits with status 1 when any paper is missing. A first Voyage run on the 73 PDFs and 139 abstracts sends about 3.1M tokens; embeddings are cached for reruns, reranking is paid each time, and `--budget` (15M by default) stops a run before any API call.
 
-The keyword search returned 137 works and the semantic search the 50 closest. They share 20, so 167 distinct works came out, and `search_overlap.py` reported LOW OVERLAP: only 40% of the semantic works were in the keyword results. `fetch_pdf.py` downloaded 73 open-access PDFs. For each paper it could not get, it wrote a `MANUAL` line with the publisher page, where the PDF can be downloaded by hand.
-
-Ranking scored the 73 PDFs on full text. The abstract order listed 147 papers, 74 of them with no PDF; 8 had no abstract, so 139 were ranked on their abstracts. A first run on these files sends about 3.1M tokens to Voyage: 1.55M for embeddings and 1.57M for reranking (the dry run estimated 3.19M). Embeddings are cached, so a rerun does not pay for them again, but reranking is paid in full on every run, about half of a first run. The example's own run took most embeddings from an earlier run's cache and sent 0.11M embedding tokens. `rank.py` stops before any API call if the token estimate is above `--budget` (15M by default; at the size of this example, that is about 350 PDFs), and it counts every request, retries included, against that budget.
-
-**4. Read the output.** [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0317_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records what is needed to repeat the run: the paper-lector version and commit, the command, the SHA-256 of every PDF and of the queries file, config, sources table and fetch logs, the models and the software versions. Runs are never overwritten. Voyage serves its models under fixed names that it may update, so a voyage rerun can differ slightly; a `local` run on the same files gives the same CSV byte for byte. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
-
-A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
-
-**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 25 seconds) gave [`runs/2026-10-18_0541_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0541_entanglement-scheduling_rank-local.csv) with the default model, `potion-science-32M`, and [`runs/2026-10-18_0542_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0542_entanglement-scheduling_rank-local.csv) with `--local-model retrieval`. Against Voyage, the science order agrees at Spearman 0.79 on full text and 0.78 on abstracts (139 papers), the retrieval order at 0.81 and 0.75; the earlier default, `potion-multilingual-128M` (531 MB), gave 0.70 and 0.71 (its run is in version 0.1.0, commit `ea3cd4d`). Voyage's top 10 with the place each paper got from the local runs:
-
-| Voyage | Science | Retrieval | Paper |
-| ---: | ---: | ---: | --- |
-| 1 | 1 | 1 | Ni & Ho (2026), Scheduling concurrent entanglement requests in quantum networks |
-| 2 | 5 | 2 | Li et al. (2021), Effective routing design for remote entanglement generation |
-| 3 | 8 | 11 | Ni et al. (2025), Entanglement request scheduling using deep Q-network |
-| 4 | 2 | 3 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
-| 5 | 13 | 20 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
-| 6 | 6 | 6 | Kumar et al. (2026), Making quantum networks work: routing |
-| 7 | 26 | 35 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
-| 8 | 20 | 12 | Fittipaldi et al. (2023), Linear algebraic framework for dynamic scheduling |
-| 9 | 21 | 33 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
-| 10 | 23 | 24 | Tran et al. (2026), Dynamic entanglement packet scheduling |
-
-The two top 10s share 5 papers (science) or 4 (retrieval). The local runs keep the papers that share the question's words, but lose some that answer its specific part, scheduling among many users: three scheduling papers drop from the top 10 to places 13 to 26 with science (with retrieval all four, to places 11 to 35), and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 40. A general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 23rd, comes 9th (4th with retrieval). Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
+The output, [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0317_entanglement-scheduling_rank.csv), has one row per paper: rank, citation, link, citation count and `start_pages`, the page ranges where the queries agree. `_rank_run.json` records what is needed to repeat the run, including the SHA-256 of every PDF and of the queries file.
 
 ## Search modes
 
-`openalex_search.py` finds papers in OpenAlex in four ways. With an agent, ask for a search ("find papers on energy-aware routing in underwater networks") and it asks which modes to use, then shows the queries it wrote for you to approve.
+| Mode | Flag | What you get |
+| --- | --- | --- |
+| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches (`AND`, `OR`, `NOT`, `*`; without a key, the first 200) |
+| Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning; can change between runs |
+| Citing works | `--cites <id>` | Works citing one paper |
+| References | `--refs <id>` | Works one paper cites |
 
-| Mode | Flag | What you get | Use it when |
-| --- | --- | --- | --- |
-| Keyword | `--exact '<boolean query>'` | Every work whose title or abstract matches the words, with `AND`, `OR`, `NOT` and `*` wildcards (all pages need `OPENALEX_API_KEY`; without it, the first 200). One query per run; run it again for another | You want a complete search and know the field's words |
-| Semantic | `--semantic '<sentence>'` | The 50 works closest in meaning to a sentence. Can change between runs | You are new to a field, or its papers use many names for one idea |
-| Citing works | `--cites <id>` | Works that cite one paper (all pages need `OPENALEX_API_KEY`; without it, the first 200) | You want what came after a key paper |
-| References | `--refs <id>` | Every work one paper cites | You want what a key paper built on |
-
-`<id>` is a DOI, an arXiv id or an OpenAlex W id. Each mode writes a JSONL file that `fetch_pdf.py --from` downloads from. Keyword and semantic searches catch different papers, so run both; `search_overlap.py` then shows how many semantic works the keyword search also found. On the entanglement-scheduling example it was 20 of 50, under half, and the agent then names the words the keyword query lacks and proposes a revised query.
+`<id>` is a DOI, arXiv id or OpenAlex W id. Keyword and semantic searches find different papers, so run both; `search_overlap.py` reports how much they share.
 
 ## How ranking works
 
 1. `pdftotext` extracts each PDF and the bibliography is cut off.
-2. The text is split into 1,200-token windows, each labelled with its pages.
+2. The text is split into 1,200-token windows labelled with their pages.
 3. For each query, the 3 best windows per paper are picked by `voyage-4-large` embeddings plus BM25.
 4. `rerank-3` scores each paper on its abstract plus those windows.
-5. The per-query ranks are combined with Reciprocal Rank Fusion into `fused_rank`.
+5. Reciprocal Rank Fusion combines the per-query ranks into `fused_rank`.
 
-Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`): no API call; ranking uses the English model2vec model `potion-science-32M` (a one-time 130 MB download; `"model": "retrieval"` picks `potion-retrieval-32M`) and gives a rougher order than Voyage. With Voyage, PDFs in Turkish, German, French, Spanish, Italian, Portuguese and Russian are handled too; the local models are English only. The formula, a worked example and the language rules are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
+`--provider local` replaces Voyage with an English model2vec model, `potion-science-32M` (130 MB, no API call). It is faster and free but rougher. For PDFs that are not in English, use Voyage. Details are in [`REFERENCE.md`](REFERENCE.md#how-ranking-works).
+
+## Benchmarks
+
+Small tests, made to check the default settings rather than to rank paper-lector against other tools:
+
+- **One known paper per question** ([LitSearch](https://huggingface.co/datasets/princeton-nlp/LitSearch), 46 questions, each with a few dozen on-topic PDFs). With Voyage and the `main` query alone, the known paper landed in the top 3 in 80% of questions and in the top 10 in 91%. Fusing `main` and `subject` gave 61% and 89%. A reranker that read only the abstracts of the same papers (`rerank-3-lite`) gave 48% and 59%. On 19 of these questions, the local model put the paper in the top 10 in 63%.
+- **Survey references** (7 IEEE surveys). The local model told a survey's references apart from a neighbouring survey's references with an average precision of 0.60, against 0.35 for a random order. It did poorly where surveys share half their references.
+- **Local against Voyage** (the example's 73 PDFs). The two orders agree at Spearman 0.79, and their top 10s share 5 papers. The local model loses papers that answer the narrow part of the question.
+
+Numbers and caveats are in [`examples/litsearch/MINI-TEST.md`](examples/litsearch/MINI-TEST.md) and the example's runs.
 
 ## Tests
 
@@ -189,11 +138,11 @@ Without a Voyage key, set `"rank": {"provider": "local"}` (or `--provider local`
 .venv/bin/python -m pytest -q
 ```
 
-The tests run offline and need `pdftotext` on `PATH`. Four of them use the real tokenizer and local models and are skipped until `rank.py --setup --provider local` (and `--local-model retrieval`) has run; CI runs them all.
+The tests run offline and need `pdftotext`. Tests that use the real tokenizer and local models are skipped until `rank.py --setup --provider local` has run.
 
 ## Versions and issues
 
-The version is in [`CHANGELOG.md`](CHANGELOG.md) and in every `_rank_run.json`. To report a problem, follow [`CONTRIBUTING.md`](CONTRIBUTING.md); security issues go by [`SECURITY.md`](SECURITY.md).
+See [`CHANGELOG.md`](CHANGELOG.md), [`CONTRIBUTING.md`](CONTRIBUTING.md) and, for security issues, [`SECURITY.md`](SECURITY.md).
 
 ## License
 

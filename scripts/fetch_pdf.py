@@ -49,14 +49,19 @@ def name_for(w, ident):
     return f"{surname}{w.get('publication_year') or ''}_{''.join(x[:1].upper() + x[1:] for x in words)}_{tag}.pdf"
 
 
+# arXiv landing pages: arxiv.org and export.arxiv.org (abs or pdf), arxiv-vanity.com/papers
+ARXIV_LANDING = re.compile(r'(?i)^https?://(?:www\.|export\.)?arxiv\.org/(?:abs|pdf)/([^?#]+?)(?:\.pdf)?/?(?:[?#].*)?$'
+                           r'|^https?://(?:www\.)?arxiv-vanity\.com/papers/([^/?#]+)/?(?:[?#].*)?$')
+
+
 def candidates(ident, w):
     urls = []
     kind, v = common.norm_id(ident)
     arx = v if kind == 'arxiv' else None
     for l in (w or {}).get('locations') or []:
-        land = l.get('landing_page_url') or ''
-        if 'arxiv.org/abs/' in land:
-            arx = arx or land.split('/abs/')[-1]
+        m = ARXIV_LANDING.match(l.get('landing_page_url') or '')
+        if m:
+            arx = arx or m.group(1) or m.group(2)
     if arx:
         urls.append(f'https://arxiv.org/pdf/{arx}')
     for l in [(w or {}).get('best_oa_location') or {}] + ((w or {}).get('locations') or []):
