@@ -17,12 +17,13 @@ jobs:
       - if: runner.os == 'macOS'
         run: brew install poppler
       - run: pip install -r requirements.txt -c constraints.txt pytest==9.1.1
-      # The tokenizer (7 MB) and the local model, kept between runs; a new pinned revision gets a new cache key.
+      # The tokenizer (7 MB) and the two local models, kept between runs; a new pinned revision gets a new cache key.
       - uses: actions/cache@v4
         with:
           path: ~/.cache/paper-lector
           key: models-${{ hashFiles('scripts/rank.py') }}
       - run: python scripts/rank.py --setup --provider local
+      - run: python scripts/rank.py --setup --provider local --local-model retrieval
       # With the models in place, the real-model tests (and the end-to-end local run) must run, not skip.
       - run: python -m pytest -q -rs
         env:

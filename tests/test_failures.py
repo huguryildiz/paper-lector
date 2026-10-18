@@ -16,7 +16,7 @@ def offline(monkeypatch, tmp_path):
     monkeypatch.setattr(rank, 'CACHE', tmp_path / 'cache' / 'embeddings.sqlite')
     monkeypatch.setattr(rank, 'call', fake)
     monkeypatch.setattr(rank, 'tokenizer', WordTokenizer)
-    monkeypatch.setattr(rank, 'local_model', lambda: local_vecs)
+    monkeypatch.setattr(rank, 'local_model', lambda model='science': local_vecs)
     monkeypatch.setattr(rank, 'WIN', 60)
     monkeypatch.setattr(rank, 'STEP', 50)
     monkeypatch.setenv('VOYAGE_API_KEY', 'test')

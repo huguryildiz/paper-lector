@@ -15,9 +15,10 @@ Method:
      orders are kept apart: fused_rank covers full_text papers, abs_fused_rank all papers with an abstract.
 
   Provider "local" (literature.json "rank": {"provider": "local"}, or --provider local) needs no API key: the
-  model2vec model potion-multilingual-128M (static token vectors, 531 MB, downloaded once) replaces voyage-4-large
-  in step 3, and in step 4 each paper is scored by the cosine of the same model's vectors for the query and for its
-  abstract plus 3 windows. Output: <out>_<name>_rank-local.csv.
+  model2vec model potion-science-32M (static token vectors, English, 130 MB, downloaded once; "rank": {"model":
+  "retrieval"} or --local-model retrieval picks potion-retrieval-32M) replaces voyage-4-large in step 3, and in step 4
+  each paper is scored by the cosine of the same model's vectors for the query and for its abstract plus 3 windows.
+  Output: <out>_<name>_rank-local.csv.
 
   Voyage embeddings are cached in ~/.cache/paper-lector/embeddings.sqlite (key: model, input type, text), so a
   rerun or a run resumed after a crash does not pay for them again; reranking is paid in full on every run. Every
@@ -47,10 +48,19 @@ TOK_REV = 'bb931c2635a93efe400c24741363d8ff61d7bb32'
 TOK_URL = f'https://huggingface.co/voyageai/voyage-4-large/resolve/{TOK_REV}/tokenizer.json'
 TOK_SHA = 'c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539'
 TOK_PATH = Path.home() / f'.cache/paper-lector/voyage-4-large-tokenizer-{TOK_REV[:7]}.json'   # a new revision, a new file
-LOCAL, LOCAL_REV = 'minishlab/potion-multilingual-128M', '73908c3438cf03b6a01bcb9611d62b23d0726f08'
-LOCAL_FILES = {'model.safetensors': '14b5eb39cb4ce5666da8ad1f3dc6be4346e9b2d601c073302fa0a31bf7943397',
-               'tokenizer.json': '19f1909063da3cfe3bd83a782381f040dccea475f4816de11116444a73e1b6a1'}
-LOCAL_DIR = Path.home() / f'.cache/paper-lector/potion-multilingual-128M/{LOCAL_REV[:7]}'
+LOCAL_MODELS = {   # model2vec models (static token vectors, English) at a pinned revision; keys are common.LOCAL_MODELS
+    'science': ('minishlab/potion-science-32M', '7366079845507de14a4330007cdfa01bb92bca52', 130,
+                {'model.safetensors': '5973432fc766d8f0fff07d4138bbb79d67854fe6af120aff2922f26b9b7e2055',
+                 'tokenizer.json': 'fdf9372b4c0b0a5b4b841a9955be1834ffc5878734a207f80e349e2956c65e93'}),
+    'retrieval': ('minishlab/potion-retrieval-32M', '6fc8051fab2a1e0ee76689cf08c853792ac285e7', 131,
+                  {'model.safetensors': '07609e5bd33aad37900b3fd62f4ec96f6daec88ca4d46b9d8b928bfababf6ea0',
+                   'tokenizer.json': '7d75cbc54318138807c401b0f0c9721117c628b39de8e8e0edb6cb17e0ee7d18'}),
+}
+
+
+def local_dir(model):
+    repo, rev = LOCAL_MODELS[model][:2]
+    return Path.home() / f'.cache/paper-lector/{repo.split("/")[1]}/{rev[:7]}'      # a new revision, a new folder
 CACHE = Path.home() / '.cache/paper-lector/embeddings.sqlite'
 STOP = set('a an the of for and or in on with to via under by at as is are be been was were this that these those it its '
            'from into over than then which when where while what who how does do can not no '
@@ -231,22 +241,23 @@ def fetch(url, path, want, what, why, setup):
     part.replace(path)
 
 
-def local_model():
-    """potion-multilingual-128M at a pinned revision, downloaded once (531 MB) and checked against its SHA-256 on every
+def local_model(model='science'):
+    """A model of LOCAL_MODELS at its pinned revision, downloaded once (130 MB) and checked against its SHA-256 on every
     load. Returns texts -> unit-norm vectors: the mean of the texts' static token vectors, as model2vec computes them."""
     from tokenizers import Tokenizer
-    for f, want in LOCAL_FILES.items():
-        fetch(f'https://huggingface.co/{LOCAL}/resolve/{LOCAL_REV}/{f}', LOCAL_DIR / f, want, f'the local model ({f})',
-              'The local provider needs it once (531 MB)', 'rank.py --setup --provider local')
-        if common.sha256_file(LOCAL_DIR / f) != want:
-            sys.exit(f'{LOCAL_DIR / f} is not the pinned local model (revision {LOCAL_REV[:7]}). Delete it and run '
-                     f'"rank.py --setup --provider local"')
-    path = LOCAL_DIR / 'model.safetensors'
+    repo, rev, mb, files = LOCAL_MODELS[model]
+    d, setup = local_dir(model), 'rank.py --setup --provider local' + (f' --local-model {model}' if model != 'science' else '')
+    for f, want in files.items():
+        fetch(f'https://huggingface.co/{repo}/resolve/{rev}/{f}', d / f, want, f'the local model ({f})',
+              f'The local provider needs it once ({mb} MB)', setup)
+        if common.sha256_file(d / f) != want:
+            sys.exit(f'{d / f} is not the pinned local model ({repo}, revision {rev[:7]}). Delete it and run "{setup}"')
+    path = d / 'model.safetensors'
     with open(path, 'rb') as fh:
         n = int.from_bytes(fh.read(8), 'little')
         shape = json.loads(fh.read(n))['embeddings']['shape']
     emb = np.memmap(path, np.float32, 'r', offset=8 + n, shape=tuple(shape))
-    tok = Tokenizer.from_file(str(LOCAL_DIR / 'tokenizer.json'))
+    tok = Tokenizer.from_file(str(d / 'tokenizer.json'))
 
     def vecs(texts):
         V = np.array([emb[e.ids].mean(0) if e.ids else np.zeros(shape[1]) for e in
@@ -967,6 +978,8 @@ def main(argv=None):
     ap.add_argument('--dirs', help='comma-separated PDF folders (default: "pdf_dirs" in the config)')
     ap.add_argument('--ids', help='CSV with a "paper" column (and optionally "sha256"): rank exactly these papers (frozen corpus)')
     ap.add_argument('--provider', choices=common.PROVIDERS, help='voyage or local (no API key); default: "rank" in the config, else voyage')
+    ap.add_argument('--local-model', choices=common.LOCAL_MODELS, help='science or retrieval; default: "model" in the '
+                    'config\'s "rank", else science')
     ap.add_argument('--variants', default='hybrid', help='hybrid, dense or hybrid,dense (dense is an ablation); voyage only')
     ap.add_argument('--abstracts', help='comma-separated search JSONL files: also rank every paper on its abstract, '
                     'including results with no PDF (abs_fused_rank, source abstract_only)')
@@ -982,9 +995,9 @@ def main(argv=None):
     if a.setup:
         tokenizer()
         if a.provider == 'local':
-            local_model()
+            local_model(a.local_model or 'science')
         print(f'ready: pdftotext {shutil.which("pdftotext")}, tokenizer {TOK_PATH}'
-              + (f', local model {LOCAL_DIR}' if a.provider == 'local' else ''))
+              + (f', local model {local_dir(a.local_model or "science")}' if a.provider == 'local' else ''))
         return
     cfg = common.load_config(a.config, required=not (a.dirs and a.queries))
     qpath = a.queries or (cfg and cfg['queries'])
@@ -1043,6 +1056,9 @@ def main(argv=None):
     variants = a.variants.split(',')
     if any(v not in ('hybrid', 'dense') for v in variants):
         sys.exit('--variants takes hybrid and/or dense')
+    if a.local_model and provider != 'local':
+        sys.exit('--local-model applies to the local provider only')
+    a.local_model = a.local_model or (cfg and cfg['local_model']) or 'science'
     if provider == 'local':
         if variants != ['hybrid']:
             sys.exit('--variants applies to the voyage provider only')
@@ -1181,7 +1197,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
             QE = embed([(q['text'], ntok(q['text'])) for q in Q.values()], 'query', usage, [(qsha, i, '') for i in Q],
                        E.shape[1])                   # the queries' vectors must have the windows' size
     else:
-        vecs = local_model()
+        vecs = local_model(a.local_model)
         E, QE = vecs(w['text'] for w in W), vecs(q['text'] for q in Q.values())
 
     abs_rows = {}
@@ -1289,7 +1305,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
            'paper_lector_commit': commit, 'argv': sys.argv[1:] if a.argv is None else a.argv, 'cwd': rel(Path.cwd(), cfg),
            'inputs': inputs(a, cfg, dirs),
            'question': question, 'queries': Q, 'queries_sha': qsha, 'fuse': fuse,
-           'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else f'{LOCAL}@{LOCAL_REV}',
+           'models': {'provider': provider, 'embed': EMBED if provider == 'voyage' else '{}@{}'.format(*LOCAL_MODELS[a.local_model][:2]),
                       'rerank': RERANK if provider == 'voyage' else None, 'tokenizer': TOK_URL},
            'versions': versions(),
            'params': {'window': WIN, 'step': STEP, 'rrf_k': RRF_K, 'windows_per_paper': N_WIN, 'max_overlap': MAX_OVERLAP},

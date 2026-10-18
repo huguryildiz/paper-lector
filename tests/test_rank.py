@@ -1,8 +1,9 @@
-import csv, json
+import csv, json, os
 
 import numpy as np
 import pytest
 
+import common
 import rank
 from conftest import FakeVoyage, WordTokenizer, local_vecs, needs
 
@@ -13,7 +14,8 @@ def offline(monkeypatch, tmp_path):
     monkeypatch.setattr(rank, 'CACHE', tmp_path / 'cache' / 'embeddings.sqlite')
     monkeypatch.setattr(rank, 'call', fake)
     monkeypatch.setattr(rank, 'tokenizer', WordTokenizer)
-    monkeypatch.setattr(rank, 'local_model', lambda: local_vecs)
+    fake.local_models = []
+    monkeypatch.setattr(rank, 'local_model', lambda model='science': fake.local_models.append(model) or local_vecs)
     monkeypatch.setattr(rank, 'WIN', 60)
     monkeypatch.setattr(rank, 'STEP', 50)
     monkeypatch.setenv('VOYAGE_API_KEY', 'test')
@@ -112,7 +114,25 @@ def test_local_provider_needs_no_key_or_api(project, offline, monkeypatch, tmp_p
     assert all(r['Q0_main_pages'] for r in rows)
     run = json.load(open(project / 'runs/b_paper-lector_rank_run.json'))
     assert run['models']['provider'] == 'local' and run['models']['rerank'] is None
-    assert run['models']['embed'] == f'{rank.LOCAL}@{rank.LOCAL_REV}' and run['usage'] == {}
+    assert run['models']['embed'] == 'minishlab/potion-science-32M@' + rank.LOCAL_MODELS['science'][1] and run['usage'] == {}
+    assert offline.local_models == ['science']
+
+
+def test_local_model_from_config_or_flag(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "queries": "queries/queries.json", '
+                                             '"rank": {"provider": "local", "model": "retrieval"}}')
+    rank.main(['--out', str(project / 'runs/r')])
+    run = json.load(open(project / 'runs/r_paper-lector_rank_run.json'))
+    assert run['models']['embed'] == 'minishlab/potion-retrieval-32M@' + rank.LOCAL_MODELS['retrieval'][1]
+    rank.main(['--out', str(project / 'runs/s'), '--local-model', 'science'])       # the flag wins over the config
+    assert offline.local_models == ['retrieval', 'science']
+
+
+def test_local_model_flag_needs_the_local_provider(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    with pytest.raises(SystemExit, match='local provider only'):
+        rank.main(['--out', str(project / 'runs/x'), '--local-model', 'retrieval'])
 
 
 def test_provider_flag_overrides_config(project, offline, monkeypatch):
@@ -384,32 +404,39 @@ def test_id_that_really_starts_with_a_quote_is_kept(project, offline, monkeypatc
 
 
 def test_cache_paths_carry_the_pinned_revision():
-    assert rank.TOK_REV[:7] in rank.TOK_PATH.name and rank.LOCAL_DIR.name == rank.LOCAL_REV[:7]
+    assert rank.TOK_REV[:7] in rank.TOK_PATH.name
+    assert all(rank.local_dir(m).name == rank.LOCAL_MODELS[m][1][:7] for m in common.LOCAL_MODELS)
+    assert set(rank.LOCAL_MODELS) == set(common.LOCAL_MODELS)
 
 
 def test_local_model_download_fails_cleanly(monkeypatch, tmp_path):
     import urllib.request
-    monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path / 'm')
+    monkeypatch.setattr(rank, 'local_dir', lambda model: tmp_path / 'm')
     monkeypatch.setattr(urllib.request, 'urlopen', cut_download)
-    with pytest.raises(SystemExit, match='531 MB.*rank.py --setup --provider local'):
+    with pytest.raises(SystemExit, match='130 MB.*rank.py --setup --provider local"'):
         rank.local_model()
+    with pytest.raises(SystemExit, match='131 MB.*rank.py --setup --provider local --local-model retrieval"'):
+        rank.local_model('retrieval')
     assert list((tmp_path / 'm').iterdir()) == []                       # no half file left
 
 
 def test_local_model_with_wrong_hash_is_refused(monkeypatch, tmp_path):
-    monkeypatch.setattr(rank, 'LOCAL_DIR', tmp_path)
-    for f in rank.LOCAL_FILES:
+    monkeypatch.setattr(rank, 'local_dir', lambda model: tmp_path)
+    for f in rank.LOCAL_MODELS['science'][3]:
         (tmp_path / f).write_text('{}')
     with pytest.raises(SystemExit, match='not the pinned local model'):
         rank.local_model()
 
 
-@needs(rank.LOCAL_DIR / 'model.safetensors', 'rank.py --setup --provider local')
-def test_real_local_model_vectors():
-    V = rank.local_model()(['quantum switch scheduling', 'kuantum anahtarında zamanlama', 'seawater attenuation', ''])
+@pytest.mark.parametrize('model', ['science', 'retrieval'])
+def test_real_local_model_vectors(model):
+    if not (rank.local_dir(model) / 'model.safetensors').exists() and not os.environ.get('PAPER_LECTOR_REQUIRE_MODELS'):
+        pytest.skip(f'not cached; run rank.py --setup --provider local --local-model {model}')
+    V = rank.local_model(model)(['quantum switch scheduling', 'serving entangled pairs to waiting users',
+                                 'seawater attenuation', ''])
     assert V.shape[0] == 4 and np.allclose(np.linalg.norm(V[:3], axis=1), 1) and not V[3].any()
-    assert V[0] @ V[1] > V[0] @ V[2]                                     # multilingual: the Turkish phrase is closer
-    assert rank.local_model()([]).shape == (0, V.shape[1])
+    assert V[0] @ V[1] > V[0] @ V[2]                                     # the related phrase is closer
+    assert rank.local_model(model)([]).shape == (0, V.shape[1])
 
 
 def test_tokenizer_with_wrong_hash_is_refused(monkeypatch, tmp_path):
@@ -1001,7 +1028,7 @@ def test_merged_record_keeps_doi_first_and_full_author_names(project, tmp_path):
 
 
 @needs(rank.TOK_PATH, 'rank.py --setup')
-@needs(rank.LOCAL_DIR / 'model.safetensors', 'rank.py --setup --provider local')
+@needs(rank.local_dir('science') / 'model.safetensors', 'rank.py --setup --provider local')
 def test_end_to_end_local_run_with_the_real_tokenizer_and_model(project, monkeypatch):
     """A first run as a new user makes it: real tokenizer, real local model, real pdftotext, no fakes."""
     monkeypatch.chdir(project)

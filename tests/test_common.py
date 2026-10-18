@@ -37,6 +37,12 @@ def test_config_rank_provider_default_and_validation(project):
     (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "rank": {"provider": "bm25"}}')
     with pytest.raises(SystemExit, match='replaced by "local"'):
         common.load_config(start=project)
+    (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "rank": {"provider": "local", "model": "retrieval"}}')
+    assert common.load_config(start=project)['local_model'] == 'retrieval'
+    for bad in ('{"provider": "local", "model": "multilingual"}', '{"model": "science"}'):
+        (project / 'literature.json').write_text('{"pdf_dirs": ["papers"], "rank": %s}' % bad)
+        with pytest.raises(SystemExit, match='one of science, retrieval'):
+            common.load_config(start=project)
 
 
 def test_sources_paths_relative_to_config(project):
