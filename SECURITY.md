@@ -1,6 +1,6 @@
 # Security
 
-Report a vulnerability privately through GitHub's "Report a vulnerability" button on the repository's Security tab (https://github.com/huguryildiz/paper-lector/security/advisories/new), not in a public issue. Say which script and version, and how to reproduce it. If that button is not shown, open an issue that says only that you have a security report, with no details, and the author will reply with a private channel.
+Report a vulnerability privately through GitHub's "Report a vulnerability" button on the repository's Security tab (https://github.com/huguryildiz/paper-lector/security/advisories/new), not in a public issue. Say which script and version, and how to reproduce it. Only you and the maintainer see the report until a fix is published.
 
 What paper-lector guards, and what it does not, is in [`REFERENCE.md`](REFERENCE.md#safety). In short:
 
