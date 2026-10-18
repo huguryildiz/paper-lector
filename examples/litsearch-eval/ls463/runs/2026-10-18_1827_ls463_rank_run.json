@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:27:39",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "3be4388636aef72a1b1951b78725ae48a064742d3dc0828a05844b5bce5d42c5"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "b604582c3ff9e6a7d2ed9ca1211042fc246680de9bcf5d484aabb03255acd113"
+   }
+  ]
+ },
+ "question": "Which paper first shows that large language models can be prompted to act like professional annotators to evaluate text generation quality?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which paper first shows that large language models can be prompted to act like professional annotators to evaluate text generation quality?",
+   "keywords": "large language models prompted annotators evaluate text generation quality"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Large language models used as human-like evaluators of natural language generation output, such as summaries, dialogue responses and translations, where the model is asked to rate quality in place of crowd or expert annotators.",
+   "keywords": "LLM evaluator human annotators text generation quality evaluation summarization dialogue ratings"
+  }
+ },
+ "queries_sha": "45c33e129c6e",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 342,
+  "ids": [
+   "Chiang2023_CanLargeLanguageModelsBe_427aa0",
+   "Liu2023_GEvalNLGEvaluationUsing_354f66",
+   "Chen2023_ExploringUseLargeLanguageModels_1271bc",
+   "Chiang2023_CloserLookIntoUsingLarge_c3878b",
+   "Wang2023_IsChatGPTGoodNLGEvaluator_4d6022",
+   "Li2024_LeveragingLargeLanguageModelsNLG_594bf6",
+   "Gong2023_CoAScoreChainAspectsPromptingNLG_d56efa",
+   "Larionov2023_TeamNLLGSubmissionEval4NLP2023_28bc76",
+   "Sottana2023_EvaluationMetricsEraGPT4_e5c45f",
+   "Xu2024_LargeLanguageModelsAreActive_caac23",
+   "Liusie2024_LLMComparativeAssessmentZeroShot_90b3ee",
+   "Bagaria2026_JudgingLLMAsJudgeConcerning_03a759",
+   "Ethayarajh2022_AuthenticityGapHumanEvaluation_097677",
+   "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98",
+   "Manakul2023_SelfCheckGPTZeroResourceBlackBox_03bcde",
+   "Lin2023_LLMEvalUnifiedMultiDimensional_40309e",
+   "Leiter2023_Eval4NLP2023SharedTaskPrompting_89ff5b",
+   "Xu2023_INSTRUCTSCORETowardsExplainableTextGeneration_e850eb",
+   "Mahmoudi2023_ExploringPromptingLargeLanguageModels_8a5c14",
+   "Xie2023_NextChapterStudyLargeLanguage_a5ba2a"
+  ],
+  "files": [
+   {
+    "id": "Chiang2023_CanLargeLanguageModelsBe_427aa0",
+    "path": "pdfs/Chiang2023_CanLargeLanguageModelsBe_427aa0.pdf",
+    "sha256": "6eeaae4ffff0bedc9f487224c83a8eec9615479ecf679c11ee80be98d5195ddc"
+   },
+   {
+    "id": "Liu2023_GEvalNLGEvaluationUsing_354f66",
+    "path": "pdfs/Liu2023_GEvalNLGEvaluationUsing_354f66.pdf",
+    "sha256": "3a822b8646dccda73b01eda9b07420072daf7601cb0d02d9bbc3b38325ab2fd2"
+   },
+   {
+    "id": "Chen2023_ExploringUseLargeLanguageModels_1271bc",
+    "path": "pdfs/Chen2023_ExploringUseLargeLanguageModels_1271bc.pdf",
+    "sha256": "451608257326966bf85530cf641af2656eb357672cd847aacbdfd3bf60fe904b"
+   },
+   {
+    "id": "Chiang2023_CloserLookIntoUsingLarge_c3878b",
+    "path": "pdfs/Chiang2023_CloserLookIntoUsingLarge_c3878b.pdf",
+    "sha256": "7af4f4b672c26fe157b53f595b6842fde21d15d97f7fafb1cf19837aaeeac5aa"
+   },
+   {
+    "id": "Wang2023_IsChatGPTGoodNLGEvaluator_4d6022",
+    "path": "pdfs/Wang2023_IsChatGPTGoodNLGEvaluator_4d6022.pdf",
+    "sha256": "4a5f04c25a54a7ad38078da8321df67d7947610ba14e8f3e59832e9f27cecf0c"
+   },
+   {
+    "id": "Li2024_LeveragingLargeLanguageModelsNLG_594bf6",
+    "path": "pdfs/Li2024_LeveragingLargeLanguageModelsNLG_594bf6.pdf",
+    "sha256": "f99bcec1fec6633c807c4877728014b7e115d080d9ea02c39a1ed094b4595dda"
+   },
+   {
+    "id": "Gong2023_CoAScoreChainAspectsPromptingNLG_d56efa",
+    "path": "pdfs/Gong2023_CoAScoreChainAspectsPromptingNLG_d56efa.pdf",
+    "sha256": "a3eee47074e0cbcbafd002e48f2c53f7933d595c6669e77aa7dee6646ff1b076"
+   },
+   {
+    "id": "Larionov2023_TeamNLLGSubmissionEval4NLP2023_28bc76",
+    "path": "pdfs/Larionov2023_TeamNLLGSubmissionEval4NLP2023_28bc76.pdf",
+    "sha256": "fc17b25eaa5078dad10a42d14a7e946c322b95e667d3233b4dcef3d0fff080cf"
+   },
+   {
+    "id": "Sottana2023_EvaluationMetricsEraGPT4_e5c45f",
+    "path": "pdfs/Sottana2023_EvaluationMetricsEraGPT4_e5c45f.pdf",
+    "sha256": "c3e0f79ad1ab4390cdf135e3cca19de6c003cb66c63fe190fa6ab69dd0b7641b"
+   },
+   {
+    "id": "Xu2024_LargeLanguageModelsAreActive_caac23",
+    "path": "pdfs/Xu2024_LargeLanguageModelsAreActive_caac23.pdf",
+    "sha256": "fa5b1e9393246f1a05357bff1b505bce23c0abc70d63286540efcf3ba3f9884c"
+   },
+   {
+    "id": "Liusie2024_LLMComparativeAssessmentZeroShot_90b3ee",
+    "path": "pdfs/Liusie2024_LLMComparativeAssessmentZeroShot_90b3ee.pdf",
+    "sha256": "dfe17506cb168394ee6c33ec054ddd8e754be957897c94859c291348d0e720cf"
+   },
+   {
+    "id": "Bagaria2026_JudgingLLMAsJudgeConcerning_03a759",
+    "path": "pdfs/Bagaria2026_JudgingLLMAsJudgeConcerning_03a759.pdf",
+    "sha256": "4a7b8d0663a6a496aeb5e66c9ab86fe1ef7a0094195fdee23b946388237a56c8"
+   },
+   {
+    "id": "Ethayarajh2022_AuthenticityGapHumanEvaluation_097677",
+    "path": "pdfs/Ethayarajh2022_AuthenticityGapHumanEvaluation_097677.pdf",
+    "sha256": "1010fdd4d979a92f04a670b791c98d7f88f10461e3c3b861c0b44c3399b2189f"
+   },
+   {
+    "id": "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98",
+    "path": "pdfs/Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98.pdf",
+    "sha256": "d4daf6dfe3a50b2af04f89c9669e5c5c90195b61642052f6b92de36ec4c8f029"
+   },
+   {
+    "id": "Manakul2023_SelfCheckGPTZeroResourceBlackBox_03bcde",
+    "path": "pdfs/Manakul2023_SelfCheckGPTZeroResourceBlackBox_03bcde.pdf",
+    "sha256": "d523eb2c779cb5902371c653301738086b2471cd21b2b4e81f7a61bd6ae370bd"
+   },
+   {
+    "id": "Lin2023_LLMEvalUnifiedMultiDimensional_40309e",
+    "path": "pdfs/Lin2023_LLMEvalUnifiedMultiDimensional_40309e.pdf",
+    "sha256": "e853ed5ca44f8366d29d45037557d7bf85073da8c9978a3a963d2ce0830889a9"
+   },
+   {
+    "id": "Leiter2023_Eval4NLP2023SharedTaskPrompting_89ff5b",
+    "path": "pdfs/Leiter2023_Eval4NLP2023SharedTaskPrompting_89ff5b.pdf",
+    "sha256": "da30ed9af9725da601ce6977331448fd614b7c88e8d7bf156423b772b082a188"
+   },
+   {
+    "id": "Xu2023_INSTRUCTSCORETowardsExplainableTextGeneration_e850eb",
+    "path": "pdfs/Xu2023_INSTRUCTSCORETowardsExplainableTextGeneration_e850eb.pdf",
+    "sha256": "2e6bcfedcd6ebaedb99dad2cb051a0b31ca22794b5c681346dc47c2042681b16"
+   },
+   {
+    "id": "Mahmoudi2023_ExploringPromptingLargeLanguageModels_8a5c14",
+    "path": "pdfs/Mahmoudi2023_ExploringPromptingLargeLanguageModels_8a5c14.pdf",
+    "sha256": "f0c0ed0985a662a365478293e5c6bacf9cabf3d9050deb75691a4997e3710200"
+   },
+   {
+    "id": "Xie2023_NextChapterStudyLargeLanguage_a5ba2a",
+    "path": "pdfs/Xie2023_NextChapterStudyLargeLanguage_a5ba2a.pdf",
+    "sha256": "60d12e5b316bb364890de83b751dc4b9c883369514873c761e66e4ce65c56fcf"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 199519,
+  "embed_cached": 157,
+  "rerank": 145467
+ },
+ "estimate": 528205,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls463/runs/2026-10-18_1827_ls463_rank.csv",
+   "fused_top10": [
+    "Chiang2023_CanLargeLanguageModelsBe_427aa0",
+    "Li2024_LeveragingLargeLanguageModelsNLG_594bf6",
+    "Xu2024_LargeLanguageModelsAreActive_caac23",
+    "Liu2023_GEvalNLGEvaluationUsing_354f66",
+    "Wang2023_IsChatGPTGoodNLGEvaluator_4d6022",
+    "Chen2023_ExploringUseLargeLanguageModels_1271bc",
+    "Chiang2023_CloserLookIntoUsingLarge_c3878b",
+    "Liusie2024_LLMComparativeAssessmentZeroShot_90b3ee",
+    "Mahmoudi2023_ExploringPromptingLargeLanguageModels_8a5c14",
+    "Xu2023_INSTRUCTSCORETowardsExplainableTextGeneration_e850eb"
+   ],
+   "first_query_top10": [
+    "Chiang2023_CanLargeLanguageModelsBe_427aa0",
+    "Chen2023_ExploringUseLargeLanguageModels_1271bc",
+    "Xu2024_LargeLanguageModelsAreActive_caac23",
+    "Wang2023_IsChatGPTGoodNLGEvaluator_4d6022",
+    "Chiang2023_CloserLookIntoUsingLarge_c3878b",
+    "Li2024_LeveragingLargeLanguageModelsNLG_594bf6",
+    "Liu2023_GEvalNLGEvaluationUsing_354f66",
+    "Liusie2024_LLMComparativeAssessmentZeroShot_90b3ee",
+    "Xu2023_INSTRUCTSCORETowardsExplainableTextGeneration_e850eb",
+    "Mahmoudi2023_ExploringPromptingLargeLanguageModels_8a5c14"
+   ]
+  }
+ }
+}

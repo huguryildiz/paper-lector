@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:19:16",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "66e6eb1d976d5259035b6bb1ad4e62a0fe8f8ee24542a9368204de8d41999364"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "7576c6321a64568d4cabc56352600c7d59edecc6490ceeef397ff39c6b647734"
+   }
+  ]
+ },
+ "question": "Where can I find a corpus of CCG annotations for natural language processing tasks, and what notable work has leveraged this corpus specifically in the domain of supertagging?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Where can I find a corpus of CCG annotations for natural language processing tasks, and what notable work has leveraged this corpus specifically in the domain of supertagging?",
+   "keywords": "corpus CCG annotations supertagging combinatory categorial grammar"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "A treebank or corpus annotated with Combinatory Categorial Grammar derivations for natural language processing, and the supertagging models that assign CCG lexical categories to words using it.",
+   "keywords": "CCG corpus CCGbank combinatory categorial grammar annotations supertagging treebank"
+  }
+ },
+ "queries_sha": "515ad5b6bbb3",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 223,
+  "ids": [
+   "Vaswani2016_SupertaggingLSTMs_ec7966",
+   "Tian2020_SupertaggingCombinatoryCategorialGrammarAttentive_04dece",
+   "Clark2021_SomethingOldSomethingNewGrammar_29a4b2",
+   "Lewis2016_LSTMCCGParsing_8a4ade",
+   "Bhargava2020_SupertaggingCCGPrimitives_0ad94f",
+   "Lhoneux2015_CCGParsingMultiwordExpressions_45b331",
+   "Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb",
+   "Lewis2015_JointCCGParsingSemanticRole_ecdf67",
+   "Yoshikawa2017_CCGParsingSupertagDependencyFactored_d7cab0",
+   "Xu2016_LSTMShiftReduceCCGParsing_50e749",
+   "Artzi2015_BroadCoverageCCGSemanticParsing_8086ef",
+   "Ambati2016_ShiftReduceCCGParsingUsing_bfa582",
+   "Stanojević2020_MaxMarginIncrementalCCGParsing_4b13e8",
+   "Clark2018_SemiSupervisedSequenceModelingCross_f2f0f7",
+   "Garrette2015_SupertagContextModelWeaklySupervised_69a313",
+   "Akkuş2017_InitialExplorationsCCGSupertaggingUniversal_15ad1e",
+   "Zhao2024_LLMSupertaggerCategorialGrammarSupertagging_3a34f5",
+   "Stanojević2019_CCGParsingAlgorithmIncrementalTree_c4874a",
+   "Xu2016_ExpectedFMeasureTrainingShift_cb8c7c",
+   "Yoshikawa2019_AutomaticGenerationHighQualityCCGbanks_f30f4a"
+  ],
+  "files": [
+   {
+    "id": "Vaswani2016_SupertaggingLSTMs_ec7966",
+    "path": "pdfs/Vaswani2016_SupertaggingLSTMs_ec7966.pdf",
+    "sha256": "12bd416cb65f622690a2f3f87dcd0f371b82f52a30e4a99ff8db8b4cae8b6012"
+   },
+   {
+    "id": "Tian2020_SupertaggingCombinatoryCategorialGrammarAttentive_04dece",
+    "path": "pdfs/Tian2020_SupertaggingCombinatoryCategorialGrammarAttentive_04dece.pdf",
+    "sha256": "98fbc046bb875968b8df971e1b36b764e270832707fc03223151350b056790fd"
+   },
+   {
+    "id": "Clark2021_SomethingOldSomethingNewGrammar_29a4b2",
+    "path": "pdfs/Clark2021_SomethingOldSomethingNewGrammar_29a4b2.pdf",
+    "sha256": "6220f5f7809fbf3bc3984508d074d4680d15bd23dcf457d6396bf79a5ba1298c"
+   },
+   {
+    "id": "Lewis2016_LSTMCCGParsing_8a4ade",
+    "path": "pdfs/Lewis2016_LSTMCCGParsing_8a4ade.pdf",
+    "sha256": "3f93a8c30e30dc02de22563564cd7243a9f24a993e8cd59dd7695791d9a71517"
+   },
+   {
+    "id": "Bhargava2020_SupertaggingCCGPrimitives_0ad94f",
+    "path": "pdfs/Bhargava2020_SupertaggingCCGPrimitives_0ad94f.pdf",
+    "sha256": "ef1c6774be68bc780a62a68008895815c77d0441d35b2cae254357d39def5183"
+   },
+   {
+    "id": "Lhoneux2015_CCGParsingMultiwordExpressions_45b331",
+    "path": "pdfs/Lhoneux2015_CCGParsingMultiwordExpressions_45b331.pdf",
+    "sha256": "34c43f202ab5c4aa6386cfe551b59ab9b358b1973a83250f2d59691c6e8e9b58"
+   },
+   {
+    "id": "Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb",
+    "path": "pdfs/Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb.pdf",
+    "sha256": "2c6595c6725ec357406ca2cd9ec38b1e19072880f46e8a61075c07e9be94e0a0"
+   },
+   {
+    "id": "Lewis2015_JointCCGParsingSemanticRole_ecdf67",
+    "path": "pdfs/Lewis2015_JointCCGParsingSemanticRole_ecdf67.pdf",
+    "sha256": "23ea889f74b8cb340d3151fa50f43d2304ff43f9df03fd4c8fe84ff4b2636b12"
+   },
+   {
+    "id": "Yoshikawa2017_CCGParsingSupertagDependencyFactored_d7cab0",
+    "path": "pdfs/Yoshikawa2017_CCGParsingSupertagDependencyFactored_d7cab0.pdf",
+    "sha256": "47a2467ff7b88e9a6e0e8de21ddccdc43abcf94513308b6049531d5eba66778f"
+   },
+   {
+    "id": "Xu2016_LSTMShiftReduceCCGParsing_50e749",
+    "path": "pdfs/Xu2016_LSTMShiftReduceCCGParsing_50e749.pdf",
+    "sha256": "66c7275a60a7b20fb1737626e47f9db13e6676c2f06f174a568cd30e929a2a55"
+   },
+   {
+    "id": "Artzi2015_BroadCoverageCCGSemanticParsing_8086ef",
+    "path": "pdfs/Artzi2015_BroadCoverageCCGSemanticParsing_8086ef.pdf",
+    "sha256": "06dc2d703af0e2d58d0b11f4a3327e8bf56e7f8d471f4ab9fe9e757e5d99ad2b"
+   },
+   {
+    "id": "Ambati2016_ShiftReduceCCGParsingUsing_bfa582",
+    "path": "pdfs/Ambati2016_ShiftReduceCCGParsingUsing_bfa582.pdf",
+    "sha256": "93eeb7e067dc6705f0377c2d0e277c2942ef67ea296472d90d25133c4d4f2647"
+   },
+   {
+    "id": "Stanojević2020_MaxMarginIncrementalCCGParsing_4b13e8",
+    "path": "pdfs/Stanojević2020_MaxMarginIncrementalCCGParsing_4b13e8.pdf",
+    "sha256": "bbc31102b7af1e3906fcecdd8e2cda350b1cf3158040e9c3f3580a89ab2d5a66"
+   },
+   {
+    "id": "Clark2018_SemiSupervisedSequenceModelingCross_f2f0f7",
+    "path": "pdfs/Clark2018_SemiSupervisedSequenceModelingCross_f2f0f7.pdf",
+    "sha256": "9ae39e6b99d52fc782e61895aeb1717c675e52b9564024a1854750c0c5cfc818"
+   },
+   {
+    "id": "Garrette2015_SupertagContextModelWeaklySupervised_69a313",
+    "path": "pdfs/Garrette2015_SupertagContextModelWeaklySupervised_69a313.pdf",
+    "sha256": "a24a5064993ff8aa59dd2c4c656ff44a6bf166e91104c6307861a74ddee8d27d"
+   },
+   {
+    "id": "Akkuş2017_InitialExplorationsCCGSupertaggingUniversal_15ad1e",
+    "path": "pdfs/Akkuş2017_InitialExplorationsCCGSupertaggingUniversal_15ad1e.pdf",
+    "sha256": "c755d7c7845f8363158c8acd58efa692a1b2cd5dceaa51766f6b9d7c7fb8919a"
+   },
+   {
+    "id": "Zhao2024_LLMSupertaggerCategorialGrammarSupertagging_3a34f5",
+    "path": "pdfs/Zhao2024_LLMSupertaggerCategorialGrammarSupertagging_3a34f5.pdf",
+    "sha256": "a29c600f40d0cf079bfcfe5b0a88fa11c2ce585c1172b95e18b9db444dc2f682"
+   },
+   {
+    "id": "Stanojević2019_CCGParsingAlgorithmIncrementalTree_c4874a",
+    "path": "pdfs/Stanojević2019_CCGParsingAlgorithmIncrementalTree_c4874a.pdf",
+    "sha256": "cb916887ce02a9b0df15567ef73dd9897b92c599b02106d2aa4e48ed27f964d5"
+   },
+   {
+    "id": "Xu2016_ExpectedFMeasureTrainingShift_cb8c7c",
+    "path": "pdfs/Xu2016_ExpectedFMeasureTrainingShift_cb8c7c.pdf",
+    "sha256": "ee0966acaa7fcf6c1edbfcc6a3775a1a6fc596647556c577015a75495b3622d0"
+   },
+   {
+    "id": "Yoshikawa2019_AutomaticGenerationHighQualityCCGbanks_f30f4a",
+    "path": "pdfs/Yoshikawa2019_AutomaticGenerationHighQualityCCGbanks_f30f4a.pdf",
+    "sha256": "55888496bcf6d314a811f1284792bee3e3201efda6d31639df1c6f1de55c3f97"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 236255,
+  "embed_cached": 0,
+  "rerank": 139125
+ },
+ "estimate": 387116,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls080/runs/2026-10-18_1819_ls080_rank.csv",
+   "fused_top10": [
+    "Clark2021_SomethingOldSomethingNewGrammar_29a4b2",
+    "Bhargava2020_SupertaggingCCGPrimitives_0ad94f",
+    "Tian2020_SupertaggingCombinatoryCategorialGrammarAttentive_04dece",
+    "Vaswani2016_SupertaggingLSTMs_ec7966",
+    "Akkuş2017_InitialExplorationsCCGSupertaggingUniversal_15ad1e",
+    "Zhao2024_LLMSupertaggerCategorialGrammarSupertagging_3a34f5",
+    "Xu2016_LSTMShiftReduceCCGParsing_50e749",
+    "Lewis2016_LSTMCCGParsing_8a4ade",
+    "Xu2016_ExpectedFMeasureTrainingShift_cb8c7c",
+    "Yoshikawa2019_AutomaticGenerationHighQualityCCGbanks_f30f4a"
+   ],
+   "first_query_top10": [
+    "Clark2021_SomethingOldSomethingNewGrammar_29a4b2",
+    "Bhargava2020_SupertaggingCCGPrimitives_0ad94f",
+    "Tian2020_SupertaggingCombinatoryCategorialGrammarAttentive_04dece",
+    "Vaswani2016_SupertaggingLSTMs_ec7966",
+    "Akkuş2017_InitialExplorationsCCGSupertaggingUniversal_15ad1e",
+    "Xu2016_LSTMShiftReduceCCGParsing_50e749",
+    "Zhao2024_LLMSupertaggerCategorialGrammarSupertagging_3a34f5",
+    "Clark2018_SemiSupervisedSequenceModelingCross_f2f0f7",
+    "Lewis2016_LSTMCCGParsing_8a4ade",
+    "Garrette2015_SupertagContextModelWeaklySupervised_69a313"
+   ]
+  }
+ }
+}

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 16-18; p. 20-22; p. 5,Sen2024_UnlearningOrConcealmentCriticalAnalysis_1fa242,0.032787,,1,0.7305,1,0.7344,p. 20-22; p. 26-28; p. 16-18,p. 16-18; p. 5; p. 20-22,21005,True,False,full_text
+2,,,,,p. 3-4; p. 7-9,Alper2026_NAMESAKESProbingIdentityMemorizationText_4d5c5c,0.032002,,2,0.6797,3,0.7227,p. 3-4; p. 4-6; p. 7-9,p. 3-4; p. 4-6; p. 7-9,14022,True,True,full_text
+2,,,,,p. 15-16; p. 1-2; p. 9-10,Deng2026_NoConceptEscapesAuditAuditing_d2cc89,0.032002,,3,0.5977,2,0.7305,p. 15-16; p. 9-10; p. 2-3,p. 15-16; p. 1-2; p. 10-15,15456,True,True,full_text
+4,,,,,p. 4-5; p. 1-2; p. 13-15,Saxon2023_MultilingualConceptualCoverageTextImage_d9b809,0.031498,,4,0.5625,3,0.7227,p. 4-5; p. 14-16; p. 13-15,p. 1-2; p. 4-5; p. 2-3,13059,True,True,full_text
+5,,,,,p. 1-3; p. 4-6,Naseh2023_UnderstandingUnIntendedMemorizationText_83a791,0.030769,,5,0.5586,5,0.6914,p. 3; p. 1-3; p. 4-6,p. 1-3; p. 3; p. 4-6,6440,True,True,full_text
+6,,,,,p. 6-8; p. 15-16; p. 4-5,Fuchi2025_ErasingPrecisionEvaluatingSpecificConcept_9375cf,0.030077,,7,0.543,6,0.6719,p. 15-16; p. 14-15; p. 6-8,p. 15-16; p. 6-8; p. 4-5,28943,False,True,full_text
+7,,,,,p. 8-9; p. 1-2; p. 5-6,Fuchi2024_ErasingConceptsFromTextImage_7f0d78,0.029631,,8,0.5078,7,0.6641,p. 1-2; p. 6-7; p. 8-9,p. 5-6; p. 9-10; p. 8-9,15020,True,True,full_text
+8,,,,,p. 5-6; p. 3-4; p. 7-8,Han2025_GrOCEGraphGuidedOnlineConcept_2c9c7c,0.02904,,6,0.5508,12,0.6172,p. 5-6; p. 7-8; p. 6-7,p. 8-11; p. 3-4; p. 5-6,10180,True,True,full_text
+9,,,,,p. 6-7; p. 8-9,Carter2025_ACEAttentionalConceptErasureDiffusion_8eaf4b,0.028992,,10,0.498,8,0.6523,p. 6-7; p. 8-9,p. 6-7; p. 8-9; p. 7-8,11038,True,True,full_text
+10,,,,,p. 1-2; p. 4-5; p. 7-8,Carter2025_TRACETrajectoryConstrainedConceptErasure_a6e9a0,0.028169,,11,0.4902,11,0.625,p. 7-8; p. 4-5; p. 1-2,p. 7-8; p. 4-5; p. 1-2,12538,True,True,full_text
+11,,,,,p. 1-3; p. 4-5; p. 9-11,Dai2026_CompositionalConceptErasureTextImage_4eb1b4,0.028006,,9,0.5039,14,0.582,p. 14-15; p. 12-13; p. 1-3,p. 1-3; p. 4-5; p. 9-11,11614,True,True,full_text
+12,,,,,p. 1; p. 3-4; p. 9-11,龚庆辉2026_GRACEAdaptiveConceptErasureGeometry_098614,0.027799,,14,0.4844,10,0.6367,p. 1; p. 3-4; p. 13-14,p. 1; p. 3-4; p. 9-11,16843,True,True,full_text
+13,,,,,p. 12-13; p. 17-18; p. 15-16,Shi2026_NeighborAwareLocalizedConceptErasure_110903,0.027783,,11,0.4902,13,0.6133,p. 12-13; p. 15-16; p. 17-18,p. 17-18; p. 12-13; p. 8-12,18662,True,True,full_text
+14,,,,,p. 6-7; p. 9-13; p. 1-2,Xiang2026_VisualEraseDualBranchVisualTrajectory_d883c3,0.027651,,16,0.4727,9,0.6484,p. 6-7; p. 17-18; p. 9-13,p. 6-7; p. 1-2; p. 9-13,13284,True,True,full_text
+15,,,,,p. 8-13; p. 1-2; p. 5-6,Ho2020_DenoisingDiffusionProbabilisticModels_75db4f,0.027072,,11,0.4902,17,0.5234,p. 9-14; p. 8-13; p. 5-6,p. 8-13; p. 1-2; p. 2,13732,True,True,full_text
+16,,,,,p. 2-3; p. 5-6; p. 16-18,Novello2026_EmptySPACECrossAttentionSparsity_42b234,0.026667,,15,0.4785,15,0.5703,p. 2-3; p. 5-6; p. 6-8,p. 17-21; p. 3-4; p. 16-18,16360,True,True,full_text
+17,,,,,p. 1-2; p. 7; p. 10-14,Wu2026_RASteerRetainAwareActivationSteering_285e7e,0.025978,,18,0.4082,16,0.5586,p. 14-15; p. 10-14,p. 15-16; p. 1-2; p. 7,22792,True,True,full_text
+18,,,,,p. 12-14; p. 22-24; p. 16-18,Ho2021_CascadedDiffusionModelsHighFidelity_48a4c8,0.025808,,17,0.4238,18,0.4609,p. 22-24; p. 12-14; p. 16-18,p. 23-29; p. 22-24; p. 12-14,15865,True,True,full_text
+19,,,,,p. 4; p. 10-11; p. 8-9,Putze2010_PHeCFeCosmic_9d28f8,0.025158,,19,0.373,20,0.2949,p. 4; p. 10-11; p. 8-9,p. 10-11; p. 4; p. 4-5,31913,False,True,full_text
+19,,,,,p. 11-13; p. 2-3; p. 9-10,Nori2023_CapabilitiesGPT4MedicalChallenge_146ad8,0.025158,,20,0.3711,19,0.3594,p. 11-13; p. 29-34; p. 9-10,p. 13-15; p. 11-13; p. 2-3,19539,True,True,full_text

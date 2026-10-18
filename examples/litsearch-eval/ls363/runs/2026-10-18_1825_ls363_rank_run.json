@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:25:49",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "ef294ebf26e8449387d890958d57f5f696fed69263d3a3964c64ea5f4315525e"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "eefc4c350e97723a18d4436cee45bf46759ee56430e48ee7ae07bbf4a0c3b7fb"
+   }
+  ]
+ },
+ "question": "Is there a dataset that allows to perform aspect-based sentiment classification on French news?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there a dataset that allows to perform aspect-based sentiment classification on French news?",
+   "keywords": "dataset aspect-based sentiment classification French news"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Aspect-based sentiment analysis of French-language news articles, which requires an annotated dataset that marks aspects and sentiment polarity in news text.",
+   "keywords": "aspect-based sentiment classification French news dataset annotated"
+  }
+ },
+ "queries_sha": "4dda9f569bef",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 199,
+  "ids": [
+   "Dufraisse2023_MADTSCMultilingualAlignedNews_b54418",
+   "Tian2021_AspectBasedSentimentAnalysisType_3ac8c3",
+   "Phan2020_ModellingContextSyntacticalFeaturesAspect_48c9e1",
+   "Chen2022_DiscreteOpinionTreeInductionAspect_59fc50",
+   "Jiang2019_ChallengeDatasetEffectiveModelsAspect_083a95",
+   "Zhang2022_SSEGCNSyntacticSemanticEnhancedGraph_9fa497",
+   "Wang2020_RelationalGraphAttentionNetworkAspect_5c1a9a",
+   "Wang2016_AttentionBasedLSTMAspectLevel_7e6371",
+   "Zhang2019_AspectBasedSentimentClassificationAspect_56b0e5",
+   "Chen2017_RecurrentAttentionNetworkMemoryAspect_c4f831",
+   "Tang2016_AspectLevelSentimentClassificationDeep_4fe61c",
+   "Xue2018_AspectBasedSentimentAnalysisGated_7806a4",
+   "Tang2020_DependencyGraphEnhancedDualTransformer_050754",
+   "Li2021_DualGraphConvolutionalNetworksAspect_8b3d14",
+   "Wang2016_RecursiveNeuralConditionalRandomFields_88134c",
+   "Fan2018_MultiGrainedAttentionNetworkAspect_ebec51",
+   "He2019_InteractiveMultiTaskLearningNetwork_7993b2",
+   "Luo2019_DOERDualCrossSharedRNN_dcc0e4",
+   "Dai2021_DoesSyntaxMatterStrongBaseline_8932d9",
+   "Saeidi2016_SentiHoodTargetedAspectBasedSentiment_b6fa1f"
+  ],
+  "files": [
+   {
+    "id": "Dufraisse2023_MADTSCMultilingualAlignedNews_b54418",
+    "path": "pdfs/Dufraisse2023_MADTSCMultilingualAlignedNews_b54418.pdf",
+    "sha256": "5e20b3102dd21af3634bbbf973760fba37abf0c2fa1df517da8b1842a4b1270f"
+   },
+   {
+    "id": "Tian2021_AspectBasedSentimentAnalysisType_3ac8c3",
+    "path": "pdfs/Tian2021_AspectBasedSentimentAnalysisType_3ac8c3.pdf",
+    "sha256": "e266ccde3a49a380fb5747f68ff30288d2d35abad1b056acc67c5514d9e1f443"
+   },
+   {
+    "id": "Phan2020_ModellingContextSyntacticalFeaturesAspect_48c9e1",
+    "path": "pdfs/Phan2020_ModellingContextSyntacticalFeaturesAspect_48c9e1.pdf",
+    "sha256": "21c1755534cedb5ff3dcc85ee50c64121c34128cb9ec25b9bb65284c678336bb"
+   },
+   {
+    "id": "Chen2022_DiscreteOpinionTreeInductionAspect_59fc50",
+    "path": "pdfs/Chen2022_DiscreteOpinionTreeInductionAspect_59fc50.pdf",
+    "sha256": "46f352977ddcffdfc184b9e8041c67d19de54442a1f22b4555f73afd0115bc4f"
+   },
+   {
+    "id": "Jiang2019_ChallengeDatasetEffectiveModelsAspect_083a95",
+    "path": "pdfs/Jiang2019_ChallengeDatasetEffectiveModelsAspect_083a95.pdf",
+    "sha256": "b91cf46accac21a5ed269e85c955880acc41a8a0fcde16b12a41d02aa4f10231"
+   },
+   {
+    "id": "Zhang2022_SSEGCNSyntacticSemanticEnhancedGraph_9fa497",
+    "path": "pdfs/Zhang2022_SSEGCNSyntacticSemanticEnhancedGraph_9fa497.pdf",
+    "sha256": "c14c2afbc3e2f7eb95a533010684bd2e15b04dc9c022539ba347fa69953e5cb3"
+   },
+   {
+    "id": "Wang2020_RelationalGraphAttentionNetworkAspect_5c1a9a",
+    "path": "pdfs/Wang2020_RelationalGraphAttentionNetworkAspect_5c1a9a.pdf",
+    "sha256": "aee095b20e744b6e86aba42952a434c8ba0fe5ff3bde0f8b47a40f3a528f3e0d"
+   },
+   {
+    "id": "Wang2016_AttentionBasedLSTMAspectLevel_7e6371",
+    "path": "pdfs/Wang2016_AttentionBasedLSTMAspectLevel_7e6371.pdf",
+    "sha256": "35a8db00a97b8cc447831f1b25c870d4f8fc44a77506cbfb90a051e436f2e4d5"
+   },
+   {
+    "id": "Zhang2019_AspectBasedSentimentClassificationAspect_56b0e5",
+    "path": "pdfs/Zhang2019_AspectBasedSentimentClassificationAspect_56b0e5.pdf",
+    "sha256": "31380bd52a2d2648076461feca288bf9812c3991884c8cbe79c9b84f665823db"
+   },
+   {
+    "id": "Chen2017_RecurrentAttentionNetworkMemoryAspect_c4f831",
+    "path": "pdfs/Chen2017_RecurrentAttentionNetworkMemoryAspect_c4f831.pdf",
+    "sha256": "522e430e8e28eefb14626399499c7998e1bead369dea44ec4402f6451e74b93e"
+   },
+   {
+    "id": "Tang2016_AspectLevelSentimentClassificationDeep_4fe61c",
+    "path": "pdfs/Tang2016_AspectLevelSentimentClassificationDeep_4fe61c.pdf",
+    "sha256": "a482a70ec7ef337597a17b0d071a6ba12e0fd722a773466b70aece311200f9af"
+   },
+   {
+    "id": "Xue2018_AspectBasedSentimentAnalysisGated_7806a4",
+    "path": "pdfs/Xue2018_AspectBasedSentimentAnalysisGated_7806a4.pdf",
+    "sha256": "8c998d96aadf127a2558350d2d69daaee4b59cae25289f086a5a6df7d8be09e0"
+   },
+   {
+    "id": "Tang2020_DependencyGraphEnhancedDualTransformer_050754",
+    "path": "pdfs/Tang2020_DependencyGraphEnhancedDualTransformer_050754.pdf",
+    "sha256": "1f1bef93e5d3025acd201b51d967585de3513173dcf6f8533debb9b9bbeff4c1"
+   },
+   {
+    "id": "Li2021_DualGraphConvolutionalNetworksAspect_8b3d14",
+    "path": "pdfs/Li2021_DualGraphConvolutionalNetworksAspect_8b3d14.pdf",
+    "sha256": "cf0110361783eb914e22fc537a0c730405bb3575afc1d6eb358af1e9a1bb937b"
+   },
+   {
+    "id": "Wang2016_RecursiveNeuralConditionalRandomFields_88134c",
+    "path": "pdfs/Wang2016_RecursiveNeuralConditionalRandomFields_88134c.pdf",
+    "sha256": "620a8398c4043038f36d916b0304a45a79068f79e5bfb278507bd29d0e578344"
+   },
+   {
+    "id": "Fan2018_MultiGrainedAttentionNetworkAspect_ebec51",
+    "path": "pdfs/Fan2018_MultiGrainedAttentionNetworkAspect_ebec51.pdf",
+    "sha256": "1c2fd0b3649f46a293cae312d8481f31fe34af108ca1efe593b3ac2f58aea1c6"
+   },
+   {
+    "id": "He2019_InteractiveMultiTaskLearningNetwork_7993b2",
+    "path": "pdfs/He2019_InteractiveMultiTaskLearningNetwork_7993b2.pdf",
+    "sha256": "d0398c80886c65ee56eadea735822e8ffa369787b9ef29cf32d7b4e65e9af2fa"
+   },
+   {
+    "id": "Luo2019_DOERDualCrossSharedRNN_dcc0e4",
+    "path": "pdfs/Luo2019_DOERDualCrossSharedRNN_dcc0e4.pdf",
+    "sha256": "d47722bcc09e39243b493cab50063873243afc8b99c7be2c3387a8e6d5e0d5d9"
+   },
+   {
+    "id": "Dai2021_DoesSyntaxMatterStrongBaseline_8932d9",
+    "path": "pdfs/Dai2021_DoesSyntaxMatterStrongBaseline_8932d9.pdf",
+    "sha256": "9a1f0e51c9630298b457fe38c65224dc6ceaa6b71412c6a50d3bd3a0ebe38ec4"
+   },
+   {
+    "id": "Saeidi2016_SentiHoodTargetedAspectBasedSentiment_b6fa1f",
+    "path": "pdfs/Saeidi2016_SentiHoodTargetedAspectBasedSentiment_b6fa1f.pdf",
+    "sha256": "b7f375d9144cd65ad42f4ebe5256db2e91c63ab35eb35c5bf4bcbf902919258e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 209759,
+  "embed_cached": 0,
+  "rerank": 138333
+ },
+ "estimate": 360679,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls363/runs/2026-10-18_1825_ls363_rank.csv",
+   "fused_top10": [
+    "Dufraisse2023_MADTSCMultilingualAlignedNews_b54418",
+    "Dai2021_DoesSyntaxMatterStrongBaseline_8932d9",
+    "Jiang2019_ChallengeDatasetEffectiveModelsAspect_083a95",
+    "Xue2018_AspectBasedSentimentAnalysisGated_7806a4",
+    "Phan2020_ModellingContextSyntacticalFeaturesAspect_48c9e1",
+    "Saeidi2016_SentiHoodTargetedAspectBasedSentiment_b6fa1f",
+    "He2019_InteractiveMultiTaskLearningNetwork_7993b2",
+    "Wang2016_AttentionBasedLSTMAspectLevel_7e6371",
+    "Li2021_DualGraphConvolutionalNetworksAspect_8b3d14",
+    "Chen2022_DiscreteOpinionTreeInductionAspect_59fc50"
+   ],
+   "first_query_top10": [
+    "Dufraisse2023_MADTSCMultilingualAlignedNews_b54418",
+    "Dai2021_DoesSyntaxMatterStrongBaseline_8932d9",
+    "Jiang2019_ChallengeDatasetEffectiveModelsAspect_083a95",
+    "Xue2018_AspectBasedSentimentAnalysisGated_7806a4",
+    "Chen2022_DiscreteOpinionTreeInductionAspect_59fc50",
+    "Saeidi2016_SentiHoodTargetedAspectBasedSentiment_b6fa1f",
+    "Wang2016_AttentionBasedLSTMAspectLevel_7e6371",
+    "Phan2020_ModellingContextSyntacticalFeaturesAspect_48c9e1",
+    "He2019_InteractiveMultiTaskLearningNetwork_7993b2",
+    "Zhang2019_AspectBasedSentimentClassificationAspect_56b0e5"
+   ]
+  }
+ }
+}

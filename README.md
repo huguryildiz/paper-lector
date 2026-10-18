@@ -125,7 +125,7 @@ The output, [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/e
 
 Small tests, made to check the default settings rather than to rank paper-lector against other tools:
 
-- **One known paper per question** ([LitSearch](https://huggingface.co/datasets/princeton-nlp/LitSearch), 46 questions, each with a few dozen on-topic PDFs). With Voyage and the `main` query alone, the known paper landed in the top 3 in 80% of questions and in the top 10 in 91%. Fusing `main` and `subject` gave 61% and 89%. A reranker that read only the abstracts of the same papers (`rerank-3-lite`) gave 48% and 59%. On 19 of these questions, the local model put the paper in the top 10 in 63%.
+- **One known paper per question** ([LitSearch](https://huggingface.co/datasets/princeton-nlp/LitSearch)). With Voyage and the default order (`main` + `subject`), the known paper landed in the top 3 in 61% of 46 questions with a few dozen on-topic PDFs each, and in 75% of 48 questions with 20 PDFs each; in the top 10 in 89% and 96%. Ranking on `main` alone was better on the first set and equal on the second, so the default stays. A reranker that read only the abstracts of the first set's papers (`rerank-3-lite`) put 48% in the top 3. On 19 questions, the local model put the paper in the top 10 in 63%.
 - **Survey references** (7 IEEE surveys). The local model told a survey's references apart from a neighbouring survey's references with an average precision of 0.60, against 0.35 for a random order. It did poorly where surveys share half their references.
 - **Local against Voyage** (the example's 73 PDFs). The two orders agree at Spearman 0.79, and their top 10s share 5 papers. The local model loses papers that answer the narrow part of the question.
 

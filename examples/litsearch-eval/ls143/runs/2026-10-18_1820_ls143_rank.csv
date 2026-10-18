@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1; p. 3-4,Zhao2021_IncorporatingGlobalInformationLocalAttention_670541,0.032522,,1,0.9102,2,0.7773,p. 1; p. 1-2; p. 3-4,p. 1; p. 3-4; p. 2-3,10191,True,True,full_text
+1,,,,,p. 1-2; p. 8-12; p. 3-4,Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd,0.032522,,2,0.6641,1,0.8086,p. 8-12; p. 1-2; p. 7-8,p. 1-2; p. 8-12; p. 3-4,9976,True,True,full_text
+3,,,,,p. 1-2; p. 3-4,Meiqi2021_RGATRelationalGraphAttention_9408e6,0.031258,,5,0.5859,3,0.7656,p. 2-3; p. 1-2; p. 3-4,p. 1-2; p. 2-3; p. 3-4,9004,True,False,full_text
+4,,,,,p. 4-5; p. 1-2,Tang2020_OrthogonalRelationTransformsGraphContext_70247f,0.03101,,4,0.6094,5,0.668,p. 4-5; p. 5-6; p. 2-3,p. 5-6; p. 4-5; p. 1-2,9592,True,True,full_text
+5,,,,,p. 3-4; p. 1-2; p. 5-6,Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f,0.030331,,8,0.5078,4,0.6758,p. 1-2; p. 3-4; p. 5-6,p. 2-3; p. 3-4; p. 7-8,11952,True,True,full_text
+6,,,,,p. 2-3; p. 4-5; p. 9-12,Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785,0.030303,,6,0.5117,6,0.6367,p. 2-3; p. 4-5; p. 9-12,p. 2-3; p. 4-5; p. 9-12,13896,True,False,full_text
+7,,,,,p. 1-2; p. 3-4; p. 9-10,Brody2021_HowAttentiveAreGraphAttention_dc4d5f,0.030159,,3,0.6133,10,0.5977,p. 1-2; p. 9-10; p. 2-3,p. 1-2; p. 3-4; p. 2-3,23220,True,True,full_text
+8,,,,,p. 1-2; p. 6-7; p. 4-5,Yao2019_KGBERTBERTKnowledgeGraph_36165e,0.030077,,6,0.5117,7,0.6211,p. 1-2; p. 6-7; p. 2-3,p. 6-7; p. 1-2; p. 4-5,9139,True,True,full_text
+9,,,,,p. 3-4; p. 6-7; p. 1-2,Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f,0.029211,,10,0.4941,7,0.6211,p. 1-2; p. 6-7; p. 3-4,p. 4-5; p. 3-4; p. 6-7,8065,True,True,full_text
+10,,,,,p. 1-2; p. 3-4; p. 5-6,Zhang2019_QuaternionKnowledgeGraphEmbeddings_773c35,0.028439,,14,0.4707,7,0.6211,p. 1-2; p. 5-6; p. 6-7,p. 1-2; p. 3-4; p. 4-5,12628,True,True,full_text
+11,,,,,p. 1-2,Xiao2015_TransAAdaptiveApproachKnowledgeGraph_aa7ce5,0.027397,,13,0.4727,13,0.5781,p. 2-3; p. 1-2,p. 1-2; p. 2-3,7633,True,True,full_text
+12,,,,,p. 1-2; p. 8-9; p. 3-4,Guu2015_TraversingKnowledgeGraphsVectorSpace_0348be,0.027313,,9,0.5,18,0.5352,p. 8-9; p. 1-2; p. 6-7,p. 8-9; p. 1-2; p. 3-4,8898,True,True,full_text
+13,,,,,p. 5-6; p. 12-14; p. 2-3,Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec,0.027242,,11,0.4883,16,0.5469,p. 5-6; p. 2-3; p. 12-14,p. 5-6; p. 4-5; p. 12-14,9464,True,True,full_text
+14,,,,,p. 1-2; p. 4-5; p. 6,Xiao2015_FromOnePointManifoldKnowledge_5b635f,0.027222,,15,0.4688,12,0.5859,p. 1-2; p. 1-3; p. 6,p. 1-2; p. 2-3; p. 4-5,8086,True,True,full_text
+15,,,,,p. 1-2; p. 8-10; p. 3-4,Nguyen2019_CapsuleNetworkBasedEmbeddingModel_27ecae,0.027072,,17,0.4629,11,0.5898,p. 1-2; p. 8-10,p. 8-10; p. 1-2; p. 3-4,10247,True,True,full_text
+16,,,,,p. 2-3; p. 6-7,Lin2018_MultiHopKnowledgeGraphReasoning_8f6cff,0.026876,,12,0.4863,17,0.5391,p. 2-3; p. 3-5; p. 3-4,p. 6-7; p. 2-3; p. 3-5,11598,True,True,full_text
+17,,,,,p. 1-2; p. 6-7; p. 3-4,Xiao2016_TransGGenerativeModelKnowledgeGraph_4274ab,0.026519,,18,0.4492,13,0.5781,p. 1-2; p. 6-7; p. 8-9,p. 1-2; p. 3-4; p. 6-7,8451,True,True,full_text
+18,,,,,p. 3-4; p. 1-2; p. 6-7,Xiong2017_DeepPathReinforcementLearningMethodKnowledge_1871b7,0.026491,,16,0.4648,15,0.5547,p. 1-2; p. 3-4; p. 2-3,p. 7-8; p. 3-4; p. 6-7,8445,True,True,full_text
+19,,,,,p. 1-2; p. 4-5; p. 6-7,Trouillon2016_ComplexEmbeddingsSimpleLinkPrediction_1203c2,0.025316,,19,0.4316,19,0.5234,p. 1-2; p. 7; p. 6-7,p. 1-2; p. 4-5; p. 1-3,10693,True,True,full_text
+20,,,,,p. 1-2; p. 4-7,Sun2020_ReEvaluationKnowledgeGraphCompletion_e011ed,0.025,,20,0.4258,20,0.4766,p. 1-2; p. 2-3; p. 2-4,p. 1-2; p. 2-3; p. 4-7,5775,True,True,full_text

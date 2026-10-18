@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:19:00",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "3b12685cd71e79d000d6fa6ce183a98156e071d11cd4a3e1cfbe29665ddccb4c"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "7fd73009fd2b0314f6254975ca682a03ed1896b804288aa7787637843073721c"
+   }
+  ]
+ },
+ "question": "When using pretrained transformer models for generating sentence embeddings, I've heard different strategies such as mean pooling and using the CLS token's embedding. What study shows that mean pooling outperforms CLS in semantic similarity tasks?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "When using pretrained transformer models for generating sentence embeddings, I've heard different strategies such as mean pooling and using the CLS token's embedding. What study shows that mean pooling outperforms CLS in semantic similarity tasks?",
+   "keywords": "mean pooling outperforms CLS token sentence embeddings semantic similarity"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Sentence embeddings obtained from pretrained transformer models such as BERT, comparing ways of pooling token outputs (mean pooling versus the CLS token) for semantic textual similarity tasks.",
+   "keywords": "sentence embeddings pretrained transformer mean pooling CLS token semantic textual similarity BERT"
+  }
+ },
+ "queries_sha": "5cbe53dbb7a6",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 213,
+  "ids": [
+   "Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130",
+   "Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b",
+   "Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f",
+   "Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9",
+   "Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb",
+   "Li2020_SentenceEmbeddingsFromPreTrained_12efe7",
+   "Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07",
+   "Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46",
+   "Cer2017_SemEval2017Task1Semantic_f3b3db",
+   "Conneau2017_SupervisedLearningUniversalSentenceRepresentations_0f54ba",
+   "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+   "Williams2018_BroadCoverageChallengeCorpusSentence_4174f6",
+   "Agirre2016_SemEval2016Task1Semantic_3b1d84",
+   "Cer2018_UniversalSentenceEncoderEnglish_aa9969",
+   "Kiros2015_SkipThoughtVectors_9087a0",
+   "Wang2018_GLUEMultiTaskBenchmarkAnalysis_700c63",
+   "Ethayarajh2019_HowContextualAreContextualizedWord_d77807",
+   "Cer2018_UniversalSentenceEncoder_51f2e5",
+   "Agirre2015_SemEval2015Task2Semantic_7707d6",
+   "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9"
+  ],
+  "files": [
+   {
+    "id": "Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130",
+    "path": "pdfs/Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130.pdf",
+    "sha256": "92366d22fc0521350d6cbe0ad72bcee754f90e88181d7b4a8e2adb1e7e594fec"
+   },
+   {
+    "id": "Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b",
+    "path": "pdfs/Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b.pdf",
+    "sha256": "cafa757486e245d5fc131a0a6b2031c43d06fdc11c4e6d21f417e99eda93b923"
+   },
+   {
+    "id": "Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f",
+    "path": "pdfs/Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f.pdf",
+    "sha256": "fb5de7653ca9215af2c6b984a9b217ed7c176b2054be841a33f352fce9f4e97f"
+   },
+   {
+    "id": "Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9",
+    "path": "pdfs/Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9.pdf",
+    "sha256": "964f6eaf602bcded15e77ea846355a2174887f90e862d501dd4cb3229853877f"
+   },
+   {
+    "id": "Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb",
+    "path": "pdfs/Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb.pdf",
+    "sha256": "b7131f36279d21a36e5767e4d3ee24b4f7bbc1320aea6f248a820cee8f988dd7"
+   },
+   {
+    "id": "Li2020_SentenceEmbeddingsFromPreTrained_12efe7",
+    "path": "pdfs/Li2020_SentenceEmbeddingsFromPreTrained_12efe7.pdf",
+    "sha256": "6350577ff7d10a29c4ea482dc9852ac83ce0fe90527321787ce8f81be8e250a4"
+   },
+   {
+    "id": "Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07",
+    "path": "pdfs/Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07.pdf",
+    "sha256": "964e1675118f7489075239f517380ae85b133839e9061ac4a67b4d01e4f1e6e5"
+   },
+   {
+    "id": "Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46",
+    "path": "pdfs/Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46.pdf",
+    "sha256": "26ad5cef51d5c4ad464b6fbf61611567c2cdaeaac02f2b2adcabc8fe78ba6094"
+   },
+   {
+    "id": "Cer2017_SemEval2017Task1Semantic_f3b3db",
+    "path": "pdfs/Cer2017_SemEval2017Task1Semantic_f3b3db.pdf",
+    "sha256": "1b7a18d2783f4343f4a6517e9f824e9a24e22f336db9b49f422cda0a612300c5"
+   },
+   {
+    "id": "Conneau2017_SupervisedLearningUniversalSentenceRepresentations_0f54ba",
+    "path": "pdfs/Conneau2017_SupervisedLearningUniversalSentenceRepresentations_0f54ba.pdf",
+    "sha256": "f3959596248686dca6951a72603cd0bcecfd8d036178e22ffd9ec8d1ed689783"
+   },
+   {
+    "id": "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+    "path": "pdfs/Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06.pdf",
+    "sha256": "7c57361a3046e360750747fb2a9bfe6caac873ac8e16035e52178712d859fdd4"
+   },
+   {
+    "id": "Williams2018_BroadCoverageChallengeCorpusSentence_4174f6",
+    "path": "pdfs/Williams2018_BroadCoverageChallengeCorpusSentence_4174f6.pdf",
+    "sha256": "a988fda5594737d526db4d78d24f81e5efe5fdc62a9313fbcc620dedbbd230c5"
+   },
+   {
+    "id": "Agirre2016_SemEval2016Task1Semantic_3b1d84",
+    "path": "pdfs/Agirre2016_SemEval2016Task1Semantic_3b1d84.pdf",
+    "sha256": "d749c2da834c7d20f07921c224119cfa75ee50dde1c369acebebcf4dab8538bb"
+   },
+   {
+    "id": "Cer2018_UniversalSentenceEncoderEnglish_aa9969",
+    "path": "pdfs/Cer2018_UniversalSentenceEncoderEnglish_aa9969.pdf",
+    "sha256": "3e7c9d025e63d4aa01136d1be3a6a874ff257124a96a58959e23dc8a8b9414dd"
+   },
+   {
+    "id": "Kiros2015_SkipThoughtVectors_9087a0",
+    "path": "pdfs/Kiros2015_SkipThoughtVectors_9087a0.pdf",
+    "sha256": "d4583cb82ac9e09e088f9f95a0371fbf8d4c2fe13c57e2a09cd25dfe6fd2021b"
+   },
+   {
+    "id": "Wang2018_GLUEMultiTaskBenchmarkAnalysis_700c63",
+    "path": "pdfs/Wang2018_GLUEMultiTaskBenchmarkAnalysis_700c63.pdf",
+    "sha256": "48fb7275b43933429b9826066c49f4b29c7ec5e73b568c70c5761c8acc7840ee"
+   },
+   {
+    "id": "Ethayarajh2019_HowContextualAreContextualizedWord_d77807",
+    "path": "pdfs/Ethayarajh2019_HowContextualAreContextualizedWord_d77807.pdf",
+    "sha256": "3e20d77329e50038974a290a50a6f815c49116a6ef77f5d27d941b8097edf4ed"
+   },
+   {
+    "id": "Cer2018_UniversalSentenceEncoder_51f2e5",
+    "path": "pdfs/Cer2018_UniversalSentenceEncoder_51f2e5.pdf",
+    "sha256": "9aa45b469089b0726f9951bd5c1b878063c059d43fcfa2e82ff4cf05ffa5eaae"
+   },
+   {
+    "id": "Agirre2015_SemEval2015Task2Semantic_7707d6",
+    "path": "pdfs/Agirre2015_SemEval2015Task2Semantic_7707d6.pdf",
+    "sha256": "e68e69fbef19851f1e800d1dd68066fb5e16358fd4cac7d7e4d414c23845e611"
+   },
+   {
+    "id": "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "path": "pdfs/Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9.pdf",
+    "sha256": "51ebaf21e4cd586761016a64b2b753ee5ca05dd52a0de6bf8058a7eb8e932d91"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 179069,
+  "embed_cached": 44,
+  "rerank": 142504
+ },
+ "estimate": 377514,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls079/runs/2026-10-18_1818_ls079_rank.csv",
+   "fused_top10": [
+    "Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130",
+    "Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46",
+    "Li2020_SentenceEmbeddingsFromPreTrained_12efe7",
+    "Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9",
+    "Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07",
+    "Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b",
+    "Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb",
+    "Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f",
+    "Cer2018_UniversalSentenceEncoder_51f2e5",
+    "Cer2018_UniversalSentenceEncoderEnglish_aa9969"
+   ],
+   "first_query_top10": [
+    "Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130",
+    "Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9",
+    "Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46",
+    "Li2020_SentenceEmbeddingsFromPreTrained_12efe7",
+    "Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b",
+    "Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07",
+    "Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb",
+    "Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f",
+    "Cer2018_UniversalSentenceEncoder_51f2e5",
+    "Cer2018_UniversalSentenceEncoderEnglish_aa9969"
+   ]
+  }
+ }
+}

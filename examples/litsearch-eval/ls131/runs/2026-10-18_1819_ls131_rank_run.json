@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:19:50",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "e5b750205e3d85eba9450732b5e0addb6715a62d98a9080fd9e1225adcb3112a"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "251f12421c229734cbbf9ff6ba4629c323a6ca22745fe90742c2377bd40eaff6"
+   }
+  ]
+ },
+ "question": "Could you recommend a study that investigates enhancing prompt engineering techniques for generative models using meta-learning strategies?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you recommend a study that investigates enhancing prompt engineering techniques for generative models using meta-learning strategies?",
+   "keywords": "prompt engineering generative models meta-learning"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Prompt design for generative models such as large language models and text-to-image models, where prompts are produced or tuned through meta-learning strategies.",
+   "keywords": "prompt engineering generative models meta-learning prompt tuning learn to prompt"
+  }
+ },
+ "queries_sha": "8ebc2dce15fe",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 322,
+  "ids": [
+   "Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9",
+   "Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf",
+   "Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240",
+   "Li2023_RobustPromptOptimizationLargeLanguage_fc98bb",
+   "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+   "Izacard2021_LeveragingPassageRetrievalGenerativeModels_c29834",
+   "Huang2023_TowardsReasoningLargeLanguageModels_50571a",
+   "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+   "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+   "White2023_PromptPatternCatalogEnhancePrompt_890240",
+   "Block2023_SummaryCyclesExploringImpactPrompt_3bbcf1",
+   "Sun2022_BBTv2TowardsGradientFreeFuture_a4ec21",
+   "Zhou2023_RevisitingAutomatedPromptingAreWe_14f2cb",
+   "Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71",
+   "Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc",
+   "Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946",
+   "Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087",
+   "Chen2024_SystematicReviewPromptEngineeringLarge_b9e61c",
+   "Honovich2023_InstructionInductionFromFewExamples_2bd747",
+   "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4"
+  ],
+  "files": [
+   {
+    "id": "Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9",
+    "path": "pdfs/Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9.pdf",
+    "sha256": "93fac9b5d82085fa8c59756f0e695680235019a87fdc6cfd9c7a1670b2dbdeed"
+   },
+   {
+    "id": "Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf",
+    "path": "pdfs/Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf.pdf",
+    "sha256": "3e55b8bcf55b8b7cfb7718e47e0eb5b77f4d39969383d4faa9641a761ba52e86"
+   },
+   {
+    "id": "Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240",
+    "path": "pdfs/Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240.pdf",
+    "sha256": "90ed9bd62d8e8c1f5bb810c7749c8272f2de4cac037cb75306746c9c9cfcb094"
+   },
+   {
+    "id": "Li2023_RobustPromptOptimizationLargeLanguage_fc98bb",
+    "path": "pdfs/Li2023_RobustPromptOptimizationLargeLanguage_fc98bb.pdf",
+    "sha256": "45534c0198017d572d7b4558d76abff7a7d3d6bf83b068d7f271141c8e429fa2"
+   },
+   {
+    "id": "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+    "path": "pdfs/Jason2022_BNAINOTOKENMINDUNITY_5c6426.pdf",
+    "sha256": "7d9f878c23b460e4566aa4ec9201b1abfb3b8faefb2b1356e411cb90fef72a12"
+   },
+   {
+    "id": "Izacard2021_LeveragingPassageRetrievalGenerativeModels_c29834",
+    "path": "pdfs/Izacard2021_LeveragingPassageRetrievalGenerativeModels_c29834.pdf",
+    "sha256": "f1ee7e927c3fb31beb2146f8c205692a91b40dadd65d80e025c6686e4d430953"
+   },
+   {
+    "id": "Huang2023_TowardsReasoningLargeLanguageModels_50571a",
+    "path": "pdfs/Huang2023_TowardsReasoningLargeLanguageModels_50571a.pdf",
+    "sha256": "46fc54b5d63dd05e1eb0c28e419330448305599e70eb20b36353a97654f409cb"
+   },
+   {
+    "id": "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+    "path": "pdfs/Huang2023_LargeLanguageModelsCanSelf_e686e4.pdf",
+    "sha256": "a17d3b26831f8c5a3b6461b3a9d852a387d1f2c384da3f11b772afeef6545cff"
+   },
+   {
+    "id": "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+    "path": "pdfs/Chen2023_MAPOBoostingLargeLanguageModel_3fbefb.pdf",
+    "sha256": "04564492e16788d6a12f2cc9ae637b97adcc19f561209cb3cdfb72697cf4f619"
+   },
+   {
+    "id": "White2023_PromptPatternCatalogEnhancePrompt_890240",
+    "path": "pdfs/White2023_PromptPatternCatalogEnhancePrompt_890240.pdf",
+    "sha256": "15b11c93075e943d9dd7154252784a723490086cddec65ec38361fcea597f33d"
+   },
+   {
+    "id": "Block2023_SummaryCyclesExploringImpactPrompt_3bbcf1",
+    "path": "pdfs/Block2023_SummaryCyclesExploringImpactPrompt_3bbcf1.pdf",
+    "sha256": "cd3b710b5e844f59125103b6335a54dceceda5c3a76c4a339e7f0a2bbf70e89e"
+   },
+   {
+    "id": "Sun2022_BBTv2TowardsGradientFreeFuture_a4ec21",
+    "path": "pdfs/Sun2022_BBTv2TowardsGradientFreeFuture_a4ec21.pdf",
+    "sha256": "f8d7ed3f3ac78c71b7c50871b2e3bb91d8d4fa02f179709db20a4f8174e1d758"
+   },
+   {
+    "id": "Zhou2023_RevisitingAutomatedPromptingAreWe_14f2cb",
+    "path": "pdfs/Zhou2023_RevisitingAutomatedPromptingAreWe_14f2cb.pdf",
+    "sha256": "046fef9280aab50e1800c197bec6ca0a1d3936eb76e101ede505d92436382395"
+   },
+   {
+    "id": "Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71",
+    "path": "pdfs/Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71.pdf",
+    "sha256": "294b1b8eb842a91e1f0d06b5515041f5049238514aaa28ea037781dd18aa6b80"
+   },
+   {
+    "id": "Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc",
+    "path": "pdfs/Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc.pdf",
+    "sha256": "f58c28a2e9d346aa73a9dc6f361e88a93a9155c7df820c9bcd7863e626af4794"
+   },
+   {
+    "id": "Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946",
+    "path": "pdfs/Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946.pdf",
+    "sha256": "7d7adbc90da0dc65a6c97a2b00be6cd961cf313542e7e7feeef6aa561168ef6d"
+   },
+   {
+    "id": "Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087",
+    "path": "pdfs/Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087.pdf",
+    "sha256": "2b26d638477bbc3a654a5d3a5fae1da7a1073f0479a55559cf2852ebe57d02bd"
+   },
+   {
+    "id": "Chen2024_SystematicReviewPromptEngineeringLarge_b9e61c",
+    "path": "pdfs/Chen2024_SystematicReviewPromptEngineeringLarge_b9e61c.pdf",
+    "sha256": "7421ef8dcc11d21cfc15432c9d654d831bb56e808ba287bc2f48ef17b438a2d6"
+   },
+   {
+    "id": "Honovich2023_InstructionInductionFromFewExamples_2bd747",
+    "path": "pdfs/Honovich2023_InstructionInductionFromFewExamples_2bd747.pdf",
+    "sha256": "e7bf0293814d87ebc0685e53c5661b03e084bb9b7109d17ec16e271cb4dbdfc0"
+   },
+   {
+    "id": "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+    "path": "pdfs/Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4.pdf",
+    "sha256": "e9d2e5a52ea6d7e3cf98223d1487b557ab5ed4b76133a300eda2037c5a928f89"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 295705,
+  "embed_cached": 46,
+  "rerank": 145659
+ },
+ "estimate": 504163,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls131/runs/2026-10-18_1819_ls131_rank.csv",
+   "fused_top10": [
+    "Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9",
+    "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+    "Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf",
+    "Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71",
+    "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+    "Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087",
+    "Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240",
+    "Li2023_RobustPromptOptimizationLargeLanguage_fc98bb",
+    "Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc",
+    "Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946"
+   ],
+   "first_query_top10": [
+    "Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9",
+    "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+    "Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf",
+    "Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71",
+    "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+    "Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087",
+    "Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240",
+    "Li2023_RobustPromptOptimizationLargeLanguage_fc98bb",
+    "Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc",
+    "Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946"
+   ]
+  }
+ }
+}

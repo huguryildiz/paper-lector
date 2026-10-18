@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:22:07", "question": "Could you suggest research that tries to interpret how bi-directional RNNs manage to carry out Named Entity Recognition (NER) tasks?", "name": "ls249", "queries": "queries.json", "queries_sha": "8d16ae7a46f2", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1821", "abstracts": ""}

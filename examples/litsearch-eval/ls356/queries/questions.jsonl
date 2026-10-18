@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:25:10", "question": "Give me a paper proposing to circumvent a single-truth target in training generative language models.", "name": "ls356", "queries": "queries.json", "queries_sha": "bb34fc4af749", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1824", "abstracts": ""}

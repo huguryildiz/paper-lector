@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:23:04", "question": "In multi-hop question answering, is there a paper that explores \"per-hop\" retrieval evaluation that treats each hop of retrieval independently?", "name": "ls279", "queries": "queries.json", "queries_sha": "68e8275a9a38", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1822", "abstracts": ""}

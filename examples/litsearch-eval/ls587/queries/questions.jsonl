@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:32:09", "question": "Which paper in human motion generation can control the spatial location of any joints of the human with either dense or sparse 3D points?", "name": "ls587", "queries": "queries.json", "queries_sha": "95535b731eba", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1831", "abstracts": ""}

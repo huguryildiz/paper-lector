@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:26:26",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "a76c492295ec8cec4a6b12878c860aa869827edbb01817af9a59aba447ed9741"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "4f6486dc9d501eeef8605c0927119772d0fa5fc23d0a675f231e167c92cd7645"
+   }
+  ]
+ },
+ "question": "Is there a paper that uses Explainable AI techniques to investigate how language models represent the expression of morality?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there a paper that uses Explainable AI techniques to investigate how language models represent the expression of morality?",
+   "keywords": "Explainable AI techniques how language models represent morality"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Pretrained language models and how they represent and express morality and moral values in text, examined with explainability methods that attribute predictions to inputs or hidden units.",
+   "keywords": "explainable AI language models morality moral values representation interpretability"
+  }
+ },
+ "queries_sha": "57f31e66dbcc",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 335,
+  "ids": [
+   "Liscio2023_WhatDoesTextClassifierLearn_4212e0",
+   "Bombaerts2026_FromMoralityInstallationLLMsLLMs_2524da",
+   "Zhou2024_RethinkingMachineEthicsCanLLMs_76aa2b",
+   "Su2026_JailbreakingLargeLanguageModelsMorality_3e1a2a",
+   "Morlat2025_MoralityIsContextualLearningInterpretable_abf27c",
+   "Hu2026_StraightNarrowDoLLMsPossess_6fdd5c",
+   "Eoin2025_MoralityProbabilityHowImplicitMoral_d0db2b",
+   "Yu2024_CMoralEvalMoralEvaluationBenchmarkChinese_0ca206",
+   "WenYi2023_HyperpolyglotLLMsCrossLingualInterpretability_f38092",
+   "Bombaerts2025_MoralityAIPleaEmbedMorality_377d02",
+   "Vida2023_ValuesEthicsMoralsUseMoral_31ea99",
+   "Nadeem2021_StereoSetMeasuringStereotypicalBiasPretrained_85924b",
+   "Simmons2023_MoralMimicryLargeLanguageModels_6b613a",
+   "Hendrycks2020_AligningAISharedHumanValues_86b0e9",
+   "Forbes2020_SocialChemistry101LearningReason_0989eb",
+   "Ramezani2023_KnowledgeCulturalMoralNormsLarge_489f1e",
+   "Danilevsky2020_SurveyStateExplainableAINatural_37317c",
+   "Hämmerl2023_SpeakingMultipleLanguagesAffectsMoral_8b8a44",
+   "Asprino2022_UncoveringValuesDetectingLatentMoral_8a506a",
+   "Yang2023_TowardsInterpretableMentalHealthAnalysis_fef957"
+  ],
+  "files": [
+   {
+    "id": "Liscio2023_WhatDoesTextClassifierLearn_4212e0",
+    "path": "pdfs/Liscio2023_WhatDoesTextClassifierLearn_4212e0.pdf",
+    "sha256": "4cb193a5135afe7d991fa5913d68c90a757a77f399fe4957ae615ab16953a43b"
+   },
+   {
+    "id": "Bombaerts2026_FromMoralityInstallationLLMsLLMs_2524da",
+    "path": "pdfs/Bombaerts2026_FromMoralityInstallationLLMsLLMs_2524da.pdf",
+    "sha256": "489c753ad796d42894141197730d24f48fc1f7742b9f6561d5d0c5f31e454527"
+   },
+   {
+    "id": "Zhou2024_RethinkingMachineEthicsCanLLMs_76aa2b",
+    "path": "pdfs/Zhou2024_RethinkingMachineEthicsCanLLMs_76aa2b.pdf",
+    "sha256": "de26be1b2050dff98f14c6a5c01e29ad8c24332c8830e71acc7e946e7f5efb45"
+   },
+   {
+    "id": "Su2026_JailbreakingLargeLanguageModelsMorality_3e1a2a",
+    "path": "pdfs/Su2026_JailbreakingLargeLanguageModelsMorality_3e1a2a.pdf",
+    "sha256": "da9f4eefb823d99b939998c8238b521857bc5a2238c9f95f12c363492c10d494"
+   },
+   {
+    "id": "Morlat2025_MoralityIsContextualLearningInterpretable_abf27c",
+    "path": "pdfs/Morlat2025_MoralityIsContextualLearningInterpretable_abf27c.pdf",
+    "sha256": "e40d2b3a0809144aed58e6b855c84d6685ecc21b86f65f4d0c3401a49dc56a5c"
+   },
+   {
+    "id": "Hu2026_StraightNarrowDoLLMsPossess_6fdd5c",
+    "path": "pdfs/Hu2026_StraightNarrowDoLLMsPossess_6fdd5c.pdf",
+    "sha256": "61e17028fe055be46087bcb3390e967b3618e31997713247ac9df7b5863ff32a"
+   },
+   {
+    "id": "Eoin2025_MoralityProbabilityHowImplicitMoral_d0db2b",
+    "path": "pdfs/Eoin2025_MoralityProbabilityHowImplicitMoral_d0db2b.pdf",
+    "sha256": "d6233a780d56d7d9abf31813717ff4e8423cf420f22e6eb5d8dc0ecd06d381f2"
+   },
+   {
+    "id": "Yu2024_CMoralEvalMoralEvaluationBenchmarkChinese_0ca206",
+    "path": "pdfs/Yu2024_CMoralEvalMoralEvaluationBenchmarkChinese_0ca206.pdf",
+    "sha256": "0f8024c3c94dc5423a12042abd475064ec7f0e219518af5636530699d248f3d2"
+   },
+   {
+    "id": "WenYi2023_HyperpolyglotLLMsCrossLingualInterpretability_f38092",
+    "path": "pdfs/WenYi2023_HyperpolyglotLLMsCrossLingualInterpretability_f38092.pdf",
+    "sha256": "8bf52df1f0526494fe80fee1a786b4e8ba5a7dbf5278f968915eb690ab86f145"
+   },
+   {
+    "id": "Bombaerts2025_MoralityAIPleaEmbedMorality_377d02",
+    "path": "pdfs/Bombaerts2025_MoralityAIPleaEmbedMorality_377d02.pdf",
+    "sha256": "c409fee152ee255c0708bf36dc4d97180847f05f9c52dab7665e8dc86c1203a8"
+   },
+   {
+    "id": "Vida2023_ValuesEthicsMoralsUseMoral_31ea99",
+    "path": "pdfs/Vida2023_ValuesEthicsMoralsUseMoral_31ea99.pdf",
+    "sha256": "7114f25d670c83ed1238691b235be811546a6be96c04d6f279eead10c5317275"
+   },
+   {
+    "id": "Nadeem2021_StereoSetMeasuringStereotypicalBiasPretrained_85924b",
+    "path": "pdfs/Nadeem2021_StereoSetMeasuringStereotypicalBiasPretrained_85924b.pdf",
+    "sha256": "32f1f71069f45999b0c5001cc3a5d4c9f6c584a35e0d53bc48c1bccc5a659edf"
+   },
+   {
+    "id": "Simmons2023_MoralMimicryLargeLanguageModels_6b613a",
+    "path": "pdfs/Simmons2023_MoralMimicryLargeLanguageModels_6b613a.pdf",
+    "sha256": "eb6b29fe419985a3008357d12590e3064f68a8886ff92bfff2a3d76456372dd5"
+   },
+   {
+    "id": "Hendrycks2020_AligningAISharedHumanValues_86b0e9",
+    "path": "pdfs/Hendrycks2020_AligningAISharedHumanValues_86b0e9.pdf",
+    "sha256": "93a7fdb244b18fc0592268dc1055133a1d67bc85b8cfac347ae8707390c23936"
+   },
+   {
+    "id": "Forbes2020_SocialChemistry101LearningReason_0989eb",
+    "path": "pdfs/Forbes2020_SocialChemistry101LearningReason_0989eb.pdf",
+    "sha256": "4091e0626bb2a0c7c5ca2e82d8c80929d29b7d36896dda0f958fe95c1cddc407"
+   },
+   {
+    "id": "Ramezani2023_KnowledgeCulturalMoralNormsLarge_489f1e",
+    "path": "pdfs/Ramezani2023_KnowledgeCulturalMoralNormsLarge_489f1e.pdf",
+    "sha256": "60a81c3e1fbd03af453a9288fd333014d681cdbcf47a55af9b552be89cbe8d4d"
+   },
+   {
+    "id": "Danilevsky2020_SurveyStateExplainableAINatural_37317c",
+    "path": "pdfs/Danilevsky2020_SurveyStateExplainableAINatural_37317c.pdf",
+    "sha256": "411756b9223b287d836f75d5f2e378b4c90539b57cac18bc0bcfb2bbeface3b5"
+   },
+   {
+    "id": "Hämmerl2023_SpeakingMultipleLanguagesAffectsMoral_8b8a44",
+    "path": "pdfs/Hämmerl2023_SpeakingMultipleLanguagesAffectsMoral_8b8a44.pdf",
+    "sha256": "3685f4c1d2eeadc1440df6764d46f7aa3acaaf0f0450fab210f401987f8a43a1"
+   },
+   {
+    "id": "Asprino2022_UncoveringValuesDetectingLatentMoral_8a506a",
+    "path": "pdfs/Asprino2022_UncoveringValuesDetectingLatentMoral_8a506a.pdf",
+    "sha256": "40e40c945ef14591de1ae8750168500fe5fb577faa6032e432749cf85da92452"
+   },
+   {
+    "id": "Yang2023_TowardsInterpretableMentalHealthAnalysis_fef957",
+    "path": "pdfs/Yang2023_TowardsInterpretableMentalHealthAnalysis_fef957.pdf",
+    "sha256": "f10bcf2bb010840698d952b7faf25eb361bf4b3dbda1c2b2343ee25859588347"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 118957,
+  "embed_cached": 225,
+  "rerank": 141933
+ },
+ "estimate": 512890,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls375/runs/2026-10-18_1826_ls375_rank.csv",
+   "fused_top10": [
+    "Liscio2023_WhatDoesTextClassifierLearn_4212e0",
+    "Eoin2025_MoralityProbabilityHowImplicitMoral_d0db2b",
+    "Asprino2022_UncoveringValuesDetectingLatentMoral_8a506a",
+    "Hu2026_StraightNarrowDoLLMsPossess_6fdd5c",
+    "Morlat2025_MoralityIsContextualLearningInterpretable_abf27c",
+    "Zhou2024_RethinkingMachineEthicsCanLLMs_76aa2b",
+    "Simmons2023_MoralMimicryLargeLanguageModels_6b613a",
+    "Bombaerts2025_MoralityAIPleaEmbedMorality_377d02",
+    "Hendrycks2020_AligningAISharedHumanValues_86b0e9",
+    "Ramezani2023_KnowledgeCulturalMoralNormsLarge_489f1e"
+   ],
+   "first_query_top10": [
+    "Liscio2023_WhatDoesTextClassifierLearn_4212e0",
+    "Eoin2025_MoralityProbabilityHowImplicitMoral_d0db2b",
+    "Asprino2022_UncoveringValuesDetectingLatentMoral_8a506a",
+    "Hu2026_StraightNarrowDoLLMsPossess_6fdd5c",
+    "Zhou2024_RethinkingMachineEthicsCanLLMs_76aa2b",
+    "Simmons2023_MoralMimicryLargeLanguageModels_6b613a",
+    "Morlat2025_MoralityIsContextualLearningInterpretable_abf27c",
+    "Hendrycks2020_AligningAISharedHumanValues_86b0e9",
+    "Bombaerts2025_MoralityAIPleaEmbedMorality_377d02",
+    "Ramezani2023_KnowledgeCulturalMoralNormsLarge_489f1e"
+   ]
+  }
+ }
+}

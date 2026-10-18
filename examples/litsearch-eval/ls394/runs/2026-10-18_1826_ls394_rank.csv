@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-3,Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26,0.032522,,1,0.8789,2,0.793,p. 1-3; p. 3-4; p. 2-4,p. 1-3; p. 3-4; p. 2-4,15778,True,True,full_text
+1,,,,,p. 2-3; p. 9-16; p. 4-5,Liu2024_LargeLanguageModelsCausalInference_ff09d9,0.032522,,2,0.7969,1,0.8203,p. 2-3; p. 9-16; p. 8-15,p. 4-5; p. 9-16; p. 2-3,12515,True,True,full_text
+3,,,,,p. 8-9; p. 1-2; p. 4-5,Kaushik2019_LearningDifferenceThatMakesDifference_914522,0.031498,,4,0.6172,3,0.7344,p. 1-2; p. 8-9; p. 4-5,p. 2-3; p. 8-9; p. 9-14,10416,True,True,full_text
+4,,,,,p. 1-2; p. 8-9,Howard2018_UniversalLanguageModelFineTuning_f8769b,0.03055,,7,0.582,4,0.6289,p. 1-2; p. 2-3; p. 8-9,p. 2-4; p. 1-2; p. 8-9,9193,True,True,full_text
+5,,,,,p. 2-3; p. 28-29; p. 4-5,Wei2021_FinetunedLanguageModelsAreZero_82db93,0.029857,,6,0.6055,8,0.5273,p. 9-10; p. 28-29; p. 2-3,p. 4-5; p. 2-3; p. 28-29,30416,True,True,full_text
+6,,,,,p. 3-4; p. 1-2; p. 5-7,Huang2023_LargeLanguageModelsCanSelf_e686e4,0.029762,,3,0.6367,12,0.5117,p. 1-2; p. 3-4; p. 7-9,p. 3-4; p. 5-7; p. 10-14,15626,True,True,full_text
+7,,,,,p. 1-2; p. 9-13,Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5,0.02971,,4,0.6172,11,0.5156,p. 2-3; p. 9-13; p. 1-2,p. 2-3; p. 1-2; p. 9-13,14699,True,True,full_text
+8,,,,,p. 4-5; p. 8-13; p. 1-2,Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab,0.029644,,9,0.5469,6,0.5312,p. 1-2; p. 4-5; p. 8-13,p. 4-5; p. 8-13; p. 7-8,18466,True,True,full_text
+9,,,,,p. 2-3; p. 7-8,Lester2021_PowerScaleParameterEfficientPrompt_a2804e,0.029236,,11,0.5156,6,0.5312,p. 8-9; p. 7-8; p. 2-3,p. 7-8; p. 2-3; p. 8-13,13770,True,False,full_text
+10,,,,,p. 8-12; p. 1-2; p. 3-5,Aggarwal2024_MAPLEMultilingualEvaluationParameterEfficient_415505,0.029083,,13,0.5117,5,0.5352,p. 8-12; p. 3-5; p. 1-2,p. 8-12; p. 13-16; p. 6-7,105738,True,True,full_text
+11,,,,,p. 1-2; p. 3-8,Wang2023_DemystifyingInstructionMixingFineTuning_10ed36,0.028039,,15,0.5039,8,0.5273,p. 1-2; p. 3-8; p. 8-10,p. 1-2; p. 2-3; p. 3-8,7751,True,True,full_text
+12,,,,,p. 3-4; p. 1-2,Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf,0.027526,,18,0.4902,8,0.5273,p. 3-4; p. 2-4; p. 4-5,p. 3-4; p. 1-2; p. 4-5,10768,True,True,full_text
+13,,,,,p. 1-2; p. 6-7; p. 8-12,Chen2024_AutomatedDataCurationRobustLanguage_42f2e8,0.027444,,10,0.5195,16,0.4824,p. 1-2; p. 6-7; p. 8-12,p. 2-3; p. 2-4; p. 7-8,9487,True,True,full_text
+14,,,,,p. 1-2; p. 3-4; p. 5-6,Aghajanyan2021_IntrinsicDimensionalityExplainsEffectivenessLanguage_2f4231,0.027397,,13,0.5117,13,0.5078,p. 1-2; p. 3-4; p. 5-6,p. 1-2; p. 3-4; p. 4-5,7155,True,True,full_text
+15,,,,,p. 1-2; p. 3-4; p. 8-9,Li2023_RAINYourLanguageModelsCan_9a8a54,0.027364,,8,0.5703,19,0.4375,p. 1-2; p. 3-4; p. 9-13,p. 3-4; p. 8-9; p. 1-2,12572,True,True,full_text
+16,,,,,p. 4-6; p. 1-2,Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4,0.027072,,11,0.5156,17,0.4668,p. 5-6; p. 4-6; p. 2-3,p. 5-6; p. 4-6; p. 1-2,13492,True,True,full_text
+17,,,,,p. 8-9; p. 12-17; p. 1-2,Hu2021_LoRAFineTuning3BCode_35e8fd,0.026686,,17,0.4922,13,0.5078,p. 12-17; p. 8-9; p. 3-4,p. 12-17; p. 8-9; p. 1-2,23113,True,True,full_text
+18,,,,,p. 4-5; p. 7-8,Houlsby2019_ParameterEfficientTransferLearningNLP_218b64,0.025992,,19,0.4727,15,0.4902,p. 7-8; p. 8-11; p. 4-5,p. 7-8; p. 8-11; p. 4-5,13161,True,False,full_text
+19,,,,,p. 9-16; p. 1-2; p. 17-19,Ruan2025_UnveilingOverMemorizationFinetuningLLMs_7333fc,0.025978,,16,0.4941,18,0.4531,p. 9-16; p. 17-19; p. 20-21,p. 9-16; p. 9-10; p. 1-2,17773,True,True,full_text
+20,,,,,p. 1-2; p. 4-6; p. 7-9,Clark2019_WhatDoesBERTLookAnalysis_a1d2c5,0.025,,20,0.4551,20,0.4199,p. 1-2; p. 9; p. 4-6,p. 1-2; p. 7-9; p. 4-6,7608,True,True,full_text

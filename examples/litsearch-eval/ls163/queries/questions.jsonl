@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:21:06", "question": "Could you recommend research that explores how the loss of spatial information impacts the effectiveness of global features in visual tasks?", "name": "ls163", "queries": "queries.json", "queries_sha": "12b5737d7be2", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1820", "abstracts": ""}

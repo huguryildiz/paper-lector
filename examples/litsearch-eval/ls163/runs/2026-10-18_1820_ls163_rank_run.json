@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:21:06",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "b9d2267fbcf52ee3ec734104d857762f1964274f0a157fb62192b0ee399fac25"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "1b457c549cecfa55c653db6adeb7508beffda816f9e52e6277055e75be6c6ce4"
+   }
+  ]
+ },
+ "question": "Could you recommend research that explores how the loss of spatial information impacts the effectiveness of global features in visual tasks?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you recommend research that explores how the loss of spatial information impacts the effectiveness of global features in visual tasks?",
+   "keywords": "loss of spatial information global features visual tasks"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Image representations in computer vision, in particular global image features obtained by pooling that discard spatial layout, and how this loss of spatial information affects performance on visual tasks.",
+   "keywords": "global features spatial information loss pooling visual recognition retrieval spatial layout"
+  }
+ },
+ "queries_sha": "12b5737d7be2",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 358,
+  "ids": [
+   "Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37",
+   "Ghiasi2022_WhatDoVisionTransformersLearn_95dc66",
+   "Chen2018_2NetsDoubleAttentionNetworks_e1a976",
+   "Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e",
+   "Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91",
+   "C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6",
+   "Sun2025_MapFeaturePerceptionMetricMap_53fdbb",
+   "Yang2021_ReRankCoarseClassificationLocal_dabf93",
+   "Bosc2020_DoSequenceSequenceVAEsLearn_89bd92",
+   "Lu2022_EnhancedCNNGlobalFeaturesFault_b78252",
+   "Gamage2021_EmbarrassinglySimpleComparisonMachineLearning_b3a6c7",
+   "Hjelm2020_RepresentationLearningVideoDeepInfoMax_daed9a",
+   "Kalimuthu2025_LOGLOFNOEfficientLearningLocal_ec25b5",
+   "Savina2000_GlobalFeaturesNucleusNucleusCollisions_cc910d",
+   "Xu2025_MambaTransMultimodalFusionImageTranslation_7cf7dd",
+   "Meshkinnejad2023_LookAheadSelectivePlasticityContinual_58db27",
+   "Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b",
+   "Wu2023_MaskedMomentumContrastiveLearningZero_28f381",
+   "Chunyu2022_InformationRetrievalLabelNoiseDocument_a70eb4",
+   "Sakaguchi2015_DetailedStudyPartonEnergyLoss_63af1a"
+  ],
+  "files": [
+   {
+    "id": "Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37",
+    "path": "pdfs/Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37.pdf",
+    "sha256": "9bce8056534f57a83000f51997f1d42497fe2496b9ecc0f893c4447ac5a2f1a9"
+   },
+   {
+    "id": "Ghiasi2022_WhatDoVisionTransformersLearn_95dc66",
+    "path": "pdfs/Ghiasi2022_WhatDoVisionTransformersLearn_95dc66.pdf",
+    "sha256": "b4020e930767691ed1ead2fea88ccae748c0a1cd7a57e5898c0a390383eec93a"
+   },
+   {
+    "id": "Chen2018_2NetsDoubleAttentionNetworks_e1a976",
+    "path": "pdfs/Chen2018_2NetsDoubleAttentionNetworks_e1a976.pdf",
+    "sha256": "f3132d9ea8311c1b3aa13ca70ec07c59c60b0cbe162e7bbd52b086c581acf1df"
+   },
+   {
+    "id": "Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e",
+    "path": "pdfs/Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e.pdf",
+    "sha256": "ee43d2a66fe2bfddc738ac69158bfd24644079af81ec8cfa62faed23592430c9"
+   },
+   {
+    "id": "Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91",
+    "path": "pdfs/Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91.pdf",
+    "sha256": "22e2571aa863b4f800110ee436dc7347504447fbf4f0f031cf98a20685aace57"
+   },
+   {
+    "id": "C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6",
+    "path": "pdfs/C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6.pdf",
+    "sha256": "317f7b0b7f1c5194c0929f9af5dbba8700907c9bd0d005de09ac9b14786f5e45"
+   },
+   {
+    "id": "Sun2025_MapFeaturePerceptionMetricMap_53fdbb",
+    "path": "pdfs/Sun2025_MapFeaturePerceptionMetricMap_53fdbb.pdf",
+    "sha256": "579c68674e4316c04282b65de2c331c337178e131cefa4c65e8276001d667936"
+   },
+   {
+    "id": "Yang2021_ReRankCoarseClassificationLocal_dabf93",
+    "path": "pdfs/Yang2021_ReRankCoarseClassificationLocal_dabf93.pdf",
+    "sha256": "d39bc7d10a91a5bc1ed0cbc927bae1263cbe3d9f576e07b209a02622fa52ea62"
+   },
+   {
+    "id": "Bosc2020_DoSequenceSequenceVAEsLearn_89bd92",
+    "path": "pdfs/Bosc2020_DoSequenceSequenceVAEsLearn_89bd92.pdf",
+    "sha256": "4dd89715bf9af72abcdb9d28f625bd08a93dd1af3acd5f2b95f9c17d5d7a6236"
+   },
+   {
+    "id": "Lu2022_EnhancedCNNGlobalFeaturesFault_b78252",
+    "path": "pdfs/Lu2022_EnhancedCNNGlobalFeaturesFault_b78252.pdf",
+    "sha256": "5cb2200abc9915568d4edb48ea72f5e85abc796a95f0b0372d16be44850a3b51"
+   },
+   {
+    "id": "Gamage2021_EmbarrassinglySimpleComparisonMachineLearning_b3a6c7",
+    "path": "pdfs/Gamage2021_EmbarrassinglySimpleComparisonMachineLearning_b3a6c7.pdf",
+    "sha256": "20b93ce2cf9fcd734f766a09a799c85d5186aae82cd3573777b1877922b4f061"
+   },
+   {
+    "id": "Hjelm2020_RepresentationLearningVideoDeepInfoMax_daed9a",
+    "path": "pdfs/Hjelm2020_RepresentationLearningVideoDeepInfoMax_daed9a.pdf",
+    "sha256": "8f70c95a91f8b958b1b56fd998af65edbf4b410881d72fdfe1676be5f7f82a0f"
+   },
+   {
+    "id": "Kalimuthu2025_LOGLOFNOEfficientLearningLocal_ec25b5",
+    "path": "pdfs/Kalimuthu2025_LOGLOFNOEfficientLearningLocal_ec25b5.pdf",
+    "sha256": "3a3c5f1850eb7b6f6a1e531dbed64c2c4c541354942026c2e9f4ce49fb6ffb1d"
+   },
+   {
+    "id": "Savina2000_GlobalFeaturesNucleusNucleusCollisions_cc910d",
+    "path": "pdfs/Savina2000_GlobalFeaturesNucleusNucleusCollisions_cc910d.pdf",
+    "sha256": "f0dcc2a798b8a9d9ceed58446c25733bd3df4002b2420a09ea91a923d3d0bdff"
+   },
+   {
+    "id": "Xu2025_MambaTransMultimodalFusionImageTranslation_7cf7dd",
+    "path": "pdfs/Xu2025_MambaTransMultimodalFusionImageTranslation_7cf7dd.pdf",
+    "sha256": "80f9032411420b31bb8e2e84e0b10b5cdb839f6f46147bb9b81873b92e8cedab"
+   },
+   {
+    "id": "Meshkinnejad2023_LookAheadSelectivePlasticityContinual_58db27",
+    "path": "pdfs/Meshkinnejad2023_LookAheadSelectivePlasticityContinual_58db27.pdf",
+    "sha256": "d4630f68465819c90029dcc9c403feaf38def78ed5b0f25998624925f33065c0"
+   },
+   {
+    "id": "Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b",
+    "path": "pdfs/Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b.pdf",
+    "sha256": "c561f1f964fd350803a263fc5be9bf5779c85d2e485e2cb78da0b4abe6819d44"
+   },
+   {
+    "id": "Wu2023_MaskedMomentumContrastiveLearningZero_28f381",
+    "path": "pdfs/Wu2023_MaskedMomentumContrastiveLearningZero_28f381.pdf",
+    "sha256": "916d2508e0f488db9b947710a85039db46e5c086c69ab37df67659a2a989f075"
+   },
+   {
+    "id": "Chunyu2022_InformationRetrievalLabelNoiseDocument_a70eb4",
+    "path": "pdfs/Chunyu2022_InformationRetrievalLabelNoiseDocument_a70eb4.pdf",
+    "sha256": "28fcae8e57729b61da551fa51db824a3bf74d4f2ddd8d2871fafaa24a68c06a2"
+   },
+   {
+    "id": "Sakaguchi2015_DetailedStudyPartonEnergyLoss_63af1a",
+    "path": "pdfs/Sakaguchi2015_DetailedStudyPartonEnergyLoss_63af1a.pdf",
+    "sha256": "31e27e0506150ec507252ce35d0ba9d8031d792ccec85c9f3e5e3aa82ef291d6"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 189529,
+  "embed_cached": 186,
+  "rerank": 141008
+ },
+ "estimate": 543670,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls163/runs/2026-10-18_1820_ls163_rank.csv",
+   "fused_top10": [
+    "Ghiasi2022_WhatDoVisionTransformersLearn_95dc66",
+    "C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6",
+    "Sun2025_MapFeaturePerceptionMetricMap_53fdbb",
+    "Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e",
+    "Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b",
+    "Chen2018_2NetsDoubleAttentionNetworks_e1a976",
+    "Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91",
+    "Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37",
+    "Yang2021_ReRankCoarseClassificationLocal_dabf93",
+    "Lu2022_EnhancedCNNGlobalFeaturesFault_b78252"
+   ],
+   "first_query_top10": [
+    "Ghiasi2022_WhatDoVisionTransformersLearn_95dc66",
+    "Sun2025_MapFeaturePerceptionMetricMap_53fdbb",
+    "Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b",
+    "C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6",
+    "Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e",
+    "Chen2018_2NetsDoubleAttentionNetworks_e1a976",
+    "Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37",
+    "Yang2021_ReRankCoarseClassificationLocal_dabf93",
+    "Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91",
+    "Lu2022_EnhancedCNNGlobalFeaturesFault_b78252"
+   ]
+  }
+ }
+}

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 5-7; p. 9-15,Ghiasi2022_WhatDoVisionTransformersLearn_95dc66,0.032787,,1,0.7422,1,0.7148,p. 1-2; p. 41-44; p. 5-7,p. 5-7; p. 9-15; p. 1-2,14787,True,True,full_text
+2,,,,,p. 1-2; p. 4-5,C2021_LogAvgExpProvidesPrincipledPerformantGlobal_1829a6,0.031754,,4,0.5898,2,0.6602,p. 1-2; p. 2-4; p. 4-5,p. 1-2; p. 2-4; p. 4-5,18906,True,True,full_text
+3,,,,,p. 5-6; p. 3-4,Sun2025_MapFeaturePerceptionMetricMap_53fdbb,0.031281,,2,0.6602,6,0.5781,p. 5-6; p. 3-4; p. 6-7,p. 5-6; p. 4-5; p. 6-7,11312,True,True,full_text
+4,,,,,p. 2-4; p. 6-8; p. 12-14,Ilievski2016_FocusedDynamicAttentionModelVisual_26ad0e,0.03101,,5,0.582,4,0.5859,p. 2-4; p. 12-14; p. 4-6,p. 2-4; p. 6-8; p. 4-6,6565,True,True,full_text
+5,,,,,p. 4-5; p. 9-11,Huang2024_TheoreticalAnalysisSelfSupervisedLearning_a2235b,0.030798,,3,0.6133,7,0.5469,p. 5-6; p. 4-5; p. 9-11,p. 5-6; p. 4-5; p. 2-4,55648,True,True,full_text
+6,,,,,p. 2-3; p. 4-5; p. 8,Chen2018_2NetsDoubleAttentionNetworks_e1a976,0.030777,,6,0.5781,4,0.5859,p. 2-3; p. 3-4; p. 8,p. 2-3; p. 3-4; p. 4-5,8279,True,True,full_text
+7,,,,,p. 4-5; p. 6-7; p. 14-16,Pawlowski2019_NeedlesHaystacksClassifyingTinyObjects_e4ed91,0.030366,,9,0.5078,3,0.6055,p. 4-5; p. 6-7; p. 7-8,p. 4-5; p. 14-16; p. 6-7,15085,True,True,full_text
+8,,,,,p. 4; p. 9-13; p. 14-16,Subramanian2022_ReCLIPStrongZeroShotBaseline_634c37,0.029418,,7,0.5391,9,0.5234,p. 4; p. 8-9; p. 9-13,p. 4; p. 9-13; p. 14-16,16133,True,True,full_text
+9,,,,,p. 3-4; p. 1-2; p. 8,Yang2021_ReRankCoarseClassificationLocal_dabf93,0.029199,,8,0.5352,9,0.5234,p. 3-4; p. 1-2; p. 8,p. 2-3; p. 3-4; p. 4-5,7640,True,True,full_text
+10,,,,,p. 1-2; p. 5-6,Lu2022_EnhancedCNNGlobalFeaturesFault_b78252,0.028992,,10,0.5,8,0.5273,p. 1-2; p. 5-6,p. 1-2; p. 2-3,7376,True,True,full_text
+11,,,,,p. 7-11; p. 12-13; p. 2-3,Wu2023_MaskedMomentumContrastiveLearningZero_28f381,0.027973,,12,0.4922,11,0.5078,p. 7-11; p. 2-3; p. 12-13,p. 12-13; p. 4-5; p. 7-11,13406,True,True,full_text
+12,,,,,p. 4-5; p. 1-2,Hjelm2020_RepresentationLearningVideoDeepInfoMax_daed9a,0.027783,,11,0.4961,13,0.4785,p. 4-5; p. 1-2; p. 2-4,p. 2; p. 4-5; p. 5-6,8769,True,True,full_text
+13,,,,,p. 1-2,Gamage2021_EmbarrassinglySimpleComparisonMachineLearning_b3a6c7,0.027588,,13,0.4688,12,0.5039,p. 1-2; p. 2-3,p. 1-2; p. 2-3,29201,True,True,full_text
+14,,,,,p. 4-6; p. 8-10,Xu2025_MambaTransMultimodalFusionImageTranslation_7cf7dd,0.027027,,14,0.4609,14,0.4609,p. 4-6; p. 5-7; p. 8-10,p. 4-6; p. 5-7; p. 3-4,12346,True,True,full_text
+15,,,,,p. 3-4; p. 21-23; p. 47-49,Kalimuthu2025_LOGLOFNOEfficientLearningLocal_ec25b5,0.026667,,15,0.4473,15,0.4316,p. 4-6; p. 21-23; p. 3-4,p. 4-6; p. 47-49; p. 3-4,75256,True,True,full_text
+16,,,,,p. 1-2; p. 4-5; p. 8-9,Bosc2020_DoSequenceSequenceVAEsLearn_89bd92,0.026145,,16,0.3887,17,0.377,p. 1-2; p. 8-12; p. 8-9,p. 1-2; p. 2-4; p. 4-5,24265,True,True,full_text
+16,,,,,p. 2-3; p. 4-6; p. 8-13,Meshkinnejad2023_LookAheadSelectivePlasticityContinual_58db27,0.026145,,17,0.3867,16,0.4238,p. 2-3; p. 13-14; p. 4-6,p. 2-3; p. 8-13,11996,True,True,full_text
+18,,,,,p. 1-2; p. 3-4,Chunyu2022_InformationRetrievalLabelNoiseDocument_a70eb4,0.025641,,18,0.3496,18,0.3711,p. 1-2; p. 2-3; p. 4,p. 1-2; p. 2-3; p. 3-4,5031,True,True,full_text
+19,,,,,p. 4-11; p. 3,Savina2000_GlobalFeaturesNucleusNucleusCollisions_cc910d,0.025158,,19,0.3047,20,0.2852,p. 3-5; p. 4-11,p. 3; p. 4-11,3368,True,False,full_text
+19,,,,,p. 1-2; p. 4-6,Sakaguchi2015_DetailedStudyPartonEnergyLoss_63af1a,0.025158,,20,0.2969,19,0.2949,p. 4-6; p. 2-3; p. 1-2,p. 4-6; p. 2-3; p. 1-2,4488,True,True,full_text

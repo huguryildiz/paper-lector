@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:20:47",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "4eafce8c0b061856cb368cc11e6e93e395c484087a3a7ddd5e84f9d07e7917f8"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "81be22a65e47d1457ffe9f9f50351ff8f5897d22a51ec7902f1e6e856d307af5"
+   }
+  ]
+ },
+ "question": "Could you recommend a study that investigates the improvement of knowledge representation learning by incorporating global context into graph attention networks?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you recommend a study that investigates the improvement of knowledge representation learning by incorporating global context into graph attention networks?",
+   "keywords": "knowledge representation learning global context graph attention networks"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Knowledge graph embedding and representation learning for entities and relations, using graph attention networks over the neighbourhood of each entity within a knowledge graph.",
+   "keywords": "knowledge graph embedding representation learning graph attention network entities relations link prediction"
+  }
+ },
+ "queries_sha": "01caae36cde7",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 212,
+  "ids": [
+   "Zhao2021_IncorporatingGlobalInformationLocalAttention_670541",
+   "Xiao2015_FromOnePointManifoldKnowledge_5b635f",
+   "Tang2020_OrthogonalRelationTransformsGraphContext_70247f",
+   "Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec",
+   "Trouillon2016_ComplexEmbeddingsSimpleLinkPrediction_1203c2",
+   "Xiong2017_DeepPathReinforcementLearningMethodKnowledge_1871b7",
+   "Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f",
+   "Lin2018_MultiHopKnowledgeGraphReasoning_8f6cff",
+   "Xiao2016_TransGGenerativeModelKnowledgeGraph_4274ab",
+   "Nguyen2019_CapsuleNetworkBasedEmbeddingModel_27ecae",
+   "Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785",
+   "Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f",
+   "Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd",
+   "Zhang2019_QuaternionKnowledgeGraphEmbeddings_773c35",
+   "Brody2021_HowAttentiveAreGraphAttention_dc4d5f",
+   "Yao2019_KGBERTBERTKnowledgeGraph_36165e",
+   "Guu2015_TraversingKnowledgeGraphsVectorSpace_0348be",
+   "Sun2020_ReEvaluationKnowledgeGraphCompletion_e011ed",
+   "Meiqi2021_RGATRelationalGraphAttention_9408e6",
+   "Xiao2015_TransAAdaptiveApproachKnowledgeGraph_aa7ce5"
+  ],
+  "files": [
+   {
+    "id": "Zhao2021_IncorporatingGlobalInformationLocalAttention_670541",
+    "path": "pdfs/Zhao2021_IncorporatingGlobalInformationLocalAttention_670541.pdf",
+    "sha256": "9fe348b5530dad71007346d35f424c4f096bf6688e704fdb09c520851fd2181a"
+   },
+   {
+    "id": "Xiao2015_FromOnePointManifoldKnowledge_5b635f",
+    "path": "pdfs/Xiao2015_FromOnePointManifoldKnowledge_5b635f.pdf",
+    "sha256": "6ba3f01bd0a83964fcd9b2e5685600360f3e2e8db94f9abc4ee5de9afc997808"
+   },
+   {
+    "id": "Tang2020_OrthogonalRelationTransformsGraphContext_70247f",
+    "path": "pdfs/Tang2020_OrthogonalRelationTransformsGraphContext_70247f.pdf",
+    "sha256": "7c277ed0f23ac842d0159439c92eab501df651419cb2c18c2a81e56f4ff5145f"
+   },
+   {
+    "id": "Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec",
+    "path": "pdfs/Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec.pdf",
+    "sha256": "a654f884db04a317b0f2414a83f2ba32a9f8442d29bcf1cb5f73f7af78a98070"
+   },
+   {
+    "id": "Trouillon2016_ComplexEmbeddingsSimpleLinkPrediction_1203c2",
+    "path": "pdfs/Trouillon2016_ComplexEmbeddingsSimpleLinkPrediction_1203c2.pdf",
+    "sha256": "674565a4588b0541f1bcd564b6f50e730e647df981723a10285986c0acf99cd4"
+   },
+   {
+    "id": "Xiong2017_DeepPathReinforcementLearningMethodKnowledge_1871b7",
+    "path": "pdfs/Xiong2017_DeepPathReinforcementLearningMethodKnowledge_1871b7.pdf",
+    "sha256": "5375a60d82b75e491d5531b78ea18fa1cbb5b7fdfc891b36ddf090a136b31c38"
+   },
+   {
+    "id": "Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f",
+    "path": "pdfs/Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f.pdf",
+    "sha256": "be21c17a83b22197e60fd7332333c3421c6dc4305331333dce9b9d0a8b1a5efc"
+   },
+   {
+    "id": "Lin2018_MultiHopKnowledgeGraphReasoning_8f6cff",
+    "path": "pdfs/Lin2018_MultiHopKnowledgeGraphReasoning_8f6cff.pdf",
+    "sha256": "bd132baf10acb6b23eee7469bd359d8e398f96b91f001a9b07d5b6ff806c8543"
+   },
+   {
+    "id": "Xiao2016_TransGGenerativeModelKnowledgeGraph_4274ab",
+    "path": "pdfs/Xiao2016_TransGGenerativeModelKnowledgeGraph_4274ab.pdf",
+    "sha256": "9c2db7e4200b00edce05d97e4025b0766346429c1d84448a4359f8042d9b0c38"
+   },
+   {
+    "id": "Nguyen2019_CapsuleNetworkBasedEmbeddingModel_27ecae",
+    "path": "pdfs/Nguyen2019_CapsuleNetworkBasedEmbeddingModel_27ecae.pdf",
+    "sha256": "9f6e8f4d56737c8272da9b2c78c9eb28ff20943181ae4995b25fbf99eb1ac469"
+   },
+   {
+    "id": "Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785",
+    "path": "pdfs/Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785.pdf",
+    "sha256": "9ef82c8df1b2f6205c86595fd0a430aa1050cc0a6fb6a1355e59e8a4a8138eb8"
+   },
+   {
+    "id": "Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f",
+    "path": "pdfs/Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f.pdf",
+    "sha256": "81ea9cdfab60573083720deff3b89b5ea3821d1cbefcd595da94262ee3f3a1e5"
+   },
+   {
+    "id": "Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd",
+    "path": "pdfs/Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd.pdf",
+    "sha256": "c44302eae78de05cd31cad3379ac0d74297763f67ccb610ce907a09e021257df"
+   },
+   {
+    "id": "Zhang2019_QuaternionKnowledgeGraphEmbeddings_773c35",
+    "path": "pdfs/Zhang2019_QuaternionKnowledgeGraphEmbeddings_773c35.pdf",
+    "sha256": "138bcd1a25f987341de8b8db2bc9908ac9fc56578c1b13e255468e0d0ec643e3"
+   },
+   {
+    "id": "Brody2021_HowAttentiveAreGraphAttention_dc4d5f",
+    "path": "pdfs/Brody2021_HowAttentiveAreGraphAttention_dc4d5f.pdf",
+    "sha256": "d316a7d23d735becf0c31d2b73c3426bb2aa5ec592705ce559d79a740abf53ec"
+   },
+   {
+    "id": "Yao2019_KGBERTBERTKnowledgeGraph_36165e",
+    "path": "pdfs/Yao2019_KGBERTBERTKnowledgeGraph_36165e.pdf",
+    "sha256": "a726cf19b0a5d5b862301e2fb45f43c29cd45510fc23696808cfa7150b45fc61"
+   },
+   {
+    "id": "Guu2015_TraversingKnowledgeGraphsVectorSpace_0348be",
+    "path": "pdfs/Guu2015_TraversingKnowledgeGraphsVectorSpace_0348be.pdf",
+    "sha256": "af78195163f76a7bfaea21cf88a8deca10dfa087b41be58e8533cb396bb0ebf4"
+   },
+   {
+    "id": "Sun2020_ReEvaluationKnowledgeGraphCompletion_e011ed",
+    "path": "pdfs/Sun2020_ReEvaluationKnowledgeGraphCompletion_e011ed.pdf",
+    "sha256": "12caccffffa04324ee910e0d677fad260a0a0147d34e2fdaf4863d421c32fa44"
+   },
+   {
+    "id": "Meiqi2021_RGATRelationalGraphAttention_9408e6",
+    "path": "pdfs/Meiqi2021_RGATRelationalGraphAttention_9408e6.pdf",
+    "sha256": "8ef5df9f0b6b314fd1243ee12915aac61b660cd0c7242c0ea845d1646ac3bbd0"
+   },
+   {
+    "id": "Xiao2015_TransAAdaptiveApproachKnowledgeGraph_aa7ce5",
+    "path": "pdfs/Xiao2015_TransAAdaptiveApproachKnowledgeGraph_aa7ce5.pdf",
+    "sha256": "3d2c2587b1357b919bce52a44df8b76f013c60e2c936a25d4b8ac5002f9664ed"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 172846,
+  "embed_cached": 50,
+  "rerank": 141252
+ },
+ "estimate": 378431,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls143/runs/2026-10-18_1820_ls143_rank.csv",
+   "fused_top10": [
+    "Zhao2021_IncorporatingGlobalInformationLocalAttention_670541",
+    "Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd",
+    "Meiqi2021_RGATRelationalGraphAttention_9408e6",
+    "Tang2020_OrthogonalRelationTransformsGraphContext_70247f",
+    "Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f",
+    "Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785",
+    "Brody2021_HowAttentiveAreGraphAttention_dc4d5f",
+    "Yao2019_KGBERTBERTKnowledgeGraph_36165e",
+    "Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f",
+    "Zhang2019_QuaternionKnowledgeGraphEmbeddings_773c35"
+   ],
+   "first_query_top10": [
+    "Zhao2021_IncorporatingGlobalInformationLocalAttention_670541",
+    "Chen2021_HittERHierarchicalTransformersKnowledgeGraph_0e41fd",
+    "Brody2021_HowAttentiveAreGraphAttention_dc4d5f",
+    "Tang2020_OrthogonalRelationTransformsGraphContext_70247f",
+    "Meiqi2021_RGATRelationalGraphAttention_9408e6",
+    "Chami2020_LowDimensionalHyperbolicKnowledgeGraph_36b785",
+    "Yao2019_KGBERTBERTKnowledgeGraph_36165e",
+    "Vashishth2019_CompositionBasedMultiRelationalGraph_05e74f",
+    "Guu2015_TraversingKnowledgeGraphsVectorSpace_0348be",
+    "Saxena2020_ImprovingMultiHopQuestionAnswering_0fd31f"
+   ]
+  }
+ }
+}

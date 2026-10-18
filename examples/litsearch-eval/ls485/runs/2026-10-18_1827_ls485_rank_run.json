@@ -1,0 +1,239 @@
+{
+ "created": "2026-10-18T18:28:01",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "6d8ce12e93adab4fa935ca681a5bcfdba8d444ec3c89fee4f14a4bd9d07cf5ea"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "b6e7383d8e7b0411e4dfb3665f7348c1f63a13282a71052cb120160a93e9cd10"
+   }
+  ]
+ },
+ "question": "Which paper proposes to use rewriting based approaches to defending against adversarial attacks in text classification?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which paper proposes to use rewriting based approaches to defending against adversarial attacks in text classification?",
+   "keywords": "rewriting defend adversarial attacks text classification"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Text classifiers for natural language, attacked with adversarial word or character perturbations, and defences that rewrite or reformulate the input text before it reaches the classifier.",
+   "keywords": "adversarial attacks defense text classification input rewriting paraphrase purification robustness"
+  }
+ },
+ "queries_sha": "cb9d1f450da1",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 254,
+  "ids": [
+   "Gupta2023_DonTRetrainJustRewrite_23e177",
+   "Qi2018_DiscreteAdversarialAttacksSubmodularOptimization_78e9e9",
+   "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3",
+   "Garg2020_BAEBERTBasedAdversarialExamples_b95d4d",
+   "Ebrahimi2018_HotFlipWhiteBoxAdversarialExamples_65dd7a",
+   "Ren2019_GeneratingNaturalLanguageAdversarialExamples_9ecc90",
+   "Zhang2015_CharacterLevelConvolutionalNetworksText_42b76f",
+   "Li2020_BERTATTACKAdversarialAttackAgainst_a3c563",
+   "Morris2020_TextAttackFrameworkAdversarialAttacksData_7f17ec",
+   "Miyato2016_AdversarialTrainingMethodsSemiSupervised_a0fc8f",
+   "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137",
+   "Wang2019_TowardsRobustDeepNeuralNetwork_d8f68e",
+   "Zhang2019_GeneratingFluentAdversarialExamplesNatural_1f9983",
+   "Li2021_ContextualizedPerturbationTextualAdversarialAttack_95df18",
+   "Mozes2021_FrequencyGuidedWordSubstitutionsDetecting_e1c14a",
+   "Ebrahimi2018_AdversarialExamplesCharacterLevelNeural_38f768",
+   "Zhang2019_AdversarialAttacksDeepLearningModels_972bd4",
+   "Cer2018_UniversalSentenceEncoder_51f2e5",
+   "Wallace2019_UniversalAdversarialTriggersAttackingAnalyzing_14ddb8",
+   "Samangouei2018_DefenseGANProtectingClassifiersAgainst_51ce66"
+  ],
+  "files": [
+   {
+    "id": "Gupta2023_DonTRetrainJustRewrite_23e177",
+    "path": "pdfs/Gupta2023_DonTRetrainJustRewrite_23e177.pdf",
+    "sha256": "f7c78f6faa20165dbe9dc4a3cfd57d151c9efa6eeb809fd2debc02bfb9ebd8cc"
+   },
+   {
+    "id": "Qi2018_DiscreteAdversarialAttacksSubmodularOptimization_78e9e9",
+    "path": "pdfs/Qi2018_DiscreteAdversarialAttacksSubmodularOptimization_78e9e9.pdf",
+    "sha256": "c68ed765c6db15d4473872d6eb9e68674e19d617da92fa12a58f2e377d35b85e"
+   },
+   {
+    "id": "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3",
+    "path": "pdfs/Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3.pdf",
+    "sha256": "9fc31d4d7d994e37b1ef3cc2c5d45ce0aa6db1d9ebf123957604feb97dd3befb"
+   },
+   {
+    "id": "Garg2020_BAEBERTBasedAdversarialExamples_b95d4d",
+    "path": "pdfs/Garg2020_BAEBERTBasedAdversarialExamples_b95d4d.pdf",
+    "sha256": "8f27ff21c31f90eb07a59e66e537fc991067438e7444f4a8ffbab6a5773dbfc4"
+   },
+   {
+    "id": "Ebrahimi2018_HotFlipWhiteBoxAdversarialExamples_65dd7a",
+    "path": "pdfs/Ebrahimi2018_HotFlipWhiteBoxAdversarialExamples_65dd7a.pdf",
+    "sha256": "d6c16aa053e18db3d75aa22d94ae4c5b961aefde7a13f92010ccf2996006dc0e"
+   },
+   {
+    "id": "Ren2019_GeneratingNaturalLanguageAdversarialExamples_9ecc90",
+    "path": "pdfs/Ren2019_GeneratingNaturalLanguageAdversarialExamples_9ecc90.pdf",
+    "sha256": "cbc2c5266d46f02016cf12a5ac74972ad926096ee71c911e898d57bbb890d154"
+   },
+   {
+    "id": "Zhang2015_CharacterLevelConvolutionalNetworksText_42b76f",
+    "path": "pdfs/Zhang2015_CharacterLevelConvolutionalNetworksText_42b76f.pdf",
+    "sha256": "c30c20ba3768c2b70c594d6f27d90ceb6ca6226cf06b76f45cb6211319e91caf"
+   },
+   {
+    "id": "Li2020_BERTATTACKAdversarialAttackAgainst_a3c563",
+    "path": "pdfs/Li2020_BERTATTACKAdversarialAttackAgainst_a3c563.pdf",
+    "sha256": "bd6eb7367db40348549643e2a5b25f89dba957c48e336cf92875e7fb5bb0b82d"
+   },
+   {
+    "id": "Morris2020_TextAttackFrameworkAdversarialAttacksData_7f17ec",
+    "path": "pdfs/Morris2020_TextAttackFrameworkAdversarialAttacksData_7f17ec.pdf",
+    "sha256": "55d376cba8c2b30b854e93599f6524c9d5bbabfec8e3a2ddfeea064f3eaba133"
+   },
+   {
+    "id": "Miyato2016_AdversarialTrainingMethodsSemiSupervised_a0fc8f",
+    "path": "pdfs/Miyato2016_AdversarialTrainingMethodsSemiSupervised_a0fc8f.pdf",
+    "sha256": "8300274a01123e048301065024a84639cd67d6945ac2a20d662222e1cf1b22a7"
+   },
+   {
+    "id": "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137",
+    "path": "pdfs/Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137.pdf",
+    "sha256": "e0afd6ae5186ffcb09305b4c63dd9a63146a8a6ac508d53de1666eefc8b5dad4"
+   },
+   {
+    "id": "Wang2019_TowardsRobustDeepNeuralNetwork_d8f68e",
+    "path": "pdfs/Wang2019_TowardsRobustDeepNeuralNetwork_d8f68e.pdf",
+    "sha256": "fa1e61fad1097c372d5bc202a5d2f2d07656daa3f6f6c02c1c38773b8ad34579"
+   },
+   {
+    "id": "Zhang2019_GeneratingFluentAdversarialExamplesNatural_1f9983",
+    "path": "pdfs/Zhang2019_GeneratingFluentAdversarialExamplesNatural_1f9983.pdf",
+    "sha256": "e1b0460640ecdc704c96fe81ae4e21fefe3e24ce6628f68532c390fd64e57b78"
+   },
+   {
+    "id": "Li2021_ContextualizedPerturbationTextualAdversarialAttack_95df18",
+    "path": "pdfs/Li2021_ContextualizedPerturbationTextualAdversarialAttack_95df18.pdf",
+    "sha256": "64e3f3edfb8fc7a66675c2061a0a701c5ed4923628a1eac901dbd9755a9932d0"
+   },
+   {
+    "id": "Mozes2021_FrequencyGuidedWordSubstitutionsDetecting_e1c14a",
+    "path": "pdfs/Mozes2021_FrequencyGuidedWordSubstitutionsDetecting_e1c14a.pdf",
+    "sha256": "3261d3eedd891913ed11b528279a52b16cc2b11336447384815ad0df16279e9a"
+   },
+   {
+    "id": "Ebrahimi2018_AdversarialExamplesCharacterLevelNeural_38f768",
+    "path": "pdfs/Ebrahimi2018_AdversarialExamplesCharacterLevelNeural_38f768.pdf",
+    "sha256": "c89a688ce77b6336ebabeff8bdec2c3c589692f42b5bad6307be47a8022757e0"
+   },
+   {
+    "id": "Zhang2019_AdversarialAttacksDeepLearningModels_972bd4",
+    "path": "pdfs/Zhang2019_AdversarialAttacksDeepLearningModels_972bd4.pdf",
+    "sha256": "3874d8050289089d998efb3e7adb45f0ccd4bcc1c2451543ba9bd7d500163c00"
+   },
+   {
+    "id": "Cer2018_UniversalSentenceEncoder_51f2e5",
+    "path": "pdfs/Cer2018_UniversalSentenceEncoder_51f2e5.pdf",
+    "sha256": "9aa45b469089b0726f9951bd5c1b878063c059d43fcfa2e82ff4cf05ffa5eaae"
+   },
+   {
+    "id": "Wallace2019_UniversalAdversarialTriggersAttackingAnalyzing_14ddb8",
+    "path": "pdfs/Wallace2019_UniversalAdversarialTriggersAttackingAnalyzing_14ddb8.pdf",
+    "sha256": "822f6cf89b1c109a67dfcdbef033debe4cb023c7ee169d454c0d598307e91048"
+   },
+   {
+    "id": "Samangouei2018_DefenseGANProtectingClassifiersAgainst_51ce66",
+    "path": "pdfs/Samangouei2018_DefenseGANProtectingClassifiersAgainst_51ce66.pdf",
+    "sha256": "9607d1c9666b50389b8e43a21f835c748550e4710444a16178b34ba180f90d2b"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": [
+   [
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3",
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137"
+   ]
+  ]
+ },
+ "expect": "",
+ "usage": {
+  "embed": 252855,
+  "embed_cached": 18,
+  "rerank": 141051
+ },
+ "estimate": 423674,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls485/runs/2026-10-18_1827_ls485_rank.csv",
+   "fused_top10": [
+    "Gupta2023_DonTRetrainJustRewrite_23e177",
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3",
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137",
+    "Qi2018_DiscreteAdversarialAttacksSubmodularOptimization_78e9e9",
+    "Ren2019_GeneratingNaturalLanguageAdversarialExamples_9ecc90",
+    "Ebrahimi2018_HotFlipWhiteBoxAdversarialExamples_65dd7a",
+    "Garg2020_BAEBERTBasedAdversarialExamples_b95d4d",
+    "Wang2019_TowardsRobustDeepNeuralNetwork_d8f68e",
+    "Mozes2021_FrequencyGuidedWordSubstitutionsDetecting_e1c14a",
+    "Li2021_ContextualizedPerturbationTextualAdversarialAttack_95df18"
+   ],
+   "first_query_top10": [
+    "Gupta2023_DonTRetrainJustRewrite_23e177",
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_bd17d3",
+    "Zhou2019_LearningDiscriminatePerturbationsBlockingAdversarial_079137",
+    "Qi2018_DiscreteAdversarialAttacksSubmodularOptimization_78e9e9",
+    "Ren2019_GeneratingNaturalLanguageAdversarialExamples_9ecc90",
+    "Garg2020_BAEBERTBasedAdversarialExamples_b95d4d",
+    "Wang2019_TowardsRobustDeepNeuralNetwork_d8f68e",
+    "Ebrahimi2018_HotFlipWhiteBoxAdversarialExamples_65dd7a",
+    "Mozes2021_FrequencyGuidedWordSubstitutionsDetecting_e1c14a",
+    "Li2021_ContextualizedPerturbationTextualAdversarialAttack_95df18"
+   ]
+  }
+ }
+}

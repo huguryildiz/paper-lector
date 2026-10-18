@@ -1,0 +1,158 @@
+{
+ "created": "2026-10-18T18:30:31",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "90066160447cd8850e535e1747c0ec7cb95cda3a307577fb72d1a36398d78b51"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "43be17868788a3c7c5ebeac229d51304a854bfbc5b25a0f9dfcd769b652bb92e"
+   }
+  ]
+ },
+ "question": "What paper first uses decoupled workers in distributed RL system?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What paper first uses decoupled workers in distributed RL system?",
+   "keywords": "decoupled workers distributed reinforcement learning system"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Distributed reinforcement learning systems in which the tasks of acting in the environment, sampling and learning are performed by separate, decoupled worker processes.",
+   "keywords": "distributed reinforcement learning decoupled workers actors learners asynchronous system"
+  }
+ },
+ "queries_sha": "50a2a07fe5ea",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 8,
+  "windows": 96,
+  "ids": [
+   "Mei2023_SRLScalingDistributedReinforcementLearning_081ec0",
+   "Liang2020_RLlibFlowDistributedReinforcementLearning_4bb96d",
+   "Zhu2022_MSRLDistributedReinforcementLearningDataflow_58ecfe",
+   "Liang2017_RLlibAbstractionsDistributedReinforcementLearning_69f1dd",
+   "Siedler2021_PowerCommunicationDistributedMultiAgent_0bfc00",
+   "Fan2019_SURREALSystemFullyIntegratedStack_9643d4",
+   "Jie2025_EchoDecouplingInferenceTrainingLarge_de2876",
+   "Bou2020_IntegratingDistributedArchitecturesHighlyModular_9f98bd"
+  ],
+  "files": [
+   {
+    "id": "Mei2023_SRLScalingDistributedReinforcementLearning_081ec0",
+    "path": "pdfs/Mei2023_SRLScalingDistributedReinforcementLearning_081ec0.pdf",
+    "sha256": "837e0c19f6858864c751e5c014ed2f87dda2964d4738114b5cfef2beaf498d79"
+   },
+   {
+    "id": "Liang2020_RLlibFlowDistributedReinforcementLearning_4bb96d",
+    "path": "pdfs/Liang2020_RLlibFlowDistributedReinforcementLearning_4bb96d.pdf",
+    "sha256": "68c3721fd2bc44bf379938de78712c351779c63ab0de09ce6647ef2cb494ae40"
+   },
+   {
+    "id": "Zhu2022_MSRLDistributedReinforcementLearningDataflow_58ecfe",
+    "path": "pdfs/Zhu2022_MSRLDistributedReinforcementLearningDataflow_58ecfe.pdf",
+    "sha256": "e2567c79c25efca746d3caca80df565b32a8d173ce807e35b6d9cc39b1431068"
+   },
+   {
+    "id": "Liang2017_RLlibAbstractionsDistributedReinforcementLearning_69f1dd",
+    "path": "pdfs/Liang2017_RLlibAbstractionsDistributedReinforcementLearning_69f1dd.pdf",
+    "sha256": "649512fc136a33c38c3e2a30fe5e6418ea14998efca43cfb6bc5c774423bcb0c"
+   },
+   {
+    "id": "Siedler2021_PowerCommunicationDistributedMultiAgent_0bfc00",
+    "path": "pdfs/Siedler2021_PowerCommunicationDistributedMultiAgent_0bfc00.pdf",
+    "sha256": "9cb31e74a180b05ed0be18c99571606c98bee3858b8ef2b2f2802516474cd9cf"
+   },
+   {
+    "id": "Fan2019_SURREALSystemFullyIntegratedStack_9643d4",
+    "path": "pdfs/Fan2019_SURREALSystemFullyIntegratedStack_9643d4.pdf",
+    "sha256": "5019091c00974ef65f97123516c92df72cf68027fc73b8666021cebf99de42cf"
+   },
+   {
+    "id": "Jie2025_EchoDecouplingInferenceTrainingLarge_de2876",
+    "path": "pdfs/Jie2025_EchoDecouplingInferenceTrainingLarge_de2876.pdf",
+    "sha256": "b621fdd6af2ebbf1b637f93b0802d6afea04cb45bde9ea2e8fed2e12459579d6"
+   },
+   {
+    "id": "Bou2020_IntegratingDistributedArchitecturesHighlyModular_9f98bd",
+    "path": "pdfs/Bou2020_IntegratingDistributedArchitecturesHighlyModular_9f98bd.pdf",
+    "sha256": "d704bfb66bb7515cd350133d1fa90bf7741227bbfdd7214a1285324b08722fe5"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 101139,
+  "embed_cached": 0,
+  "rerank": 57534
+ },
+ "estimate": 163479,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls552/runs/2026-10-18_1830_ls552_rank.csv",
+   "fused_top10": [
+    "Mei2023_SRLScalingDistributedReinforcementLearning_081ec0",
+    "Zhu2022_MSRLDistributedReinforcementLearningDataflow_58ecfe",
+    "Liang2020_RLlibFlowDistributedReinforcementLearning_4bb96d",
+    "Jie2025_EchoDecouplingInferenceTrainingLarge_de2876",
+    "Bou2020_IntegratingDistributedArchitecturesHighlyModular_9f98bd",
+    "Fan2019_SURREALSystemFullyIntegratedStack_9643d4",
+    "Liang2017_RLlibAbstractionsDistributedReinforcementLearning_69f1dd",
+    "Siedler2021_PowerCommunicationDistributedMultiAgent_0bfc00"
+   ],
+   "first_query_top10": [
+    "Mei2023_SRLScalingDistributedReinforcementLearning_081ec0",
+    "Zhu2022_MSRLDistributedReinforcementLearningDataflow_58ecfe",
+    "Bou2020_IntegratingDistributedArchitecturesHighlyModular_9f98bd",
+    "Jie2025_EchoDecouplingInferenceTrainingLarge_de2876",
+    "Liang2020_RLlibFlowDistributedReinforcementLearning_4bb96d",
+    "Fan2019_SURREALSystemFullyIntegratedStack_9643d4",
+    "Liang2017_RLlibAbstractionsDistributedReinforcementLearning_69f1dd",
+    "Siedler2021_PowerCommunicationDistributedMultiAgent_0bfc00"
+   ]
+  }
+ }
+}

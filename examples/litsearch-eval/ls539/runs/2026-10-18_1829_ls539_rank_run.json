@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:29:59",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "b40b1fd419cc45f100963dc44fd7c89f4df5a4cc7328e0c7a0aaca6c49aa4cb3"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "3c9901d543b2607b5faa464a03cc03b76dc1c5c813aea6f96117366534e53567"
+   }
+  ]
+ },
+ "question": "What is the first paper that theoretically studies training neural networks under small initialization?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What is the first paper that theoretically studies training neural networks under small initialization?",
+   "keywords": "theoretically study training neural networks small initialization"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Gradient-based training dynamics of neural networks, such as two-layer networks, when the weights start from a very small initialization, analysed theoretically with convergence results.",
+   "keywords": "small initialization neural networks training dynamics theory gradient descent theoretical analysis"
+  }
+ },
+ "queries_sha": "27eed4f6a65f",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 835,
+  "ids": [
+   "Min2023_EarlyNeuronAlignmentTwoLayer_782d93",
+   "Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b",
+   "Pesme2021_ImplicitBiasSGDDiagonalLinear_04a6e2",
+   "Yun2020_UnifyingViewImplicitBiasTraining_1f534d",
+   "Yang2019_ScalingLimitsWideNeuralNetworks_d34789",
+   "Bohan2020_ImplicitBiasAdaptiveOptimizationAlgorithms_52824f",
+   "Du2018_GradientDescentProvablyOptimizesOver_f4d92e",
+   "Gissin2019_ImplicitBiasDepthHowIncremental_935819",
+   "Han2025_PreciseGradientDescentTrainingDynamics_c55d20",
+   "Binghui2024_FeatureAveragingImplicitBiasGradient_119417",
+   "Chatterji2021_InterplayBetweenImplicitBiasBenign_118ab0",
+   "Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee",
+   "Schechtman2025_LateStageTrainingDynamicsStochastic_3d51ca",
+   "Hui2020_ImplicitBiasGradientDescentMean_805cfa",
+   "Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81",
+   "Marcotte2025_IntrinsicTrainingDynamicsDeepNeural_b0efeb",
+   "Zhang2016_UnderstandingDeepLearningRequiresRethinking_fb7fb5",
+   "AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537",
+   "Ioffe2015_BatchNormalizationAcceleratingDeepNetwork_9d1804",
+   "Du2018_GradientDescentFindsGlobalMinima_8a1357"
+  ],
+  "files": [
+   {
+    "id": "Min2023_EarlyNeuronAlignmentTwoLayer_782d93",
+    "path": "pdfs/Min2023_EarlyNeuronAlignmentTwoLayer_782d93.pdf",
+    "sha256": "e18c0659f5e56d9c38f666b4c5cbed4ceb2c9f4c1af362e57ae705e76f172f8c"
+   },
+   {
+    "id": "Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b",
+    "path": "pdfs/Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b.pdf",
+    "sha256": "f753d29ae598eaddeb23b2ef388e89b18c00887e783b3e838414ec7593c8c992"
+   },
+   {
+    "id": "Pesme2021_ImplicitBiasSGDDiagonalLinear_04a6e2",
+    "path": "pdfs/Pesme2021_ImplicitBiasSGDDiagonalLinear_04a6e2.pdf",
+    "sha256": "7adb6ac6765b888ae3d8aa5fe7ed55757bd0a76666c625bc9c51352198d06f09"
+   },
+   {
+    "id": "Yun2020_UnifyingViewImplicitBiasTraining_1f534d",
+    "path": "pdfs/Yun2020_UnifyingViewImplicitBiasTraining_1f534d.pdf",
+    "sha256": "c0266a8711af2bbe1cd8ad2abe9ce732cce30a05a6f99ce8569e6ab41fd86ce9"
+   },
+   {
+    "id": "Yang2019_ScalingLimitsWideNeuralNetworks_d34789",
+    "path": "pdfs/Yang2019_ScalingLimitsWideNeuralNetworks_d34789.pdf",
+    "sha256": "72eebb93f9b9f6b4b7a78980337bda673fed84b41fa335b24134476a826549d8"
+   },
+   {
+    "id": "Bohan2020_ImplicitBiasAdaptiveOptimizationAlgorithms_52824f",
+    "path": "pdfs/Bohan2020_ImplicitBiasAdaptiveOptimizationAlgorithms_52824f.pdf",
+    "sha256": "f7d44f84f8b5633b21efcb79e656ef0c6b8592663a18a921252da67a6e9d3a67"
+   },
+   {
+    "id": "Du2018_GradientDescentProvablyOptimizesOver_f4d92e",
+    "path": "pdfs/Du2018_GradientDescentProvablyOptimizesOver_f4d92e.pdf",
+    "sha256": "83b01ff943e847f189c3d175aa06eeec0451582387f6c4157899736d04c78ae7"
+   },
+   {
+    "id": "Gissin2019_ImplicitBiasDepthHowIncremental_935819",
+    "path": "pdfs/Gissin2019_ImplicitBiasDepthHowIncremental_935819.pdf",
+    "sha256": "42509f1d75338c6e9a8c9f9ac1933ea5e70f0f136ed99c82375ff2f50fe20a50"
+   },
+   {
+    "id": "Han2025_PreciseGradientDescentTrainingDynamics_c55d20",
+    "path": "pdfs/Han2025_PreciseGradientDescentTrainingDynamics_c55d20.pdf",
+    "sha256": "bdeec0440439697faa06dab8d790e36426c29801166ab3f316116c5c11bf49b0"
+   },
+   {
+    "id": "Binghui2024_FeatureAveragingImplicitBiasGradient_119417",
+    "path": "pdfs/Binghui2024_FeatureAveragingImplicitBiasGradient_119417.pdf",
+    "sha256": "aaa05862da3c3fc0e45b80919449b1f9766572784a05b09e2ded01a8df8263be"
+   },
+   {
+    "id": "Chatterji2021_InterplayBetweenImplicitBiasBenign_118ab0",
+    "path": "pdfs/Chatterji2021_InterplayBetweenImplicitBiasBenign_118ab0.pdf",
+    "sha256": "f71db093d1f5168e1d4b1ba8b319ca24ec256b54e09753a811f55c7334b08aa6"
+   },
+   {
+    "id": "Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee",
+    "path": "pdfs/Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee.pdf",
+    "sha256": "f2f746a799c49d70aae6552efa10ef973acd70861fe6faec0c1fd2c8795ecffb"
+   },
+   {
+    "id": "Schechtman2025_LateStageTrainingDynamicsStochastic_3d51ca",
+    "path": "pdfs/Schechtman2025_LateStageTrainingDynamicsStochastic_3d51ca.pdf",
+    "sha256": "03e6517b934eb5a9435d87d00c0552a993b49909097bcc44df85952bc15763f9"
+   },
+   {
+    "id": "Hui2020_ImplicitBiasGradientDescentMean_805cfa",
+    "path": "pdfs/Hui2020_ImplicitBiasGradientDescentMean_805cfa.pdf",
+    "sha256": "e9893e856f32c9b8bed83da320a60ec2ece630335097e2dff9dde1244aaa3c8a"
+   },
+   {
+    "id": "Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81",
+    "path": "pdfs/Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81.pdf",
+    "sha256": "902428395f6ac96502036baf7afa4a9263cea3d1edd451a5a6e68b608cba708c"
+   },
+   {
+    "id": "Marcotte2025_IntrinsicTrainingDynamicsDeepNeural_b0efeb",
+    "path": "pdfs/Marcotte2025_IntrinsicTrainingDynamicsDeepNeural_b0efeb.pdf",
+    "sha256": "3b16c4cf6a1e7e757fcf117dc724089b4d7e16edef30f1b2d72a4286257715f2"
+   },
+   {
+    "id": "Zhang2016_UnderstandingDeepLearningRequiresRethinking_fb7fb5",
+    "path": "pdfs/Zhang2016_UnderstandingDeepLearningRequiresRethinking_fb7fb5.pdf",
+    "sha256": "a71f1294a021cebc6939ec977fc073b6d7b4f183950eba761ec55364d30b729f"
+   },
+   {
+    "id": "AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537",
+    "path": "pdfs/AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537.pdf",
+    "sha256": "9d511f9ab93657a01cb7afb903a404d10952bd0c14c112093f3dc1550461d127"
+   },
+   {
+    "id": "Ioffe2015_BatchNormalizationAcceleratingDeepNetwork_9d1804",
+    "path": "pdfs/Ioffe2015_BatchNormalizationAcceleratingDeepNetwork_9d1804.pdf",
+    "sha256": "bdc69e0b568f41d8d3181cc9077a461f58fcdd1c70c9f49efe60a05ee6109655"
+   },
+   {
+    "id": "Du2018_GradientDescentFindsGlobalMinima_8a1357",
+    "path": "pdfs/Du2018_GradientDescentFindsGlobalMinima_8a1357.pdf",
+    "sha256": "dc79243379d2ad27d0ed75522eccec88e05694c72556104a35ca78209c9edb8e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 940648,
+  "embed_cached": 0,
+  "rerank": 146280
+ },
+ "estimate": 1094401,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls539/runs/2026-10-18_1829_ls539_rank.csv",
+   "fused_top10": [
+    "Min2023_EarlyNeuronAlignmentTwoLayer_782d93",
+    "Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee",
+    "Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81",
+    "Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b",
+    "Du2018_GradientDescentProvablyOptimizesOver_f4d92e",
+    "Gissin2019_ImplicitBiasDepthHowIncremental_935819",
+    "Binghui2024_FeatureAveragingImplicitBiasGradient_119417",
+    "Han2025_PreciseGradientDescentTrainingDynamics_c55d20",
+    "Yun2020_UnifyingViewImplicitBiasTraining_1f534d",
+    "AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537"
+   ],
+   "first_query_top10": [
+    "Min2023_EarlyNeuronAlignmentTwoLayer_782d93",
+    "Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee",
+    "Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81",
+    "Gissin2019_ImplicitBiasDepthHowIncremental_935819",
+    "Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b",
+    "Han2025_PreciseGradientDescentTrainingDynamics_c55d20",
+    "AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537",
+    "Binghui2024_FeatureAveragingImplicitBiasGradient_119417",
+    "Du2018_GradientDescentProvablyOptimizesOver_f4d92e",
+    "Pesme2021_ImplicitBiasSGDDiagonalLinear_04a6e2"
+   ]
+  }
+ }
+}

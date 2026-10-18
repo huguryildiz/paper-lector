@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:23:21", "question": "Is there research examining if multilingual pre-trained models utilize identical sets of neural units to encode morphosyntactic features in various languages?", "name": "ls290", "queries": "queries.json", "queries_sha": "7c9571006ca6", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1823", "abstracts": ""}

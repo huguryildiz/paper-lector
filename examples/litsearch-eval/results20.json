@@ -1,0 +1,312 @@
+{
+ "questions": 48,
+ "main": {
+  "hit@3": 0.75,
+  "hit@5": 0.85,
+  "hit@10": 0.96,
+  "mrr": 0.71
+ },
+ "fused": {
+  "hit@3": 0.75,
+  "hit@5": 0.88,
+  "hit@10": 0.96,
+  "mrr": 0.72
+ },
+ "mrr_main_minus_fused": -0.01,
+ "ci95": [
+  -0.072,
+  0.052
+ ],
+ "main_better": 7,
+ "main_worse": 7,
+ "per_question": [
+  {
+   "id": "ls017",
+   "n": 20,
+   "main": 2,
+   "fused": 2
+  },
+  {
+   "id": "ls040",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls045",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls046",
+   "n": 20,
+   "main": 2,
+   "fused": 2
+  },
+  {
+   "id": "ls067",
+   "n": 20,
+   "main": 2,
+   "fused": 2
+  },
+  {
+   "id": "ls079",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls080",
+   "n": 20,
+   "main": 4,
+   "fused": 4
+  },
+  {
+   "id": "ls101",
+   "n": 20,
+   "main": 2,
+   "fused": 2
+  },
+  {
+   "id": "ls131",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls133",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls135",
+   "n": 20,
+   "main": 9,
+   "fused": 6
+  },
+  {
+   "id": "ls143",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls163",
+   "n": 20,
+   "main": 7,
+   "fused": 8
+  },
+  {
+   "id": "ls172",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls176",
+   "n": 20,
+   "main": 7,
+   "fused": 12
+  },
+  {
+   "id": "ls206",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls249",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls250",
+   "n": 20,
+   "main": 2,
+   "fused": 1
+  },
+  {
+   "id": "ls271",
+   "n": 20,
+   "main": 5,
+   "fused": 1
+  },
+  {
+   "id": "ls279",
+   "n": 20,
+   "main": 8,
+   "fused": 7
+  },
+  {
+   "id": "ls290",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls302",
+   "n": 20,
+   "main": 3,
+   "fused": 4
+  },
+  {
+   "id": "ls306",
+   "n": 20,
+   "main": 12,
+   "fused": 14
+  },
+  {
+   "id": "ls324",
+   "n": 20,
+   "main": 2,
+   "fused": 1
+  },
+  {
+   "id": "ls336",
+   "n": 20,
+   "main": 12,
+   "fused": 5
+  },
+  {
+   "id": "ls344",
+   "n": 20,
+   "main": 5,
+   "fused": 3
+  },
+  {
+   "id": "ls356",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls359",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls363",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls373",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls375",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls378",
+   "n": 20,
+   "main": 4,
+   "fused": 4
+  },
+  {
+   "id": "ls394",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls399",
+   "n": 20,
+   "main": 6,
+   "fused": 7
+  },
+  {
+   "id": "ls423",
+   "n": 20,
+   "main": 5,
+   "fused": 5
+  },
+  {
+   "id": "ls463",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls485",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls490",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls495",
+   "n": 20,
+   "main": 1,
+   "fused": 5
+  },
+  {
+   "id": "ls500",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls510",
+   "n": 13,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls515",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls539",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls549",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls552",
+   "n": 8,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls558",
+   "n": 20,
+   "main": 1,
+   "fused": 3
+  },
+  {
+   "id": "ls575",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  },
+  {
+   "id": "ls587",
+   "n": 20,
+   "main": 1,
+   "fused": 1
+  }
+ ]
+}

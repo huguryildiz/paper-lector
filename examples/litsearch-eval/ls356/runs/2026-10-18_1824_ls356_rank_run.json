@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:25:10",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "d41d8ef15eb3773036fa5a4a15d714ecf73b6a24602af01b86a6f6128929a690"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "c8920eeeff86cbd1576b08f0c53d5d861b74587d09c5292afcd6fac5a1f87cdc"
+   }
+  ]
+ },
+ "question": "Give me a paper proposing to circumvent a single-truth target in training generative language models.",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Give me a paper proposing to circumvent a single-truth target in training generative language models.",
+   "keywords": "circumvent single-truth target training generative language models"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Training of generative language models with maximum likelihood on one reference output per input, and how this single ground-truth target ignores that many different outputs can be valid.",
+   "keywords": "single reference target generative language models training multiple valid outputs one-to-many maximum likelihood"
+  }
+ },
+ "queries_sha": "bb34fc4af749",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 289,
+  "ids": [
+   "Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c",
+   "Torun2026_EvaluationLLMBasedSoftwareEngineering_4c8766",
+   "Puri2026_ReachingBeyondModeRLDistributional_3afa19",
+   "Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0",
+   "Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738",
+   "Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d",
+   "Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3",
+   "Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74",
+   "He2026_ImplicitReasoningLargeLanguageModel_9df05a",
+   "Kim2024_AutomaticJailbreakingTextImageGenerative_05a879",
+   "Yang2024_SingleGroundTruthIsNot_4c36a2",
+   "Maya2024_FactualityOrFictionBenchmarkingModern_662860",
+   "Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc",
+   "Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820",
+   "Keskar2019_CTRLConditionalTransformerLanguageModel_aeeebe",
+   "Ji2023_TowardsMitigatingLLMHallucinationSelf_201abf",
+   "Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40",
+   "Maynez2020_FaithfulnessFactualityAbstractiveSummarization_bf1b0c",
+   "Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3",
+   "Gehman2020_RealToxicityPromptsEvaluatingNeuralToxicDegeneration_712c0e"
+  ],
+  "files": [
+   {
+    "id": "Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c",
+    "path": "pdfs/Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c.pdf",
+    "sha256": "081985492b7faf0907cc905181210135e9acc6b002742242fb226357bd717cdb"
+   },
+   {
+    "id": "Torun2026_EvaluationLLMBasedSoftwareEngineering_4c8766",
+    "path": "pdfs/Torun2026_EvaluationLLMBasedSoftwareEngineering_4c8766.pdf",
+    "sha256": "7b6c34e3052bbda29033697aada330cb748b21a8dfd1d63fc5b346426933b66c"
+   },
+   {
+    "id": "Puri2026_ReachingBeyondModeRLDistributional_3afa19",
+    "path": "pdfs/Puri2026_ReachingBeyondModeRLDistributional_3afa19.pdf",
+    "sha256": "20cc47fac8fa14923ca6cf786bc00df09779b252eeee43cc67ed9598532d5b18"
+   },
+   {
+    "id": "Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0",
+    "path": "pdfs/Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0.pdf",
+    "sha256": "3f619499ec5ee1dd19ed047066396f64d5567a2b53a9673715b437a6c3c8e544"
+   },
+   {
+    "id": "Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738",
+    "path": "pdfs/Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738.pdf",
+    "sha256": "8060843d48989393a6e96da80bf5779baab7692e37bc973f77b958ef9128d560"
+   },
+   {
+    "id": "Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d",
+    "path": "pdfs/Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d.pdf",
+    "sha256": "800c595a413a36b2b301babfced9fb2ece0fabd262bba6aaf66cf5b917b888e7"
+   },
+   {
+    "id": "Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3",
+    "path": "pdfs/Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3.pdf",
+    "sha256": "b7880e552c6f854b7b0c7cc7b10b71a321e507d628987e010e66974b17e5bf5f"
+   },
+   {
+    "id": "Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74",
+    "path": "pdfs/Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74.pdf",
+    "sha256": "65583ddc0cd4dd3ca841e26e6b42e22591a72f5f1e5bc9ccf913177e0fadd933"
+   },
+   {
+    "id": "He2026_ImplicitReasoningLargeLanguageModel_9df05a",
+    "path": "pdfs/He2026_ImplicitReasoningLargeLanguageModel_9df05a.pdf",
+    "sha256": "ffdbcfe38c486f187108cef13d87cc35dd48383401475655ee0f41bd98735553"
+   },
+   {
+    "id": "Kim2024_AutomaticJailbreakingTextImageGenerative_05a879",
+    "path": "pdfs/Kim2024_AutomaticJailbreakingTextImageGenerative_05a879.pdf",
+    "sha256": "fc0e053b1f8464d6c28b8923f89149765b77a1f8bd73d6d800803f5741026cb5"
+   },
+   {
+    "id": "Yang2024_SingleGroundTruthIsNot_4c36a2",
+    "path": "pdfs/Yang2024_SingleGroundTruthIsNot_4c36a2.pdf",
+    "sha256": "a3ca724e053f371f730584f337a67cbe5ba5573a43bcb9257940db01683a1e7e"
+   },
+   {
+    "id": "Maya2024_FactualityOrFictionBenchmarkingModern_662860",
+    "path": "pdfs/Maya2024_FactualityOrFictionBenchmarkingModern_662860.pdf",
+    "sha256": "3c2b7fe01bcb6ed6592d421e18224aff96948882d67f100722d6f383678d15ec"
+   },
+   {
+    "id": "Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc",
+    "path": "pdfs/Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc.pdf",
+    "sha256": "6e86175861d24d075bbd8fec987cbdabd0d6332700b001a1ccf335fa72f541b2"
+   },
+   {
+    "id": "Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820",
+    "path": "pdfs/Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820.pdf",
+    "sha256": "b455b4d1426f9e9c27f673ebe00c6d9542ce1cb26356101d50c9e17ebee5b5d8"
+   },
+   {
+    "id": "Keskar2019_CTRLConditionalTransformerLanguageModel_aeeebe",
+    "path": "pdfs/Keskar2019_CTRLConditionalTransformerLanguageModel_aeeebe.pdf",
+    "sha256": "ab5e56e3aabe4495f487107d4fceab52d0669d32176159716080cf1d3df48b7e"
+   },
+   {
+    "id": "Ji2023_TowardsMitigatingLLMHallucinationSelf_201abf",
+    "path": "pdfs/Ji2023_TowardsMitigatingLLMHallucinationSelf_201abf.pdf",
+    "sha256": "64cde79fc8d00d0cb4240d71885fcce94ead34e61612f5effca41318cfb148bc"
+   },
+   {
+    "id": "Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40",
+    "path": "pdfs/Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40.pdf",
+    "sha256": "23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233"
+   },
+   {
+    "id": "Maynez2020_FaithfulnessFactualityAbstractiveSummarization_bf1b0c",
+    "path": "pdfs/Maynez2020_FaithfulnessFactualityAbstractiveSummarization_bf1b0c.pdf",
+    "sha256": "dc0eff088eaafee3937ee93f4c273995bd17c1c9199034262d4151aac8840f80"
+   },
+   {
+    "id": "Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3",
+    "path": "pdfs/Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3.pdf",
+    "sha256": "f0749cc4db8afeb82006a20785b2cd3615fcbced8a29886872b6174485ced21b"
+   },
+   {
+    "id": "Gehman2020_RealToxicityPromptsEvaluatingNeuralToxicDegeneration_712c0e",
+    "path": "pdfs/Gehman2020_RealToxicityPromptsEvaluatingNeuralToxicDegeneration_712c0e.pdf",
+    "sha256": "5959d04d1cd7a604d3fe59f163c0c38c36439eaa5531127929467829a02cb68a"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 245557,
+  "embed_cached": 63,
+  "rerank": 143242
+ },
+ "estimate": 467701,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls356/runs/2026-10-18_1824_ls356_rank.csv",
+   "fused_top10": [
+    "Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c",
+    "Puri2026_ReachingBeyondModeRLDistributional_3afa19",
+    "Yang2024_SingleGroundTruthIsNot_4c36a2",
+    "Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d",
+    "Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0",
+    "Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738",
+    "Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3",
+    "Torun2026_EvaluationLLMBasedSoftwareEngineering_4c8766",
+    "Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820",
+    "Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74"
+   ],
+   "first_query_top10": [
+    "Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c",
+    "Puri2026_ReachingBeyondModeRLDistributional_3afa19",
+    "Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0",
+    "Yang2024_SingleGroundTruthIsNot_4c36a2",
+    "Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d",
+    "Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3",
+    "Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820",
+    "Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738",
+    "Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74",
+    "Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc"
+   ]
+  }
+ }
+}

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:24:23",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "70ecde93561a71e4c45612c0657884c9af3f727917eae241971729e5c5cc5e09"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "d3b11f0cea0177b828be55fd985ce667d2862234a0e9ac41cc93ff611c722882"
+   }
+  ]
+ },
+ "question": "Where can I find a database of good prompts to use for prompting language models for in-context learning?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Where can I find a database of good prompts to use for prompting language models for in-context learning?",
+   "keywords": "database collection prompts in-context learning language models"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "A public collection or database of prompts and prompt templates, covering many natural language processing datasets and tasks, that researchers can reuse when prompting large language models for in-context learning and few-shot evaluation.",
+   "keywords": "prompt collection database templates datasets in-context learning few-shot large language models"
+  }
+ },
+ "queries_sha": "9a84a0c5a311",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 363,
+  "ids": [
+   "Ding2021_OpenPromptOpenSourceFrameworkPrompt_a08344",
+   "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+   "Qin2021_LearningHowAskQueryingLMs_2afece",
+   "Lu2022_FantasticallyOrderedPromptsWhereFind_5b5b5e",
+   "Huan2023_FairnessGuidedFewShotPrompting_6111e7",
+   "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+   "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+   "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+   "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+   "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+   "Scao2021_HowManyDataPointsIs_f3c300",
+   "Gonen2023_DemystifyingPromptsLanguageModelsPerplexity_5fc69a",
+   "Webson2022_DoPromptBasedModelsReally_efc05b",
+   "IV2022_CuttingDownPromptsParametersSimple_5d442f",
+   "Bach2022_PromptSourceIntegratedDevelopmentEnvironmentRepository_24184a",
+   "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+   "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+   "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+   "Li2021_PrefixTuningOptimizingContinuousPrompts_d48c15",
+   "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98"
+  ],
+  "files": [
+   {
+    "id": "Ding2021_OpenPromptOpenSourceFrameworkPrompt_a08344",
+    "path": "pdfs/Ding2021_OpenPromptOpenSourceFrameworkPrompt_a08344.pdf",
+    "sha256": "39c37a1d3b1cee25ffdbf82b8e8d89ab86a5d31ffbfb13e92921bef75956dad3"
+   },
+   {
+    "id": "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "path": "pdfs/Rubin2022_LearningRetrievePromptsContextLearning_47f9ec.pdf",
+    "sha256": "d18479bda48c0f1bfc6bc05cdf3496aef400ee2c40970bf72bf0d3ccfd0f928b"
+   },
+   {
+    "id": "Qin2021_LearningHowAskQueryingLMs_2afece",
+    "path": "pdfs/Qin2021_LearningHowAskQueryingLMs_2afece.pdf",
+    "sha256": "ff6a24cfbbc44886fb53983d0fee35b097db7847156672a31966d36824040caf"
+   },
+   {
+    "id": "Lu2022_FantasticallyOrderedPromptsWhereFind_5b5b5e",
+    "path": "pdfs/Lu2022_FantasticallyOrderedPromptsWhereFind_5b5b5e.pdf",
+    "sha256": "7a5b89546628145d6a55e44d75ddd5dc989cc1d8ef92212533fb4833c2f36ebf"
+   },
+   {
+    "id": "Huan2023_FairnessGuidedFewShotPrompting_6111e7",
+    "path": "pdfs/Huan2023_FairnessGuidedFewShotPrompting_6111e7.pdf",
+    "sha256": "5e26d8aa1048525d0a7c2cb306a9b2d6036f8a63559561046c13740000aa164d"
+   },
+   {
+    "id": "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+    "path": "pdfs/Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f.pdf",
+    "sha256": "79128fd114abe78e1377b212ee3f28cc41cc9e4c20a45111dbdb8fdb3dd0af7f"
+   },
+   {
+    "id": "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+    "path": "pdfs/Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4.pdf",
+    "sha256": "e9d2e5a52ea6d7e3cf98223d1487b557ab5ed4b76133a300eda2037c5a928f89"
+   },
+   {
+    "id": "Chen2023_MAPOBoostingLargeLanguageModel_3fbefb",
+    "path": "pdfs/Chen2023_MAPOBoostingLargeLanguageModel_3fbefb.pdf",
+    "sha256": "04564492e16788d6a12f2cc9ae637b97adcc19f561209cb3cdfb72697cf4f619"
+   },
+   {
+    "id": "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+    "path": "pdfs/Xie2021_ExplanationContextLearningAsImplicit_f73edf.pdf",
+    "sha256": "ad9be01798fcf4fdc66ff3630f7a6f1cc157c04d51d0821d7798e028cb175c4b"
+   },
+   {
+    "id": "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+    "path": "pdfs/Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f.pdf",
+    "sha256": "3a9e7466738095af6d63d49af69c95c7bcf652d76bae07fcf963f42198d4cea4"
+   },
+   {
+    "id": "Scao2021_HowManyDataPointsIs_f3c300",
+    "path": "pdfs/Scao2021_HowManyDataPointsIs_f3c300.pdf",
+    "sha256": "5f035d492c7574edf32493b87f3306c6dbd70b3ade805363c7a5e0acea2be2ab"
+   },
+   {
+    "id": "Gonen2023_DemystifyingPromptsLanguageModelsPerplexity_5fc69a",
+    "path": "pdfs/Gonen2023_DemystifyingPromptsLanguageModelsPerplexity_5fc69a.pdf",
+    "sha256": "59a60c9e7f16f54d9e47723084a75af64197b604bc70a54392a27012a31bdfb6"
+   },
+   {
+    "id": "Webson2022_DoPromptBasedModelsReally_efc05b",
+    "path": "pdfs/Webson2022_DoPromptBasedModelsReally_efc05b.pdf",
+    "sha256": "d9cf5a8978a18dccf9266f6cb41bbd998db965e185ee239d5eca958659ba1cea"
+   },
+   {
+    "id": "IV2022_CuttingDownPromptsParametersSimple_5d442f",
+    "path": "pdfs/IV2022_CuttingDownPromptsParametersSimple_5d442f.pdf",
+    "sha256": "3fa957a91fa8f9fcbbbe45a033f83bc5fd4175b625460a3cf6b288a2dba217de"
+   },
+   {
+    "id": "Bach2022_PromptSourceIntegratedDevelopmentEnvironmentRepository_24184a",
+    "path": "pdfs/Bach2022_PromptSourceIntegratedDevelopmentEnvironmentRepository_24184a.pdf",
+    "sha256": "7bf4ac7454b56a134b662cf3195e04a15863fbf0e03809fdd49e9b73ccdddcc1"
+   },
+   {
+    "id": "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+    "path": "pdfs/Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4.pdf",
+    "sha256": "9e77217618c4164472ba73f01c2371ce4a59c2ee8d307c83a874abe5f631129a"
+   },
+   {
+    "id": "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+    "path": "pdfs/Lester2021_PowerScaleParameterEfficientPrompt_a2804e.pdf",
+    "sha256": "393e99b5e9d599f2fc9c85b425f168de15da2ca3d2d65af27d799e41fffc0d60"
+   },
+   {
+    "id": "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+    "path": "pdfs/Jason2022_BNAINOTOKENMINDUNITY_5c6426.pdf",
+    "sha256": "7d9f878c23b460e4566aa4ec9201b1abfb3b8faefb2b1356e411cb90fef72a12"
+   },
+   {
+    "id": "Li2021_PrefixTuningOptimizingContinuousPrompts_d48c15",
+    "path": "pdfs/Li2021_PrefixTuningOptimizingContinuousPrompts_d48c15.pdf",
+    "sha256": "89b23665c4e377361bae6b3924b8670d69739669b8af0bafe9d64b6a2e2d9d87"
+   },
+   {
+    "id": "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98",
+    "path": "pdfs/Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98.pdf",
+    "sha256": "d4daf6dfe3a50b2af04f89c9669e5c5c90195b61642052f6b92de36ec4c8f029"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 106021,
+  "embed_cached": 264,
+  "rerank": 148893
+ },
+ "estimate": 553643,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls336/runs/2026-10-18_1824_ls336_rank.csv",
+   "fused_top10": [
+    "Bach2022_PromptSourceIntegratedDevelopmentEnvironmentRepository_24184a",
+    "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98",
+    "Gonen2023_DemystifyingPromptsLanguageModelsPerplexity_5fc69a",
+    "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "Ding2021_OpenPromptOpenSourceFrameworkPrompt_a08344",
+    "Lu2022_FantasticallyOrderedPromptsWhereFind_5b5b5e",
+    "Qin2021_LearningHowAskQueryingLMs_2afece",
+    "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4",
+    "Webson2022_DoPromptBasedModelsReally_efc05b",
+    "Huan2023_FairnessGuidedFewShotPrompting_6111e7"
+   ],
+   "first_query_top10": [
+    "Bach2022_PromptSourceIntegratedDevelopmentEnvironmentRepository_24184a",
+    "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "Gonen2023_DemystifyingPromptsLanguageModelsPerplexity_5fc69a",
+    "Lu2022_FantasticallyOrderedPromptsWhereFind_5b5b5e",
+    "Sanh2021_MultitaskPromptedTrainingEnablesZero_b80a98",
+    "Huan2023_FairnessGuidedFewShotPrompting_6111e7",
+    "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+    "Qin2021_LearningHowAskQueryingLMs_2afece",
+    "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+    "Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4"
+   ]
+  }
+ }
+}

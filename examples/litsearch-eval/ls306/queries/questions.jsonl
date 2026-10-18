@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:23:51", "question": "What papers discuss the effect of false negatives among hard negatives in dense retriever training?", "name": "ls306", "queries": "queries.json", "queries_sha": "37a265f8fc03", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1823", "abstracts": ""}

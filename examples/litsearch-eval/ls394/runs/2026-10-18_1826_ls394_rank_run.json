@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:26:52",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "2fb582b4b99c2ffb8f8625a3cc7f911f08cef956245f351f3aa1df787648ba3e"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "f727a8a7194e1fa13202c117f118167f39ddc3ed1e3af2f9b9cc0635b188fad6"
+   }
+  ]
+ },
+ "question": "Is there any paper that combines causal inference and finetuning for language models?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there any paper that combines causal inference and finetuning for language models?",
+   "keywords": "combines causal inference finetuning language models"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Language models that are fine-tuned on downstream tasks, and the use of causal inference concepts such as interventions, confounders and counterfactuals within that fine-tuning.",
+   "keywords": "causal inference fine-tuning language models counterfactual intervention confounder spurious"
+  }
+ },
+ "queries_sha": "9bedb9757ae2",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 375,
+  "ids": [
+   "Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26",
+   "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+   "Chen2024_AutomatedDataCurationRobustLanguage_42f2e8",
+   "Aggarwal2024_MAPLEMultilingualEvaluationParameterEfficient_415505",
+   "Li2023_RAINYourLanguageModelsCan_9a8a54",
+   "Liu2024_LargeLanguageModelsCausalInference_ff09d9",
+   "Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5",
+   "Ruan2025_UnveilingOverMemorizationFinetuningLLMs_7333fc",
+   "Wang2023_DemystifyingInstructionMixingFineTuning_10ed36",
+   "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+   "Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab",
+   "Hu2021_LoRAFineTuning3BCode_35e8fd",
+   "Howard2018_UniversalLanguageModelFineTuning_f8769b",
+   "Houlsby2019_ParameterEfficientTransferLearningNLP_218b64",
+   "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+   "Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf",
+   "Kaushik2019_LearningDifferenceThatMakesDifference_914522",
+   "Aghajanyan2021_IntrinsicDimensionalityExplainsEffectivenessLanguage_2f4231",
+   "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+   "Clark2019_WhatDoesBERTLookAnalysis_a1d2c5"
+  ],
+  "files": [
+   {
+    "id": "Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26",
+    "path": "pdfs/Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26.pdf",
+    "sha256": "edc35fcf6c605d16d8df8899cafb24952a85de511f7dd4ac6ac6d79a7fa65027"
+   },
+   {
+    "id": "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+    "path": "pdfs/Wei2021_FinetunedLanguageModelsAreZero_82db93.pdf",
+    "sha256": "7126b83c5590b9eb4b6e6027446cb88c0aeff132e47d88e9407982b1f7fad044"
+   },
+   {
+    "id": "Chen2024_AutomatedDataCurationRobustLanguage_42f2e8",
+    "path": "pdfs/Chen2024_AutomatedDataCurationRobustLanguage_42f2e8.pdf",
+    "sha256": "7d39800e362a047e3ea949e739535c39536edc77caec841dbeb40b07bb800edc"
+   },
+   {
+    "id": "Aggarwal2024_MAPLEMultilingualEvaluationParameterEfficient_415505",
+    "path": "pdfs/Aggarwal2024_MAPLEMultilingualEvaluationParameterEfficient_415505.pdf",
+    "sha256": "6ae32424565b337fb75cedf6e08abf0c7502db9ed68e0552167e2f5ed5107419"
+   },
+   {
+    "id": "Li2023_RAINYourLanguageModelsCan_9a8a54",
+    "path": "pdfs/Li2023_RAINYourLanguageModelsCan_9a8a54.pdf",
+    "sha256": "11dc734c5c515fa64a581c1351bf5b48432f0a096c199b8dbe6de2a56c559f26"
+   },
+   {
+    "id": "Liu2024_LargeLanguageModelsCausalInference_ff09d9",
+    "path": "pdfs/Liu2024_LargeLanguageModelsCausalInference_ff09d9.pdf",
+    "sha256": "72b09cc89df958e201b0be6a42efda7e358d78da6ffe3dfbf7f4c318ac66227a"
+   },
+   {
+    "id": "Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5",
+    "path": "pdfs/Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5.pdf",
+    "sha256": "dbf6c07e2ec5cac7f45c3df8d4dc8eac9f2f5e711cc15edd99899ab636d53fda"
+   },
+   {
+    "id": "Ruan2025_UnveilingOverMemorizationFinetuningLLMs_7333fc",
+    "path": "pdfs/Ruan2025_UnveilingOverMemorizationFinetuningLLMs_7333fc.pdf",
+    "sha256": "664d18f33cd680338ea36192080aad993486c63b1bedc0100f8888a4118f23f6"
+   },
+   {
+    "id": "Wang2023_DemystifyingInstructionMixingFineTuning_10ed36",
+    "path": "pdfs/Wang2023_DemystifyingInstructionMixingFineTuning_10ed36.pdf",
+    "sha256": "5d48b713a8ff3ce55aa375dfb8c9057b88a96f4cf6efe51535a6159cdf67924f"
+   },
+   {
+    "id": "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+    "path": "pdfs/Lester2021_PowerScaleParameterEfficientPrompt_a2804e.pdf",
+    "sha256": "393e99b5e9d599f2fc9c85b425f168de15da2ca3d2d65af27d799e41fffc0d60"
+   },
+   {
+    "id": "Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab",
+    "path": "pdfs/Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab.pdf",
+    "sha256": "42e5adc38d4a762077a7060d3c6b6d84d03c1fca132e3ab2581ef3c1245eac7f"
+   },
+   {
+    "id": "Hu2021_LoRAFineTuning3BCode_35e8fd",
+    "path": "pdfs/Hu2021_LoRAFineTuning3BCode_35e8fd.pdf",
+    "sha256": "e9a0d3128767db616085dc0f4e6e455e672e89af823e8ed1282793682787395a"
+   },
+   {
+    "id": "Howard2018_UniversalLanguageModelFineTuning_f8769b",
+    "path": "pdfs/Howard2018_UniversalLanguageModelFineTuning_f8769b.pdf",
+    "sha256": "19670779e1262aaff3a64ec4c669adc762b2df2e81a407a6e72a1b7d0b780ae5"
+   },
+   {
+    "id": "Houlsby2019_ParameterEfficientTransferLearningNLP_218b64",
+    "path": "pdfs/Houlsby2019_ParameterEfficientTransferLearningNLP_218b64.pdf",
+    "sha256": "7889e34caf5b786c378951be4b2f391234f5ff05ed61cba237b8281e3c94974b"
+   },
+   {
+    "id": "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+    "path": "pdfs/Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4.pdf",
+    "sha256": "9e77217618c4164472ba73f01c2371ce4a59c2ee8d307c83a874abe5f631129a"
+   },
+   {
+    "id": "Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf",
+    "path": "pdfs/Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf.pdf",
+    "sha256": "6e50d42ad977b061fef306b88d9323c101e3bc76efffdb6da009ac244dc3037f"
+   },
+   {
+    "id": "Kaushik2019_LearningDifferenceThatMakesDifference_914522",
+    "path": "pdfs/Kaushik2019_LearningDifferenceThatMakesDifference_914522.pdf",
+    "sha256": "0997b9a4447cb079efd71bda36885956bfd303ab286cf9149a402294d5bfe890"
+   },
+   {
+    "id": "Aghajanyan2021_IntrinsicDimensionalityExplainsEffectivenessLanguage_2f4231",
+    "path": "pdfs/Aghajanyan2021_IntrinsicDimensionalityExplainsEffectivenessLanguage_2f4231.pdf",
+    "sha256": "e3205485a4222770dd73705495cbce0a27afdec63d6c21fa27f2a165e7f805f1"
+   },
+   {
+    "id": "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+    "path": "pdfs/Huang2023_LargeLanguageModelsCanSelf_e686e4.pdf",
+    "sha256": "a17d3b26831f8c5a3b6461b3a9d852a387d1f2c384da3f11b772afeef6545cff"
+   },
+   {
+    "id": "Clark2019_WhatDoesBERTLookAnalysis_a1d2c5",
+    "path": "pdfs/Clark2019_WhatDoesBERTLookAnalysis_a1d2c5.pdf",
+    "sha256": "cf01528475b67c122e4d7d7371dea64c8004ee972be286577a09ca5e7df1098a"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 232513,
+  "embed_cached": 167,
+  "rerank": 147548
+ },
+ "estimate": 570173,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls394/runs/2026-10-18_1826_ls394_rank.csv",
+   "fused_top10": [
+    "Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26",
+    "Liu2024_LargeLanguageModelsCausalInference_ff09d9",
+    "Kaushik2019_LearningDifferenceThatMakesDifference_914522",
+    "Howard2018_UniversalLanguageModelFineTuning_f8769b",
+    "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+    "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+    "Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5",
+    "Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab",
+    "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+    "Aggarwal2024_MAPLEMultilingualEvaluationParameterEfficient_415505"
+   ],
+   "first_query_top10": [
+    "Zheng2023_PreservingCommonsenseKnowledgeFromPre_95cf26",
+    "Liu2024_LargeLanguageModelsCausalInference_ff09d9",
+    "Huang2023_LargeLanguageModelsCanSelf_e686e4",
+    "Kaushik2019_LearningDifferenceThatMakesDifference_914522",
+    "Xiao2026_SFTMixElevatingLanguageModelInstruction_9f2ae5",
+    "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+    "Howard2018_UniversalLanguageModelFineTuning_f8769b",
+    "Li2023_RAINYourLanguageModelsCan_9a8a54",
+    "Hu2023_LLMAdaptersAdapterFamilyParameter_8d76ab",
+    "Chen2024_AutomatedDataCurationRobustLanguage_42f2e8"
+   ]
+  }
+ }
+}

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:25:27",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "5d3f0722747f676f6dedead7a93ac6fd16634ff93cab2ee611a1caaea25a1b6d"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "ba7fcaf4c69e7786654ee140fe5b4f66093b0274811b517b99ce8b726f5a0041"
+   }
+  ]
+ },
+ "question": "How to faithfully and explicitly measure the helpfulness of human explanations to language models during finetuning and inference?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "How to faithfully and explicitly measure the helpfulness of human explanations to language models during finetuning and inference?",
+   "keywords": "measure helpfulness of human explanations to language models finetuning inference"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Human-written natural language explanations attached to examples, and how much they help language models during fine-tuning and at inference time on downstream tasks.",
+   "keywords": "human explanations helpfulness language models fine-tuning inference natural language explanations measure"
+  }
+ },
+ "queries_sha": "448a23d22860",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 349,
+  "ids": [
+   "Yao2023_AreHumanExplanationsAlwaysHelpful_f008a1",
+   "Kumar2020_NILENaturalLanguageInferenceFaithful_641343",
+   "Rajani2019_ExplainYourselfLeveragingLanguageModels_073a9c",
+   "Prasad2021_WhatExtentDoHumanExplanations_f59206",
+   "Quan2025_FaithfulRobustLLMDrivenTheorem_112093",
+   "Stacey2022_LogicalReasoningSpanLevelPredictions_242019",
+   "Yao2023_BeyondLabelsEmpoweringHumanAnnotators_9dc096",
+   "Dalal2024_InferenceBestExplanationLargeLanguage_f3b653",
+   "Qiu2024_ScenariosApproachesSituatedNaturalLanguage_0f43b7",
+   "Sun2022_InvestigatingBenefitsFreeFormRationales_8e2bce",
+   "Sherburn2024_CanLanguageModelsExplainTheir_681ff7",
+   "Quan2024_VerificationRefinementNaturalLanguageExplanations_a15d1d",
+   "Schuff2021_DoesExternalKnowledgeHelpExplainable_ba79c6",
+   "Chen2024_TowardsConsistentNaturalLanguageExplanations_d7653f",
+   "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+   "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+   "Williams2018_BroadCoverageChallengeCorpusSentence_4174f6",
+   "B2020_LanguageModelsAreFewShot_c78ddc",
+   "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+   "Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc"
+  ],
+  "files": [
+   {
+    "id": "Yao2023_AreHumanExplanationsAlwaysHelpful_f008a1",
+    "path": "pdfs/Yao2023_AreHumanExplanationsAlwaysHelpful_f008a1.pdf",
+    "sha256": "b042dfacebc31deb85ff83a1226c82e9cc45ac037819a0f3fcce56b909ea9f7e"
+   },
+   {
+    "id": "Kumar2020_NILENaturalLanguageInferenceFaithful_641343",
+    "path": "pdfs/Kumar2020_NILENaturalLanguageInferenceFaithful_641343.pdf",
+    "sha256": "39dc9fddfd6f0530e8f51f442a43f0c16d92ba278dea317596b1525fe69091d8"
+   },
+   {
+    "id": "Rajani2019_ExplainYourselfLeveragingLanguageModels_073a9c",
+    "path": "pdfs/Rajani2019_ExplainYourselfLeveragingLanguageModels_073a9c.pdf",
+    "sha256": "6a9151e18c3c36dc2617d06d526b995fefd8c0fb7a7ae906801c16242913dd59"
+   },
+   {
+    "id": "Prasad2021_WhatExtentDoHumanExplanations_f59206",
+    "path": "pdfs/Prasad2021_WhatExtentDoHumanExplanations_f59206.pdf",
+    "sha256": "2a8b51a5955e6419d188347b332c822b20fe96a2d5ffc967945c40561fd46b95"
+   },
+   {
+    "id": "Quan2025_FaithfulRobustLLMDrivenTheorem_112093",
+    "path": "pdfs/Quan2025_FaithfulRobustLLMDrivenTheorem_112093.pdf",
+    "sha256": "59546c5538a8fae491de97ee5dcff9a78c628dbbd41109222c88f4cf78d9c923"
+   },
+   {
+    "id": "Stacey2022_LogicalReasoningSpanLevelPredictions_242019",
+    "path": "pdfs/Stacey2022_LogicalReasoningSpanLevelPredictions_242019.pdf",
+    "sha256": "0444b9a56b16ea923827943610446152abdc76b8ffa9ccb535faa77cb827e880"
+   },
+   {
+    "id": "Yao2023_BeyondLabelsEmpoweringHumanAnnotators_9dc096",
+    "path": "pdfs/Yao2023_BeyondLabelsEmpoweringHumanAnnotators_9dc096.pdf",
+    "sha256": "1f5f542ca13276c44bffacf690266dd21b66bf4372b08fa05a8cf640b7d7a007"
+   },
+   {
+    "id": "Dalal2024_InferenceBestExplanationLargeLanguage_f3b653",
+    "path": "pdfs/Dalal2024_InferenceBestExplanationLargeLanguage_f3b653.pdf",
+    "sha256": "1e6cc3a3872e7fa35af9a733284662dc766741b40a8ba8a07857346a2559c44a"
+   },
+   {
+    "id": "Qiu2024_ScenariosApproachesSituatedNaturalLanguage_0f43b7",
+    "path": "pdfs/Qiu2024_ScenariosApproachesSituatedNaturalLanguage_0f43b7.pdf",
+    "sha256": "f22069e50816610da4f4bb4951dac9b6c3dd26036a20f6a61288ffbe73ecf93e"
+   },
+   {
+    "id": "Sun2022_InvestigatingBenefitsFreeFormRationales_8e2bce",
+    "path": "pdfs/Sun2022_InvestigatingBenefitsFreeFormRationales_8e2bce.pdf",
+    "sha256": "7ebe7b3687e82dab108b05ed050e1d97f8bb464b8d3e0bb96dd7b5b0b9955fde"
+   },
+   {
+    "id": "Sherburn2024_CanLanguageModelsExplainTheir_681ff7",
+    "path": "pdfs/Sherburn2024_CanLanguageModelsExplainTheir_681ff7.pdf",
+    "sha256": "cf1e3e60bfd4e42e6b909c310421b4d843585d97b1b0c32a541c9766cb298bf1"
+   },
+   {
+    "id": "Quan2024_VerificationRefinementNaturalLanguageExplanations_a15d1d",
+    "path": "pdfs/Quan2024_VerificationRefinementNaturalLanguageExplanations_a15d1d.pdf",
+    "sha256": "14677811b43651786aebb2bd072bd1a5aa426a343f4abce400268c1b96d30ef8"
+   },
+   {
+    "id": "Schuff2021_DoesExternalKnowledgeHelpExplainable_ba79c6",
+    "path": "pdfs/Schuff2021_DoesExternalKnowledgeHelpExplainable_ba79c6.pdf",
+    "sha256": "3286c1a62c9c7f3785c2e1f51b180fb06367adb38d13116b08ae6bb884e46044"
+   },
+   {
+    "id": "Chen2024_TowardsConsistentNaturalLanguageExplanations_d7653f",
+    "path": "pdfs/Chen2024_TowardsConsistentNaturalLanguageExplanations_d7653f.pdf",
+    "sha256": "86ba84ac80c72d9fee95449c8201e6b90660ee6d0f594589cca626127d55d980"
+   },
+   {
+    "id": "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+    "path": "pdfs/Wei2021_FinetunedLanguageModelsAreZero_82db93.pdf",
+    "sha256": "7126b83c5590b9eb4b6e6027446cb88c0aeff132e47d88e9407982b1f7fad044"
+   },
+   {
+    "id": "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+    "path": "pdfs/Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06.pdf",
+    "sha256": "7c57361a3046e360750747fb2a9bfe6caac873ac8e16035e52178712d859fdd4"
+   },
+   {
+    "id": "Williams2018_BroadCoverageChallengeCorpusSentence_4174f6",
+    "path": "pdfs/Williams2018_BroadCoverageChallengeCorpusSentence_4174f6.pdf",
+    "sha256": "a988fda5594737d526db4d78d24f81e5efe5fdc62a9313fbcc620dedbbd230c5"
+   },
+   {
+    "id": "B2020_LanguageModelsAreFewShot_c78ddc",
+    "path": "pdfs/B2020_LanguageModelsAreFewShot_c78ddc.pdf",
+    "sha256": "97fd272f1fdfc18677462d0292f5fbf26ca86b4d1b485c2dba03269b643a0e83"
+   },
+   {
+    "id": "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "path": "pdfs/Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9.pdf",
+    "sha256": "51ebaf21e4cd586761016a64b2b753ee5ca05dd52a0de6bf8058a7eb8e932d91"
+   },
+   {
+    "id": "Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc",
+    "path": "pdfs/Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc.pdf",
+    "sha256": "6e86175861d24d075bbd8fec987cbdabd0d6332700b001a1ccf335fa72f541b2"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 209929,
+  "embed_cached": 152,
+  "rerank": 148827
+ },
+ "estimate": 536606,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls359/runs/2026-10-18_1825_ls359_rank.csv",
+   "fused_top10": [
+    "Yao2023_AreHumanExplanationsAlwaysHelpful_f008a1",
+    "Prasad2021_WhatExtentDoHumanExplanations_f59206",
+    "Rajani2019_ExplainYourselfLeveragingLanguageModels_073a9c",
+    "Kumar2020_NILENaturalLanguageInferenceFaithful_641343",
+    "Yao2023_BeyondLabelsEmpoweringHumanAnnotators_9dc096",
+    "Sun2022_InvestigatingBenefitsFreeFormRationales_8e2bce",
+    "Chen2024_TowardsConsistentNaturalLanguageExplanations_d7653f",
+    "Stacey2022_LogicalReasoningSpanLevelPredictions_242019",
+    "Quan2024_VerificationRefinementNaturalLanguageExplanations_a15d1d",
+    "Qiu2024_ScenariosApproachesSituatedNaturalLanguage_0f43b7"
+   ],
+   "first_query_top10": [
+    "Yao2023_AreHumanExplanationsAlwaysHelpful_f008a1",
+    "Prasad2021_WhatExtentDoHumanExplanations_f59206",
+    "Kumar2020_NILENaturalLanguageInferenceFaithful_641343",
+    "Rajani2019_ExplainYourselfLeveragingLanguageModels_073a9c",
+    "Yao2023_BeyondLabelsEmpoweringHumanAnnotators_9dc096",
+    "Quan2024_VerificationRefinementNaturalLanguageExplanations_a15d1d",
+    "Stacey2022_LogicalReasoningSpanLevelPredictions_242019",
+    "Sun2022_InvestigatingBenefitsFreeFormRationales_8e2bce",
+    "Qiu2024_ScenariosApproachesSituatedNaturalLanguage_0f43b7",
+    "Chen2024_TowardsConsistentNaturalLanguageExplanations_d7653f"
+   ]
+  }
+ }
+}

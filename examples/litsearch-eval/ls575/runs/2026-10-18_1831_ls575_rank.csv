@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 9-19; p. 2-3; p. 4-6,Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2,0.032787,,1,0.8203,1,0.8203,p. 9-19; p. 21-23; p. 6-7,p. 9-19; p. 2-3; p. 4-6,11995,True,True,full_text
+2,,,,,p. 15-17; p. 19-21; p. 24-26,Levine2026_TSSRTwoStageSwapReward_8066cd,0.032258,,2,0.6133,2,0.7969,p. 15-17; p. 19-21; p. 24-26,p. 15-17; p. 19-21; p. 17-20,19241,True,True,full_text
+3,,,,,p. 2-3; p. 4-5,Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200,0.031498,,4,0.5781,3,0.7852,p. 2-3; p. 5-6; p. 4-5,p. 2-3; p. 1-2; p. 4-5,12471,True,True,full_text
+4,,,,,p. 7-8; p. 20-22,Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0,0.031258,,3,0.6055,5,0.5742,p. 7-8; p. 20-22; p. 8-9,p. 8-9; p. 7-8; p. 20-22,28289,True,False,full_text
+5,,,,,p. 8-9; p. 10-15; p. 3-4,Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4,0.030536,,5,0.5703,6,0.5508,p. 8-9; p. 10-15; p. 5-7,p. 3-4; p. 8-9; p. 10-15,18570,True,False,full_text
+6,,,,,p. 23-24; p. 2-3; p. 12-18,Han2024_DPOMeetsPPOReinforcedToken_625a52,0.029857,,6,0.5664,8,0.5078,p. 24-25; p. 23-24; p. 12-18,p. 24-25; p. 23-24; p. 2-3,22914,True,True,full_text
+7,,,,,p. 1-2; p. 11-12; p. 7-8,Luo2026_OnlineFinetuningDecisionTransformersPure_874633,0.029851,,7,0.5508,7,0.5273,p. 1-2; p. 11-12; p. 12-17,p. 11-12; p. 1-2; p. 7-8,18705,True,True,full_text
+8,,,,,p. 7-10; p. 1-2,Lin2026_FineTuningDiffusionModelsMolecular_7471fd,0.029514,,12,0.4453,4,0.6367,p. 6-7; p. 2-3; p. 7-10,p. 1-2; p. 7-10; p. 2-4,11585,True,True,full_text
+9,,,,,p. 13-14; p. 1-2; p. 4-5,Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4,0.02879,,8,0.5273,11,0.4844,p. 9-13; p. 13-14; p. 6-7,p. 13-14; p. 4-5; p. 1-2,52225,True,True,full_text
+9,,,,,p. 2-3; p. 9-14,Cao2024_EnhancingReinforcementLearningDenseRewards_deb929,0.02879,,11,0.5078,8,0.5078,p. 3-4; p. 9-14; p. 2-3,p. 2-3; p. 9-14; p. 3-4,13757,True,True,full_text
+11,,,,,p. 1-2; p. 3-4; p. 8-9,Qi2026_RethinkingTrustRegionLLMReinforcement_c8a5e9,0.028571,,10,0.5195,10,0.4883,p. 1-2; p. 9; p. 8-9,p. 1-2; p. 25-26; p. 3-4,27793,True,True,full_text
+12,,,,,p. 1-2; p. 12-14; p. 6-7,Tran2026_ExploitingTreeStructureCreditAssignment_1fd95b,0.028405,,8,0.5273,13,0.459,p. 1-2; p. 6-7; p. 12-14,p. 1-2; p. 12-14; p. 8-9,11062,True,True,full_text
+13,,,,,p. 5-6; p. 9-13; p. 1-2,Kasai2021_FinetuningPretrainedTransformersIntoRNNs_f0b9f1,0.027588,,13,0.4199,12,0.4668,p. 5-6; p. 9-13; p. 1-2,p. 9-13; p. 1-3; p. 5-6,11472,True,True,full_text
+14,,,,,p. 7-8; p. 4-5; p. 9-14,Dai2023_WhyCanGPTLearnContext_4171a8,0.027027,,14,0.4082,14,0.416,p. 7-8; p. 4-5; p. 8-11,p. 9-14; p. 7-8; p. 8-11,11003,True,True,full_text
+15,,,,,p. 2-3; p. 8-12,Chen2020_DistillingKnowledgeLearnedBERTText_f5d7c2,0.026671,,16,0.3809,14,0.416,p. 2-3; p. 2-4; p. 8-12,p. 2-3; p. 8-12; p. 12-13,10216,True,True,full_text
+16,,,,,p. 6-7; p. 8-9; p. 1-3,Dai2019_TransformerXLAttentiveLanguageModels_dd4bce,0.026491,,15,0.3887,16,0.4062,p. 6-7; p. 8-9; p. 1-3,p. 6-7; p. 8-9; p. 5-6,9845,True,True,full_text
+17,,,,,p. 1-2; p. 4; p. 5-8,Zaken2022_BitFitSimpleParameterEfficientFine_57fd1d,0.025974,,17,0.377,17,0.3887,p. 1-2; p. 5-8; p. 4-5,p. 1-2; p. 8-9; p. 4,7457,True,True,full_text
+18,,,,,p. 3-4; p. 1-2; p. 13-15,Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9,0.025479,,19,0.3574,18,0.3867,p. 3-4; p. 1-2; p. 13-15,p. 3-4; p. 2-3; p. 4-5,14259,True,True,full_text
+19,,,,,p. 1-2; p. 5-6; p. 3-4,Gheini2021_CrossAttentionIsAllYou_20a962,0.025321,,18,0.373,20,0.3809,p. 5-6; p. 1-2; p. 3-4,p. 1-2; p. 5-6; p. 8-12,9483,True,True,full_text
+20,,,,,p. 2-3; p. 4-5; p. 7-9,Ding2021_CogViewMasteringTextImageGeneration_f7bcef,0.025158,,20,0.3516,19,0.3828,p. 7-9; p. 2-3; p. 8-10,p. 5; p. 2-3; p. 4-5,12994,True,True,full_text

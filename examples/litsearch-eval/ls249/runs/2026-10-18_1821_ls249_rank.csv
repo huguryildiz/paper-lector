@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 4-6; p. 16-20; p. 10-11,Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99,0.032266,,1,0.7386,3,0.6445,p. 4-6; p. 10-11; p. 16-20,p. 16-20; p. 4-6; p. 6-8,15664,True,False,full_text
+1,,,,,p. 3-4; p. 6-7; p. 1-2,Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53,0.032266,,3,0.6579,1,0.668,p. 3-4; p. 2-3; p. 6-7,p. 3-4; p. 1-2; p. 6-7,8354,True,True,full_text
+3,,,,,p. 1-2,Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47,0.032258,,2,0.6769,2,0.6562,p. 1-2; p. 1-3; p. 2-3,p. 1-2; p. 1-3; p. 2-3,9992,True,True,full_text
+4,,,,,p. 1-2; p. 3-4; p. 5-6,Ma2016_EndEndSequenceLabelingBi_f34e33,0.03101,,4,0.6411,5,0.6289,p. 1-2; p. 2-3; p. 3-4,p. 1-2; p. 5-6; p. 3-4,8870,True,True,full_text
+4,,,,,p. 1-2; p. 5,Yu2020_NamedEntityRecognitionAsDependency_a4da29,0.03101,,5,0.637,4,0.6406,p. 1-2; p. 2-3; p. 5,p. 1-2; p. 2-3; p. 5,5706,True,True,full_text
+6,,,,,p. 1-2; p. 3-4; p. 8-9,Zhang2018_ChineseNERUsingLatticeLSTM_db8203,0.030077,,6,0.573,7,0.5508,p. 3-4; p. 1-2; p. 8-9,p. 8-9; p. 1-2; p. 3-4,10882,True,True,full_text
+6,,,,,p. 5-6; p. 7-8,Strubell2017_FastAccurateEntityRecognitionIterated_ef6338,0.030077,,7,0.5657,6,0.6016,p. 7-8; p. 5-6; p. 6-7,p. 7-8; p. 5-6; p. 6-7,10127,True,True,full_text
+8,,,,,p. 5-6; p. 7-8; p. 1-2,Lin2020_TriggerNERLearningEntityTriggersAs_93edcb,0.02901,,11,0.5205,7,0.5508,p. 5-6; p. 1-2; p. 7-8,p. 5-6; p. 7-8; p. 4-5,8661,True,True,full_text
+9,,,,,p. 1-2; p. 6-7; p. 8-9,Gui2019_LexiconBasedGraphNeuralNetwork_a6febe,0.028571,,10,0.5523,10,0.5312,p. 1-2; p. 8-9; p. 6-7,p. 1-2; p. 8-9; p. 6-7,10494,True,True,full_text
+10,,,,,p. 8-10; p. 1-2,Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603,0.028405,,8,0.5612,13,0.498,p. 6-8; p. 8-10; p. 1-2,p. 8-10; p. 2-3; p. 2-4,6146,True,True,full_text
+11,,,,,p. 1-2; p. 8-9,Nie2020_ImprovingNamedEntityRecognitionAttentive_a2ed9c,0.028006,,14,0.5116,9,0.5391,p. 1-2; p. 9-14; p. 8-9,p. 1-2; p. 9-14; p. 8-9,12394,True,True,full_text
+12,,,,,p. 1; p. 7-8; p. 2,Fu2020_InterpretableMultiDatasetEvaluationNamed_aac375,0.027826,,9,0.5576,15,0.4785,p. 1; p. 8-11; p. 7-8,p. 2; p. 7-8; p. 1,29389,True,True,full_text
+13,,,,,p. 2-3; p. 4-5; p. 6,Li2020_UnifiedMRCFrameworkNamedEntity_dd3478,0.027783,,13,0.5155,11,0.5273,p. 6-7; p. 2-3; p. 4-5,p. 6; p. 2-3; p. 4-5,9132,True,True,full_text
+14,,,,,p. 2-4; p. 13-15; p. 28-30,Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb,0.027778,,12,0.5161,12,0.5039,p. 3-5; p. 2-4; p. 13-15,p. 3-5; p. 2-4; p. 28-30,29484,True,True,full_text
+15,,,,,p. 2-3,Shen2017_DeepActiveLearningNamedEntity_1bf061,0.026671,,16,0.4615,14,0.4922,p. 2-3; p. 2-4; p. 3-5,p. 2-3; p. 2-4; p. 3-5,4090,True,True,full_text
+16,,,,,p. 2-3; p. 4-6,Golde2024_LargeScaleLabelInterpretationLearning_6fc7ba,0.026491,,15,0.4905,16,0.4648,p. 4-6; p. 3-5; p. 2-3,p. 3-5; p. 2-3; p. 4-6,12114,True,True,full_text
+17,,,,,p. 1-2; p. 3-4; p. 5,Peng2015_NamedEntityRecognitionChineseSocial_5b996b,0.025974,,17,0.4233,17,0.4316,p. 3-4; p. 1-2; p. 2-3,p. 1-2; p. 3-4; p. 5,5921,True,True,full_text
+18,,,,,p. 3-4; p. 14-15; p. 5-6,Fu2022_PolyglotPromptMultilingualMultitaskPrompt_0aa301,0.025641,,18,0.3875,18,0.4004,p. 14-15; p. 5-6; p. 3-4,p. 3-4; p. 8-9; p. 14-15,16281,True,True,full_text
+19,,,,,p. 1-2; p. 3-4,Sang2002_IntroductionCoNLL2002SharedTask_2e818d,0.025316,,19,0.3856,19,0.3945,p. 3-4; p. 1-2,p. 3-4; p. 1-2,2977,True,True,full_text
+20,,,,,p. 2-3; p. 6-8; p. 9-12,Kingma2014_AdamMethodStochasticOptimization_c98f79,0.025,,20,0.3068,20,0.3301,p. 6-8; p. 12-13; p. 8-9,p. 3-4; p. 9-12; p. 2-3,12280,True,True,full_text

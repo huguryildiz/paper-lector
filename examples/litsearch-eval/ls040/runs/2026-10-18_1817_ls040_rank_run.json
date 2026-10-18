@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:18:04",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "a7fcb8bfb2fe0ab40f82e7902e34fd0ecaf9124a260669f5c1856c14fae52cfe"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "4518273d075bfe5843c928494ae0e319f9869f25d98776230ebd3bcabbe3884f"
+   }
+  ]
+ },
+ "question": "I am looking to understand more about sequence-to-sequence pre-training and its applications in natural language tasks. Can you suggest a significant paper that describes the denoising process for such models?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "I am looking to understand more about sequence-to-sequence pre-training and its applications in natural language tasks. Can you suggest a significant paper that describes the denoising process for such models?",
+   "keywords": "sequence-to-sequence pre-training denoising natural language tasks"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Sequence-to-sequence pretrained language models with an encoder and decoder, trained by corrupting text with noising functions and reconstructing it, then applied to generation and comprehension tasks.",
+   "keywords": "sequence-to-sequence pre-training denoising autoencoder text corruption encoder-decoder generation"
+  }
+ },
+ "queries_sha": "79e98a46cd7b",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 237,
+  "ids": [
+   "Lewis2020_BARTDenoisingSequenceSequencePre_bcd4a7",
+   "Xu2022_PRINCEPrefixMaskedDecodingKnowledge_bcbdc5",
+   "Kew2023_UncoveringHiddenConsequencesPreTraining_67354d",
+   "Wang2019_DenoisingBasedSequenceSequencePre_8b9c8f",
+   "Gao2022_SummarizingPatientsProblemsFromHospital_13d736",
+   "Dai2015_SemiSupervisedSequenceLearning_e18871",
+   "Dong2019_UnifiedLanguageModelPreTraining_6152f9",
+   "Zhou2021_ImprovingSequenceSequencePreTraining_631aa0",
+   "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+   "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+   "Wolf2020_TransformersStateArtNaturalLanguage_b20b21",
+   "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+   "Ott2019_FairseqFastExtensibleToolkitSequence_4d35e4",
+   "Hendrycks2016_GaussianErrorLinearUnitsGELUs_a39f7f",
+   "Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a",
+   "Lample2019_CrossLingualLanguageModelPretraining_6a97e2",
+   "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+   "Wang2021_CodeT5IdentifierAwareUnifiedPre_43c6b1",
+   "Bao2020_UniLMv2PseudoMaskedLanguageModels_c0a4b7",
+   "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600"
+  ],
+  "files": [
+   {
+    "id": "Lewis2020_BARTDenoisingSequenceSequencePre_bcd4a7",
+    "path": "pdfs/Lewis2020_BARTDenoisingSequenceSequencePre_bcd4a7.pdf",
+    "sha256": "c884c393e817e408e581a3ac219263f54e086b0703e0b079e41c2f2e71f63195"
+   },
+   {
+    "id": "Xu2022_PRINCEPrefixMaskedDecodingKnowledge_bcbdc5",
+    "path": "pdfs/Xu2022_PRINCEPrefixMaskedDecodingKnowledge_bcbdc5.pdf",
+    "sha256": "dfd4910fe50c651e3e299d2f7c0a16e9f7643eec0cebc7a0d6a06639acb39402"
+   },
+   {
+    "id": "Kew2023_UncoveringHiddenConsequencesPreTraining_67354d",
+    "path": "pdfs/Kew2023_UncoveringHiddenConsequencesPreTraining_67354d.pdf",
+    "sha256": "e1e8d4cae76f3f2eef8af47e15be78e62293d45ed7dc60c90a62496ebeed0f1c"
+   },
+   {
+    "id": "Wang2019_DenoisingBasedSequenceSequencePre_8b9c8f",
+    "path": "pdfs/Wang2019_DenoisingBasedSequenceSequencePre_8b9c8f.pdf",
+    "sha256": "500d920e6db93995383e7c7b8bfe05ed68fef2a2590cb2d64e9811e34d05afdf"
+   },
+   {
+    "id": "Gao2022_SummarizingPatientsProblemsFromHospital_13d736",
+    "path": "pdfs/Gao2022_SummarizingPatientsProblemsFromHospital_13d736.pdf",
+    "sha256": "d73e4a430795f840b4ce5eca4b50a29767aff9a3d7458147c0c1790c9be8db3b"
+   },
+   {
+    "id": "Dai2015_SemiSupervisedSequenceLearning_e18871",
+    "path": "pdfs/Dai2015_SemiSupervisedSequenceLearning_e18871.pdf",
+    "sha256": "f9991e473f779614e627df4036068c2e90015980702d6fcdfa8ff49e7136737a"
+   },
+   {
+    "id": "Dong2019_UnifiedLanguageModelPreTraining_6152f9",
+    "path": "pdfs/Dong2019_UnifiedLanguageModelPreTraining_6152f9.pdf",
+    "sha256": "b77a1513c9051c3175df83ec4fa0ab0e33d5e5fc145761656d0b725d99ddff12"
+   },
+   {
+    "id": "Zhou2021_ImprovingSequenceSequencePreTraining_631aa0",
+    "path": "pdfs/Zhou2021_ImprovingSequenceSequencePreTraining_631aa0.pdf",
+    "sha256": "83b567f61dacdf65aebf04e21d25aea6b08c3af4e744759a31a4b3602c03ba80"
+   },
+   {
+    "id": "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+    "path": "pdfs/Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60.pdf",
+    "sha256": "ad07e47cedf437a4156419ce5d3076e08a3e59bbfd6dac7cc53df1009cdcbe7f"
+   },
+   {
+    "id": "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "path": "pdfs/Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9.pdf",
+    "sha256": "51ebaf21e4cd586761016a64b2b753ee5ca05dd52a0de6bf8058a7eb8e932d91"
+   },
+   {
+    "id": "Wolf2020_TransformersStateArtNaturalLanguage_b20b21",
+    "path": "pdfs/Wolf2020_TransformersStateArtNaturalLanguage_b20b21.pdf",
+    "sha256": "2018b64d6c4cd54b4c1e4efca4223f2d7d88edd72b4de2e29342881c5bdf1586"
+   },
+   {
+    "id": "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+    "path": "pdfs/See2017_GetPointSummarizationPointerGenerator_5a6ecd.pdf",
+    "sha256": "499a1f95e7f291821233351fc6fd1beecce55dbb2cae05bcf7386ab6df6aef89"
+   },
+   {
+    "id": "Ott2019_FairseqFastExtensibleToolkitSequence_4d35e4",
+    "path": "pdfs/Ott2019_FairseqFastExtensibleToolkitSequence_4d35e4.pdf",
+    "sha256": "8343ab0b989e6e1a06d7bef63c0965a89164fbf0fa91371373d26c7b7010ffc5"
+   },
+   {
+    "id": "Hendrycks2016_GaussianErrorLinearUnitsGELUs_a39f7f",
+    "path": "pdfs/Hendrycks2016_GaussianErrorLinearUnitsGELUs_a39f7f.pdf",
+    "sha256": "ef59863c8e36d4b64c43ced6b399a95412b4f232ff1ce83e84cf10b8a786b6a8"
+   },
+   {
+    "id": "Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a",
+    "path": "pdfs/Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a.pdf",
+    "sha256": "c08f19ffc32b2ba8d9c5d528475bd3048b21f8b1bbc43d7ab3fd95294ccd4c15"
+   },
+   {
+    "id": "Lample2019_CrossLingualLanguageModelPretraining_6a97e2",
+    "path": "pdfs/Lample2019_CrossLingualLanguageModelPretraining_6a97e2.pdf",
+    "sha256": "d03c0acabcb8bf5043dafb81c8dd1880555a4f3376d5205f6c8e446ea835ad2a"
+   },
+   {
+    "id": "Lester2021_PowerScaleParameterEfficientPrompt_a2804e",
+    "path": "pdfs/Lester2021_PowerScaleParameterEfficientPrompt_a2804e.pdf",
+    "sha256": "393e99b5e9d599f2fc9c85b425f168de15da2ca3d2d65af27d799e41fffc0d60"
+   },
+   {
+    "id": "Wang2021_CodeT5IdentifierAwareUnifiedPre_43c6b1",
+    "path": "pdfs/Wang2021_CodeT5IdentifierAwareUnifiedPre_43c6b1.pdf",
+    "sha256": "095c9374519e87366f0819d1b067771e847f9932df79a6bedaca5646f67ca014"
+   },
+   {
+    "id": "Bao2020_UniLMv2PseudoMaskedLanguageModels_c0a4b7",
+    "path": "pdfs/Bao2020_UniLMv2PseudoMaskedLanguageModels_c0a4b7.pdf",
+    "sha256": "825b2aa0a5a7a0e883f7414a9400955735419ee0760baf04320bcbaca957022e"
+   },
+   {
+    "id": "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+    "path": "pdfs/Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600.pdf",
+    "sha256": "da82d4aa7b37683b9e756b50c29db0f37de73e8add2429f4ddbebfb11921088d"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 132769,
+  "embed_cached": 113,
+  "rerank": 144569
+ },
+ "estimate": 410533,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls040/runs/2026-10-18_1817_ls040_rank.csv",
+   "fused_top10": [
+    "Lewis2020_BARTDenoisingSequenceSequencePre_bcd4a7",
+    "Wang2019_DenoisingBasedSequenceSequencePre_8b9c8f",
+    "Xu2022_PRINCEPrefixMaskedDecodingKnowledge_bcbdc5",
+    "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+    "Zhou2021_ImprovingSequenceSequencePreTraining_631aa0",
+    "Wang2021_CodeT5IdentifierAwareUnifiedPre_43c6b1",
+    "Kew2023_UncoveringHiddenConsequencesPreTraining_67354d",
+    "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "Bao2020_UniLMv2PseudoMaskedLanguageModels_c0a4b7",
+    "Dong2019_UnifiedLanguageModelPreTraining_6152f9"
+   ],
+   "first_query_top10": [
+    "Lewis2020_BARTDenoisingSequenceSequencePre_bcd4a7",
+    "Wang2019_DenoisingBasedSequenceSequencePre_8b9c8f",
+    "Xu2022_PRINCEPrefixMaskedDecodingKnowledge_bcbdc5",
+    "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+    "Zhou2021_ImprovingSequenceSequencePreTraining_631aa0",
+    "Kew2023_UncoveringHiddenConsequencesPreTraining_67354d",
+    "Wang2021_CodeT5IdentifierAwareUnifiedPre_43c6b1",
+    "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "Dong2019_UnifiedLanguageModelPreTraining_6152f9",
+    "Bao2020_UniLMv2PseudoMaskedLanguageModels_c0a4b7"
+   ]
+  }
+ }
+}

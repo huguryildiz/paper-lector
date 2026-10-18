@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:32:09",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "7f0718fe299d114354b81b95d6ac079bc3f52a8d1802846b3785ed8888807def"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "0bee28d345a85cf9c0e1d76896f5999d6e9dc7da1c2cb401f4d613b8abb8315e"
+   }
+  ]
+ },
+ "question": "Which paper in human motion generation can control the spatial location of any joints of the human with either dense or sparse 3D points?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which paper in human motion generation can control the spatial location of any joints of the human with either dense or sparse 3D points?",
+   "keywords": "human motion generation control joints spatial location dense sparse 3D points"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Text-conditioned human motion generation, where a generative model produces body motion sequences and the spatial positions of arbitrary joints can be specified as dense or sparse three-dimensional control signals.",
+   "keywords": "human motion generation text-to-motion spatial control joints trajectory sparse dense 3D diffusion"
+  }
+ },
+ "queries_sha": "95535b731eba",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 358,
+  "ids": [
+   "Xie2023_OmniControlControlAnyJointAny_46a406",
+   "Tashakori2025_FlexMotionLightweightPhysicsAwareControllable_6b9d5c",
+   "Liang2025_RealisMotionDecomposedHumanMotionControl_059b99",
+   "Rempe2026_KimodoScalingControllableHumanMotion_e57917",
+   "Zhuang2020_Towards3DDanceMotionSynthesis_91cfd2",
+   "Yu2023_PointBasedRadianceFieldsControllable_849866",
+   "Gang2025_StrongControllable3DMotionGeneration_7bf4d5",
+   "Yangsong2026_StreamingMultiTrackTimelineControl_34e34b",
+   "Le2026_MultiScaleCoarseFineModeling_132564",
+   "Li2026_FrankenMotionPartLevelHumanMotion_21011e",
+   "Zhao2024_DartControlDiffusionBasedAutoregressiveMotion_4a5dd4",
+   "Tevet2022_HumanMotionDiffusionModel_c221c1",
+   "Yu2026_MotionSpaceFlowRepresentationAwareFlowMatching_3bbf95",
+   "Dai2026_ControllableTextMotionGenerationModular_3ed2fc",
+   "Pavllo2018_QuaterNetQuaternionBasedRecurrentModel_a6fc89",
+   "Ling2026_AnimateCanvasLearningImplicitMotionPlanning_f2e8a1",
+   "Chen2023_MotionConditionedDiffusionModelControllable_bc0b9f",
+   "Ling2023_MCMMultiConditionMotionSynthesis_150d51",
+   "YiYang2025_MotionDuetDualConditioned3DHuman_7dde39",
+   "Meng2025_AbsoluteCoordinatesMakeMotionGeneration_2556e9"
+  ],
+  "files": [
+   {
+    "id": "Xie2023_OmniControlControlAnyJointAny_46a406",
+    "path": "pdfs/Xie2023_OmniControlControlAnyJointAny_46a406.pdf",
+    "sha256": "5adbd5b18228230603561e57d8461e94e7679b7c7038ee8495230901df0ccd5d"
+   },
+   {
+    "id": "Tashakori2025_FlexMotionLightweightPhysicsAwareControllable_6b9d5c",
+    "path": "pdfs/Tashakori2025_FlexMotionLightweightPhysicsAwareControllable_6b9d5c.pdf",
+    "sha256": "f00c9662f8589b5e1b0b41fe992bfc90f2446a3a9d1cc0d6fbf2c2f4f3e04e46"
+   },
+   {
+    "id": "Liang2025_RealisMotionDecomposedHumanMotionControl_059b99",
+    "path": "pdfs/Liang2025_RealisMotionDecomposedHumanMotionControl_059b99.pdf",
+    "sha256": "ca849e31e3333b77f32529c0e7650e8583693fe203a67909ba83e72ba1dcabf4"
+   },
+   {
+    "id": "Rempe2026_KimodoScalingControllableHumanMotion_e57917",
+    "path": "pdfs/Rempe2026_KimodoScalingControllableHumanMotion_e57917.pdf",
+    "sha256": "35c2eeaea13d5c7410640fa7f36dec137c26cc794a4516b1c3489e50a165ad03"
+   },
+   {
+    "id": "Zhuang2020_Towards3DDanceMotionSynthesis_91cfd2",
+    "path": "pdfs/Zhuang2020_Towards3DDanceMotionSynthesis_91cfd2.pdf",
+    "sha256": "db02ef054e742ecb84eae2e41bac744feac9853dc26ccd0ebac22de7a2de3baa"
+   },
+   {
+    "id": "Yu2023_PointBasedRadianceFieldsControllable_849866",
+    "path": "pdfs/Yu2023_PointBasedRadianceFieldsControllable_849866.pdf",
+    "sha256": "bfa569139014a3ed20ac2c117b33e5f507754cb49d87431df9b8387618fc30b4"
+   },
+   {
+    "id": "Gang2025_StrongControllable3DMotionGeneration_7bf4d5",
+    "path": "pdfs/Gang2025_StrongControllable3DMotionGeneration_7bf4d5.pdf",
+    "sha256": "7992466ec3f1368eafa99ff2958491ce79ffb0c3f79b9d9a801ff26b94dcd86e"
+   },
+   {
+    "id": "Yangsong2026_StreamingMultiTrackTimelineControl_34e34b",
+    "path": "pdfs/Yangsong2026_StreamingMultiTrackTimelineControl_34e34b.pdf",
+    "sha256": "ea9afce702912b06c9b5c196a5e41e684b2bff5e46118a8e075348e105acd0cd"
+   },
+   {
+    "id": "Le2026_MultiScaleCoarseFineModeling_132564",
+    "path": "pdfs/Le2026_MultiScaleCoarseFineModeling_132564.pdf",
+    "sha256": "ee16fd8f01e8f21b1991cd03f1cf817ab3911bf0aaa71663bef473e3cfda19ec"
+   },
+   {
+    "id": "Li2026_FrankenMotionPartLevelHumanMotion_21011e",
+    "path": "pdfs/Li2026_FrankenMotionPartLevelHumanMotion_21011e.pdf",
+    "sha256": "d5663bdf6265dcbcab9bb04b14e4e17f73f380cb906070f1f3d564661e11524b"
+   },
+   {
+    "id": "Zhao2024_DartControlDiffusionBasedAutoregressiveMotion_4a5dd4",
+    "path": "pdfs/Zhao2024_DartControlDiffusionBasedAutoregressiveMotion_4a5dd4.pdf",
+    "sha256": "16c2579e2e969f131d267dfdff33b744531dd558baaa2a07bd708ea49d9f3127"
+   },
+   {
+    "id": "Tevet2022_HumanMotionDiffusionModel_c221c1",
+    "path": "pdfs/Tevet2022_HumanMotionDiffusionModel_c221c1.pdf",
+    "sha256": "cfe20558dfb4670e9a23e52cff289bb305ebace9b079333e9541e3dfa2b2669c"
+   },
+   {
+    "id": "Yu2026_MotionSpaceFlowRepresentationAwareFlowMatching_3bbf95",
+    "path": "pdfs/Yu2026_MotionSpaceFlowRepresentationAwareFlowMatching_3bbf95.pdf",
+    "sha256": "620b4659906e2aa80b961dc8eb7063ba7995fdfbf6631893968a6582dc7d4fae"
+   },
+   {
+    "id": "Dai2026_ControllableTextMotionGenerationModular_3ed2fc",
+    "path": "pdfs/Dai2026_ControllableTextMotionGenerationModular_3ed2fc.pdf",
+    "sha256": "ecec605f80db8ba1250f0793f4baa8ede6947f263a0bb1d77b76c62e8085f3ce"
+   },
+   {
+    "id": "Pavllo2018_QuaterNetQuaternionBasedRecurrentModel_a6fc89",
+    "path": "pdfs/Pavllo2018_QuaterNetQuaternionBasedRecurrentModel_a6fc89.pdf",
+    "sha256": "544ccbfdec45019a651b69d3dac61ec9758b5968a41f1a8d5f1561a966e7e853"
+   },
+   {
+    "id": "Ling2026_AnimateCanvasLearningImplicitMotionPlanning_f2e8a1",
+    "path": "pdfs/Ling2026_AnimateCanvasLearningImplicitMotionPlanning_f2e8a1.pdf",
+    "sha256": "1743f67ec0ed3dda69c91e93a76b691ba80de1ed36982180277f6d46ac982e19"
+   },
+   {
+    "id": "Chen2023_MotionConditionedDiffusionModelControllable_bc0b9f",
+    "path": "pdfs/Chen2023_MotionConditionedDiffusionModelControllable_bc0b9f.pdf",
+    "sha256": "1b0529f13596044efcd4f9fc572211bfd2f4bc3a4217c35f93a48801d5eff3b5"
+   },
+   {
+    "id": "Ling2023_MCMMultiConditionMotionSynthesis_150d51",
+    "path": "pdfs/Ling2023_MCMMultiConditionMotionSynthesis_150d51.pdf",
+    "sha256": "e3439f18440f789c048868126095a5075820622ecd75efb7f0cc868df8c4ce81"
+   },
+   {
+    "id": "YiYang2025_MotionDuetDualConditioned3DHuman_7dde39",
+    "path": "pdfs/YiYang2025_MotionDuetDualConditioned3DHuman_7dde39.pdf",
+    "sha256": "1c54f80fc2b90159eb18f74ca1ac8a5f528cee4a87f22983064a5f77afab2ed1"
+   },
+   {
+    "id": "Meng2025_AbsoluteCoordinatesMakeMotionGeneration_2556e9",
+    "path": "pdfs/Meng2025_AbsoluteCoordinatesMakeMotionGeneration_2556e9.pdf",
+    "sha256": "80625ee18c14f623c72e2f8571856bc3f661121b0cb6e1692fafbc4e8a8a9117"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 395456,
+  "embed_cached": 0,
+  "rerank": 142300
+ },
+ "estimate": 549281,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls587/runs/2026-10-18_1831_ls587_rank.csv",
+   "fused_top10": [
+    "Xie2023_OmniControlControlAnyJointAny_46a406",
+    "Le2026_MultiScaleCoarseFineModeling_132564",
+    "Rempe2026_KimodoScalingControllableHumanMotion_e57917",
+    "Gang2025_StrongControllable3DMotionGeneration_7bf4d5",
+    "Yu2026_MotionSpaceFlowRepresentationAwareFlowMatching_3bbf95",
+    "Zhao2024_DartControlDiffusionBasedAutoregressiveMotion_4a5dd4",
+    "Ling2026_AnimateCanvasLearningImplicitMotionPlanning_f2e8a1",
+    "Tashakori2025_FlexMotionLightweightPhysicsAwareControllable_6b9d5c",
+    "Meng2025_AbsoluteCoordinatesMakeMotionGeneration_2556e9",
+    "Li2026_FrankenMotionPartLevelHumanMotion_21011e"
+   ],
+   "first_query_top10": [
+    "Xie2023_OmniControlControlAnyJointAny_46a406",
+    "Yu2026_MotionSpaceFlowRepresentationAwareFlowMatching_3bbf95",
+    "Le2026_MultiScaleCoarseFineModeling_132564",
+    "Ling2026_AnimateCanvasLearningImplicitMotionPlanning_f2e8a1",
+    "Rempe2026_KimodoScalingControllableHumanMotion_e57917",
+    "Gang2025_StrongControllable3DMotionGeneration_7bf4d5",
+    "Tashakori2025_FlexMotionLightweightPhysicsAwareControllable_6b9d5c",
+    "Meng2025_AbsoluteCoordinatesMakeMotionGeneration_2556e9",
+    "Yu2023_PointBasedRadianceFieldsControllable_849866",
+    "Zhao2024_DartControlDiffusionBasedAutoregressiveMotion_4a5dd4"
+   ]
+  }
+ }
+}

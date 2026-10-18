@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 2-3; p. 9-12,Khatri2025_CompressingManyShotsContextLearning_28e2ce,0.032522,,2,0.8555,1,0.8828,p. 3-4; p. 2-3; p. 9-12,p. 3-4; p. 2-3; p. 9-12,10180,True,False,full_text
+2,,,,,p. 1-2; p. 9-15; p. 7-8,Golchin2025_TowardsComputeOptimalManyShot_6380a2,0.032002,,3,0.8516,2,0.8789,p. 1-2; p. 9-15; p. 8-9,p. 9-15; p. 1-2; p. 7-8,14111,True,True,full_text
+3,,,,,p. 2; p. 5-6; p. 8-9,Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f,0.031746,,3,0.8516,3,0.8711,p. 9-10; p. 5-6; p. 8-9,p. 2-3; p. 2; p. 6-7,19915,True,True,full_text
+4,,,,,p. 5-6; p. 1-2; p. 9-13,Chung2024_SelectionPSelfSupervisedTask_180cf3,0.03101,,5,0.832,4,0.8555,p. 2-3; p. 4-5; p. 5-6,p. 9-13; p. 1-2; p. 5-6,10686,True,True,full_text
+5,,,,,p. 5-6; p. 1-2; p. 7,Ye2023_FiDICLFusionDecoderApproach_19e189,0.030886,,1,0.8633,9,0.7773,p. 1-2; p. 5-6; p. 6-7,p. 5-6; p. 2; p. 7,31432,True,True,full_text
+6,,,,,p. 1-2; p. 4; p. 8-13,Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54,0.029851,,7,0.8125,7,0.8047,p. 1-2; p. 8-13; p. 4,p. 1-2; p. 15-16; p. 16-18,26739,True,True,full_text
+7,,,,,p. 1-2; p. 3-4,Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379,0.029437,,6,0.8203,10,0.7734,p. 1-2; p. 4-6; p. 3-4,p. 1-2; p. 3-4,8532,True,True,full_text
+8,,,,,p. 1; p. 2-3; p. 11-12,Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9,0.029412,,8,0.7969,8,0.793,p. 1; p. 11-12; p. 2-3,p. 1; p. 2-3; p. 1-2,19008,True,True,full_text
+9,,,,,p. 5-7; p. 1-2,Cheng2023_BatchPromptingEfficientInferenceLarge_7eb76f,0.029236,,11,0.7891,6,0.8242,p. 5-7; p. 6-10; p. 1-2,p. 1-3; p. 6-10; p. 5-7,16733,True,True,full_text
+10,,,,,p. 1-2; p. 6; p. 8-9,Jiang2023_LLMLinguaCompressingPromptsAcceleratedInference_28d90a,0.028898,,14,0.7539,5,0.832,p. 1-2; p. 6-7; p. 6,p. 8-9; p. 1-2; p. 9-12,17157,True,True,full_text
+11,,,,,p. 1-2; p. 9,Pantelidis2025_EfficientTextClassificationConformalContext_efc7cb,0.02879,,8,0.7969,11,0.7656,p. 2-3; p. 1-2; p. 9-10,p. 9; p. 2-3; p. 1-2,10133,False,True,full_text
+12,,,,,p. 3-4; p. 1-2; p. 8-13,Li2023_FindingSupportExamplesContextLearning_7a9b60,0.027526,,8,0.7969,18,0.6914,p. 1-2; p. 3-4; p. 13-14,p. 8-13; p. 3-4; p. 2-3,13690,True,True,full_text
+13,,,,,p. 3-4; p. 9-13; p. 1-2,Rubin2022_LearningRetrievePromptsContextLearning_47f9ec,0.027402,,12,0.7773,14,0.7266,p. 10-14; p. 9-13; p. 3-4,p. 1-2; p. 9-13; p. 3-4,13690,True,True,full_text
+14,,,,,p. 1-2; p. 3-5; p. 8-9,Pu2024_StyleCompressLLMBasedPrompt_9dc84c,0.026905,,18,0.6211,11,0.7656,p. 1-2; p. 8-9; p. 3-5,p. 1-2; p. 3; p. 3-5,15434,True,True,full_text
+15,,,,,p. 1-2; p. 3-4; p. 7-8,Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac,0.026686,,13,0.7695,17,0.6953,p. 1-2; p. 3-4; p. 9-13,p. 8-9; p. 1-2; p. 7-8,12905,True,True,full_text
+16,,,,,p. 1-2; p. 8-9; p. 3-5,Zhang2022_ActiveExampleSelectionContextLearning_7093af,0.026501,,17,0.6406,14,0.7266,p. 1-2; p. 8-9; p. 9-13,p. 8-9; p. 3-5; p. 1-2,12556,True,True,full_text
+17,,,,,p. 2-4; p. 11-16; p. 5-6,Xie2021_ExplanationContextLearningAsImplicit_f73edf,0.026357,,19,0.6094,13,0.7539,p. 11-16; p. 2-4; p. 29-31,p. 2-4; p. 11-16; p. 5-6,22246,True,True,full_text
+18,,,,,p. 1-2; p. 3-4; p. 8-11,Dai2023_WhyCanGPTLearnContext_4171a8,0.026316,,16,0.6797,16,0.7148,p. 8-11; p. 1-2; p. 3-4,p. 8-11; p. 1-2; p. 3-4,11003,True,True,full_text
+19,,,,,p. 2-4; p. 8-9,Wu2023_SelfAdaptiveContextLearningInformation_50efe9,0.025833,,15,0.7188,20,0.6367,p. 3-5; p. 2; p. 2-4,p. 2-4; p. 3-5; p. 8-9,9779,True,False,full_text
+20,,,,,p. 1-2; p. 3-4; p. 7-8,Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f,0.025158,,20,0.6016,19,0.6641,p. 1-2; p. 7-8; p. 3-4,p. 1-2; p. 2-3; p. 17-18,15571,True,False,full_text

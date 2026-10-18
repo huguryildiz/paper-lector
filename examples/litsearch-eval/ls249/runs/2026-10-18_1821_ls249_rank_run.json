@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:22:07",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "dcea4d07063acf566a8af03bea124ddfbc3bc50cfde2dea613a4fd303e143219"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "7afc7e569fcbfee90cbdc5a62f46923953467dfba5042eb1cd44d7343816c770"
+   }
+  ]
+ },
+ "question": "Could you suggest research that tries to interpret how bi-directional RNNs manage to carry out Named Entity Recognition (NER) tasks?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you suggest research that tries to interpret how bi-directional RNNs manage to carry out Named Entity Recognition (NER) tasks?",
+   "keywords": "interpret bi-directional RNN named entity recognition"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Bidirectional recurrent neural networks, such as BiLSTMs, applied to named entity recognition in text, and how their internal states and computations produce entity predictions.",
+   "keywords": "bidirectional RNN BiLSTM named entity recognition NER interpretability analysis"
+  }
+ },
+ "queries_sha": "8d16ae7a46f2",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 234,
+  "ids": [
+   "Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99",
+   "Fu2020_InterpretableMultiDatasetEvaluationNamed_aac375",
+   "Ma2016_EndEndSequenceLabelingBi_f34e33",
+   "Nie2020_ImprovingNamedEntityRecognitionAttentive_a2ed9c",
+   "Fu2022_PolyglotPromptMultilingualMultitaskPrompt_0aa301",
+   "Golde2024_LargeScaleLabelInterpretationLearning_6fc7ba",
+   "Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53",
+   "Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb",
+   "Sang2002_IntroductionCoNLL2002SharedTask_2e818d",
+   "Zhang2018_ChineseNERUsingLatticeLSTM_db8203",
+   "Li2020_UnifiedMRCFrameworkNamedEntity_dd3478",
+   "Kingma2014_AdamMethodStochasticOptimization_c98f79",
+   "Strubell2017_FastAccurateEntityRecognitionIterated_ef6338",
+   "Peng2015_NamedEntityRecognitionChineseSocial_5b996b",
+   "Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47",
+   "Yu2020_NamedEntityRecognitionAsDependency_a4da29",
+   "Shen2017_DeepActiveLearningNamedEntity_1bf061",
+   "Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603",
+   "Gui2019_LexiconBasedGraphNeuralNetwork_a6febe",
+   "Lin2020_TriggerNERLearningEntityTriggersAs_93edcb"
+  ],
+  "files": [
+   {
+    "id": "Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99",
+    "path": "pdfs/Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99.pdf",
+    "sha256": "0980999f4406d0ef939bce85d91f2acebf111dbb947b1d12106e637a427b96bc"
+   },
+   {
+    "id": "Fu2020_InterpretableMultiDatasetEvaluationNamed_aac375",
+    "path": "pdfs/Fu2020_InterpretableMultiDatasetEvaluationNamed_aac375.pdf",
+    "sha256": "0988e32b937fbaf4aa8c77e4320d94c02f9c46f864d27f097a6908adff3facc6"
+   },
+   {
+    "id": "Ma2016_EndEndSequenceLabelingBi_f34e33",
+    "path": "pdfs/Ma2016_EndEndSequenceLabelingBi_f34e33.pdf",
+    "sha256": "fbd055d194e370e8fc42bf68d2d878e9ce3cd19612f96e89a4da0dd273cbb706"
+   },
+   {
+    "id": "Nie2020_ImprovingNamedEntityRecognitionAttentive_a2ed9c",
+    "path": "pdfs/Nie2020_ImprovingNamedEntityRecognitionAttentive_a2ed9c.pdf",
+    "sha256": "dcc6112ebd609ccce63eed09884829fd9afafcdd24c29b9886b8dda402bbbc0c"
+   },
+   {
+    "id": "Fu2022_PolyglotPromptMultilingualMultitaskPrompt_0aa301",
+    "path": "pdfs/Fu2022_PolyglotPromptMultilingualMultitaskPrompt_0aa301.pdf",
+    "sha256": "9aa61986b147998f36920be20f5ea83bceaceb93b69e4352a611a0fab48f3a91"
+   },
+   {
+    "id": "Golde2024_LargeScaleLabelInterpretationLearning_6fc7ba",
+    "path": "pdfs/Golde2024_LargeScaleLabelInterpretationLearning_6fc7ba.pdf",
+    "sha256": "f9864d74b16b0672c452fafcba3838c1e4d6c5983012e3f5ab095338c86ca2b0"
+   },
+   {
+    "id": "Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53",
+    "path": "pdfs/Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53.pdf",
+    "sha256": "5be978f118e4ea5f55e937cde1d68c3e34251b1f4081bebe44e793c530e5ab14"
+   },
+   {
+    "id": "Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb",
+    "path": "pdfs/Collobert2011_NaturalLanguageProcessingAlmostFrom_ee9cbb.pdf",
+    "sha256": "2c6595c6725ec357406ca2cd9ec38b1e19072880f46e8a61075c07e9be94e0a0"
+   },
+   {
+    "id": "Sang2002_IntroductionCoNLL2002SharedTask_2e818d",
+    "path": "pdfs/Sang2002_IntroductionCoNLL2002SharedTask_2e818d.pdf",
+    "sha256": "d454d8409f852eb4e79a3aa02a904d97124e526c8981eb53e395e5b8d1975ab3"
+   },
+   {
+    "id": "Zhang2018_ChineseNERUsingLatticeLSTM_db8203",
+    "path": "pdfs/Zhang2018_ChineseNERUsingLatticeLSTM_db8203.pdf",
+    "sha256": "47d652cdca4779e28ed32ea8a86df10863ebd244b6a28be096350ce27c7271be"
+   },
+   {
+    "id": "Li2020_UnifiedMRCFrameworkNamedEntity_dd3478",
+    "path": "pdfs/Li2020_UnifiedMRCFrameworkNamedEntity_dd3478.pdf",
+    "sha256": "4c7ddd250b3d53d5298aefc7864d32281ee44a8c08424b24d43a0338a6c3e8ad"
+   },
+   {
+    "id": "Kingma2014_AdamMethodStochasticOptimization_c98f79",
+    "path": "pdfs/Kingma2014_AdamMethodStochasticOptimization_c98f79.pdf",
+    "sha256": "eab9c73ae2ceda884b94830bda99312254bac4806f6c9f045cbab90721ecda31"
+   },
+   {
+    "id": "Strubell2017_FastAccurateEntityRecognitionIterated_ef6338",
+    "path": "pdfs/Strubell2017_FastAccurateEntityRecognitionIterated_ef6338.pdf",
+    "sha256": "01b84a722f255960068f0953acb948d2834227e719c6ea1d52d6c90a461bbf5f"
+   },
+   {
+    "id": "Peng2015_NamedEntityRecognitionChineseSocial_5b996b",
+    "path": "pdfs/Peng2015_NamedEntityRecognitionChineseSocial_5b996b.pdf",
+    "sha256": "5e578172e5d4cfeaaa031bd8dc9ab28f5efb40726971069ead67043752d18341"
+   },
+   {
+    "id": "Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47",
+    "path": "pdfs/Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47.pdf",
+    "sha256": "ae7a0886fab35d7064d753bd6dab559fd80e2c42535ad3a0a167818c614a7937"
+   },
+   {
+    "id": "Yu2020_NamedEntityRecognitionAsDependency_a4da29",
+    "path": "pdfs/Yu2020_NamedEntityRecognitionAsDependency_a4da29.pdf",
+    "sha256": "5b9ca379c26ff4a4baba7a53b6fdc7fbb0df127ef00679e668a38cb894af2470"
+   },
+   {
+    "id": "Shen2017_DeepActiveLearningNamedEntity_1bf061",
+    "path": "pdfs/Shen2017_DeepActiveLearningNamedEntity_1bf061.pdf",
+    "sha256": "10dae8d46fb6c84f609fad487442314dfc276920850381e4002175ba40e336ce"
+   },
+   {
+    "id": "Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603",
+    "path": "pdfs/Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603.pdf",
+    "sha256": "f62fb488fcc3bf4b5ca1745b931a73c393ebe61f7b4aca266a366df70d96dbe9"
+   },
+   {
+    "id": "Gui2019_LexiconBasedGraphNeuralNetwork_a6febe",
+    "path": "pdfs/Gui2019_LexiconBasedGraphNeuralNetwork_a6febe.pdf",
+    "sha256": "e6d696411fff01ffb1f6a6c0c69b432709aa378a85327ce739941c39de6dd3ab"
+   },
+   {
+    "id": "Lin2020_TriggerNERLearningEntityTriggersAs_93edcb",
+    "path": "pdfs/Lin2020_TriggerNERLearningEntityTriggersAs_93edcb.pdf",
+    "sha256": "c6ac2fb191c8be393cc45d05482533722becf3eda67b9dbf5759663ad9cd0453"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 200697,
+  "embed_cached": 46,
+  "rerank": 139843
+ },
+ "estimate": 400942,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls249/runs/2026-10-18_1821_ls249_rank.csv",
+   "fused_top10": [
+    "Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99",
+    "Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53",
+    "Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47",
+    "Ma2016_EndEndSequenceLabelingBi_f34e33",
+    "Yu2020_NamedEntityRecognitionAsDependency_a4da29",
+    "Zhang2018_ChineseNERUsingLatticeLSTM_db8203",
+    "Strubell2017_FastAccurateEntityRecognitionIterated_ef6338",
+    "Lin2020_TriggerNERLearningEntityTriggersAs_93edcb",
+    "Gui2019_LexiconBasedGraphNeuralNetwork_a6febe",
+    "Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603"
+   ],
+   "first_query_top10": [
+    "Agarwal2021_InterpretabilityAnalysisNamedEntityRecognition_eebd99",
+    "Yan2019_TENERAdaptingTransformerEncoderNamed_f14e47",
+    "Lample2016_NeuralArchitecturesNamedEntityRecognition_d3cb53",
+    "Ma2016_EndEndSequenceLabelingBi_f34e33",
+    "Yu2020_NamedEntityRecognitionAsDependency_a4da29",
+    "Zhang2018_ChineseNERUsingLatticeLSTM_db8203",
+    "Strubell2017_FastAccurateEntityRecognitionIterated_ef6338",
+    "Li2016_VisualizingUnderstandingNeuralModelsNLP_e39603",
+    "Fu2020_InterpretableMultiDatasetEvaluationNamed_aac375",
+    "Gui2019_LexiconBasedGraphNeuralNetwork_a6febe"
+   ]
+  }
+ }
+}

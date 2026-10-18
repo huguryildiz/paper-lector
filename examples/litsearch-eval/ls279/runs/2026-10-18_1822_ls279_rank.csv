@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 3-4; p. 5,Tang2021_DoMultiHopQuestionAnswering_99e6d5,0.032522,,1,0.7148,2,0.7962,p. 1-2; p. 4-5; p. 3-4,p. 1-2; p. 3-4; p. 5,4207,True,True,full_text
+2,,,,,p. 5-6; p. 1-2,Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8,0.032266,,3,0.6523,1,0.8263,p. 5-6; p. 6-7; p. 4-5,p. 5-6; p. 6-7; p. 1-2,16155,True,True,full_text
+3,,,,,p. 3-4; p. 6-7; p. 9-14,Khattab2021_BaleenRobustMultiHopReasoning_673309,0.032002,,2,0.6758,3,0.7914,p. 9-14; p. 3-4; p. 6-7,p. 7-8; p. 3-4; p. 6-7,13364,True,True,full_text
+4,,,,,p. 3-4; p. 1-2,Godbole2019_MultiStepEntityCentricInformation_d516d5,0.03101,,4,0.6211,5,0.7749,p. 3-4; p. 4-5; p. 1-2,p. 4-5; p. 3-4; p. 2-3,5494,True,True,full_text
+5,,,,,p. 1-2; p. 6-7; p. 8-11,Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e,0.03055,,7,0.6055,4,0.79,p. 6-7; p. 1-2; p. 8-11,p. 1-2; p. 2-3; p. 6-7,11597,True,True,full_text
+6,,,,,p. 5-6; p. 11-13,Lee2022_GenerativeMultiHopRetrieval_29d78f,0.029877,,5,0.6094,9,0.7544,p. 5-6; p. 13-14; p. 11-13,p. 5-6; p. 13-14; p. 11-13,19370,True,True,full_text
+7,,,,,p. 1-2,Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b,0.029631,,8,0.5977,7,0.7584,p. 1-2; p. 2-3,p. 1-2; p. 2-3,6150,True,True,full_text
+8,,,,,p. 1-2; p. 3-4,Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7,0.029469,,5,0.6094,11,0.7188,p. 1-2; p. 2-3; p. 3-4,p. 1-2; p. 2-3; p. 3-4,3694,True,True,full_text
+9,,,,,p. 1-2; p. 6-7,Chen2019_MultiHopQuestionAnsweringReasoning_a022f6,0.029437,,10,0.5898,6,0.76,p. 6-7; p. 7-8; p. 1-2,p. 1-2; p. 7-8; p. 6-7,8217,True,True,full_text
+10,,,,,p. 1; p. 6-7; p. 3,Deng2026_PAGERAGProvenanceAwareGraph_a13a1b,0.029412,,8,0.5977,8,0.7557,p. 1; p. 6-7; p. 10-11,p. 6-7; p. 1; p. 3,13554,True,True,full_text
+11,,,,,p. 1-2; p. 7-8; p. 6,Fang2020_HierarchicalGraphNetworkMultiHop_5cb845,0.028175,,12,0.5586,10,0.7381,p. 1-2; p. 6-7; p. 7-8,p. 1-2; p. 6; p. 7-8,16013,True,True,full_text
+12,,,,,p. 1-2; p. 3-4; p. 6-7,Min2019_MultiHopReadingComprehensionThrough_1ed07f,0.027402,,14,0.5117,12,0.6847,p. 4-5; p. 6-7; p. 7-8,p. 1-2; p. 2-3; p. 3-4,12208,True,True,full_text
+13,,,,,p. 2-4,Min2019_CompositionalQuestionsDoNotNecessitate_b21591,0.027242,,11,0.5781,16,0.6012,p. 2-3; p. 2-4; p. 3-5,p. 1-2; p. 2-4; p. 3-5,7600,True,True,full_text
+14,,,,,p. 2-3; p. 8-10,Huang2021_BreadthFirstReasoningGraphMulti_2273fd,0.027212,,13,0.5508,14,0.6658,p. 10-12; p. 8-10; p. 2-3,p. 8-10; p. 10-12; p. 2-3,9094,True,True,full_text
+15,,,,,p. 3-4; p. 9-11; p. 1-2,Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5,0.026857,,16,0.498,13,0.6766,p. 3-4; p. 9-11; p. 1-2,p. 3-4; p. 9-11; p. 4-6,10697,True,True,full_text
+16,,,,,p. 2-3; p. 8-9,Zhou2020_KnowledgeAidedOpenDomainQuestion_e86158,0.026847,,14,0.5117,15,0.6204,p. 3-4; p. 2-3; p. 8-9,p. 2-3; p. 3-4; p. 8-9,11610,True,True,full_text
+17,,,,,p. 2-3; p. 6-7; p. 9,Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b,0.025808,,17,0.4336,18,0.4835,p. 2-3; p. 9; p. 6-7,p. 2-3; p. 6-7; p. 4-6,9444,True,True,full_text
+17,,,,,p. 4-5; p. 7-8; p. 12-13,Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c,0.025808,,18,0.4297,17,0.5185,p. 7-8; p. 4-5; p. 6-7,p. 7-8; p. 4-5; p. 12-13,11944,True,True,full_text
+19,,,,,p. 4-5; p. 18-19; p. 1-2,Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40,0.025158,,19,0.416,20,0.441,p. 4-5; p. 18-19; p. 1-2,p. 4-5; p. 18-19; p. 6-7,11630,True,True,full_text
+19,,,,,p. 6-7; p. 8-9,Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b,0.025158,,20,0.3945,19,0.4507,p. 7-8; p. 8-9; p. 6-7,p. 7-8; p. 8-9; p. 6-7,8022,True,True,full_text

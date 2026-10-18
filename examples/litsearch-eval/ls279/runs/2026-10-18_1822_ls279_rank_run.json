@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:23:04",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "849f465d4fe83995bcae01ced0cdaf58f6ae6057b3a5f15c5fb99c67a97ec906"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "3797f1ffd842a2941519c40844abdd4c0eb9902101e3b29ab6d9e05ae8fee543"
+   }
+  ]
+ },
+ "question": "In multi-hop question answering, is there a paper that explores \"per-hop\" retrieval evaluation that treats each hop of retrieval independently?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "In multi-hop question answering, is there a paper that explores \"per-hop\" retrieval evaluation that treats each hop of retrieval independently?",
+   "keywords": "multi-hop question answering per-hop retrieval evaluation each hop independently"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Multi-hop question answering, in which answering needs several chained retrieval steps over documents, and how retrieval quality at each separate hop is measured.",
+   "keywords": "multi-hop question answering retrieval evaluation per-hop each hop independent"
+  }
+ },
+ "queries_sha": "68e8275a9a38",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 217,
+  "ids": [
+   "Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b",
+   "Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8",
+   "Khattab2021_BaleenRobustMultiHopReasoning_673309",
+   "Deng2026_PAGERAGProvenanceAwareGraph_a13a1b",
+   "Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7",
+   "Lee2022_GenerativeMultiHopRetrieval_29d78f",
+   "Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e",
+   "Godbole2019_MultiStepEntityCentricInformation_d516d5",
+   "Min2019_CompositionalQuestionsDoNotNecessitate_b21591",
+   "Fang2020_HierarchicalGraphNetworkMultiHop_5cb845",
+   "Zhou2020_KnowledgeAidedOpenDomainQuestion_e86158",
+   "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+   "Chen2019_MultiHopQuestionAnsweringReasoning_a022f6",
+   "Huang2021_BreadthFirstReasoningGraphMulti_2273fd",
+   "Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b",
+   "Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5",
+   "Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c",
+   "Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40",
+   "Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b",
+   "Min2019_MultiHopReadingComprehensionThrough_1ed07f"
+  ],
+  "files": [
+   {
+    "id": "Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b",
+    "path": "pdfs/Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b.pdf",
+    "sha256": "1d8e890b8bd47128449c95e09455609838c92661c76ebf4522749a5dbf05e552"
+   },
+   {
+    "id": "Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8",
+    "path": "pdfs/Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8.pdf",
+    "sha256": "2f2faf1766c45fed4c6000ab3f4b063779932c8a5139fa4995245396e0ba2c83"
+   },
+   {
+    "id": "Khattab2021_BaleenRobustMultiHopReasoning_673309",
+    "path": "pdfs/Khattab2021_BaleenRobustMultiHopReasoning_673309.pdf",
+    "sha256": "c4e67c1b5f1da9980aea8239ccb1c35747f0d9ef27ed07ffd957218c6febafdb"
+   },
+   {
+    "id": "Deng2026_PAGERAGProvenanceAwareGraph_a13a1b",
+    "path": "pdfs/Deng2026_PAGERAGProvenanceAwareGraph_a13a1b.pdf",
+    "sha256": "b03babd7f7a33a3e0fd562edca44e103c36821c7028a3d048187e67c9245766c"
+   },
+   {
+    "id": "Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7",
+    "path": "pdfs/Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7.pdf",
+    "sha256": "038ce56533d47f899a0c7cbc00055245e44f9021c0569d3a5d8816d174fdc087"
+   },
+   {
+    "id": "Lee2022_GenerativeMultiHopRetrieval_29d78f",
+    "path": "pdfs/Lee2022_GenerativeMultiHopRetrieval_29d78f.pdf",
+    "sha256": "fe373236781e8687028523cd4a0d8a3d32c75fa7e964eb147d08ff1d81544914"
+   },
+   {
+    "id": "Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e",
+    "path": "pdfs/Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e.pdf",
+    "sha256": "2b8be5cf190d0dfdb5130a419f12e99a09456441cd4af629b370b81e32462e23"
+   },
+   {
+    "id": "Godbole2019_MultiStepEntityCentricInformation_d516d5",
+    "path": "pdfs/Godbole2019_MultiStepEntityCentricInformation_d516d5.pdf",
+    "sha256": "1220ed001334d3b3badfbfcb247dea1575ef0f55c18d996d584b65f02886c320"
+   },
+   {
+    "id": "Min2019_CompositionalQuestionsDoNotNecessitate_b21591",
+    "path": "pdfs/Min2019_CompositionalQuestionsDoNotNecessitate_b21591.pdf",
+    "sha256": "f87326e5ccfc4241541a63e5c9e2ceae509ce092170cf8b73ef341827e25dc3e"
+   },
+   {
+    "id": "Fang2020_HierarchicalGraphNetworkMultiHop_5cb845",
+    "path": "pdfs/Fang2020_HierarchicalGraphNetworkMultiHop_5cb845.pdf",
+    "sha256": "e2c0970db3428637ec19e6fa7aed8abdfe730d8df0ead87031487eefd01ca2d8"
+   },
+   {
+    "id": "Zhou2020_KnowledgeAidedOpenDomainQuestion_e86158",
+    "path": "pdfs/Zhou2020_KnowledgeAidedOpenDomainQuestion_e86158.pdf",
+    "sha256": "23fd90dc1d43abbb39a2fdc559330c5ead15f69adc6cc474ae5b362c7b018f7c"
+   },
+   {
+    "id": "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+    "path": "pdfs/Tang2021_DoMultiHopQuestionAnswering_99e6d5.pdf",
+    "sha256": "8759137f8f0094ca3b042c0707988a67d4172255ee38e49dcd748e2f789e5fd3"
+   },
+   {
+    "id": "Chen2019_MultiHopQuestionAnsweringReasoning_a022f6",
+    "path": "pdfs/Chen2019_MultiHopQuestionAnsweringReasoning_a022f6.pdf",
+    "sha256": "e1ddb2ce344d84291e8d8bc39bb0c3473883af4afa1e24fa01e5fe3f9e8fdd4a"
+   },
+   {
+    "id": "Huang2021_BreadthFirstReasoningGraphMulti_2273fd",
+    "path": "pdfs/Huang2021_BreadthFirstReasoningGraphMulti_2273fd.pdf",
+    "sha256": "f684a144ecce3d6b977c826bf7b7b3c40af8f86ac7565e3e45f8172af1738025"
+   },
+   {
+    "id": "Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b",
+    "path": "pdfs/Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b.pdf",
+    "sha256": "908af6e79a228a5c577f694f924c9db43ed3ed1e5149bffe0008aa334769d6d6"
+   },
+   {
+    "id": "Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5",
+    "path": "pdfs/Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5.pdf",
+    "sha256": "4ac04d526dfdf4a2549e4a7fcebe0c55a8ff0071b61ea53615e49c3a778f907c"
+   },
+   {
+    "id": "Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c",
+    "path": "pdfs/Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c.pdf",
+    "sha256": "3e67fc1a9977715acf722d85f0b7d124b03715e975f6310a4d6c12094190912f"
+   },
+   {
+    "id": "Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40",
+    "path": "pdfs/Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40.pdf",
+    "sha256": "23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233"
+   },
+   {
+    "id": "Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b",
+    "path": "pdfs/Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b.pdf",
+    "sha256": "796b27cd8e8199ae841bdb4584c774673fc3ed64aa25a12ddd61de7e79a8b1b0"
+   },
+   {
+    "id": "Min2019_MultiHopReadingComprehensionThrough_1ed07f",
+    "path": "pdfs/Min2019_MultiHopReadingComprehensionThrough_1ed07f.pdf",
+    "sha256": "0dd2f8d959d492af0aa105217a7192cf69434728dd33678f2d1fca666a285a14"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 85092,
+  "embed_cached": 138,
+  "rerank": 139831
+ },
+ "estimate": 379021,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls279/runs/2026-10-18_1822_ls279_rank.csv",
+   "fused_top10": [
+    "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+    "Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8",
+    "Khattab2021_BaleenRobustMultiHopReasoning_673309",
+    "Godbole2019_MultiStepEntityCentricInformation_d516d5",
+    "Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e",
+    "Lee2022_GenerativeMultiHopRetrieval_29d78f",
+    "Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b",
+    "Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7",
+    "Chen2019_MultiHopQuestionAnsweringReasoning_a022f6",
+    "Deng2026_PAGERAGProvenanceAwareGraph_a13a1b"
+   ],
+   "first_query_top10": [
+    "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+    "Khattab2021_BaleenRobustMultiHopReasoning_673309",
+    "Xia2024_MomentumPosteriorRegularizationMultiHop_50e5b8",
+    "Godbole2019_MultiStepEntityCentricInformation_d516d5",
+    "Lee2022_GenerativeMultiHopRetrieval_29d78f",
+    "Malon2020_GeneratingFollowupQuestionsInterpretableMulti_8a7ff7",
+    "Feldman2019_MultiHopParagraphRetrievalOpen_f2b54e",
+    "Deng2026_PAGERAGProvenanceAwareGraph_a13a1b",
+    "Sidiropoulos2021_CombiningLexicalDenseRetrievalComputationally_b2377b",
+    "Chen2019_MultiHopQuestionAnsweringReasoning_a022f6"
+   ]
+  }
+ }
+}

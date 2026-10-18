@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 3-4; p. 1-2; p. 8-11,Hou2022_MetaPromptingLearningLearnBetterPrompts_be1fb9,0.032522,,1,0.8477,2,0.832,p. 3-4; p. 8-11; p. 2-3,p. 3-4; p. 4-5; p. 1-2,10277,True,True,full_text
+1,,,,,p. 3; p. 4-5; p. 1-2,Ha2023_MetaLearningPromptGenerationLightweight_a1cfd4,0.032522,,2,0.8438,1,0.8438,p. 1-2; p. 4-5; p. 3,p. 3; p. 4-5; p. 3-4,10361,True,True,full_text
+3,,,,,p. 11-13; p. 29-30,Kepel2024_AutonomousPromptEngineeringLargeLanguage_30e4bf,0.031498,,3,0.8125,4,0.7852,p. 12-14; p. 11-13; p. 29-30,p. 12-14; p. 11-13; p. 29-30,19607,True,True,full_text
+3,,,,,p. 1-2; p. 5-6,Murthy2025_PromptomatixAutomaticPromptOptimizationFramework_5b5f71,0.031498,,4,0.7812,3,0.8047,p. 1-2; p. 2-3; p. 5-6,p. 1-2; p. 5-6; p. 3-5,11500,True,True,full_text
+5,,,,,p. 1; p. 2-3,Chen2023_MAPOBoostingLargeLanguageModel_3fbefb,0.030769,,5,0.7539,5,0.7734,p. 1-2; p. 1; p. 2-3,p. 1-2; p. 2-3; p. 1,37689,True,True,full_text
+6,,,,,p. 1-2; p. 4-6; p. 7-8,Qing2025_ELPOEnsembleLearningBasedPrompt_6bf087,0.030303,,6,0.7461,6,0.7617,p. 1-2; p. 4-6; p. 7-8,p. 1-2; p. 4-6; p. 7-8,23462,True,True,full_text
+7,,,,,p. 5-6; p. 1-2; p. 3-4,Pryzant2023_AutomaticPromptOptimizationGradientDescent_d8d240,0.029851,,7,0.7344,7,0.7539,p. 1-2; p. 5-6; p. 3-4,p. 8-10; p. 2-3; p. 5-6,9609,True,True,full_text
+8,,,,,p. 4-5; p. 8-10,Li2023_RobustPromptOptimizationLargeLanguage_fc98bb,0.029412,,8,0.7266,8,0.7383,p. 5-6; p. 4-5; p. 8-10,p. 5-6; p. 8-10; p. 4-5,14226,True,True,full_text
+9,,,,,p. 3-4; p. 5-6; p. 17-18,Shlok2025_ExploratoryStudyBayesianPromptOptimization_1c8dfc,0.028986,,9,0.6758,9,0.6992,p. 5-6; p. 3-4; p. 17-18,p. 5-6; p. 6-7; p. 3-4,14772,True,False,full_text
+10,,,,,p. 2-3; p. 8-9; p. 10-13,Schmitt2026_EnhancingSentimentClassificationIronyDetection_59d946,0.028571,,10,0.6602,10,0.6602,p. 9-10; p. 2-3; p. 8-9,p. 10-13; p. 2-3,18200,True,True,full_text
+11,,,,,p. 3-4; p. 5-6; p. 17-18,White2023_PromptPatternCatalogEnhancePrompt_890240,0.028169,,11,0.6133,11,0.6523,p. 3-4; p. 2-3; p. 5-6,p. 3-4; p. 17-18; p. 5-6,21016,True,True,full_text
+12,,,,,p. 3-4; p. 12-13,Chen2024_SystematicReviewPromptEngineeringLarge_b9e61c,0.027588,,12,0.5625,13,0.6445,p. 12-13; p. 4-5; p. 3-4,p. 12-13; p. 3-4; p. 2-3,12013,True,False,full_text
+12,,,,,p. 5-6; p. 8-9; p. 1-2,Sun2022_BBTv2TowardsGradientFreeFuture_a4ec21,0.027588,,12,0.5625,13,0.6445,p. 1-3; p. 8-9; p. 5-6,p. 1-2; p. 5-6; p. 8-9,14371,True,False,full_text
+14,,,,,p. 1-2; p. 3-4; p. 8-11,Zhou2023_RevisitingAutomatedPromptingAreWe_14f2cb,0.027242,,16,0.5352,11,0.6523,p. 1-2; p. 2-3; p. 8-11,p. 1-2; p. 2-3; p. 3-4,10584,True,True,full_text
+15,,,,,p. 2-3; p. 10-14; p. 4-6,Huang2023_LargeLanguageModelsCanSelf_e686e4,0.026847,,14,0.5586,15,0.6289,p. 10-14; p. 1-2; p. 2-3,p. 10-14; p. 4-6; p. 2-3,15626,True,True,full_text
+16,,,,,p. 17-19; p. 24-25; p. 1-2,Jason2022_BNAINOTOKENMINDUNITY_5c6426,0.02632,,15,0.543,17,0.6016,p. 17-19; p. 24-25; p. 1-2,p. 2-3; p. 24-25; p. 17-19,35000,True,True,full_text
+16,,,,,p. 3-5; p. 8-14; p. 1-2,Honovich2023_InstructionInductionFromFewExamples_2bd747,0.02632,,17,0.5234,15,0.6289,p. 8-14; p. 1-2; p. 3-5,p. 8-14; p. 2-3; p. 3-5,10422,True,True,full_text
+18,,,,,p. 2-3; p. 6-7; p. 10-13,Block2023_SummaryCyclesExploringImpactPrompt_3bbcf1,0.025479,,18,0.5156,19,0.5078,p. 2-3; p. 3-4; p. 6-7,p. 2-3; p. 3-4; p. 10-13,11061,True,True,full_text
+18,,,,,p. 1-2; p. 3-4; p. 7-8,Huang2023_TowardsReasoningLargeLanguageModels_50571a,0.025479,,19,0.5039,18,0.5547,p. 3-4; p. 7-8; p. 1-2,p. 3-4; p. 7-8; p. 1-2,10344,True,True,full_text
+20,,,,,p. 1-2; p. 5,Izacard2021_LeveragingPassageRetrievalGenerativeModels_c29834,0.025,,20,0.4297,20,0.4297,p. 2-3; p. 5; p. 1-2,p. 2-3; p. 5; p. 1-2,4512,True,True,full_text

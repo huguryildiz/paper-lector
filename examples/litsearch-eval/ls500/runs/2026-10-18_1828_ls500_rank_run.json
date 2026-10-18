@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:28:45",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "c539ad6805b54bd50b76b37567bf92300ad52abcbd3e0fd8e4f97005dc9329e4"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "8e0a3227fb5c3ad423a6eec576e700d507aeb9d81f11ee8be2ff90ff4bdf5c8d"
+   }
+  ]
+ },
+ "question": "Which vision-language model paper in 2023 developed techniques that reduce input tokens to improve model inference speed?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which vision-language model paper in 2023 developed techniques that reduce input tokens to improve model inference speed?",
+   "keywords": "vision-language model 2023 reduce input tokens faster inference"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Vision-language models that take image tokens as input to a language model, and methods that cut the number of visual tokens to speed up inference.",
+   "keywords": "vision-language model reduce visual tokens token pruning merging inference speed 2023"
+  }
+ },
+ "queries_sha": "b50dce7ed41a",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 284,
+  "ids": [
+   "Cao2023_PuMerPruningMergingTokensEfficient_1b1252",
+   "Zhao2026_FocusThenContextSubjectCentric_cead20",
+   "Singh2026_DUETVLMDualStageUnified_6a80f2",
+   "Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6",
+   "Guo2025_STARStageWiseAttentionGuided_d01f3e",
+   "Li2023_EvaluatingObjectHallucinationLargeVision_bb3778",
+   "Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa",
+   "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+   "Wang2021_SimVLMSimpleVisualLanguageModel_bb7b01",
+   "Marin2021_TokenPoolingVisionTransformers_ff513e",
+   "Wang2020_MiniVLMSmallerFasterVisionLanguage_110c29",
+   "Nawrot2023_EfficientTransformersDynamicTokenPooling_ba5bb3",
+   "Ye2021_TRBERTDynamicTokenReduction_2eac12",
+   "Bolya2022_TokenMergingYourViTBut_e66777",
+   "Zhang2024_TinyChartEfficientChartUnderstandingProgram_4f8c48",
+   "Jiang2024_MedMoEMixtureDomainSpecific_df88e5",
+   "Wen2025_TokenPruningMultimodalLargeLanguage_f05665",
+   "Chu2023_MobileVLMFastStrongOpenVision_28a242",
+   "Jing2026_P4QCoDesigningTokenPruning_e0067e",
+   "Ren2023_TESTATemporalSpatialTokenAggregation_d39824"
+  ],
+  "files": [
+   {
+    "id": "Cao2023_PuMerPruningMergingTokensEfficient_1b1252",
+    "path": "pdfs/Cao2023_PuMerPruningMergingTokensEfficient_1b1252.pdf",
+    "sha256": "9689ccbcb63f1d6d95a714c96d76546d6503ecbd8252af3d9745eab21b106b0a"
+   },
+   {
+    "id": "Zhao2026_FocusThenContextSubjectCentric_cead20",
+    "path": "pdfs/Zhao2026_FocusThenContextSubjectCentric_cead20.pdf",
+    "sha256": "94110ecd46e1621ff2044d02ba4dd81f030d0e3d089cd6c30f53490f523b8f76"
+   },
+   {
+    "id": "Singh2026_DUETVLMDualStageUnified_6a80f2",
+    "path": "pdfs/Singh2026_DUETVLMDualStageUnified_6a80f2.pdf",
+    "sha256": "e46736a643a381e5a86b62d057b91ab35d765d5265d584673e0c5b2145f7fdad"
+   },
+   {
+    "id": "Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6",
+    "path": "pdfs/Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6.pdf",
+    "sha256": "c13d12d09beb7f956beba364e1158b4dc13e5a63aa5c23146a92a89f777dffcd"
+   },
+   {
+    "id": "Guo2025_STARStageWiseAttentionGuided_d01f3e",
+    "path": "pdfs/Guo2025_STARStageWiseAttentionGuided_d01f3e.pdf",
+    "sha256": "88c30c26ccb983688731ec037adaef814e514b3487d341c14781f4fb5b4f4b3c"
+   },
+   {
+    "id": "Li2023_EvaluatingObjectHallucinationLargeVision_bb3778",
+    "path": "pdfs/Li2023_EvaluatingObjectHallucinationLargeVision_bb3778.pdf",
+    "sha256": "1abf5348124825d52580d415540151eb1c6b246727aa293ced415dfbd41d4330"
+   },
+   {
+    "id": "Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa",
+    "path": "pdfs/Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa.pdf",
+    "sha256": "266037d6a6866b03084481fb0755f6f04aed6f6447ff4206977601d5fbd25f52"
+   },
+   {
+    "id": "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+    "path": "pdfs/Li2021_AlignBeforeFuseVisionLanguage_db7a60.pdf",
+    "sha256": "137c937c0834d8aa116bac93cae46cabe86cf7b7645f3b6339639b194273b229"
+   },
+   {
+    "id": "Wang2021_SimVLMSimpleVisualLanguageModel_bb7b01",
+    "path": "pdfs/Wang2021_SimVLMSimpleVisualLanguageModel_bb7b01.pdf",
+    "sha256": "3258e2c8a1ed2e85c82d04ed7e930780b9e75dca2a2d5e6aa78e13efd67c5d8b"
+   },
+   {
+    "id": "Marin2021_TokenPoolingVisionTransformers_ff513e",
+    "path": "pdfs/Marin2021_TokenPoolingVisionTransformers_ff513e.pdf",
+    "sha256": "e9088625325043d98776330af5d1981905c4e23040c72d7194c66d0d3e0d8aa9"
+   },
+   {
+    "id": "Wang2020_MiniVLMSmallerFasterVisionLanguage_110c29",
+    "path": "pdfs/Wang2020_MiniVLMSmallerFasterVisionLanguage_110c29.pdf",
+    "sha256": "db290510285502fc1bf25492cb5b314e12801db0f787bb033b6af075def0cb56"
+   },
+   {
+    "id": "Nawrot2023_EfficientTransformersDynamicTokenPooling_ba5bb3",
+    "path": "pdfs/Nawrot2023_EfficientTransformersDynamicTokenPooling_ba5bb3.pdf",
+    "sha256": "9db799b97dcc0e114e6a475993d5846a5fc02dcdc6f3bd7e0c8e228a581f4dc0"
+   },
+   {
+    "id": "Ye2021_TRBERTDynamicTokenReduction_2eac12",
+    "path": "pdfs/Ye2021_TRBERTDynamicTokenReduction_2eac12.pdf",
+    "sha256": "0e0b300d1058a98f4a98ec491bc60bddc744b9029057e413a4258aa07ffb77fc"
+   },
+   {
+    "id": "Bolya2022_TokenMergingYourViTBut_e66777",
+    "path": "pdfs/Bolya2022_TokenMergingYourViTBut_e66777.pdf",
+    "sha256": "83d966e708b0963864004d43c62cebbc1c993e16850284a5d137469349dba522"
+   },
+   {
+    "id": "Zhang2024_TinyChartEfficientChartUnderstandingProgram_4f8c48",
+    "path": "pdfs/Zhang2024_TinyChartEfficientChartUnderstandingProgram_4f8c48.pdf",
+    "sha256": "aab3dbf5935739a10fb048067034f0654ffa39b10e27a30892721c75bf320c42"
+   },
+   {
+    "id": "Jiang2024_MedMoEMixtureDomainSpecific_df88e5",
+    "path": "pdfs/Jiang2024_MedMoEMixtureDomainSpecific_df88e5.pdf",
+    "sha256": "95a62375402869e61d0b633aa0d1f8ecb7be88a17cefbd47620bcc4de5aceca2"
+   },
+   {
+    "id": "Wen2025_TokenPruningMultimodalLargeLanguage_f05665",
+    "path": "pdfs/Wen2025_TokenPruningMultimodalLargeLanguage_f05665.pdf",
+    "sha256": "866cb0933915b43e92a21488fe2a408dfff833af9667e873f6f1c589a596929e"
+   },
+   {
+    "id": "Chu2023_MobileVLMFastStrongOpenVision_28a242",
+    "path": "pdfs/Chu2023_MobileVLMFastStrongOpenVision_28a242.pdf",
+    "sha256": "5cd7c398d74df436dc00745ccc150a47b80377c7244e5526e3d725e841aa5af4"
+   },
+   {
+    "id": "Jing2026_P4QCoDesigningTokenPruning_e0067e",
+    "path": "pdfs/Jing2026_P4QCoDesigningTokenPruning_e0067e.pdf",
+    "sha256": "010a79fbdf18ef29777febc41d41384749334ba385954502e7646a25e537edf3"
+   },
+   {
+    "id": "Ren2023_TESTATemporalSpatialTokenAggregation_d39824",
+    "path": "pdfs/Ren2023_TESTATemporalSpatialTokenAggregation_d39824.pdf",
+    "sha256": "8c87b267e19241c7c1b829827d8e6bf6e3ba26d2c9297c677407988bbd6eebce"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 120761,
+  "embed_cached": 173,
+  "rerank": 149045
+ },
+ "estimate": 466932,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls500/runs/2026-10-18_1828_ls500_rank.csv",
+   "fused_top10": [
+    "Cao2023_PuMerPruningMergingTokensEfficient_1b1252",
+    "Guo2025_STARStageWiseAttentionGuided_d01f3e",
+    "Chu2023_MobileVLMFastStrongOpenVision_28a242",
+    "Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6",
+    "Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa",
+    "Singh2026_DUETVLMDualStageUnified_6a80f2",
+    "Zhao2026_FocusThenContextSubjectCentric_cead20",
+    "Jing2026_P4QCoDesigningTokenPruning_e0067e",
+    "Bolya2022_TokenMergingYourViTBut_e66777",
+    "Wen2025_TokenPruningMultimodalLargeLanguage_f05665"
+   ],
+   "first_query_top10": [
+    "Cao2023_PuMerPruningMergingTokensEfficient_1b1252",
+    "Chu2023_MobileVLMFastStrongOpenVision_28a242",
+    "Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa",
+    "Bolya2022_TokenMergingYourViTBut_e66777",
+    "Guo2025_STARStageWiseAttentionGuided_d01f3e",
+    "Singh2026_DUETVLMDualStageUnified_6a80f2",
+    "Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6",
+    "Zhao2026_FocusThenContextSubjectCentric_cead20",
+    "Jing2026_P4QCoDesigningTokenPruning_e0067e",
+    "Wen2025_TokenPruningMultimodalLargeLanguage_f05665"
+   ]
+  }
+ }
+}

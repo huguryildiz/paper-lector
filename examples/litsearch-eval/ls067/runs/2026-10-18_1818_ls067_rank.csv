@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 12-13; p. 1-2; p. 3-4,Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a,0.032787,,1,0.8164,1,0.8672,p. 12-13; p. 2-3; p. 3-4,p. 1-2; p. 12-13; p. 6-7,16288,True,True,full_text
+2,,,,,p. 1-2; p. 7-8; p. 9-10,Wolfson2020_BreakItDownQuestionUnderstanding_2b156a,0.032258,,2,0.793,2,0.8438,p. 1-2; p. 7-8; p. 9-10,p. 1-2; p. 7-8; p. 11-12,14713,True,True,full_text
+3,,,,,p. 2-3; p. 8-10,Min2019_MultiHopReadingComprehensionThrough_1ed07f,0.031746,,3,0.7891,3,0.8359,p. 1-2; p. 2-3; p. 3-4,p. 3-4; p. 2-3; p. 8-10,12208,True,True,full_text
+4,,,,,p. 2-5; p. 6-8,Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750,0.03125,,4,0.7539,4,0.8125,p. 2-5; p. 4-7; p. 6-8,p. 2-5; p. 4-7; p. 6-8,7425,True,True,full_text
+5,,,,,p. 1-2; p. 8-12; p. 5-6,Xie2022_CalibratingTrustMultiHopQuestion_6e1153,0.030769,,5,0.7031,5,0.8008,p. 1-2; p. 8-12; p. 7-8,p. 1-2; p. 5-6; p. 8-12,9254,True,True,full_text
+6,,,,,p. 1-2; p. 3-4,Zhang2019_LearningOrderSubQuestionsComplex_216490,0.029631,,7,0.6836,8,0.7539,p. 2-3; p. 3-4; p. 1-2,p. 1-2; p. 2-3; p. 3-4,8391,True,True,full_text
+6,,,,,p. 1-2; p. 3-4; p. 7-8,Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764,0.029631,,8,0.6758,7,0.7578,p. 3-4; p. 4-7; p. 1-2,p. 1-2; p. 3-4; p. 7-8,6408,True,True,full_text
+8,,,,,p. 2-3; p. 4-5; p. 6-7,Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75,0.029437,,6,0.6875,10,0.7461,p. 2-3; p. 4-5; p. 6-7,p. 2-3; p. 1-2; p. 3-4,11410,True,True,full_text
+9,,,,,p. 3-4; p. 1-2,Tang2021_DoMultiHopQuestionAnswering_99e6d5,0.029236,,11,0.6523,6,0.7969,p. 4-5; p. 1-2; p. 3-4,p. 2-3; p. 4-5; p. 3-4,4207,True,True,full_text
+10,,,,,p. 2-3; p. 4-5; p. 7-9,Lee2026_DecomposeRefineStructuredLegalQuestion_5ec472,0.02879,,11,0.6523,8,0.7539,p. 2-3; p. 7-9; p. 3-4,p. 2-3; p. 4-5; p. 3-4,15794,True,True,full_text
+11,,,,,p. 2-3; p. 4-5; p. 6-7,Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_45c436,0.028577,,9,0.6719,11,0.7148,p. 2-3; p. 4-5; p. 6-7,p. 2-3; p. 8-12; p. 1-2,12459,True,True,full_text
+12,,,,,p. 3-4; p. 1-2; p. 7-8,Fang2020_HierarchicalGraphNetworkMultiHop_5cb845,0.028175,,10,0.668,12,0.6758,p. 1-2; p. 3-4; p. 9-12,p. 2-3; p. 3-4; p. 7-8,16013,True,True,full_text
+13,,,,,p. 4-6; p. 1-2; p. 7-8,Ding2019_CognitiveGraphMultiHopReading_255386,0.027212,,13,0.6289,14,0.6367,p. 4-6; p. 8-9; p. 1-2,p. 7-8; p. 4-6; p. 8,19627,True,True,full_text
+14,,,,,p. 2-4,Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5,0.026857,,16,0.5859,13,0.6641,p. 2-4; p. 3-4; p. 1-2,p. 2-4; p. 1-3; p. 4-6,10697,True,True,full_text
+15,,,,,p. 3-4; p. 7-8; p. 1-2,Gupta2020_ReinforcedMultiTaskApproachMulti_01c22d,0.026847,,14,0.6094,15,0.625,p. 1-2; p. 3-4; p. 7-8,p. 2-3; p. 3-4; p. 7-8,13161,True,True,full_text
+16,,,,,p. 3-5; p. 1-2; p. 9,Qiu2019_DynamicallyFusedGraphNetworkMulti_49a0c1,0.026491,,15,0.5977,16,0.6055,p. 3-5; p. 1-2; p. 5-6,p. 2-3; p. 3-5; p. 9,9609,True,True,full_text
+17,,,,,p. 1-2; p. 9-13,Ho2023_AnalyzingEffectivenessUnderlyingReasoningTasks_d50ccd,0.025974,,17,0.5703,17,0.6016,p. 2-3; p. 1-2; p. 9-13,p. 1-2; p. 8-9; p. 9-13,19089,True,True,full_text
+18,,,,,p. 3-4; p. 7-8,Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b,0.025479,,18,0.4375,19,0.4121,p. 7-8; p. 4-5; p. 3-4,p. 3-4; p. 7-8; p. 4-5,8022,True,True,full_text
+18,,,,,p. 2-3; p. 6-7,Rajpurkar2016_SQuAD100000QuestionsMachine_463332,0.025479,,19,0.4336,18,0.4258,p. 2-3; p. 6-7; p. 5-6,p. 6-7; p. 3-4; p. 2-3,7884,True,True,full_text
+20,,,,,p. 2-4; p. 5-9,Rajpurkar2018_KnowWhatYouDonT_925a9c,0.025,,20,0.3984,20,0.3906,p. 5-9; p. 2-4; p. 2-3,p. 1-2; p. 5-9; p. 2-4,5819,True,True,full_text

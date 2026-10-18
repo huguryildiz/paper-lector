@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:22:54",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "df9076570df007a89e13a2c8fe35c4fa2625d947384ecd81e3db6ad43b7645ad"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "ee88ec504de2f2534f6f90e3e567b4da6f8395b34a49007560003fc6222a91de"
+   }
+  ]
+ },
+ "question": "Have any research papers suggested techniques for automatically choosing in-context examples?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Have any research papers suggested techniques for automatically choosing in-context examples?",
+   "keywords": "automatically choosing in-context examples"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "In-context learning with large language models, where the demonstration examples placed in the prompt are selected automatically from a pool of labelled examples.",
+   "keywords": "in-context examples selection demonstration retrieval automatic few-shot prompt"
+  }
+ },
+ "queries_sha": "9b81e601203e",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 332,
+  "ids": [
+   "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+   "An2023_SkillBasedFewShotSelection_ed971a",
+   "Liu2024_UnravelingMechanicsLearningBasedDemonstration_c64a80",
+   "Chang2023_DataCurationAloneCanStabilize_ef8980",
+   "Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac",
+   "Ghosal2024_PromptRefineEnhancingFewShotPerformance_21a121",
+   "Venktesh2026_DataEfficientSampleSelectionContext_df8836",
+   "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+   "Gupta2023_CoverageBasedExampleSelectionContext_ea5ad0",
+   "Shi2022_XRICLCrossLingualRetrievalAugmented_bd333d",
+   "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+   "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+   "Liu2022_WhatMakesGoodContextExamples_f59eab",
+   "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+   "Li2023_UnifiedDemonstrationRetrieverContextLearning_be277f",
+   "Holtzman2021_SurfaceFormCompetitionWhyHighest_60c9c3",
+   "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+   "Levy2023_DiverseDemonstrationsImproveContextCompositional_1b8c51",
+   "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+   "Chen2023_RelationBetweenSensitivityAccuracyContext_921221"
+  ],
+  "files": [
+   {
+    "id": "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+    "path": "pdfs/Zhang2022_ActiveExampleSelectionContextLearning_7093af.pdf",
+    "sha256": "1d1c116f1d66da865d8c27b51081f8e45639a0843709c3af15f4616cece56e65"
+   },
+   {
+    "id": "An2023_SkillBasedFewShotSelection_ed971a",
+    "path": "pdfs/An2023_SkillBasedFewShotSelection_ed971a.pdf",
+    "sha256": "291969500401758115d5973ec362849df1c41502799a37ee1a62d59a2942090a"
+   },
+   {
+    "id": "Liu2024_UnravelingMechanicsLearningBasedDemonstration_c64a80",
+    "path": "pdfs/Liu2024_UnravelingMechanicsLearningBasedDemonstration_c64a80.pdf",
+    "sha256": "1d2fa7ffc6aa8b482cb0c4a9454906e91960a48e83a0ced09d3735650341ef1d"
+   },
+   {
+    "id": "Chang2023_DataCurationAloneCanStabilize_ef8980",
+    "path": "pdfs/Chang2023_DataCurationAloneCanStabilize_ef8980.pdf",
+    "sha256": "640166c31c710276eb79f54a6a1f4eda463a28554cb80eee7d8c405fdb082443"
+   },
+   {
+    "id": "Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac",
+    "path": "pdfs/Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac.pdf",
+    "sha256": "0a9ac5b9d586bcfb3c88fd1c399bc81170a0388cca01973b5a698331b3ce3ffa"
+   },
+   {
+    "id": "Ghosal2024_PromptRefineEnhancingFewShotPerformance_21a121",
+    "path": "pdfs/Ghosal2024_PromptRefineEnhancingFewShotPerformance_21a121.pdf",
+    "sha256": "e102dfdbae758b2e874d71a3249b9ea39a1becb956061a9375387ba3df6cb3f5"
+   },
+   {
+    "id": "Venktesh2026_DataEfficientSampleSelectionContext_df8836",
+    "path": "pdfs/Venktesh2026_DataEfficientSampleSelectionContext_df8836.pdf",
+    "sha256": "307dc06bbfca14868e48435bf096804bc1cfddd13a08524c80f884efca6771f7"
+   },
+   {
+    "id": "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+    "path": "pdfs/Wu2023_SelfAdaptiveContextLearningInformation_50efe9.pdf",
+    "sha256": "bcc3efa0a2854cb4a9eaa7bc4c2adbc63204d095564dd4276a756a696b0f5465"
+   },
+   {
+    "id": "Gupta2023_CoverageBasedExampleSelectionContext_ea5ad0",
+    "path": "pdfs/Gupta2023_CoverageBasedExampleSelectionContext_ea5ad0.pdf",
+    "sha256": "7f5dec5283e417120fb9dedcf2c262f8c9425dc588f11bf5e1cda8e80f58e263"
+   },
+   {
+    "id": "Shi2022_XRICLCrossLingualRetrievalAugmented_bd333d",
+    "path": "pdfs/Shi2022_XRICLCrossLingualRetrievalAugmented_bd333d.pdf",
+    "sha256": "226f6b510eece0538217d5fc143aebcae9af68c01444ac562009d11de9445356"
+   },
+   {
+    "id": "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+    "path": "pdfs/Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f.pdf",
+    "sha256": "3a9e7466738095af6d63d49af69c95c7bcf652d76bae07fcf963f42198d4cea4"
+   },
+   {
+    "id": "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "path": "pdfs/Rubin2022_LearningRetrievePromptsContextLearning_47f9ec.pdf",
+    "sha256": "d18479bda48c0f1bfc6bc05cdf3496aef400ee2c40970bf72bf0d3ccfd0f928b"
+   },
+   {
+    "id": "Liu2022_WhatMakesGoodContextExamples_f59eab",
+    "path": "pdfs/Liu2022_WhatMakesGoodContextExamples_f59eab.pdf",
+    "sha256": "257a0527b152dc970a21d20a1f9e85e2eb9834ec5cabdc1e662b68a24d04351f"
+   },
+   {
+    "id": "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+    "path": "pdfs/Xie2021_ExplanationContextLearningAsImplicit_f73edf.pdf",
+    "sha256": "ad9be01798fcf4fdc66ff3630f7a6f1cc157c04d51d0821d7798e028cb175c4b"
+   },
+   {
+    "id": "Li2023_UnifiedDemonstrationRetrieverContextLearning_be277f",
+    "path": "pdfs/Li2023_UnifiedDemonstrationRetrieverContextLearning_be277f.pdf",
+    "sha256": "e3defb1a939069e5af8e380dda531b3fa56bef8bcac5b6c778fca7726817000e"
+   },
+   {
+    "id": "Holtzman2021_SurfaceFormCompetitionWhyHighest_60c9c3",
+    "path": "pdfs/Holtzman2021_SurfaceFormCompetitionWhyHighest_60c9c3.pdf",
+    "sha256": "810c26ceec851aff7b478bab82f09aaf09bd592650f1931869ecaac325974566"
+   },
+   {
+    "id": "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+    "path": "pdfs/Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f.pdf",
+    "sha256": "79128fd114abe78e1377b212ee3f28cc41cc9e4c20a45111dbdb8fdb3dd0af7f"
+   },
+   {
+    "id": "Levy2023_DiverseDemonstrationsImproveContextCompositional_1b8c51",
+    "path": "pdfs/Levy2023_DiverseDemonstrationsImproveContextCompositional_1b8c51.pdf",
+    "sha256": "df523ee452a7021b8ba9f5606fdfd418d944d17cb6842045d49e1b765adf8826"
+   },
+   {
+    "id": "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+    "path": "pdfs/Li2023_FindingSupportExamplesContextLearning_7a9b60.pdf",
+    "sha256": "d3776613de9b70e5fedbe012cc8934e94764ce965681e623e5b4790e8bfe3324"
+   },
+   {
+    "id": "Chen2023_RelationBetweenSensitivityAccuracyContext_921221",
+    "path": "pdfs/Chen2023_RelationBetweenSensitivityAccuracyContext_921221.pdf",
+    "sha256": "da9a70646336c9cd912dc3fd778ea8ea6a23f00ef84ba0796c550b9273e822e9"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 276825,
+  "embed_cached": 76,
+  "rerank": 146485
+ },
+ "estimate": 515290,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls271/runs/2026-10-18_1822_ls271_rank.csv",
+   "fused_top10": [
+    "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+    "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+    "Gupta2023_CoverageBasedExampleSelectionContext_ea5ad0",
+    "Venktesh2026_DataEfficientSampleSelectionContext_df8836",
+    "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "Liu2022_WhatMakesGoodContextExamples_f59eab",
+    "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+    "An2023_SkillBasedFewShotSelection_ed971a",
+    "Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac",
+    "Liu2024_UnravelingMechanicsLearningBasedDemonstration_c64a80"
+   ],
+   "first_query_top10": [
+    "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+    "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+    "Liu2022_WhatMakesGoodContextExamples_f59eab",
+    "Gupta2023_CoverageBasedExampleSelectionContext_ea5ad0",
+    "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+    "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "Venktesh2026_DataEfficientSampleSelectionContext_df8836",
+    "An2023_SkillBasedFewShotSelection_ed971a",
+    "Agrawal2023_ContextExamplesSelectionMachineTranslation_70073f",
+    "Ghosal2024_PromptRefineEnhancingFewShotPerformance_21a121"
+   ]
+  }
+ }
+}

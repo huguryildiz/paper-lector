@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:27:12",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "3d766f3366d44ff67229e513d6b6a5c257fa3bf4092fc23e228bd3b7d5f60ab4"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "b73fc85a29b6cbe77527f41abb0348ec4cf271aaf44d3289e77e74f75bbc84f9"
+   }
+  ]
+ },
+ "question": "Is there any paper that investigates backdoor attacks across various types of tasks, not limited to classification, in language models?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there any paper that investigates backdoor attacks across various types of tasks, not limited to classification, in language models?",
+   "keywords": "backdoor attacks language models various tasks beyond classification generation"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Backdoor attacks that poison the training data or weights of pretrained language models, studied across many kinds of natural language processing tasks such as generation, translation, question answering and tagging rather than classification alone.",
+   "keywords": "backdoor poisoning trigger language models NLP tasks generation translation question answering"
+  }
+ },
+ "queries_sha": "eada4b5b2e25",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 303,
+  "ids": [
+   "Li2023_MultiTargetBackdoorAttacksCode_425358",
+   "Lyu2023_AttentionEnhancingBackdoorAttacksAgainst_49b740",
+   "Li2025_ChainScrutinyDetectingBackdoorAttacks_b5dbf9",
+   "Qiu2025_MEGenGenerativeBackdoorIntoLarge_1bc5a9",
+   "Du2024_UORUniversalBackdoorAttacksPre_6c70f1",
+   "Li2026_PurifyingGenerativeLLMsFromBackdoors_c22070",
+   "Yuan2025_MergeHijackingBackdoorAttacksModel_6d2d39",
+   "Kurita2020_WeightPoisoningAttacksPretrainedModels_57ec1d",
+   "Zhao2023_PromptAsTriggersBackdoorAttack_f0d03b",
+   "Azizi2021_TMinerGenerativeApproachDefend_64b23c",
+   "Chen2021_BadPreTaskAgnosticBackdoorAttacks_1874a2",
+   "You2023_LargeLanguageModelsAreBetter_3a69c2",
+   "Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a",
+   "Li2021_BackdoorAttacksPreTrainedModels_272ca8",
+   "Qi2021_ONIONSimpleEffectiveDefenseAgainst_2c2f48",
+   "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+   "Qi2021_MindStyleTextAdversarialBackdoor_5b5990",
+   "Qi2021_HiddenKillerInvisibleTextualBackdoor_39951d",
+   "Gu2017_BadNetsIdentifyingVulnerabilitiesMachineLearning_cae3a6",
+   "Gan2022_TriggerlessBackdoorAttackNLPTasks_23389e"
+  ],
+  "files": [
+   {
+    "id": "Li2023_MultiTargetBackdoorAttacksCode_425358",
+    "path": "pdfs/Li2023_MultiTargetBackdoorAttacksCode_425358.pdf",
+    "sha256": "65e6c6ddab1b86525656cb70e555c21109aa866d64ff8dab4a22439fcc9d6b86"
+   },
+   {
+    "id": "Lyu2023_AttentionEnhancingBackdoorAttacksAgainst_49b740",
+    "path": "pdfs/Lyu2023_AttentionEnhancingBackdoorAttacksAgainst_49b740.pdf",
+    "sha256": "63b967b52c32e6e7cbcbd4d45964168193bbd23b8b02e3807d75e795060b3a55"
+   },
+   {
+    "id": "Li2025_ChainScrutinyDetectingBackdoorAttacks_b5dbf9",
+    "path": "pdfs/Li2025_ChainScrutinyDetectingBackdoorAttacks_b5dbf9.pdf",
+    "sha256": "f61db0039df58372cd97841c843369649f12620a9680f0f28ad926e33f1fa735"
+   },
+   {
+    "id": "Qiu2025_MEGenGenerativeBackdoorIntoLarge_1bc5a9",
+    "path": "pdfs/Qiu2025_MEGenGenerativeBackdoorIntoLarge_1bc5a9.pdf",
+    "sha256": "0cf10dfcddcef6899c28b73596ba7c9539b9d88568916fdd45b3285b37f2a589"
+   },
+   {
+    "id": "Du2024_UORUniversalBackdoorAttacksPre_6c70f1",
+    "path": "pdfs/Du2024_UORUniversalBackdoorAttacksPre_6c70f1.pdf",
+    "sha256": "71751bccc7743ba10cc95d731a7b88b2c7e64e9e6a52b403ebffcd51004c2e83"
+   },
+   {
+    "id": "Li2026_PurifyingGenerativeLLMsFromBackdoors_c22070",
+    "path": "pdfs/Li2026_PurifyingGenerativeLLMsFromBackdoors_c22070.pdf",
+    "sha256": "198d397c68014110cbce29948455182b2b9e805d604444021f98a9ea2dee3ae4"
+   },
+   {
+    "id": "Yuan2025_MergeHijackingBackdoorAttacksModel_6d2d39",
+    "path": "pdfs/Yuan2025_MergeHijackingBackdoorAttacksModel_6d2d39.pdf",
+    "sha256": "b2be34f31cf90a21dede166264a4184381ec2bc284a26ea1f3d10a9de8b8fc5d"
+   },
+   {
+    "id": "Kurita2020_WeightPoisoningAttacksPretrainedModels_57ec1d",
+    "path": "pdfs/Kurita2020_WeightPoisoningAttacksPretrainedModels_57ec1d.pdf",
+    "sha256": "2fda2cb63a613b40777179481d4ff2dece722c90e09666c82b7e2b38f3750fbf"
+   },
+   {
+    "id": "Zhao2023_PromptAsTriggersBackdoorAttack_f0d03b",
+    "path": "pdfs/Zhao2023_PromptAsTriggersBackdoorAttack_f0d03b.pdf",
+    "sha256": "1fcb169ed245730e06acbae805e28046be7629c42890211a2c1de453957a29b2"
+   },
+   {
+    "id": "Azizi2021_TMinerGenerativeApproachDefend_64b23c",
+    "path": "pdfs/Azizi2021_TMinerGenerativeApproachDefend_64b23c.pdf",
+    "sha256": "09286fc38f3f6bed32ba7841345d327ef65a486d42b5155827bca316661f4e41"
+   },
+   {
+    "id": "Chen2021_BadPreTaskAgnosticBackdoorAttacks_1874a2",
+    "path": "pdfs/Chen2021_BadPreTaskAgnosticBackdoorAttacks_1874a2.pdf",
+    "sha256": "17afb525554063afa054bbe79048c96ab16b31fdd0cb6b9052a7b05c19f587e7"
+   },
+   {
+    "id": "You2023_LargeLanguageModelsAreBetter_3a69c2",
+    "path": "pdfs/You2023_LargeLanguageModelsAreBetter_3a69c2.pdf",
+    "sha256": "bbd8718101f3b27e35e0417c8225affce63aaa58f7971a8a44ef46d8928fb9cf"
+   },
+   {
+    "id": "Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a",
+    "path": "pdfs/Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a.pdf",
+    "sha256": "c08f19ffc32b2ba8d9c5d528475bd3048b21f8b1bbc43d7ab3fd95294ccd4c15"
+   },
+   {
+    "id": "Li2021_BackdoorAttacksPreTrainedModels_272ca8",
+    "path": "pdfs/Li2021_BackdoorAttacksPreTrainedModels_272ca8.pdf",
+    "sha256": "3efcb33560cf5f79e24c2ac64b81f4cb16e1170743213c2491c776c51cbb5288"
+   },
+   {
+    "id": "Qi2021_ONIONSimpleEffectiveDefenseAgainst_2c2f48",
+    "path": "pdfs/Qi2021_ONIONSimpleEffectiveDefenseAgainst_2c2f48.pdf",
+    "sha256": "d38a6367e77b4a49870a14fae5df58ae2d1fe953a048392a531ba37e1e0d0fca"
+   },
+   {
+    "id": "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "path": "pdfs/Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9.pdf",
+    "sha256": "51ebaf21e4cd586761016a64b2b753ee5ca05dd52a0de6bf8058a7eb8e932d91"
+   },
+   {
+    "id": "Qi2021_MindStyleTextAdversarialBackdoor_5b5990",
+    "path": "pdfs/Qi2021_MindStyleTextAdversarialBackdoor_5b5990.pdf",
+    "sha256": "f51c3ba98867875fefe8288695cc0d339d1ceb1c7b8059b3e532a1585771fbcd"
+   },
+   {
+    "id": "Qi2021_HiddenKillerInvisibleTextualBackdoor_39951d",
+    "path": "pdfs/Qi2021_HiddenKillerInvisibleTextualBackdoor_39951d.pdf",
+    "sha256": "0f09a422f36e5257dbeb48a8aed896d096b1b8217b823f199503b79ebc3aa983"
+   },
+   {
+    "id": "Gu2017_BadNetsIdentifyingVulnerabilitiesMachineLearning_cae3a6",
+    "path": "pdfs/Gu2017_BadNetsIdentifyingVulnerabilitiesMachineLearning_cae3a6.pdf",
+    "sha256": "96f572d948ff62baaae5fbb9fcf6bdf28dfb6a67b7a4ea013a3d17ece927795e"
+   },
+   {
+    "id": "Gan2022_TriggerlessBackdoorAttackNLPTasks_23389e",
+    "path": "pdfs/Gan2022_TriggerlessBackdoorAttackNLPTasks_23389e.pdf",
+    "sha256": "abf4827e09b4633f877ecb3759a210d17eb5780ade0a35ecd980abca2a742fd8"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 299476,
+  "embed_cached": 25,
+  "rerank": 144925
+ },
+ "estimate": 478253,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls399/runs/2026-10-18_1826_ls399_rank.csv",
+   "fused_top10": [
+    "Chen2021_BadPreTaskAgnosticBackdoorAttacks_1874a2",
+    "Qiu2025_MEGenGenerativeBackdoorIntoLarge_1bc5a9",
+    "Li2026_PurifyingGenerativeLLMsFromBackdoors_c22070",
+    "Du2024_UORUniversalBackdoorAttacksPre_6c70f1",
+    "Kurita2020_WeightPoisoningAttacksPretrainedModels_57ec1d",
+    "Lyu2023_AttentionEnhancingBackdoorAttacksAgainst_49b740",
+    "Li2023_MultiTargetBackdoorAttacksCode_425358",
+    "You2023_LargeLanguageModelsAreBetter_3a69c2",
+    "Li2021_BackdoorAttacksPreTrainedModels_272ca8",
+    "Qi2021_HiddenKillerInvisibleTextualBackdoor_39951d"
+   ],
+   "first_query_top10": [
+    "Chen2021_BadPreTaskAgnosticBackdoorAttacks_1874a2",
+    "Qiu2025_MEGenGenerativeBackdoorIntoLarge_1bc5a9",
+    "Li2026_PurifyingGenerativeLLMsFromBackdoors_c22070",
+    "Du2024_UORUniversalBackdoorAttacksPre_6c70f1",
+    "Lyu2023_AttentionEnhancingBackdoorAttacksAgainst_49b740",
+    "Li2023_MultiTargetBackdoorAttacksCode_425358",
+    "Li2025_ChainScrutinyDetectingBackdoorAttacks_b5dbf9",
+    "Yuan2025_MergeHijackingBackdoorAttacksModel_6d2d39",
+    "You2023_LargeLanguageModelsAreBetter_3a69c2",
+    "Kurita2020_WeightPoisoningAttacksPretrainedModels_57ec1d"
+   ]
+  }
+ }
+}

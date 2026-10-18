@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:25:27", "question": "How to faithfully and explicitly measure the helpfulness of human explanations to language models during finetuning and inference?", "name": "ls359", "queries": "queries.json", "queries_sha": "448a23d22860", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1825", "abstracts": ""}

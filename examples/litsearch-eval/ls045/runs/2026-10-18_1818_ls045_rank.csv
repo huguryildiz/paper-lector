@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 5-6; p. 9-12,Shakeri2020_EndEndSyntheticDataGeneration_9db851,0.032522,,1,0.9414,2,0.8086,p. 1-2; p. 5-6; p. 9-12,p. 1-2; p. 5-6; p. 9-12,18628,True,True,full_text
+2,,,,,p. 6-7; p. 1-2; p. 3-4,Yue2021_ContrastiveDomainAdaptationQuestionAnswering_db98f2,0.032266,,3,0.8828,1,0.8438,p. 1-2; p. 3-4; p. 6-7,p. 2-3; p. 3-5; p. 6-7,14185,True,True,full_text
+3,,,,,p. 1-2; p. 8-11; p. 5-6,Puri2020_TrainingQuestionAnsweringModelsFrom_85fa0c,0.031258,,5,0.8594,3,0.7227,p. 8-11; p. 1-2; p. 5-6,p. 8-11; p. 1-2; p. 7-8,13753,True,True,full_text
+4,,,,,p. 1-2; p. 3-4,Alberti2019_SyntheticQACorporaGenerationRoundtrip_06909c,0.030835,,2,0.8906,8,0.6992,p. 1-2; p. 3-4; p. 2-3,p. 1-2; p. 3-4; p. 4-5,5103,True,True,full_text
+5,,,,,p. 1-2; p. 4-7,Chowdhury2024_GenerativeDataAugmentationUsingLLMs_9afabe,0.030777,,4,0.8711,6,0.7109,p. 1-2; p. 2-4; p. 4-7,p. 1-2; p. 2-4; p. 4-7,5890,True,True,full_text
+5,,,,,p. 1-2; p. 7-8,Bai2024_GiveMeSomeHardQuestions_28986f,0.030777,,6,0.8281,4,0.7188,p. 7-8; p. 8-9; p. 1-2,p. 7-8; p. 8-9; p. 1-2,14206,True,True,full_text
+7,,,,,p. 1-2; p. 3-4; p. 9-13,Yue2022_QADomainAdaptationUsingHidden_abb89c,0.030118,,9,0.8047,4,0.7188,p. 1-2; p. 9-13; p. 3-4,p. 1-2; p. 9-13; p. 3-4,10398,True,True,full_text
+8,,,,,p. 1-2; p. 4-5; p. 6-7,Shakeri2021_TowardsZeroShotMultilingualSynthetic_f2f0a1,0.029851,,7,0.8164,7,0.707,p. 1-2; p. 2-3; p. 6-7,p. 1-2; p. 2-3; p. 4-5,8841,True,True,full_text
+9,,,,,p. 2-3; p. 6-7,Chakravarti2020_TowardsBuildingRobustIndustryScale_47d37d,0.028778,,10,0.7773,9,0.6953,p. 6-7; p. 2-3; p. 5-6,p. 2-3; p. 6-7; p. 7-8,9077,True,True,full_text
+10,,,,,p. 1-3; p. 4-5; p. 9-13,Mekala2022_LeveragingQADatasetsImproveGenerative_230e7f,0.028595,,8,0.8125,12,0.6406,p. 1-3; p. 3-4; p. 4-5,p. 1-3; p. 3-4; p. 9-13,15036,True,True,full_text
+11,,,,,p. 1-2; p. 4-6,Hazen2019_TowardsDomainAdaptationFromLimited_42e3bc,0.028191,,13,0.6875,9,0.6953,p. 1-2; p. 2-3; p. 4-6,p. 2-3; p. 1-2; p. 4-6,6377,True,True,full_text
+12,,,,,p. 1-2; p. 6-7,Duan2017_QuestionGenerationQuestionAnswering_0e2423,0.027783,,11,0.7188,13,0.6289,p. 1-2; p. 6-7; p. 7-8,p. 1-2; p. 6-7; p. 7-8,7774,True,True,full_text
+13,,,,,p. 2-4; p. 6-7,Hemati2024_ConsistencyTrainingSyntheticQuestionGeneration_58b8e7,0.027598,,11,0.7188,14,0.5508,p. 2-3; p. 6-7; p. 2-4,p. 1-2; p. 6-7; p. 2-4,6564,True,True,full_text
+13,,,,,p. 1-2; p. 4; p. 6-7,Basu2023_UsingWeakSupervisionDataAugmentation_5c2342,0.027598,,14,0.6836,11,0.6719,p. 4-5; p. 1-2; p. 4,p. 1-2; p. 6-7; p. 4,9335,True,True,full_text
+15,,,,,p. 2-3; p. 6-7; p. 4-5,Tang2017_QuestionAnsweringQuestionGenerationAs_44f9c4,0.026667,,15,0.5898,15,0.4922,p. 6-7; p. 2-3; p. 1-2,p. 6-7; p. 2-3; p. 4-5,9532,True,True,full_text
+16,,,,,p. 3-4; p. 9-10; p. 1-2,Fisch2019_MRQA2019SharedTaskEvaluating_b610c2,0.026316,,16,0.5664,16,0.4844,p. 3-4; p. 9-10; p. 1-2,p. 3-4; p. 9-10; p. 3-5,11182,True,True,full_text
+17,,,,,p. 7-8; p. 27-28; p. 2-3,Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60,0.025974,,17,0.5312,17,0.4414,p. 27-28; p. 7-8; p. 25-27,p. 27-28; p. 2-3; p. 7-8,57933,True,True,full_text
+18,,,,,p. 3-4; p. 8-9,Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5,0.025479,,18,0.4844,19,0.4258,p. 8-9; p. 3-4; p. 2-4,p. 8-9; p. 1-3; p. 3-4,10697,True,True,full_text
+19,,,,,p. 2-3; p. 4-5,Rajpurkar2016_SQuAD100000QuestionsMachine_463332,0.025321,,20,0.4688,18,0.4395,p. 3-4; p. 2-3; p. 4-5,p. 2-3; p. 3-4; p. 5-6,7884,True,True,full_text
+20,,,,,p. 1-2; p. 5-6; p. 4,Long2015_LearningTransferableFeaturesDeepAdaptation_1c83f3,0.025158,,19,0.4805,20,0.4199,p. 1-2; p. 5-6; p. 4,p. 1-2; p. 5-6; p. 2-3,12008,True,True,full_text

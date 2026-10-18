@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 8-9; p. 1-2; p. 3-4,Ao2021_SpeechT5UnifiedModalEncoderDecoder_cb7cb3,0.032787,,1,0.9258,1,0.9025,p. 2-3; p. 8-9; p. 9-13,p. 1-2; p. 3-4; p. 8-9,12836,True,True,full_text
+2,,,,,p. 2-3; p. 8-13,Zhang2022_SpeechUTBridgingSpeechTextHidden_1e5e93,0.032258,,2,0.8594,2,0.8366,p. 2; p. 2-3; p. 8-13,p. 2-3; p. 1-2; p. 8-13,12848,True,True,full_text
+3,,,,,p. 1-2; p. 4-5,Zheng2021_FusedAcousticTextEncodingMultimodal_2e328b,0.031746,,3,0.8477,3,0.8332,p. 1-2; p. 2-3; p. 4-5,p. 1-2; p. 2-3; p. 4-5,10700,True,True,full_text
+4,,,,,p. 1-2; p. 3-4; p. 8-9,Ye2022_CrossModalContrastiveLearningSpeech_6966ec,0.03101,,4,0.8359,5,0.78,p. 1-2; p. 2-3; p. 8-9,p. 2-3; p. 3-4; p. 1-2,12844,True,True,full_text
+4,,,,,p. 2-3; p. 7-8; p. 4-5,Bapna2021_SLAMUnifiedEncoderSpeechLanguage_483f4a,0.03101,,5,0.8203,4,0.7955,p. 2-3; p. 9-10; p. 7-8,p. 7-8; p. 2-3; p. 4-5,11402,True,True,full_text
+6,,,,,p. 8-12; p. 1-2; p. 3-4,Chou2023_TowardJointLanguageModelingSpeech_f6d499,0.029857,,6,0.8164,8,0.7379,p. 1-2; p. 8-12; p. 8-9,p. 2-3; p. 8-12; p. 3-4,10094,True,True,full_text
+6,,,,,p. 2-3; p. 4-5,Ouyang2023_WACOWordAlignedContrastiveLearning_51522d,0.029857,,8,0.7656,6,0.7492,p. 2-3; p. 3-5; p. 1-2,p. 2-3; p. 3-5; p. 4-5,11930,True,True,full_text
+8,,,,,p. 1-3; p. 4-5; p. 7-8,Chung2021_SPLATSpeechLanguageJointPre_876e21,0.029851,,7,0.7812,7,0.7398,p. 1-3; p. 8-9; p. 7-8,p. 1-3; p. 4-5; p. 3-4,8740,True,True,full_text
+9,,,,,p. 3-5; p. 1-2,Xu2021_StackedAcousticTextualEncodingIntegrating_46535d,0.028986,,9,0.6992,9,0.694,p. 4-6; p. 3-5; p. 1-2,p. 3-5; p. 4-6; p. 1-3,8686,True,True,full_text
+10,,,,,p. 3-4; p. 1-2; p. 7-8,Wang2021_UniSpeechUnifiedSpeechRepresentationLearning_cf59ed,0.027984,,10,0.6172,13,0.5782,p. 1-2; p. 3-4; p. 8-9,p. 3-4; p. 4-5; p. 7-8,11015,True,True,full_text
+11,,,,,p. 1-2; p. 3-4; p. 6,Wang2020_CurriculumPreTrainingEndEnd_cac064,0.027783,,13,0.5664,11,0.6242,p. 1-2; p. 3-4; p. 6,p. 3-4; p. 1-2; p. 6,8855,True,True,full_text
+12,,,,,p. 6-7; p. 8-10; p. 24-25,Baevski2021_UnsupervisedSpeechRecognition_c26197,0.027778,,12,0.582,12,0.5927,p. 8-10; p. 6-7; p. 24-25,p. 24-25; p. 6-7; p. 8-10,19697,True,True,full_text
+13,,,,,p. 2-3; p. 4-5,Baevski2019_VqWav2vecSelfSupervisedLearning_ae5f54,0.027619,,10,0.6172,15,0.562,p. 1-2; p. 2-3; p. 5-6,p. 2-3; p. 3-4; p. 4-5,8998,True,True,full_text
+13,,,,,p. 1-2; p. 3-4,Wang2020_CoVoST2MassivelyMultilingualSpeech_d63540,0.027619,,15,0.5352,10,0.626,p. 3-4; p. 4-5; p. 1-2,p. 3-4; p. 4-5; p. 1-2,7896,True,True,full_text
+15,,,,,p. 1-2; p. 4-5; p. 6,Baevski2019_EffectivenessSelfSupervisedPreTraining_9a563a,0.027027,,14,0.543,14,0.5699,p. 1-2; p. 6; p. 4-5,p. 1-2; p. 4-5; p. 2-3,7753,True,True,full_text
+16,,,,,p. 1; p. 2-3,Chan2021_SpeechStewSimplyMixAllAvailable_3b7e7b,0.026145,,17,0.5156,16,0.5186,p. 1; p. 2-3; p. 3-4,p. 1; p. 2-3; p. 3-4,5938,True,True,full_text
+17,,,,,p. 2-3; p. 5-6; p. 11-12,Ren2019_FastSpeechFastRobustControllableText_cb3ddf,0.025816,,16,0.5273,19,0.4905,p. 5-6; p. 2-3; p. 4-5,p. 5-6; p. 11-12; p. 2-3,8837,True,True,full_text
+18,,,,,p. 2-3; p. 5-6; p. 9-10,Synnaeve2019_EndEndASRFromSupervised_8503d9,0.025808,,18,0.5078,17,0.5107,p. 3-4; p. 2-3; p. 9-10,p. 2-3; p. 3-4; p. 5-6,14312,True,True,full_text
+19,,,,,p. 2-4; p. 5; p. 7-8,Zhang2020_PushingLimitsSemiSupervisedLearning_98c9d5,0.025479,,19,0.5039,18,0.5038,p. 2-4; p. 7-8; p. 5,p. 2-4; p. 1-2; p. 5,6104,True,True,full_text
+20,,,,,p. 1; p. 3; p. 4-5,Ardila2019_CommonVoiceMassivelyMultilingualSpeech_836d14,0.025,,20,0.4375,20,0.4629,p. 3; p. 3-4; p. 1,p. 3; p. 1; p. 4-5,5445,True,True,full_text

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 2-3; p. 9-13; p. 4-5,Subramani2022_ExtractingLatentSteeringVectorsFrom_c3e34b,0.032522,,2,0.7578,1,0.8359,p. 2-3; p. 4-5; p. 9-13,p. 2-3; p. 8-9; p. 9-13,12198,True,True,full_text
+2,,,,,p. 1; p. 7-10; p. 2-3,Wang2026_FishBackPullbackFisherGeometryOptimal_d3fc4d,0.031778,,1,0.8086,5,0.7852,p. 1; p. 4-5; p. 7-10,p. 1; p. 2-3; p. 7-10,27204,True,True,full_text
+3,,,,,p. 19-20; p. 21-22; p. 26-28,Wehner2025_TaxonomyOpportunitiesChallengesRepresentationEngineering_7e5526,0.031746,,3,0.7383,3,0.8008,p. 26-28; p. 41-42; p. 19-20,p. 19-20; p. 20-21; p. 21-22,52104,True,True,full_text
+4,,,,,p. 1-2; p. 11-12,Kumar2023_ControlledTextGenerationHiddenRepresentation_dbfb3b,0.031281,,6,0.6562,2,0.8047,p. 11-12; p. 2-4; p. 1-2,p. 2-4; p. 11-12; p. 1-2,11341,True,True,full_text
+5,,,,,p. 1-2; p. 3-4; p. 10-15,Dathathri2019_PlugPlayLanguageModelsSimple_3e5602,0.030798,,7,0.6523,3,0.8008,p. 4-5; p. 3-4; p. 1-2,p. 3-4; p. 10-15; p. 1-2,31088,True,True,full_text
+6,,,,,p. 8-9; p. 2-3,Leong2023_SelfDetoxifyingLanguageModelsToxification_cce2a0,0.03055,,4,0.7148,7,0.7227,p. 8-9; p. 7-8; p. 8-12,p. 8-9; p. 2-3; p. 3-4,17093,True,True,full_text
+7,,,,,p. 1-2; p. 9-12,Chan2020_CoConSelfSupervisedApproachControlled_8d79c9,0.030536,,5,0.6797,6,0.7383,p. 2-4; p. 9-12; p. 1-2,p. 2-4; p. 1-3; p. 1-2,19003,True,True,full_text
+8,,,,,p. 8-9; p. 1-2,Liu2021_DExpertsDecodingTimeControlledText_c3f6ac,0.029199,,9,0.6367,8,0.7109,p. 8-9; p. 2-3; p. 9-13,p. 8-9; p. 1-2; p. 9-13,12552,True,True,full_text
+9,,,,,p. 1-2; p. 8-9,Kumar2021_ControlledTextGenerationAsContinuous_b1b292,0.028992,,8,0.6406,10,0.6719,p. 8-9; p. 9-16; p. 1-2,p. 8-9; p. 9-16; p. 1-2,13543,True,True,full_text
+10,,,,,p. 2; p. 3-4; p. 5-6,Yang2025_LFSteeringLatentFeatureActivation_c1bddd,0.028577,,11,0.5938,9,0.707,p. 5-6; p. 2; p. 7-9,p. 4-5; p. 2; p. 3-4,8306,True,False,full_text
+11,,,,,p. 7-8; p. 2-3; p. 16-19,Li2024_RevisitingJailbreakingLargeLanguageModels_b5555f,0.027973,,12,0.5859,11,0.6445,p. 7-8; p. 6-7; p. 16-19,p. 2-3; p. 3-4; p. 7-8,16383,True,True,full_text
+12,,,,,p. 2-3; p. 4-5,SaadFalcon2023_EmbeddingRecyclingLanguageModels_992280,0.027619,,10,0.5977,15,0.5273,p. 2-3; p. 2-4; p. 4-5,p. 2-3; p. 2-4; p. 4-5,21945,True,True,full_text
+13,,,,,p. 1-2; p. 6-7,Zhang2022_DisCupDiscriminatorCooperativeUnlikelihoodPrompt_8700b1,0.027588,,13,0.5547,12,0.6172,p. 1-2; p. 2-4; p. 7-8,p. 2-4; p. 6-7; p. 1-2,13870,True,True,full_text
+14,,,,,p. 1-2; p. 3-4,Liu2022_PlugPlayRecipeGenerationContent_f32a51,0.027212,,14,0.5273,13,0.5664,p. 1-2; p. 2-3; p. 3-4,p. 1-2; p. 2-3; p. 3-4,9752,True,True,full_text
+15,,,,,p. 9-11; p. 1-2; p. 3-4,Fang2022_ControlledTextGenerationUsingDictionary_0f7f0e,0.026491,,16,0.4785,15,0.5273,p. 9-11; p. 11-12; p. 3-4,p. 9-11; p. 1-2; p. 11-12,17436,True,True,full_text
+16,,,,,p. 2-4,Li2020_RigidFormatsControlledTextGeneration_1ad895,0.026334,,18,0.457,14,0.5312,p. 2-4; p. 4-5; p. 3-4,p. 4-5; p. 3-4; p. 2-4,10559,True,True,full_text
+17,,,,,p. 1-2; p. 9-13; p. 14-16,Gururangan2020_DonTStopPretrainingAdapt_5ca8d9,0.025833,,15,0.5117,20,0.4629,p. 1-2; p. 9-13; p. 14-16,p. 9-13; p. 1-2; p. 14-16,17125,True,True,full_text
+18,,,,,p. 17-18; p. 29-30; p. 4-6,Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60,0.025816,,16,0.4785,19,0.4883,p. 17-18; p. 29-30; p. 4-6,p. 17-18; p. 15-17; p. 29-30,57933,True,True,full_text
+19,,,,,p. 3-4; p. 5-6; p. 1-2,Li2020_SongNetRigidFormatsControlledText_bfe2f6,0.025808,,18,0.457,17,0.5234,p. 1-2; p. 3-4; p. 5-6,p. 4-5; p. 5-6; p. 3-4,11203,True,True,full_text
+20,,,,,p. 1-2; p. 3-4; p. 5-6,Wolf2019_HuggingFaceSTransformersStateArt_219dff,0.025321,,20,0.4414,18,0.5117,p. 3-4; p. 5-6; p. 1-2,p. 3-4; p. 4-6; p. 1-2,4995,True,True,full_text

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:18:32",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "cb30634d0e46f0e47dfe3c758385e32e8b5689c7ffb8962bf4f31e0ec08ddf79"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "7c768d4e58c3e64016af7d8fb1f8579151209fcb9b3812867603fb830f8254c9"
+   }
+  ]
+ },
+ "question": "I'm interested in understanding how perplexity is utilized in identifying misinformation or fact-checking. Are there studies discussing this application of perplexity?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "I'm interested in understanding how perplexity is utilized in identifying misinformation or fact-checking. Are there studies discussing this application of perplexity?",
+   "keywords": "perplexity misinformation fact-checking"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Language model perplexity used as a signal for detecting misinformation, false claims or fake news in automated fact-checking pipelines, applied to claims and the evidence retrieved for them.",
+   "keywords": "perplexity misinformation fact-checking fake news claims language model detection"
+  }
+ },
+ "queries_sha": "a7ea97a1ed89",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 234,
+  "ids": [
+   "Lee2021_TowardsFewShotFactChecking_d53763",
+   "Lee2020_MisinformationHasHighPerplexity_af7f92",
+   "Monti2019_FakeNewsDetectionSocialMedia_377984",
+   "Figueras2022_SemanticsAwareApproachAutomatedClaim_e7362b",
+   "Murayama2021_DatasetFakeNewsDetectionFact_4880fc",
+   "Hardalov2022_SurveyStanceDetectionMisDisinformation_f34742",
+   "Popat2018_DeClarEDebunkingFakeNewsFalse_43b9fa",
+   "Wang2017_LiarLiarPantsFireNew_1cecc2",
+   "Zhong2020_ReasoningOverSemanticLevelGraph_501712",
+   "Ma2019_SentenceLevelEvidenceEmbeddingClaim_74e108",
+   "Ronak2020_ScientificClaimVerificationVERT5ERINI_4ddfd8",
+   "Gupta2022_DialFactBenchmarkFactCheckingDialogue_ed9a12",
+   "Hidey2020_DeSePtionDualSequencePredictionAdversarial_c06edf",
+   "Wadden2022_MultiVerSImprovingScientificClaimVerification_cb6b56",
+   "Thorne2019_AdversarialAttacksAgainstFactExtraction_283619",
+   "Wang2023_ExplainableClaimVerificationKnowledgeGrounded_59c878",
+   "Pan2023_FactCheckingComplexClaimsProgram_0e6697",
+   "Nie2020_SimpleCompoundedLabelTrainingFact_b0d9d7",
+   "Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75",
+   "Yue2023_MetaAdaptDomainAdaptiveFewShot_7e8999"
+  ],
+  "files": [
+   {
+    "id": "Lee2021_TowardsFewShotFactChecking_d53763",
+    "path": "pdfs/Lee2021_TowardsFewShotFactChecking_d53763.pdf",
+    "sha256": "be97cdc34320fab8cbfe6c045a4c8ae9005a259ebd1e2235f1f0f71a162eac48"
+   },
+   {
+    "id": "Lee2020_MisinformationHasHighPerplexity_af7f92",
+    "path": "pdfs/Lee2020_MisinformationHasHighPerplexity_af7f92.pdf",
+    "sha256": "2a0920ea4d3c1cd0b3570c4c42eb041fd634e9c33273bedb58730bbe977918be"
+   },
+   {
+    "id": "Monti2019_FakeNewsDetectionSocialMedia_377984",
+    "path": "pdfs/Monti2019_FakeNewsDetectionSocialMedia_377984.pdf",
+    "sha256": "acff39937bcd754041bd8080190334e90a41ee2ae7d54eaff7ba15f7ae4a5309"
+   },
+   {
+    "id": "Figueras2022_SemanticsAwareApproachAutomatedClaim_e7362b",
+    "path": "pdfs/Figueras2022_SemanticsAwareApproachAutomatedClaim_e7362b.pdf",
+    "sha256": "c2729928aeca6e95c4304c5328fb5a6e08338c083c5dd5c2c8b6bc56b0003639"
+   },
+   {
+    "id": "Murayama2021_DatasetFakeNewsDetectionFact_4880fc",
+    "path": "pdfs/Murayama2021_DatasetFakeNewsDetectionFact_4880fc.pdf",
+    "sha256": "af4e4173857a3d246ac70b3463326e3806d07d21f9eb6e06e9bae67bd2ed02be"
+   },
+   {
+    "id": "Hardalov2022_SurveyStanceDetectionMisDisinformation_f34742",
+    "path": "pdfs/Hardalov2022_SurveyStanceDetectionMisDisinformation_f34742.pdf",
+    "sha256": "6ffdb936b88c0a539fcec05fdbc6bd4ac173b38b6244067525a66b196d65b45f"
+   },
+   {
+    "id": "Popat2018_DeClarEDebunkingFakeNewsFalse_43b9fa",
+    "path": "pdfs/Popat2018_DeClarEDebunkingFakeNewsFalse_43b9fa.pdf",
+    "sha256": "f5978284316db74422f6afc4227da1acb49986301861911ca74fff00e5a84882"
+   },
+   {
+    "id": "Wang2017_LiarLiarPantsFireNew_1cecc2",
+    "path": "pdfs/Wang2017_LiarLiarPantsFireNew_1cecc2.pdf",
+    "sha256": "6e7a9f976e398fbf11efc9c75d86a9d312d336d07c853e7f02f355e414bf75f6"
+   },
+   {
+    "id": "Zhong2020_ReasoningOverSemanticLevelGraph_501712",
+    "path": "pdfs/Zhong2020_ReasoningOverSemanticLevelGraph_501712.pdf",
+    "sha256": "86733991028fa29ac470f3db3585f70d7466e725cb9269ec0ccff9432231b35a"
+   },
+   {
+    "id": "Ma2019_SentenceLevelEvidenceEmbeddingClaim_74e108",
+    "path": "pdfs/Ma2019_SentenceLevelEvidenceEmbeddingClaim_74e108.pdf",
+    "sha256": "2c89b027f452579dd4297be9373af0db5a866b7f8b0a8edd6a04dd46b6272290"
+   },
+   {
+    "id": "Ronak2020_ScientificClaimVerificationVERT5ERINI_4ddfd8",
+    "path": "pdfs/Ronak2020_ScientificClaimVerificationVERT5ERINI_4ddfd8.pdf",
+    "sha256": "acd515eae814a21d5660d7b2a9f4cc347a1172bf9e6922a7cef326f9cdf9f61d"
+   },
+   {
+    "id": "Gupta2022_DialFactBenchmarkFactCheckingDialogue_ed9a12",
+    "path": "pdfs/Gupta2022_DialFactBenchmarkFactCheckingDialogue_ed9a12.pdf",
+    "sha256": "28ee1043495b6731dcc02debbbce562aed6ebbb2710dfa97a48da3567ded6b7b"
+   },
+   {
+    "id": "Hidey2020_DeSePtionDualSequencePredictionAdversarial_c06edf",
+    "path": "pdfs/Hidey2020_DeSePtionDualSequencePredictionAdversarial_c06edf.pdf",
+    "sha256": "eaaee0f91db77241beb2690bb6f6f5c132e694a5d87204b68469e3f2d7b9faf1"
+   },
+   {
+    "id": "Wadden2022_MultiVerSImprovingScientificClaimVerification_cb6b56",
+    "path": "pdfs/Wadden2022_MultiVerSImprovingScientificClaimVerification_cb6b56.pdf",
+    "sha256": "089ed7611404b1138f1ffc66bdb3d4e7e439fb6decd2971b2fee61873d0ffdf6"
+   },
+   {
+    "id": "Thorne2019_AdversarialAttacksAgainstFactExtraction_283619",
+    "path": "pdfs/Thorne2019_AdversarialAttacksAgainstFactExtraction_283619.pdf",
+    "sha256": "a6112964acb7628538838f58f6e0e3f2eca7be5b91a88a62499b5bb7a44981e5"
+   },
+   {
+    "id": "Wang2023_ExplainableClaimVerificationKnowledgeGrounded_59c878",
+    "path": "pdfs/Wang2023_ExplainableClaimVerificationKnowledgeGrounded_59c878.pdf",
+    "sha256": "ad56ddd0bbd70e80e0ad8213392a18862baf3f5a686c2c766994c50df8cc9a21"
+   },
+   {
+    "id": "Pan2023_FactCheckingComplexClaimsProgram_0e6697",
+    "path": "pdfs/Pan2023_FactCheckingComplexClaimsProgram_0e6697.pdf",
+    "sha256": "0928396891b1b209c34dcc16f44f334beaec69cc18c8d15d4d411239d5e40e26"
+   },
+   {
+    "id": "Nie2020_SimpleCompoundedLabelTrainingFact_b0d9d7",
+    "path": "pdfs/Nie2020_SimpleCompoundedLabelTrainingFact_b0d9d7.pdf",
+    "sha256": "bc65bdd4cfdcc2638ff4b2056a22e6e301953b31f516d59847dfd20cea992d58"
+   },
+   {
+    "id": "Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75",
+    "path": "pdfs/Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75.pdf",
+    "sha256": "2f797175167100cf2c2584a045fffe7c662df7cb0c4be06c88a4d8f6b36e1768"
+   },
+   {
+    "id": "Yue2023_MetaAdaptDomainAdaptiveFewShot_7e8999",
+    "path": "pdfs/Yue2023_MetaAdaptDomainAdaptiveFewShot_7e8999.pdf",
+    "sha256": "291197b9603f35d8af73a1f19f5929c2f10fc3a0311665a80fdf0a1f36e9dce1"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 163113,
+  "embed_cached": 81,
+  "rerank": 137275
+ },
+ "estimate": 403267,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls046/runs/2026-10-18_1818_ls046_rank.csv",
+   "fused_top10": [
+    "Lee2020_MisinformationHasHighPerplexity_af7f92",
+    "Lee2021_TowardsFewShotFactChecking_d53763",
+    "Ronak2020_ScientificClaimVerificationVERT5ERINI_4ddfd8",
+    "Popat2018_DeClarEDebunkingFakeNewsFalse_43b9fa",
+    "Gupta2022_DialFactBenchmarkFactCheckingDialogue_ed9a12",
+    "Hardalov2022_SurveyStanceDetectionMisDisinformation_f34742",
+    "Hidey2020_DeSePtionDualSequencePredictionAdversarial_c06edf",
+    "Figueras2022_SemanticsAwareApproachAutomatedClaim_e7362b",
+    "Wadden2022_MultiVerSImprovingScientificClaimVerification_cb6b56",
+    "Wang2023_ExplainableClaimVerificationKnowledgeGrounded_59c878"
+   ],
+   "first_query_top10": [
+    "Lee2020_MisinformationHasHighPerplexity_af7f92",
+    "Lee2021_TowardsFewShotFactChecking_d53763",
+    "Ronak2020_ScientificClaimVerificationVERT5ERINI_4ddfd8",
+    "Hardalov2022_SurveyStanceDetectionMisDisinformation_f34742",
+    "Wadden2022_MultiVerSImprovingScientificClaimVerification_cb6b56",
+    "Popat2018_DeClarEDebunkingFakeNewsFalse_43b9fa",
+    "Gupta2022_DialFactBenchmarkFactCheckingDialogue_ed9a12",
+    "Hidey2020_DeSePtionDualSequencePredictionAdversarial_c06edf",
+    "Figueras2022_SemanticsAwareApproachAutomatedClaim_e7362b",
+    "Wang2023_ExplainableClaimVerificationKnowledgeGrounded_59c878"
+   ]
+  }
+ }
+}

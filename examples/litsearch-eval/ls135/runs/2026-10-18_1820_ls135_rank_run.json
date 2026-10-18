@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:20:33",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "e7e06d82192a8e0b199614cbfdf69ae0db7196b2ef79422e38be8f9dcb18c648"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "592046ed7f281e0ffd555ce10531f299826d6b69a3bc53b75ef794dc6154f5ee"
+   }
+  ]
+ },
+ "question": "Could you recommend a study that investigates how a subset with clean, annotated datasets improve denoising methods?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you recommend a study that investigates how a subset with clean, annotated datasets improve denoising methods?",
+   "keywords": "clean annotated subset improves denoising methods noisy labels"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Training datasets with noisy or automatically generated labels, such as distantly supervised data, where a small subset of clean human-annotated examples is available to guide the denoising of the rest.",
+   "keywords": "noisy labels denoising clean annotated subset distant supervision weak supervision"
+  }
+ },
+ "queries_sha": "e8c896d3bcad",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 286,
+  "ids": [
+   "Maheshwari2021_SemiSupervisedDataProgrammingSubset_8d5f56",
+   "Chen2022_CleanOrAnnotateHowSpend_b99f33",
+   "Li2020_DivideMixLearningNoisyLabelsAs_b76b1c",
+   "Xu2018_RealWorldNoisyImageDenoising_f99630",
+   "Lee2020_RestoreFromRestoredSingleImage_d51f80",
+   "Laine2019_HighQualitySelfSupervisedDeep_68b9e1",
+   "Zhang2018_GeneralizedCrossEntropyLossTraining_11dc0b",
+   "Liu2020_EarlyLearningRegularizationPreventsMemorization_dd47dd",
+   "Yu2019_HowDoesDisagreementHelpGeneralization_568498",
+   "Nguyen2019_SELFLearningFilterNoisyLabels_a1c38a",
+   "Sukhbaatar2014_TrainingConvolutionalNetworksNoisyLabels_6b0433",
+   "Han2018_CoTeachingRobustTrainingDeep_96a30a",
+   "Chu2024_SelfCleaningImprovingNamedEntity_fdb7ce",
+   "Yu2023_LabelDenoisingThroughCrossModel_5e9f6f",
+   "Wu2020_Class2SimiNoiseReductionPerspectiveLearning_02efae",
+   "Kong2023_ComparisonImageDenoisingMethods_f176b5",
+   "Şener2017_ActiveLearningConvolutionalNeuralNetworks_b9801c",
+   "Stowell2015_DenoisingWithoutAccessCleanData_3a3245",
+   "Wang2019_SegmentationAwareImageDenoisingWithout_d74506",
+   "Fang2024_FlyDenoisingDataAugmentationNatural_e51782"
+  ],
+  "files": [
+   {
+    "id": "Maheshwari2021_SemiSupervisedDataProgrammingSubset_8d5f56",
+    "path": "pdfs/Maheshwari2021_SemiSupervisedDataProgrammingSubset_8d5f56.pdf",
+    "sha256": "99f6835df606bbae27714e9ac06b3fab92c68a0c70dcbf4065966f709c416409"
+   },
+   {
+    "id": "Chen2022_CleanOrAnnotateHowSpend_b99f33",
+    "path": "pdfs/Chen2022_CleanOrAnnotateHowSpend_b99f33.pdf",
+    "sha256": "765ab8edb6346cc3fb1570c6a8d39a7e30cf8102ba534e9eea8f2062a54dab3f"
+   },
+   {
+    "id": "Li2020_DivideMixLearningNoisyLabelsAs_b76b1c",
+    "path": "pdfs/Li2020_DivideMixLearningNoisyLabelsAs_b76b1c.pdf",
+    "sha256": "1ff51bf883305e7601e5d7126077f6ffc35247d9d1367f57cf93d312807161aa"
+   },
+   {
+    "id": "Xu2018_RealWorldNoisyImageDenoising_f99630",
+    "path": "pdfs/Xu2018_RealWorldNoisyImageDenoising_f99630.pdf",
+    "sha256": "4d9cc6d7521859d51716b2e121982b3e2413a9f38d25c756a121bef4dbbbdbbf"
+   },
+   {
+    "id": "Lee2020_RestoreFromRestoredSingleImage_d51f80",
+    "path": "pdfs/Lee2020_RestoreFromRestoredSingleImage_d51f80.pdf",
+    "sha256": "e3f776ec17003a07b2409ac9510498e72699c6f801e4fb6115c749a3bacf14d4"
+   },
+   {
+    "id": "Laine2019_HighQualitySelfSupervisedDeep_68b9e1",
+    "path": "pdfs/Laine2019_HighQualitySelfSupervisedDeep_68b9e1.pdf",
+    "sha256": "0b8d5dfba6ad41f5e2a02a710840bdf6986c47528e7a5e7b656783818e0d5dcc"
+   },
+   {
+    "id": "Zhang2018_GeneralizedCrossEntropyLossTraining_11dc0b",
+    "path": "pdfs/Zhang2018_GeneralizedCrossEntropyLossTraining_11dc0b.pdf",
+    "sha256": "596d08fd9019410d2a7b0983df8be75100a4c74e9af55f54c89714e94e7b4fb6"
+   },
+   {
+    "id": "Liu2020_EarlyLearningRegularizationPreventsMemorization_dd47dd",
+    "path": "pdfs/Liu2020_EarlyLearningRegularizationPreventsMemorization_dd47dd.pdf",
+    "sha256": "8a78f84d8ac30318e6266e60c89f1bf659d336b09cdc933276a41f42e7d6d26d"
+   },
+   {
+    "id": "Yu2019_HowDoesDisagreementHelpGeneralization_568498",
+    "path": "pdfs/Yu2019_HowDoesDisagreementHelpGeneralization_568498.pdf",
+    "sha256": "31b97c5f6d672865634a459a317cff4bb49d2a41d027b7c867b2c6b657fa6959"
+   },
+   {
+    "id": "Nguyen2019_SELFLearningFilterNoisyLabels_a1c38a",
+    "path": "pdfs/Nguyen2019_SELFLearningFilterNoisyLabels_a1c38a.pdf",
+    "sha256": "aa6bff81fcbcab2719870480d780db9ba17a111df033dc6f3757b3e6182cd9f4"
+   },
+   {
+    "id": "Sukhbaatar2014_TrainingConvolutionalNetworksNoisyLabels_6b0433",
+    "path": "pdfs/Sukhbaatar2014_TrainingConvolutionalNetworksNoisyLabels_6b0433.pdf",
+    "sha256": "4437ed4a7e76cedce91d9038ccba73b0608a63421d728e04ec7e150dc9adaace"
+   },
+   {
+    "id": "Han2018_CoTeachingRobustTrainingDeep_96a30a",
+    "path": "pdfs/Han2018_CoTeachingRobustTrainingDeep_96a30a.pdf",
+    "sha256": "217f5e7262af5bb555e3ddb11d5806f094af6965c7bcd71d10f159d3657d8593"
+   },
+   {
+    "id": "Chu2024_SelfCleaningImprovingNamedEntity_fdb7ce",
+    "path": "pdfs/Chu2024_SelfCleaningImprovingNamedEntity_fdb7ce.pdf",
+    "sha256": "8f58fb01c4294b30d6d161bba2fd7273455ea70250096eed204de04debc74c1b"
+   },
+   {
+    "id": "Yu2023_LabelDenoisingThroughCrossModel_5e9f6f",
+    "path": "pdfs/Yu2023_LabelDenoisingThroughCrossModel_5e9f6f.pdf",
+    "sha256": "0a23fc8a48356b0a3aa20d0bb0a547e3207b9763a7fcf7c9d7c868236b5c0fb5"
+   },
+   {
+    "id": "Wu2020_Class2SimiNoiseReductionPerspectiveLearning_02efae",
+    "path": "pdfs/Wu2020_Class2SimiNoiseReductionPerspectiveLearning_02efae.pdf",
+    "sha256": "46e7b1dfde6986b0125f2cf4c17363cef79d2c1e003eeb674f1e2de910a9c324"
+   },
+   {
+    "id": "Kong2023_ComparisonImageDenoisingMethods_f176b5",
+    "path": "pdfs/Kong2023_ComparisonImageDenoisingMethods_f176b5.pdf",
+    "sha256": "cf50a967137349aebf4ef25ce0c2425b465d2a5e9cfd3f4899387534356add29"
+   },
+   {
+    "id": "Şener2017_ActiveLearningConvolutionalNeuralNetworks_b9801c",
+    "path": "pdfs/Şener2017_ActiveLearningConvolutionalNeuralNetworks_b9801c.pdf",
+    "sha256": "93562d0894759407c0ed795fbc58e9d270967e789be787e2ef85f777ee008482"
+   },
+   {
+    "id": "Stowell2015_DenoisingWithoutAccessCleanData_3a3245",
+    "path": "pdfs/Stowell2015_DenoisingWithoutAccessCleanData_3a3245.pdf",
+    "sha256": "080cd8682aa190c87252d06aafe9c6e7c1d14b796de72cbb79db3a2ffb13193e"
+   },
+   {
+    "id": "Wang2019_SegmentationAwareImageDenoisingWithout_d74506",
+    "path": "pdfs/Wang2019_SegmentationAwareImageDenoisingWithout_d74506.pdf",
+    "sha256": "28e11008e2f73eba59e962187443fea5ecbab5980a8675e4195cb8bb398d4f72"
+   },
+   {
+    "id": "Fang2024_FlyDenoisingDataAugmentationNatural_e51782",
+    "path": "pdfs/Fang2024_FlyDenoisingDataAugmentationNatural_e51782.pdf",
+    "sha256": "dc5be4996b3b9feecc9fd5e5e3ccffec937a1df992937544cd3c1be28200a891"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 309289,
+  "embed_cached": 0,
+  "rerank": 146711
+ },
+ "estimate": 467834,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls135/runs/2026-10-18_1820_ls135_rank.csv",
+   "fused_top10": [
+    "Chu2024_SelfCleaningImprovingNamedEntity_fdb7ce",
+    "Chen2022_CleanOrAnnotateHowSpend_b99f33",
+    "Fang2024_FlyDenoisingDataAugmentationNatural_e51782",
+    "Stowell2015_DenoisingWithoutAccessCleanData_3a3245",
+    "Yu2023_LabelDenoisingThroughCrossModel_5e9f6f",
+    "Maheshwari2021_SemiSupervisedDataProgrammingSubset_8d5f56",
+    "Li2020_DivideMixLearningNoisyLabelsAs_b76b1c",
+    "Nguyen2019_SELFLearningFilterNoisyLabels_a1c38a",
+    "Lee2020_RestoreFromRestoredSingleImage_d51f80",
+    "Wang2019_SegmentationAwareImageDenoisingWithout_d74506"
+   ],
+   "first_query_top10": [
+    "Chu2024_SelfCleaningImprovingNamedEntity_fdb7ce",
+    "Chen2022_CleanOrAnnotateHowSpend_b99f33",
+    "Stowell2015_DenoisingWithoutAccessCleanData_3a3245",
+    "Lee2020_RestoreFromRestoredSingleImage_d51f80",
+    "Yu2023_LabelDenoisingThroughCrossModel_5e9f6f",
+    "Fang2024_FlyDenoisingDataAugmentationNatural_e51782",
+    "Wang2019_SegmentationAwareImageDenoisingWithout_d74506",
+    "Xu2018_RealWorldNoisyImageDenoising_f99630",
+    "Kong2023_ComparisonImageDenoisingMethods_f176b5",
+    "Maheshwari2021_SemiSupervisedDataProgrammingSubset_8d5f56"
+   ]
+  }
+ }
+}

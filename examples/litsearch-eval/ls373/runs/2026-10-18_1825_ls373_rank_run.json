@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:26:09",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "8c3f45e3e363eee4fe8d6ef770da0aaeda5389e220b13b689f24f91d5ff8e014"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "a6bd4747f8ca59b1ebdd9aac4ef9833f7c3f2cd3e4e8bfb35683b5e327abb9e2"
+   }
+  ]
+ },
+ "question": "Is there a paper that shows that language models' error distribution is different for unfamiliar entities that is not apparent when models are evaluated on familiar entities alone?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there a paper that shows that language models' error distribution is different for unfamiliar entities that is not apparent when models are evaluated on familiar entities alone?",
+   "keywords": "language models error distribution unfamiliar entities versus familiar entities"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Language models answering factual questions about entities, in particular rare, unseen or unfamiliar entities versus well-known familiar ones, and how their error patterns differ between the two groups.",
+   "keywords": "language models unfamiliar entities rare long-tail entities errors factual knowledge hallucination"
+  }
+ },
+ "queries_sha": "4bf77d29f029",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 401,
+  "ids": [
+   "Goyal2023_FactualOrContextualDisentanglingError_1c7892",
+   "Draetta2026_TailNLGMultilingualBenchmarkAddressingVerbalization_0b58d6",
+   "Yona2024_NarrowingKnowledgeEvaluationGapOpen_86d028",
+   "Guo2024_CRLTKGQAKnowledgeGraph_c2b5e9",
+   "Klein2025_ARKV1LLMAgentKnowledge_d169aa",
+   "Toroghi2024_RightRightReasonsLargeLanguage_234531",
+   "Lihu2023_KnowledgeBaseCompletionLongTail_3e821d",
+   "Onoe2023_CanLMsLearnNewEntities_69a336",
+   "Qiu2024_SnapNTellEnhancingEntityCentricVisual_16e6ae",
+   "Onoe2022_EntityClozeDateWhatLMs_069922",
+   "Cao2021_EditingFactualKnowledgeLanguageModels_aaca6d",
+   "B2020_LanguageModelsAreFewShot_c78ddc",
+   "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+   "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+   "Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf",
+   "Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3",
+   "Dai2019_TransformerXLAttentiveLanguageModels_dd4bce",
+   "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+   "A2020_ScalingLawsNeuralLanguageModels_9f7757",
+   "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4"
+  ],
+  "files": [
+   {
+    "id": "Goyal2023_FactualOrContextualDisentanglingError_1c7892",
+    "path": "pdfs/Goyal2023_FactualOrContextualDisentanglingError_1c7892.pdf",
+    "sha256": "7bf054d01bbf24693044a49be814afb96816a41356383a0d4749de1ec773eb67"
+   },
+   {
+    "id": "Draetta2026_TailNLGMultilingualBenchmarkAddressingVerbalization_0b58d6",
+    "path": "pdfs/Draetta2026_TailNLGMultilingualBenchmarkAddressingVerbalization_0b58d6.pdf",
+    "sha256": "050396414236f6cbc139a7120ab65b5512dc5002b51f07f5c052f932277f4ee7"
+   },
+   {
+    "id": "Yona2024_NarrowingKnowledgeEvaluationGapOpen_86d028",
+    "path": "pdfs/Yona2024_NarrowingKnowledgeEvaluationGapOpen_86d028.pdf",
+    "sha256": "1ae0217da001d3ba3c8d59bd65ff1083a990433a1d94660d7a6af1ce90547aef"
+   },
+   {
+    "id": "Guo2024_CRLTKGQAKnowledgeGraph_c2b5e9",
+    "path": "pdfs/Guo2024_CRLTKGQAKnowledgeGraph_c2b5e9.pdf",
+    "sha256": "e6c024eb35cac01641417b8a1f4f61cd0b2d2bfb7a0a01d17a4488f2ec8bfd94"
+   },
+   {
+    "id": "Klein2025_ARKV1LLMAgentKnowledge_d169aa",
+    "path": "pdfs/Klein2025_ARKV1LLMAgentKnowledge_d169aa.pdf",
+    "sha256": "bb76c13202bc01ba615afca4642044dd4bbac875ef21f59b7573023fef928480"
+   },
+   {
+    "id": "Toroghi2024_RightRightReasonsLargeLanguage_234531",
+    "path": "pdfs/Toroghi2024_RightRightReasonsLargeLanguage_234531.pdf",
+    "sha256": "4e91dc3d6c1a6fcde27d49ed541418090f8ea1ebbde2e1f01777cd50390eb505"
+   },
+   {
+    "id": "Lihu2023_KnowledgeBaseCompletionLongTail_3e821d",
+    "path": "pdfs/Lihu2023_KnowledgeBaseCompletionLongTail_3e821d.pdf",
+    "sha256": "c769b12bcd0044c5c7de84aa1383a08eee372154b03f9785af006eb20ff687db"
+   },
+   {
+    "id": "Onoe2023_CanLMsLearnNewEntities_69a336",
+    "path": "pdfs/Onoe2023_CanLMsLearnNewEntities_69a336.pdf",
+    "sha256": "2c02c458ca7faae3e2b7261c2edcc548f04a37e3ed4f231b979683195c819c20"
+   },
+   {
+    "id": "Qiu2024_SnapNTellEnhancingEntityCentricVisual_16e6ae",
+    "path": "pdfs/Qiu2024_SnapNTellEnhancingEntityCentricVisual_16e6ae.pdf",
+    "sha256": "595241adee0bb0612dc89c287240b8c8b59d1c7f15fe6c15b04e7e43d722a1b9"
+   },
+   {
+    "id": "Onoe2022_EntityClozeDateWhatLMs_069922",
+    "path": "pdfs/Onoe2022_EntityClozeDateWhatLMs_069922.pdf",
+    "sha256": "7eec786efc9dae9f7054ec76a383df992f9aef3aba94b5b5ed1ba31d461fad23"
+   },
+   {
+    "id": "Cao2021_EditingFactualKnowledgeLanguageModels_aaca6d",
+    "path": "pdfs/Cao2021_EditingFactualKnowledgeLanguageModels_aaca6d.pdf",
+    "sha256": "eb11d132933ef5a42591d113f484b4956d8e0aa4bf62b11727e99bff98cba1cc"
+   },
+   {
+    "id": "B2020_LanguageModelsAreFewShot_c78ddc",
+    "path": "pdfs/B2020_LanguageModelsAreFewShot_c78ddc.pdf",
+    "sha256": "97fd272f1fdfc18677462d0292f5fbf26ca86b4d1b485c2dba03269b643a0e83"
+   },
+   {
+    "id": "Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60",
+    "path": "pdfs/Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60.pdf",
+    "sha256": "ad07e47cedf437a4156419ce5d3076e08a3e59bbfd6dac7cc53df1009cdcbe7f"
+   },
+   {
+    "id": "Jason2022_BNAINOTOKENMINDUNITY_5c6426",
+    "path": "pdfs/Jason2022_BNAINOTOKENMINDUNITY_5c6426.pdf",
+    "sha256": "7d9f878c23b460e4566aa4ec9201b1abfb3b8faefb2b1356e411cb90fef72a12"
+   },
+   {
+    "id": "Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf",
+    "path": "pdfs/Petroni2019_LanguageModelsAsKnowledgeBases_abe1bf.pdf",
+    "sha256": "6e50d42ad977b061fef306b88d9323c101e3bc76efffdb6da009ac244dc3037f"
+   },
+   {
+    "id": "Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3",
+    "path": "pdfs/Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3.pdf",
+    "sha256": "f0749cc4db8afeb82006a20785b2cd3615fcbced8a29886872b6174485ced21b"
+   },
+   {
+    "id": "Dai2019_TransformerXLAttentiveLanguageModels_dd4bce",
+    "path": "pdfs/Dai2019_TransformerXLAttentiveLanguageModels_dd4bce.pdf",
+    "sha256": "2438bdcddc0db3328a78d108df6438c180f97ef6a12c555eb10a5d6e0e4d734b"
+   },
+   {
+    "id": "Wei2021_FinetunedLanguageModelsAreZero_82db93",
+    "path": "pdfs/Wei2021_FinetunedLanguageModelsAreZero_82db93.pdf",
+    "sha256": "7126b83c5590b9eb4b6e6027446cb88c0aeff132e47d88e9407982b1f7fad044"
+   },
+   {
+    "id": "A2020_ScalingLawsNeuralLanguageModels_9f7757",
+    "path": "pdfs/A2020_ScalingLawsNeuralLanguageModels_9f7757.pdf",
+    "sha256": "a41bd7877fd1a6bcbba096b2619618bd2f90e02488f2365644903eb2f7c6a494"
+   },
+   {
+    "id": "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+    "path": "pdfs/Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4.pdf",
+    "sha256": "9e77217618c4164472ba73f01c2371ce4a59c2ee8d307c83a874abe5f631129a"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 165041,
+  "embed_cached": 247,
+  "rerank": 148355
+ },
+ "estimate": 598968,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls373/runs/2026-10-18_1825_ls373_rank.csv",
+   "fused_top10": [
+    "Goyal2023_FactualOrContextualDisentanglingError_1c7892",
+    "Onoe2022_EntityClozeDateWhatLMs_069922",
+    "Draetta2026_TailNLGMultilingualBenchmarkAddressingVerbalization_0b58d6",
+    "Yona2024_NarrowingKnowledgeEvaluationGapOpen_86d028",
+    "Guo2024_CRLTKGQAKnowledgeGraph_c2b5e9",
+    "Toroghi2024_RightRightReasonsLargeLanguage_234531",
+    "Onoe2023_CanLMsLearnNewEntities_69a336",
+    "Lihu2023_KnowledgeBaseCompletionLongTail_3e821d",
+    "Klein2025_ARKV1LLMAgentKnowledge_d169aa",
+    "Qiu2024_SnapNTellEnhancingEntityCentricVisual_16e6ae"
+   ],
+   "first_query_top10": [
+    "Goyal2023_FactualOrContextualDisentanglingError_1c7892",
+    "Onoe2022_EntityClozeDateWhatLMs_069922",
+    "Draetta2026_TailNLGMultilingualBenchmarkAddressingVerbalization_0b58d6",
+    "Yona2024_NarrowingKnowledgeEvaluationGapOpen_86d028",
+    "Onoe2023_CanLMsLearnNewEntities_69a336",
+    "Guo2024_CRLTKGQAKnowledgeGraph_c2b5e9",
+    "Toroghi2024_RightRightReasonsLargeLanguage_234531",
+    "Klein2025_ARKV1LLMAgentKnowledge_d169aa",
+    "Lihu2023_KnowledgeBaseCompletionLongTail_3e821d",
+    "Qiu2024_SnapNTellEnhancingEntityCentricVisual_16e6ae"
+   ]
+  }
+ }
+}

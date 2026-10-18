@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:22:35", "question": "Could you suggest some work that develops multimodal models with contrastive learning approaches?", "name": "ls250", "queries": "queries.json", "queries_sha": "1a4ed72cf197", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1822", "abstracts": ""}

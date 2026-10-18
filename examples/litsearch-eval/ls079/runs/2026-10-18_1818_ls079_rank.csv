@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 2-4; p. 7-8,Reimers2019_SentenceBERTSentenceEmbeddingsUsing_4ed130,0.032787,,1,0.7913,1,0.8242,p. 7-8; p. 2-4; p. 8-9,p. 7-8; p. 2-4; p. 2-3,9088,True,True,full_text
+2,,,,,p. 4-5; p. 6-7; p. 1-2,Wieting2020_BilingualGenerativeTransformerSemanticSentence_ed6a46,0.032002,,3,0.7658,2,0.8125,p. 4-5; p. 6-7; p. 1-2,p. 4-5; p. 6-7; p. 3-4,13149,True,True,full_text
+3,,,,,p. 2-3; p. 5-6,Li2020_SentenceEmbeddingsFromPreTrained_12efe7,0.031498,,4,0.734,3,0.7812,p. 2-3; p. 5-6; p. 3-4,p. 2-3; p. 5-6; p. 3-4,10468,True,True,full_text
+4,,,,,p. 6-7,Gao2021_SimCSESimpleContrastiveLearningSentence_6c8fa9,0.030835,,2,0.7797,8,0.6406,p. 7-9; p. 6-7; p. 7-8,p. 6-7; p. 7-8; p. 7-9,17572,True,True,full_text
+5,,,,,p. 1-2; p. 5-6,Lee2022_TowardInterpretableSemanticTextualSimilarity_61ad07,0.030777,,6,0.6695,4,0.7344,p. 5-6; p. 1-2; p. 6-7,p. 5-6; p. 1-2; p. 4-5,8243,True,True,full_text
+6,,,,,p. 1-2; p. 3-5,Zhang2020_UnsupervisedSentenceEmbeddingMethodMutual_10d87b,0.030769,,5,0.6822,5,0.7188,p. 1-2; p. 3-5; p. 5-6,p. 3-5; p. 1-2; p. 4-5,9188,True,True,full_text
+7,,,,,p. 2; p. 3-4,Wang2023_GoingBeyondSentenceEmbeddingsToken_f068cb,0.030077,,7,0.6621,6,0.7148,p. 3-4; p. 2-3; p. 2,p. 3-4; p. 2-3; p. 2,7038,True,True,full_text
+8,,,,,p. 1-2; p. 4-5,Liao2021_SentenceEmbeddingsUsingSupervisedContrastive_398a9f,0.029631,,8,0.6276,7,0.6797,p. 4-5; p. 1-2; p. 5-6,p. 4-5; p. 1-2; p. 3-4,7664,True,True,full_text
+9,,,,,p. 1-2; p. 3-4,Cer2018_UniversalSentenceEncoder_51f2e5,0.028986,,9,0.5723,9,0.6289,p. 3-4; p. 1-2; p. 4-5,p. 3-4; p. 1-2; p. 4-5,6068,True,True,full_text
+10,,,,,p. 2-3; p. 5,Cer2018_UniversalSentenceEncoderEnglish_aa9969,0.028778,,10,0.5398,9,0.6289,p. 2-3; p. 3; p. 3-4,p. 2-3; p. 3-4; p. 5,5559,True,True,full_text
+11,,,,,p. 6-7; p. 9-12; p. 1-2,Conneau2017_SupervisedLearningUniversalSentenceRepresentations_0f54ba,0.027973,,11,0.5079,12,0.5312,p. 9-12; p. 6-7; p. 1-2,p. 5-6; p. 9-12; p. 6-7,10004,True,True,full_text
+12,,,,,p. 2-3; p. 8-9; p. 4-6,Ethayarajh2019_HowContextualAreContextualizedWord_d77807,0.027783,,13,0.4703,11,0.543,p. 2-3; p. 8-9; p. 4-6,p. 2-3; p. 3-4; p. 8-9,8267,True,True,full_text
+13,,,,,p. 6-7; p. 10-11; p. 1-2,Cer2017_SemEval2017Task1Semantic_f3b3db,0.027588,,12,0.4727,13,0.5273,p. 7-8; p. 6-7; p. 10-11,p. 10-11; p. 1-2; p. 6-7,15522,True,True,full_text
+14,,,,,p. 5; p. 6-7,Kiros2015_SkipThoughtVectors_9087a0,0.027027,,14,0.4338,14,0.4648,p. 5; p. 6-7; p. 7-8,p. 5; p. 6-7; p. 7-8,9258,True,True,full_text
+15,,,,,p. 4; p. 6-7,Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06,0.026491,,15,0.4285,16,0.4551,p. 7-8; p. 6-7; p. 4,p. 7-8; p. 6-7; p. 4,9305,True,True,full_text
+15,,,,,p. 1-2,Wang2018_GLUEMultiTaskBenchmarkAnalysis_700c63,0.026491,,16,0.4276,15,0.4629,p. 1-2; p. 2,p. 1-2; p. 2,2463,True,False,full_text
+17,,,,,p. 2-3; p. 6-8,Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9,0.025974,,17,0.3977,17,0.4375,p. 6-8; p. 2-3; p. 7-8,p. 3-4; p. 8-9; p. 2-3,14259,True,True,full_text
+18,,,,,p. 6-8,Agirre2015_SemEval2015Task2Semantic_7707d6,0.025479,,18,0.3707,19,0.4102,p. 6-8; p. 8-10; p. 8-9,p. 8-10; p. 6-8; p. 7-8,16079,True,True,full_text
+19,,,,,p. 3-4; p. 11-12,Agirre2016_SemEval2016Task1Semantic_3b1d84,0.025321,,20,0.357,18,0.416,p. 4-5; p. 11-12; p. 3-4,p. 3-4; p. 4-5; p. 11-12,18384,True,True,full_text
+20,,,,,p. 5; p. 7-8,Williams2018_BroadCoverageChallengeCorpusSentence_4174f6,0.025158,,19,0.3617,20,0.3848,p. 5-6; p. 5; p. 8-11,p. 5-6; p. 5; p. 7-8,9069,True,True,full_text

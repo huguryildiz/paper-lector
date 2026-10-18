@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:28:45", "question": "Which vision-language model paper in 2023 developed techniques that reduce input tokens to improve model inference speed?", "name": "ls500", "queries": "queries.json", "queries_sha": "b50dce7ed41a", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1828", "abstracts": ""}

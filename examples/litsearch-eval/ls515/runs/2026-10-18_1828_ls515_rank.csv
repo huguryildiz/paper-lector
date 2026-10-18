@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 9-15; p. 19-20; p. 1-2,Xia2023_ShearedLLaMAAcceleratingLanguageModel_8e4908,0.032787,,1,0.9102,1,0.8999,p. 2-3; p. 9-15; p. 19-20,p. 1-2; p. 9-15; p. 19-20,19229,True,True,full_text
+2,,,,,p. 1-2; p. 8-9; p. 3-5,Shen2024_PruningLargeLanguageModelsIntra_57e0f7,0.031754,,2,0.8633,4,0.8105,p. 1-2; p. 3-5; p. 8-9,p. 1-2; p. 8-9; p. 7-8,11643,True,True,full_text
+3,,,,,p. 1-2; p. 10-15,Thangarasa2024_SelfDataDistillationRecoveringQuality_acc8da,0.031746,,3,0.8516,3,0.8163,p. 15-16; p. 1-2; p. 10-15,p. 1-2; p. 2-3; p. 10-15,22300,True,True,full_text
+4,,,,,p. 1-2; p. 3-4; p. 9-14,Xia2022_StructuredPruningLearnsCompactAccurate_71765a,0.031514,,5,0.8164,2,0.8457,p. 1-2; p. 3-4; p. 9-14,p. 1-2; p. 3-4; p. 2-3,13979,True,True,full_text
+5,,,,,p. 2-3; p. 4-5; p. 7-8,S2019_StructuredPruningBERTBasedQuestion_0b7424,0.03101,,4,0.832,5,0.8057,p. 2-3; p. 7-8; p. 4-5,p. 2-3; p. 4-5,8663,True,True,full_text
+6,,,,,p. 1-2; p. 3-4; p. 8-11,Hu2026_LogitsBasedBlockPruningAffine_c8ea76,0.030303,,6,0.7812,6,0.7516,p. 1-2; p. 3-4; p. 8-11,p. 1-2; p. 3-4; p. 9-12,16273,True,True,full_text
+7,,,,,p. 1-2; p. 3-4; p. 8-9,Young2024_FoundationsLargeLanguageModelCompression_571b42,0.029851,,7,0.7031,7,0.7361,p. 1-2; p. 8-9; p. 3-4,p. 1-2; p. 2-3; p. 3-4,22375,True,True,full_text
+8,,,,,p. 2-3; p. 7-8,Sun2019_PatientKnowledgeDistillationBERTModel_7c1104,0.029199,,9,0.6523,8,0.724,p. 2-3; p. 2-4; p. 8-9,p. 2-3; p. 2-4; p. 7-8,8990,True,True,full_text
+9,,,,,p. 3-4; p. 9-14; p. 1-2,Chen2020_LotteryTicketHypothesisPreTrained_22b37f,0.02879,,8,0.6719,11,0.6801,p. 1-2; p. 3-4; p. 9-14,p. 2-3; p. 3-4; p. 9-14,13865,True,True,full_text
+10,,,,,p. 6-8,Michel2019_AreSixteenHeadsReallyBetter_6987e2,0.028778,,10,0.6484,9,0.6882,p. 8-13; p. 6-8; p. 7-9,p. 8-13; p. 6-8; p. 7-9,8054,True,True,full_text
+11,,,,,p. 1-2; p. 7-8,Jiao2020_TinyBERTDistillingBERTNaturalLanguage_6e7b9f,0.027984,,13,0.5898,10,0.6808,p. 1-2; p. 8-11; p. 7-8,p. 1-2; p. 8-11; p. 7-8,12208,True,True,full_text
+12,,,,,p. 1-2; p. 9-12; p. 16-17,Huang2025_LessIsMoreExaminingFairness_796edf,0.027973,,11,0.6367,12,0.6538,p. 1-2; p. 2-4; p. 9-12,p. 1-2; p. 16-17; p. 9-12,68942,True,True,full_text
+13,,,,,p. 6-8; p. 11-12,Voita2019_AnalyzingMultiHeadSelfAttention_9e88a5,0.027588,,12,0.6055,13,0.6311,p. 6-8; p. 7-9; p. 11-12,p. 7-9; p. 6-8; p. 4-6,8860,True,True,full_text
+14,,,,,p. 6-7; p. 2-3,Lester2021_PowerScaleParameterEfficientPrompt_a2804e,0.026671,,14,0.5703,16,0.5159,p. 3-4; p. 6-7; p. 2-3,p. 5-6; p. 6-7; p. 7-8,13770,True,False,full_text
+14,,,,,p. 18-20; p. 36-37; p. 3-4,Raffel2019_ExploringLimitsTransferLearningUnified_4d3b60,0.026671,,16,0.5156,14,0.5685,p. 36-37; p. 3-4; p. 18-20,p. 36-37; p. 29-30; p. 18-20,57933,True,True,full_text
+16,,,,,p. 9-10; p. 39-40,Frankle2018_LotteryTicketHypothesisFindingSparse_aed166,0.026667,,15,0.5352,15,0.5458,p. 39-40; p. 10-14; p. 9-10,p. 9-10; p. 10-14; p. 39-40,37615,True,True,full_text
+17,,,,,p. 3-4; p. 39-40; p. 10-11,B2020_LanguageModelsAreFewShot_c78ddc,0.025974,,17,0.5117,17,0.5148,p. 39-40; p. 3-4; p. 40-42,p. 39-40; p. 10-11; p. 3-4,59779,True,True,full_text
+18,,,,,p. 1-3; p. 10-11; p. 18-20,A2020_ScalingLawsNeuralLanguageModels_9f7757,0.025479,,18,0.5,19,0.4557,p. 26-27; p. 1-3; p. 11-12,p. 25-26; p. 18-20; p. 10-11,21886,True,True,full_text
+18,,,,,p. 2-3,Roberts2020_HowMuchKnowledgeCanYou_81ec79,0.025479,,19,0.4941,18,0.4694,p. 1-2; p. 2-3; p. 3-4,p. 1-3; p. 2-3; p. 3-4,7265,True,True,full_text
+20,,,,,p. 7-8; p. 3-5,Zellers2019_HellaSwagCanMachineReallyFinish_349c61,0.025,,20,0.375,20,0.3805,p. 7-8; p. 8-9; p. 6-7,p. 7-8; p. 3-5; p. 8-9,9170,True,True,full_text

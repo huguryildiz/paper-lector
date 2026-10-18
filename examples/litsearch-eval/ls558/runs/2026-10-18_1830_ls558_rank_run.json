@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:31:09",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "d0984d291c2abd6afffd4ef0c8ff515a460e0d8a43371f974cedc09efc7db6b2"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "e7e6bf2b8c309e94c242f067cd406779fac160b27f9d4642d2bc74fe1f8f51f4"
+   }
+  ]
+ },
+ "question": "What paper showed first that one can build a fully differentiable mixture of experts layer with no increase in time complexity?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What paper showed first that one can build a fully differentiable mixture of experts layer with no increase in time complexity?",
+   "keywords": "fully differentiable mixture of experts layer no increase in time complexity"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Mixture of experts layers inside neural networks, where a router selects among expert subnetworks, and the discrete routing prevents fully differentiable training.",
+   "keywords": "mixture of experts layer differentiable routing gating sparse experts time complexity"
+  }
+ },
+ "queries_sha": "0a525167a1d2",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 366,
+  "ids": [
+   "Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24",
+   "Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc",
+   "He2023_MergingExpertsIntoOneImproving_586e3d",
+   "Dai2022_StableMoEStableRoutingStrategyMixture_d593b6",
+   "Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4",
+   "Chung2024_BeyondParameterCountImplicitBias_7ac1d2",
+   "Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086",
+   "Fedus2021_SwitchTransformersScalingTrillionParameter_2511d6",
+   "He2023_PADNetEfficientFrameworkDynamic_18294b",
+   "Makkuva2019_LearningGatedNeuralNetworks_c15e91",
+   "Kim2021_ScalableEfficientMoETrainingMultitask_87946b",
+   "Zhang2022_MoEficationTransformerFeedForwardLayers_36be4c",
+   "Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164",
+   "Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f",
+   "Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100",
+   "Sander2023_FastDifferentiableSparseTopK_e041d8",
+   "Chowdhury2023_PatchLevelRoutingMixtureExperts_3e06eb",
+   "Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8",
+   "Hihn2021_MixtureVariationalExpertsContinualLearning_8a2621",
+   "Gormley2018_MixturesExpertsModels_e369a7"
+  ],
+  "files": [
+   {
+    "id": "Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24",
+    "path": "pdfs/Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24.pdf",
+    "sha256": "0d35f584a24f81b9e2736ca32548630747e9859a8e754d8e448899bbf5eae549"
+   },
+   {
+    "id": "Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc",
+    "path": "pdfs/Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc.pdf",
+    "sha256": "939082e2b92d0e2a05cd69293fc258f6fe761fc963bc1f533fa5f670d13c594a"
+   },
+   {
+    "id": "He2023_MergingExpertsIntoOneImproving_586e3d",
+    "path": "pdfs/He2023_MergingExpertsIntoOneImproving_586e3d.pdf",
+    "sha256": "9d81656f18a9cbd52ff6162894aac242aa0b9b4edfa770b27f2bd26d42f9b8b0"
+   },
+   {
+    "id": "Dai2022_StableMoEStableRoutingStrategyMixture_d593b6",
+    "path": "pdfs/Dai2022_StableMoEStableRoutingStrategyMixture_d593b6.pdf",
+    "sha256": "8f101ae94d2589dab804539bcdb368ab4ff27376641d76b7f2dfef403c8fc83d"
+   },
+   {
+    "id": "Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4",
+    "path": "pdfs/Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4.pdf",
+    "sha256": "005bae4f8e8d4557ed3d09db20619f3c5a2899d586a8e89da63862b340fec3ad"
+   },
+   {
+    "id": "Chung2024_BeyondParameterCountImplicitBias_7ac1d2",
+    "path": "pdfs/Chung2024_BeyondParameterCountImplicitBias_7ac1d2.pdf",
+    "sha256": "5fa214f79ada604ebef2b0345efb10c5ffd381c7d8979dcffecc9315e3989010"
+   },
+   {
+    "id": "Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086",
+    "path": "pdfs/Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086.pdf",
+    "sha256": "33d7532114113e5b6fefbfb477271357cb3b5b7bf40369e4995e953425c3e92b"
+   },
+   {
+    "id": "Fedus2021_SwitchTransformersScalingTrillionParameter_2511d6",
+    "path": "pdfs/Fedus2021_SwitchTransformersScalingTrillionParameter_2511d6.pdf",
+    "sha256": "f340f6ace31abf7d0730ef461404279f40d3c890e9cc2daeb7068b3304afdbd6"
+   },
+   {
+    "id": "He2023_PADNetEfficientFrameworkDynamic_18294b",
+    "path": "pdfs/He2023_PADNetEfficientFrameworkDynamic_18294b.pdf",
+    "sha256": "bc82f61bebeb407967bcd271b624f223d863ac13183e5e606272d0829eba7cc9"
+   },
+   {
+    "id": "Makkuva2019_LearningGatedNeuralNetworks_c15e91",
+    "path": "pdfs/Makkuva2019_LearningGatedNeuralNetworks_c15e91.pdf",
+    "sha256": "5bac83cddb367ca1cae6a54fa09f67a46df2c7f4e86fe385980e1888f39f2555"
+   },
+   {
+    "id": "Kim2021_ScalableEfficientMoETrainingMultitask_87946b",
+    "path": "pdfs/Kim2021_ScalableEfficientMoETrainingMultitask_87946b.pdf",
+    "sha256": "e0e1a042c2ce2a94c7bcd6667edc74cd6ea1feb90ab4e90af677d832e80169b2"
+   },
+   {
+    "id": "Zhang2022_MoEficationTransformerFeedForwardLayers_36be4c",
+    "path": "pdfs/Zhang2022_MoEficationTransformerFeedForwardLayers_36be4c.pdf",
+    "sha256": "f465408a9d9ef4554898d141282c180d0a821495ac2d8c5a99ee458eb38cad56"
+   },
+   {
+    "id": "Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164",
+    "path": "pdfs/Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164.pdf",
+    "sha256": "df7397d2fe041042b07a7039e3e425f84492dd14179987bc3a7ad301a39c12fc"
+   },
+   {
+    "id": "Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f",
+    "path": "pdfs/Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f.pdf",
+    "sha256": "2567713d198a376b65b92f0c60b9f58c8c5f66755530b92203533a17c4ec4b8e"
+   },
+   {
+    "id": "Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100",
+    "path": "pdfs/Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100.pdf",
+    "sha256": "6f15308e3ab4225ef0cd57e671d388640a8bdafc252fdc4b00ba7cfa4b92a4d0"
+   },
+   {
+    "id": "Sander2023_FastDifferentiableSparseTopK_e041d8",
+    "path": "pdfs/Sander2023_FastDifferentiableSparseTopK_e041d8.pdf",
+    "sha256": "2efda3ad5e2e18e4a39f54574f9628c65ff7c5c78b523f6f6313a8a2855a3924"
+   },
+   {
+    "id": "Chowdhury2023_PatchLevelRoutingMixtureExperts_3e06eb",
+    "path": "pdfs/Chowdhury2023_PatchLevelRoutingMixtureExperts_3e06eb.pdf",
+    "sha256": "5d2c6d81d30de924b79c502a3fbad818b73ba27389b18d23044da76462bde32a"
+   },
+   {
+    "id": "Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8",
+    "path": "pdfs/Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8.pdf",
+    "sha256": "0eeb3f86283a23b3fdb4a02da73b83c431882cb990d7c229725f36f99f88c460"
+   },
+   {
+    "id": "Hihn2021_MixtureVariationalExpertsContinualLearning_8a2621",
+    "path": "pdfs/Hihn2021_MixtureVariationalExpertsContinualLearning_8a2621.pdf",
+    "sha256": "514d2bf894112f69796272f950701d72c845885206f0486d3271176b2b78db01"
+   },
+   {
+    "id": "Gormley2018_MixturesExpertsModels_e369a7",
+    "path": "pdfs/Gormley2018_MixturesExpertsModels_e369a7.pdf",
+    "sha256": "7f87e49e9e6f52b25a8f05ad8ee2ec7347504f0c63c162d5977916d249a0950e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 378471,
+  "embed_cached": 24,
+  "rerank": 141590
+ },
+ "estimate": 557287,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls558/runs/2026-10-18_1830_ls558_rank.csv",
+   "fused_top10": [
+    "Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8",
+    "Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086",
+    "Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24",
+    "Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4",
+    "Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100",
+    "Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164",
+    "Chung2024_BeyondParameterCountImplicitBias_7ac1d2",
+    "Sander2023_FastDifferentiableSparseTopK_e041d8",
+    "Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f",
+    "Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc"
+   ],
+   "first_query_top10": [
+    "Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24",
+    "Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8",
+    "Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086",
+    "Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100",
+    "Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4",
+    "Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f",
+    "Chung2024_BeyondParameterCountImplicitBias_7ac1d2",
+    "Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc",
+    "Sander2023_FastDifferentiableSparseTopK_e041d8",
+    "Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164"
+   ]
+  }
+ }
+}

@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:31:09", "question": "What paper showed first that one can build a fully differentiable mixture of experts layer with no increase in time complexity?", "name": "ls558", "queries": "queries.json", "queries_sha": "0a525167a1d2", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1830", "abstracts": ""}

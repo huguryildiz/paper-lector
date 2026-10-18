@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:28:17",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "cd554fb52141e5ed68d0bf78a795cc2d8ba18e474bcbca4306d286776224cffc"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "ac4fab73330e9cdabbb30faa683cb4797bf0ef03932c10b75f4428d301f0ac97"
+   }
+  ]
+ },
+ "question": "Which paper studies the concept of enhancing the coverage of a selective prediction system by re-attempting the questions on which it was not sufficiently confident.",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which paper studies the concept of enhancing the coverage of a selective prediction system by re-attempting the questions on which it was not sufficiently confident.",
+   "keywords": "selective prediction coverage re-attempting questions low confidence"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Selective prediction systems for question answering that abstain when their confidence is too low, and the coverage, meaning the share of questions that they end up answering.",
+   "keywords": "selective prediction coverage abstain confidence question answering retry re-attempt"
+  }
+ },
+ "queries_sha": "ac864a9e4e3b",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 340,
+  "ids": [
+   "Varshney2023_PostAbstentionTowardsReliablyRe_9b51c8",
+   "Jones2020_SelectiveClassificationCanMagnifyDisparities_2c8457",
+   "Feng2019_SelectivePredictionSetModelsCoverage_a773b7",
+   "Luo2026_AligningLanguageModelsSelectivePrediction_736e1a",
+   "Geifman2017_SelectiveClassificationDeepNeuralNetworks_587d71",
+   "Ziyin2019_DeepGamblersLearningAbstainPortfolio_e15399",
+   "Kamath2020_SelectiveQuestionAnsweringDomainShift_3cf035",
+   "Xin2021_ArtAbstentionSelectivePredictionError_25e4c8",
+   "Varshney2022_InvestigatingSelectivePredictionApproachesAcross_72ee83",
+   "Varshney2022_TowardsImprovingSelectivePredictionAbility_726513",
+   "Chen2023_AdaptationSelfEvaluationImproveSelective_feec3a",
+   "Gangrade2020_SelectiveClassificationOneSidedPrediction_7e268c",
+   "Gu2023_EvaluationNeuralSelectivePredictionMethods_3c77c1",
+   "Shekhar2019_BinaryClassificationBoundedAbstentionRate_a67bff",
+   "Nicolas2020_LastLayerAlgorithmsClassificationDecoupling_71d882",
+   "Shah2021_SelectiveRegressionFairnessCriteria_2bca7a",
+   "Srinivasan2024_SelectiveSelectivePredictionReducingUnnecessary_a6e93f",
+   "Feng2022_TowardsBetterSelectiveClassification_f00bfc",
+   "Feng2020_LearningHowApproveUpdatesMachine_b0cb6c",
+   "Galil2022_WhichModelsAreInnatelyBest_af4a51"
+  ],
+  "files": [
+   {
+    "id": "Varshney2023_PostAbstentionTowardsReliablyRe_9b51c8",
+    "path": "pdfs/Varshney2023_PostAbstentionTowardsReliablyRe_9b51c8.pdf",
+    "sha256": "949a676b682be83f05064add33854fb6a19c1e4605f5fa7c7d5e12750ebff0a2"
+   },
+   {
+    "id": "Jones2020_SelectiveClassificationCanMagnifyDisparities_2c8457",
+    "path": "pdfs/Jones2020_SelectiveClassificationCanMagnifyDisparities_2c8457.pdf",
+    "sha256": "e2d1d1f9e000d4228acfaf281ed3577b1f1724d4d7cd1793efc1b4186b8edddd"
+   },
+   {
+    "id": "Feng2019_SelectivePredictionSetModelsCoverage_a773b7",
+    "path": "pdfs/Feng2019_SelectivePredictionSetModelsCoverage_a773b7.pdf",
+    "sha256": "2e2cefa668f29f9227f778956d1580d763dba456f4a39aa6d77b560a9f17471e"
+   },
+   {
+    "id": "Luo2026_AligningLanguageModelsSelectivePrediction_736e1a",
+    "path": "pdfs/Luo2026_AligningLanguageModelsSelectivePrediction_736e1a.pdf",
+    "sha256": "4f03dcbc85f08dead59e4f0a6c6f2e149c7d3d54a57367fdc18da33ba1d357f7"
+   },
+   {
+    "id": "Geifman2017_SelectiveClassificationDeepNeuralNetworks_587d71",
+    "path": "pdfs/Geifman2017_SelectiveClassificationDeepNeuralNetworks_587d71.pdf",
+    "sha256": "91899dfcbc41553f571f7a491839733e4d16f81d82e9274278e8f06ffc42022b"
+   },
+   {
+    "id": "Ziyin2019_DeepGamblersLearningAbstainPortfolio_e15399",
+    "path": "pdfs/Ziyin2019_DeepGamblersLearningAbstainPortfolio_e15399.pdf",
+    "sha256": "c681a53e7c9024f7b0ef508b3ad1105bcb60052ff07830fcd1b08a334338fb6f"
+   },
+   {
+    "id": "Kamath2020_SelectiveQuestionAnsweringDomainShift_3cf035",
+    "path": "pdfs/Kamath2020_SelectiveQuestionAnsweringDomainShift_3cf035.pdf",
+    "sha256": "73e02901c56f8ac0fa875cf25325c02755c4009ec7c9443871d072b99eb06f70"
+   },
+   {
+    "id": "Xin2021_ArtAbstentionSelectivePredictionError_25e4c8",
+    "path": "pdfs/Xin2021_ArtAbstentionSelectivePredictionError_25e4c8.pdf",
+    "sha256": "b4f91651ed0417552996dbf1bcb88ea87a276369a01967ea6232676b67c0946b"
+   },
+   {
+    "id": "Varshney2022_InvestigatingSelectivePredictionApproachesAcross_72ee83",
+    "path": "pdfs/Varshney2022_InvestigatingSelectivePredictionApproachesAcross_72ee83.pdf",
+    "sha256": "bc3326cd5e7711978b92cdeffff9bf9e0ed320343694d7de180d8f760a949868"
+   },
+   {
+    "id": "Varshney2022_TowardsImprovingSelectivePredictionAbility_726513",
+    "path": "pdfs/Varshney2022_TowardsImprovingSelectivePredictionAbility_726513.pdf",
+    "sha256": "02dab2d3e0c315ebfb318b2263a25604a456720d3c4f0fefd2babff86a18ce78"
+   },
+   {
+    "id": "Chen2023_AdaptationSelfEvaluationImproveSelective_feec3a",
+    "path": "pdfs/Chen2023_AdaptationSelfEvaluationImproveSelective_feec3a.pdf",
+    "sha256": "cfadb89b672489f5eb371e94cc7171c991ab807a39bc8ca70ea183a2b0457d34"
+   },
+   {
+    "id": "Gangrade2020_SelectiveClassificationOneSidedPrediction_7e268c",
+    "path": "pdfs/Gangrade2020_SelectiveClassificationOneSidedPrediction_7e268c.pdf",
+    "sha256": "80a88baa9b030cded503bfdb89a2d6ed61d88caaada02adf27fd32baeb5aece4"
+   },
+   {
+    "id": "Gu2023_EvaluationNeuralSelectivePredictionMethods_3c77c1",
+    "path": "pdfs/Gu2023_EvaluationNeuralSelectivePredictionMethods_3c77c1.pdf",
+    "sha256": "01ef3299ae30990ef465cd6453834a48af337b2bd5c670603a0b87f81104638d"
+   },
+   {
+    "id": "Shekhar2019_BinaryClassificationBoundedAbstentionRate_a67bff",
+    "path": "pdfs/Shekhar2019_BinaryClassificationBoundedAbstentionRate_a67bff.pdf",
+    "sha256": "55b02ce44c28980f34dc29293a97c05d644259a521580d072a3ddad407b1e33e"
+   },
+   {
+    "id": "Nicolas2020_LastLayerAlgorithmsClassificationDecoupling_71d882",
+    "path": "pdfs/Nicolas2020_LastLayerAlgorithmsClassificationDecoupling_71d882.pdf",
+    "sha256": "cee44f77bb53e73bbf6d1af49f6183f0312c95266d88183899ef961d7a9a1abb"
+   },
+   {
+    "id": "Shah2021_SelectiveRegressionFairnessCriteria_2bca7a",
+    "path": "pdfs/Shah2021_SelectiveRegressionFairnessCriteria_2bca7a.pdf",
+    "sha256": "6518a9ce4c522fdad9bc8bcf65d90f021ab95a5699b1ec8c95b8029331b5eff4"
+   },
+   {
+    "id": "Srinivasan2024_SelectiveSelectivePredictionReducingUnnecessary_a6e93f",
+    "path": "pdfs/Srinivasan2024_SelectiveSelectivePredictionReducingUnnecessary_a6e93f.pdf",
+    "sha256": "afc59f27d53550fb5aaa59baff3d7c1377c94fdf7597a0d25fc2b304e4e071c6"
+   },
+   {
+    "id": "Feng2022_TowardsBetterSelectiveClassification_f00bfc",
+    "path": "pdfs/Feng2022_TowardsBetterSelectiveClassification_f00bfc.pdf",
+    "sha256": "99e65e78cc84e3af79869a0876eebe0a474c898e757e5537313e974c5940f627"
+   },
+   {
+    "id": "Feng2020_LearningHowApproveUpdatesMachine_b0cb6c",
+    "path": "pdfs/Feng2020_LearningHowApproveUpdatesMachine_b0cb6c.pdf",
+    "sha256": "8750a2a465b771291148524939425cee6dc0574d70b22fd2d0e2062d747b0225"
+   },
+   {
+    "id": "Galil2022_WhichModelsAreInnatelyBest_af4a51",
+    "path": "pdfs/Galil2022_WhichModelsAreInnatelyBest_af4a51.pdf",
+    "sha256": "79ee27eee6576c13df17961c705fa50831f5cc39eedfa7bce166d76e0a5c598e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 180521,
+  "embed_cached": 178,
+  "rerank": 144429
+ },
+ "estimate": 528831,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls490/runs/2026-10-18_1828_ls490_rank.csv",
+   "fused_top10": [
+    "Varshney2023_PostAbstentionTowardsReliablyRe_9b51c8",
+    "Srinivasan2024_SelectiveSelectivePredictionReducingUnnecessary_a6e93f",
+    "Luo2026_AligningLanguageModelsSelectivePrediction_736e1a",
+    "Kamath2020_SelectiveQuestionAnsweringDomainShift_3cf035",
+    "Xin2021_ArtAbstentionSelectivePredictionError_25e4c8",
+    "Varshney2022_TowardsImprovingSelectivePredictionAbility_726513",
+    "Chen2023_AdaptationSelfEvaluationImproveSelective_feec3a",
+    "Feng2019_SelectivePredictionSetModelsCoverage_a773b7",
+    "Ziyin2019_DeepGamblersLearningAbstainPortfolio_e15399",
+    "Varshney2022_InvestigatingSelectivePredictionApproachesAcross_72ee83"
+   ],
+   "first_query_top10": [
+    "Varshney2023_PostAbstentionTowardsReliablyRe_9b51c8",
+    "Srinivasan2024_SelectiveSelectivePredictionReducingUnnecessary_a6e93f",
+    "Luo2026_AligningLanguageModelsSelectivePrediction_736e1a",
+    "Xin2021_ArtAbstentionSelectivePredictionError_25e4c8",
+    "Varshney2022_TowardsImprovingSelectivePredictionAbility_726513",
+    "Feng2019_SelectivePredictionSetModelsCoverage_a773b7",
+    "Kamath2020_SelectiveQuestionAnsweringDomainShift_3cf035",
+    "Ziyin2019_DeepGamblersLearningAbstainPortfolio_e15399",
+    "Chen2023_AdaptationSelfEvaluationImproveSelective_feec3a",
+    "Gangrade2020_SelectiveClassificationOneSidedPrediction_7e268c"
+   ]
+  }
+ }
+}

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:23:31",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "511aae40a71fa2e2bebcce9849dbd4f33b9f6bf8eb8dc7bd8eefc2cb9ddfb925"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "c4051cc315e3e8c30de2a0deaaa653e58a88a2193a3377b800d87a287e66985d"
+   }
+  ]
+ },
+ "question": "What concerns or key points have been highlighted in scholarly articles about employing random divisions in machine learning datasets, especially with respect to contamination of the test set?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What concerns or key points have been highlighted in scholarly articles about employing random divisions in machine learning datasets, especially with respect to contamination of the test set?",
+   "keywords": "random splits machine learning datasets test set contamination"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Machine learning benchmark datasets divided into training, development and test sets by random splitting, and the resulting problems of leakage or contamination between the training data and the test set.",
+   "keywords": "random splits train test datasets test set contamination leakage benchmark evaluation"
+  }
+ },
+ "queries_sha": "24389cfebf5c",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 257,
+  "ids": [
+   "Søgaard2021_WeNeedTalkAboutRandom_39bd06",
+   "Tan2021_CriticalLookCurrentTrainTest_854782",
+   "Gal2015_DropoutAsBayesianApproximationRepresenting_59dd2e",
+   "Northcutt2021_PervasiveLabelErrorsTestSets_e1c825",
+   "Jacovi2023_StopUploadingTestDataPlain_06f36e",
+   "Anh2018_GoogleSpeechCommandsMusanTest_6811a9",
+   "Catania2022_BeyondRandomSplitAssessingStatistical_ed0361",
+   "Gomes2017_AtomicConvolutionalNetworksPredictingProtein_9d8a85",
+   "Huang2021_TherapeuticsDataCommonsMachineLearning_2b62d8",
+   "Denton2020_BringingPeopleBackContestingBenchmark_bc71d4",
+   "Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d",
+   "Mittal2023_ResponsibleMachineLearningDatasetsFairness_cf22c5",
+   "Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3",
+   "Wadduwage2026_BeyondPerfectScoresProofContradiction_d5c7e5",
+   "Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16",
+   "Jin2021_CAFECatastrophicDataLeakageVertical_832251",
+   "Zhang2019_EffectTranslationeseMachineTranslationTest_69d34a",
+   "Hannun2021_MeasuringDataLeakageMachineLearning_d4ae9c",
+   "Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6",
+   "Lavertu2026_RefndPreventingDataLeakageRelational_552285"
+  ],
+  "files": [
+   {
+    "id": "Søgaard2021_WeNeedTalkAboutRandom_39bd06",
+    "path": "pdfs/Søgaard2021_WeNeedTalkAboutRandom_39bd06.pdf",
+    "sha256": "8c2c7abe296738055d4c6fd35b6e238c0489c37ae05da83db8e9ee1ee24b8521"
+   },
+   {
+    "id": "Tan2021_CriticalLookCurrentTrainTest_854782",
+    "path": "pdfs/Tan2021_CriticalLookCurrentTrainTest_854782.pdf",
+    "sha256": "234688bdd179731346a5d6c366d19cff7b4dae3dc3d0ab17095ccdc09f9d6228"
+   },
+   {
+    "id": "Gal2015_DropoutAsBayesianApproximationRepresenting_59dd2e",
+    "path": "pdfs/Gal2015_DropoutAsBayesianApproximationRepresenting_59dd2e.pdf",
+    "sha256": "dcebe17f1cef7d510900659c23d68038e5c6f9aaca2949f40bf91edd10566bca"
+   },
+   {
+    "id": "Northcutt2021_PervasiveLabelErrorsTestSets_e1c825",
+    "path": "pdfs/Northcutt2021_PervasiveLabelErrorsTestSets_e1c825.pdf",
+    "sha256": "605c6a72f3a970dbbdd02622079c32d687862455a1152da9f2075e35fad2bf1d"
+   },
+   {
+    "id": "Jacovi2023_StopUploadingTestDataPlain_06f36e",
+    "path": "pdfs/Jacovi2023_StopUploadingTestDataPlain_06f36e.pdf",
+    "sha256": "146a5430543e1a8bc603cd7afde8fc52ee1f8f237565db56475569f186775f9b"
+   },
+   {
+    "id": "Anh2018_GoogleSpeechCommandsMusanTest_6811a9",
+    "path": "pdfs/Anh2018_GoogleSpeechCommandsMusanTest_6811a9.pdf",
+    "sha256": "3633226bc49967d980c7e4ef3df89982c52faec93fe7bd0af1e3e7f0416d9c57"
+   },
+   {
+    "id": "Catania2022_BeyondRandomSplitAssessingStatistical_ed0361",
+    "path": "pdfs/Catania2022_BeyondRandomSplitAssessingStatistical_ed0361.pdf",
+    "sha256": "d3cfd7cd36b7c008aac695976d421ac11d4a2edec847687eb8dd14f4ab458616"
+   },
+   {
+    "id": "Gomes2017_AtomicConvolutionalNetworksPredictingProtein_9d8a85",
+    "path": "pdfs/Gomes2017_AtomicConvolutionalNetworksPredictingProtein_9d8a85.pdf",
+    "sha256": "43024501975b5a3d64f493dd5ee93becf4a66ad1e3901ff99557879c6d670c98"
+   },
+   {
+    "id": "Huang2021_TherapeuticsDataCommonsMachineLearning_2b62d8",
+    "path": "pdfs/Huang2021_TherapeuticsDataCommonsMachineLearning_2b62d8.pdf",
+    "sha256": "dd06c2339d13f0de18b7674af2430b842e6aa914579561ab363e443fc8206b93"
+   },
+   {
+    "id": "Denton2020_BringingPeopleBackContestingBenchmark_bc71d4",
+    "path": "pdfs/Denton2020_BringingPeopleBackContestingBenchmark_bc71d4.pdf",
+    "sha256": "20ee1e3a717e07566a106eece7949f74845d0002da282ecfa1568b004c6db2c4"
+   },
+   {
+    "id": "Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d",
+    "path": "pdfs/Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d.pdf",
+    "sha256": "307f580876b4288c0bf1b3049caa1dc7b330d6c9eb0d45cdea4fc98e59033648"
+   },
+   {
+    "id": "Mittal2023_ResponsibleMachineLearningDatasetsFairness_cf22c5",
+    "path": "pdfs/Mittal2023_ResponsibleMachineLearningDatasetsFairness_cf22c5.pdf",
+    "sha256": "b9f9b7892752d987f50acf93a0c8d0a5f356c31a931f9d5d24b7ee7791e49de6"
+   },
+   {
+    "id": "Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3",
+    "path": "pdfs/Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3.pdf",
+    "sha256": "0d5ca540da7924b82882856a610b2b02dff5dbaa0dddd7f9380c44194fef85ab"
+   },
+   {
+    "id": "Wadduwage2026_BeyondPerfectScoresProofContradiction_d5c7e5",
+    "path": "pdfs/Wadduwage2026_BeyondPerfectScoresProofContradiction_d5c7e5.pdf",
+    "sha256": "60e18178c48ee91c0e10695ee4aa54ba70e1af2cd0207972e93df9f908383a59"
+   },
+   {
+    "id": "Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16",
+    "path": "pdfs/Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16.pdf",
+    "sha256": "c1e2cbfb5734479629b6f77bc81017ce1f9762c207680734a92b089c9c509262"
+   },
+   {
+    "id": "Jin2021_CAFECatastrophicDataLeakageVertical_832251",
+    "path": "pdfs/Jin2021_CAFECatastrophicDataLeakageVertical_832251.pdf",
+    "sha256": "1fe12ff6bc76d952f16a48115a3908ca4c6c6f7f493305b976ae3740c823375a"
+   },
+   {
+    "id": "Zhang2019_EffectTranslationeseMachineTranslationTest_69d34a",
+    "path": "pdfs/Zhang2019_EffectTranslationeseMachineTranslationTest_69d34a.pdf",
+    "sha256": "597c202458288282d398fc6fcca0d92480ca5e7b3fbd508eb3f00c34712f9cfd"
+   },
+   {
+    "id": "Hannun2021_MeasuringDataLeakageMachineLearning_d4ae9c",
+    "path": "pdfs/Hannun2021_MeasuringDataLeakageMachineLearning_d4ae9c.pdf",
+    "sha256": "b416527f5c00481e92d9e87d5ac8cfd2bbe3776169d35e1d5e251f7c40b61fc9"
+   },
+   {
+    "id": "Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6",
+    "path": "pdfs/Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6.pdf",
+    "sha256": "8045d884fcf6d5c2c4ad3a7163a0ba28779fad00659fa8e1fce2afdf0f97878f"
+   },
+   {
+    "id": "Lavertu2026_RefndPreventingDataLeakageRelational_552285",
+    "path": "pdfs/Lavertu2026_RefndPreventingDataLeakageRelational_552285.pdf",
+    "sha256": "1868246022ca926e1ddf2c264ec2a6ba93266ad7cf8309ffb265a3ef41e7996e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 47394,
+  "embed_cached": 213,
+  "rerank": 143078
+ },
+ "estimate": 428397,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls302/runs/2026-10-18_1823_ls302_rank.csv",
+   "fused_top10": [
+    "Lavertu2026_RefndPreventingDataLeakageRelational_552285",
+    "Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6",
+    "Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d",
+    "Søgaard2021_WeNeedTalkAboutRandom_39bd06",
+    "Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3",
+    "Jacovi2023_StopUploadingTestDataPlain_06f36e",
+    "Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16",
+    "Catania2022_BeyondRandomSplitAssessingStatistical_ed0361",
+    "Tan2021_CriticalLookCurrentTrainTest_854782",
+    "Northcutt2021_PervasiveLabelErrorsTestSets_e1c825"
+   ],
+   "first_query_top10": [
+    "Lavertu2026_RefndPreventingDataLeakageRelational_552285",
+    "Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d",
+    "Søgaard2021_WeNeedTalkAboutRandom_39bd06",
+    "Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6",
+    "Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3",
+    "Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16",
+    "Jacovi2023_StopUploadingTestDataPlain_06f36e",
+    "Catania2022_BeyondRandomSplitAssessingStatistical_ed0361",
+    "Tan2021_CriticalLookCurrentTrainTest_854782",
+    "Northcutt2021_PervasiveLabelErrorsTestSets_e1c825"
+   ]
+  }
+ }
+}

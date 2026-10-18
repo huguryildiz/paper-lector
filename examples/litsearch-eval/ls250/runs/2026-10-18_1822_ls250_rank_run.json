@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:22:35",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "cc88468f517a10499ef2bddafc3625dbb38b8615462bfa6d3aacbefb1283b749"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "40d220859b76d42ef1cd39390b8327b7428606016c8021b7f2cabce152c14a11"
+   }
+  ]
+ },
+ "question": "Could you suggest some work that develops multimodal models with contrastive learning approaches?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Could you suggest some work that develops multimodal models with contrastive learning approaches?",
+   "keywords": "multimodal models contrastive learning"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Multimodal representation learning models that align images and text, or other modalities, in a shared embedding space, trained at scale with contrastive objectives on paired data.",
+   "keywords": "multimodal contrastive learning image text embedding vision-language pretraining alignment"
+  }
+ },
+ "queries_sha": "1a4ed72cf197",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 393,
+  "ids": [
+   "Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65",
+   "Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68",
+   "Singh2023_CoarseFineContrastiveLearningImage_601780",
+   "Jia2021_ScalingUpVisualVisionLanguage_bdf13d",
+   "Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5",
+   "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+   "Chen2020_ImprovedBaselinesMomentumContrastiveLearning_94a973",
+   "Mathilde2020_UnsupervisedLearningVisualFeaturesContrasting_cfa70c",
+   "Kim2021_ViLTVisionLanguageTransformerWithout_61fc65",
+   "Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef",
+   "Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9",
+   "Khosla2020_SupervisedContrastiveLearning_5ce2a6",
+   "Bachman2019_LearningRepresentationsMaximizingMutualInformation_e466dd",
+   "Gan2020_LargeScaleAdversarialTrainingVision_3c219a",
+   "Cho2021_UnifyingVisionLanguageTasksText_4cee57",
+   "Tongzhou2020_UnderstandingContrastiveRepresentationLearningThrough_e7c12f",
+   "Tian2020_WhatMakesGoodViewsContrastive_d400ea",
+   "Li2020_PrototypicalContrastiveLearningUnsupervisedRepresentations_f7f3ec",
+   "Tian2019_ContrastiveMultiviewCoding_cbb147",
+   "Robinson2020_ContrastiveLearningHardNegativeSamples_5862b9"
+  ],
+  "files": [
+   {
+    "id": "Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65",
+    "path": "pdfs/Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65.pdf",
+    "sha256": "030676216716918474e13d75a8fe324904f4c9de2bd93d4e43d2a7ac868e6f71"
+   },
+   {
+    "id": "Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68",
+    "path": "pdfs/Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68.pdf",
+    "sha256": "b6c1e9bc7435e71bca31810e482a91c1e18f3c1ce4c3983a3eb58ead5abd5d3f"
+   },
+   {
+    "id": "Singh2023_CoarseFineContrastiveLearningImage_601780",
+    "path": "pdfs/Singh2023_CoarseFineContrastiveLearningImage_601780.pdf",
+    "sha256": "0ac57643e7aa6f4e5437547a1dcb20ee9cfec570620fd0c9b11ed4fe901a8403"
+   },
+   {
+    "id": "Jia2021_ScalingUpVisualVisionLanguage_bdf13d",
+    "path": "pdfs/Jia2021_ScalingUpVisualVisionLanguage_bdf13d.pdf",
+    "sha256": "dd9e1884b4593af667a176dcaabc0399effd1b278130804660ec8f6ae82fcfc4"
+   },
+   {
+    "id": "Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5",
+    "path": "pdfs/Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5.pdf",
+    "sha256": "5498f64ba553665c62fc55c25c210afa4300acdcc8a5f51aa42cb40eb040c408"
+   },
+   {
+    "id": "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+    "path": "pdfs/Li2021_AlignBeforeFuseVisionLanguage_db7a60.pdf",
+    "sha256": "137c937c0834d8aa116bac93cae46cabe86cf7b7645f3b6339639b194273b229"
+   },
+   {
+    "id": "Chen2020_ImprovedBaselinesMomentumContrastiveLearning_94a973",
+    "path": "pdfs/Chen2020_ImprovedBaselinesMomentumContrastiveLearning_94a973.pdf",
+    "sha256": "12279a05ec386febacea77313d12fdb63eb8fde8250cd6d6fb39d88ae6ae80d9"
+   },
+   {
+    "id": "Mathilde2020_UnsupervisedLearningVisualFeaturesContrasting_cfa70c",
+    "path": "pdfs/Mathilde2020_UnsupervisedLearningVisualFeaturesContrasting_cfa70c.pdf",
+    "sha256": "4249b19a6c31946e27b4244d050b69d7283b87dde1d134c051cd596a8bd4e5dc"
+   },
+   {
+    "id": "Kim2021_ViLTVisionLanguageTransformerWithout_61fc65",
+    "path": "pdfs/Kim2021_ViLTVisionLanguageTransformerWithout_61fc65.pdf",
+    "sha256": "916b5f4abe2bb5fdd2093bd1ca6ad8a6268e3f16b3837f51970c5dbb787e677c"
+   },
+   {
+    "id": "Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef",
+    "path": "pdfs/Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef.pdf",
+    "sha256": "31ce9e9fb7c829427b61efc5c351efbcde6e1495469913fb5642d48c6cde455f"
+   },
+   {
+    "id": "Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9",
+    "path": "pdfs/Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9.pdf",
+    "sha256": "051e6b042680c55e7edb2902c58fdaf7eb27482dc6460bfb07090648e1db9a35"
+   },
+   {
+    "id": "Khosla2020_SupervisedContrastiveLearning_5ce2a6",
+    "path": "pdfs/Khosla2020_SupervisedContrastiveLearning_5ce2a6.pdf",
+    "sha256": "b6f1f9ed63e6fcc3d387fa069425848d4791e35db1ea5b404441e0fdcab885a6"
+   },
+   {
+    "id": "Bachman2019_LearningRepresentationsMaximizingMutualInformation_e466dd",
+    "path": "pdfs/Bachman2019_LearningRepresentationsMaximizingMutualInformation_e466dd.pdf",
+    "sha256": "6a86e06738612ea3dd357e7a36ed700f045726c7531d02b6b2a06222b25751c4"
+   },
+   {
+    "id": "Gan2020_LargeScaleAdversarialTrainingVision_3c219a",
+    "path": "pdfs/Gan2020_LargeScaleAdversarialTrainingVision_3c219a.pdf",
+    "sha256": "f2bb7a411472b0453f3351a3f312f8d55212691e3bc5d63f773ce209546556c3"
+   },
+   {
+    "id": "Cho2021_UnifyingVisionLanguageTasksText_4cee57",
+    "path": "pdfs/Cho2021_UnifyingVisionLanguageTasksText_4cee57.pdf",
+    "sha256": "f62ca0965b3d19cfdda036feaac32d54e6ffcc5cd04d722080c9a085aabdd82f"
+   },
+   {
+    "id": "Tongzhou2020_UnderstandingContrastiveRepresentationLearningThrough_e7c12f",
+    "path": "pdfs/Tongzhou2020_UnderstandingContrastiveRepresentationLearningThrough_e7c12f.pdf",
+    "sha256": "1b5e644e94cbc4b2fbd3177c115b153be44c622863aaec779bc66672b2e7deb7"
+   },
+   {
+    "id": "Tian2020_WhatMakesGoodViewsContrastive_d400ea",
+    "path": "pdfs/Tian2020_WhatMakesGoodViewsContrastive_d400ea.pdf",
+    "sha256": "8b7997451fa07e446a18ef3cd739684d86ec42efa2730aa14145e9908856b5d0"
+   },
+   {
+    "id": "Li2020_PrototypicalContrastiveLearningUnsupervisedRepresentations_f7f3ec",
+    "path": "pdfs/Li2020_PrototypicalContrastiveLearningUnsupervisedRepresentations_f7f3ec.pdf",
+    "sha256": "47783f785c00130659a29d79f28f112a6e8914f4c84490d19669b61db8a612d2"
+   },
+   {
+    "id": "Tian2019_ContrastiveMultiviewCoding_cbb147",
+    "path": "pdfs/Tian2019_ContrastiveMultiviewCoding_cbb147.pdf",
+    "sha256": "4e69619af41208bae9d4ee85a04b6042689b3ba7249666dd6a9ae7ad12230c43"
+   },
+   {
+    "id": "Robinson2020_ContrastiveLearningHardNegativeSamples_5862b9",
+    "path": "pdfs/Robinson2020_ContrastiveLearningHardNegativeSamples_5862b9.pdf",
+    "sha256": "4b3dbb6bc1aa5e8bc8248df4606817b0781d5b00af441dd4f5841c7cea5ecf4a"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 414070,
+  "embed_cached": 22,
+  "rerank": 143189
+ },
+ "estimate": 593374,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls250/runs/2026-10-18_1822_ls250_rank.csv",
+   "fused_top10": [
+    "Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65",
+    "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+    "Jia2021_ScalingUpVisualVisionLanguage_bdf13d",
+    "Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68",
+    "Singh2023_CoarseFineContrastiveLearningImage_601780",
+    "Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5",
+    "Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef",
+    "Tian2019_ContrastiveMultiviewCoding_cbb147",
+    "Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9",
+    "Gan2020_LargeScaleAdversarialTrainingVision_3c219a"
+   ],
+   "first_query_top10": [
+    "Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68",
+    "Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65",
+    "Li2021_AlignBeforeFuseVisionLanguage_db7a60",
+    "Singh2023_CoarseFineContrastiveLearningImage_601780",
+    "Tian2019_ContrastiveMultiviewCoding_cbb147",
+    "Jia2021_ScalingUpVisualVisionLanguage_bdf13d",
+    "Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9",
+    "Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5",
+    "Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef",
+    "Li2020_PrototypicalContrastiveLearningUnsupervisedRepresentations_f7f3ec"
+   ]
+  }
+ }
+}

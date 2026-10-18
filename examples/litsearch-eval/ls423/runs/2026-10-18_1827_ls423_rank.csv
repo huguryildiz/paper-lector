@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 6-8,Zhang2019_LabelMappingNeuralNetworksResponse_facb72,0.032787,,1,0.7773,1,0.8469,p. 1-2; p. 6-8; p. 7-8,p. 1-2; p. 5-7; p. 6-8,9208,True,True,full_text
+2,,,,,p. 1-3; p. 4-5,Wu2018_IncrementalClassifierLearningGenerativeAdversarial_75d78f,0.031498,,3,0.7305,4,0.8221,p. 1-3; p. 4-5; p. 2-3,p. 1-3; p. 4-5; p. 2-3,11341,True,True,full_text
+3,,,,,p. 5-6; p. 1-2; p. 7-11,Ven2019_ThreeScenariosContinualLearning_f87e27,0.031054,,2,0.7461,7,0.7913,p. 5-6; p. 6-7; p. 7-11,p. 1-2; p. 3-5; p. 5-6,12765,True,True,full_text
+3,,,,,p. 5-6; p. 1-2; p. 7-8,LópezPaz2017_GradientEpisodicMemoryContinualLearning_05fd82,0.031054,,7,0.6289,2,0.8364,p. 5-6; p. 6-7; p. 8-12,p. 5-6; p. 1-2; p. 7-8,52998,True,True,full_text
+5,,,,,p. 1-3; p. 5-6; p. 8-12,Wang2023_RehearsalFreeContinualLanguageLearning_71cd74,0.030769,,5,0.6836,5,0.8146,p. 1-3; p. 8-12; p. 5-6,p. 1-3; p. 5-6; p. 4-5,10993,True,True,full_text
+6,,,,,p. 2-3; p. 6-7; p. 9-12,Ven2018_GenerativeReplayFeedbackConnectionsAs_df05c7,0.030331,,4,0.7148,8,0.7879,p. 2-3; p. 17; p. 3-4,p. 2-3; p. 9-12; p. 6-7,12363,True,True,full_text
+7,,,,,p. 1-2; p. 7-8,Zenke2017_ContinualLearningThroughSynapticIntelligence_f2ea69,0.029762,,12,0.5586,3,0.8347,p. 2-3; p. 7-8; p. 1-2,p. 1-2; p. 7-8; p. 2-3,9481,True,True,full_text
+8,,,,,p. 1-2; p. 6; p. 8,Ni2021_SelfSupervisedClassIncrementalLearning_bbd338,0.029644,,6,0.6602,9,0.7822,p. 6-8; p. 6; p. 1-2,p. 8; p. 6; p. 1-2,8965,True,True,full_text
+9,,,,,p. 1-2; p. 5-6; p. 7-8,Chaudhry2019_TinyEpisodicMemoriesContinualLearning_858d62,0.029437,,10,0.5742,6,0.7951,p. 5-6; p. 13; p. 1-2,p. 5-6; p. 7-8; p. 1-2,13617,True,True,full_text
+10,,,,,p. 1-2; p. 16-17,Zeno2018_TaskAgnosticContinualLearningUsing_25f0a9,0.028577,,9,0.5938,11,0.7629,p. 16-17; p. 1-2; p. 2-3,p. 1-2; p. 2-3,17773,True,True,full_text
+11,,,,,p. 1-2; p. 5-9,Hsu2018_ReEvaluatingContinualLearningScenarios_47a753,0.028405,,8,0.6172,13,0.7316,p. 1-2; p. 5-9; p. 8-9,p. 1-2; p. 5-9; p. 4-6,9177,True,True,full_text
+12,,,,,p. 1-2; p. 9-11; p. 5-7,Aljundi2019_GradientBasedSampleSelectionOnline_ae6151,0.027619,,10,0.5742,15,0.7074,p. 1-2; p. 9-11; p. 5-7,p. 1-2; p. 9-11; p. 8-9,10853,True,True,full_text
+12,,,,,p. 2-3; p. 7-8; p. 4-5,Shin2017_ContinualLearningDeepGenerativeReplay_f23283,0.027619,,15,0.5352,10,0.7759,p. 2-3; p. 7-8; p. 1-2,p. 4-5; p. 7-8; p. 2-3,6280,True,True,full_text
+14,,,,,p. 7-8; p. 1-2; p. 5-6,Serrà2018_OvercomingCatastrophicForgettingHardAttention_e5d16d,0.027402,,14,0.543,12,0.7494,p. 7-8; p. 6-7; p. 13-14,p. 1-2; p. 5-6; p. 7-8,17297,True,True,full_text
+15,,,,,p. 3-4; p. 1-2; p. 6-7,Yoon2017_LifelongLearningDynamicallyExpandableNetworks_f94386,0.027212,,13,0.5547,14,0.7146,p. 1-2; p. 3-4; p. 6-7,p. 2-3; p. 3-4; p. 9-11,10069,True,True,full_text
+16,,,,,p. 1-2; p. 4-5; p. 7-9,Rolnick2018_ExperienceReplayContinualLearning_31043c,0.026145,,16,0.5234,17,0.6979,p. 1-2; p. 2-3; p. 7-9,p. 4-5; p. 5-7; p. 1-2,8154,True,True,full_text
+17,,,,,p. 11-12; p. 1-2; p. 5-6,Farquhar2018_TowardsRobustEvaluationsContinualLearning_61e8df,0.025978,,18,0.4902,16,0.6995,p. 11-12; p. 2-3; p. 6-8,p. 11-12; p. 1-2; p. 5-6,15533,True,True,full_text
+18,,,,,p. 1-2; p. 4-5; p. 7-8,Nguyen2019_TowardUnderstandingCatastrophicForgettingContinual_4e5aba,0.025808,,17,0.4961,18,0.6962,p. 2-3; p. 4-5; p. 5-6,p. 1-2; p. 7-8; p. 8-9,11247,True,True,full_text
+19,,,,,p. 1-2; p. 5-8,Fernando2017_PathNetEvolutionChannelsGradientDescent_651864,0.025158,,19,0.4551,20,0.5403,p. 1-2; p. 5-8; p. 2-3,p. 1-2; p. 2-3; p. 8-14,8405,True,True,full_text
+19,,,,,p. 4-5; p. 1-2,Goodfellow2013_EmpiricalInvestigationCatastrophicForgettingGradient_4c26fe,0.025158,,20,0.3691,19,0.5588,p. 4-5; p. 2-3; p. 3-4,p. 1-2; p. 5-7; p. 4-5,5992,True,True,full_text

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:23:21",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "407b6e020f273cb61555580eb1836db6d200540d54375de26c0c6817c1a827b4"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "1ade60caaaa04fa5aefee6da4a61f9f928fe2bc28987876aef3dead8f709bbf9"
+   }
+  ]
+ },
+ "question": "Is there research examining if multilingual pre-trained models utilize identical sets of neural units to encode morphosyntactic features in various languages?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Is there research examining if multilingual pre-trained models utilize identical sets of neural units to encode morphosyntactic features in various languages?",
+   "keywords": "multilingual pre-trained models same neurons morphosyntactic features languages"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Multilingual pretrained language models such as mBERT and XLM-R, and the individual neurons or hidden units inside them that encode morphosyntactic features like number, gender, case and tense across many different languages.",
+   "keywords": "multilingual pretrained models neurons morphosyntactic features number gender case tense mBERT XLM-R cross-lingual probing"
+  }
+ },
+ "queries_sha": "7c9571006ca6",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 292,
+  "ids": [
+   "Stańczak2022_SameNeuronsDifferentLanguagesProbing_2ac58f",
+   "Mueller2022_CausalAnalysisSyntacticAgreementNeurons_670814",
+   "Stańczak2022_SameNeuronsDifferentLanguagesProbing_d43036",
+   "Zhao2023_JointMatrixFactorizationAnalysisMultilingual_b2193a",
+   "Shapiro2021_MultilabelApproachMorphosyntacticProbing_aaa69a",
+   "Pires2019_HowMultilingualIsMultilingualBERT_3ad6ab",
+   "Chi2020_FindingUniversalGrammaticalRelationsMultilingual_7e569e",
+   "Mikhailov2021_MorphCallProbingMorphosyntacticContent_4c16e4",
+   "Riemenschneider2025_CrossLingualGeneralizationCompressionFrom_527c1f",
+   "Otmakhova2022_CrossLinguisticComparisonLinguisticFeature_9c8654",
+   "Wang2024_ProbingEmergenceCrossLingualAlignment_2916ee",
+   "Choenni2020_WhatDoesItMeanBe_042981",
+   "Foroutan2022_DiscoveringLanguageNeutralSubNetworks_f9739c",
+   "Aghazadeh2022_MetaphorsPreTrainedLanguageModels_b36f33",
+   "Conneau2020_UnsupervisedCrossLingualRepresentationLearning_cac9f9",
+   "Karthikeyan2019_CrossLingualAbilityMultilingualBERT_59f3ae",
+   "Artetxe2020_CrossLingualTransferabilityMonolingualRepresentations_e6ad38",
+   "Conneau2018_WhatYouCanCramInto_2cbe04",
+   "Lample2019_CrossLingualLanguageModelPretraining_6a97e2",
+   "Conneau2018_XNLIEvaluatingCrossLingualSentence_6f6952"
+  ],
+  "files": [
+   {
+    "id": "Stańczak2022_SameNeuronsDifferentLanguagesProbing_2ac58f",
+    "path": "pdfs/Stańczak2022_SameNeuronsDifferentLanguagesProbing_2ac58f.pdf",
+    "sha256": "9ffe7895af862794ef6d83c3ad0ce94e958d927623231fd9b9c423f62df0379a"
+   },
+   {
+    "id": "Mueller2022_CausalAnalysisSyntacticAgreementNeurons_670814",
+    "path": "pdfs/Mueller2022_CausalAnalysisSyntacticAgreementNeurons_670814.pdf",
+    "sha256": "0142b37582a8a9ad9f0add662b78fee5ac842316d0ec37c6bd0bd0677fd72b70"
+   },
+   {
+    "id": "Stańczak2022_SameNeuronsDifferentLanguagesProbing_d43036",
+    "path": "pdfs/Stańczak2022_SameNeuronsDifferentLanguagesProbing_d43036.pdf",
+    "sha256": "9c50b28a048972fd173eb9c0a73d84d36aa383cb3b926541c44a9acc7a86319d"
+   },
+   {
+    "id": "Zhao2023_JointMatrixFactorizationAnalysisMultilingual_b2193a",
+    "path": "pdfs/Zhao2023_JointMatrixFactorizationAnalysisMultilingual_b2193a.pdf",
+    "sha256": "6dbab1aac72905b496daa27028e1c2df8aeb2533c12e16c9ea534348c80db248"
+   },
+   {
+    "id": "Shapiro2021_MultilabelApproachMorphosyntacticProbing_aaa69a",
+    "path": "pdfs/Shapiro2021_MultilabelApproachMorphosyntacticProbing_aaa69a.pdf",
+    "sha256": "ac2090e4af7ae2679f400f9f52cfaffa069d7946c6faa9a1a3914e6c206c86d0"
+   },
+   {
+    "id": "Pires2019_HowMultilingualIsMultilingualBERT_3ad6ab",
+    "path": "pdfs/Pires2019_HowMultilingualIsMultilingualBERT_3ad6ab.pdf",
+    "sha256": "48241aa690fdeac68261a003b95932617bba6b3930c9d3567290e90c7fa2e526"
+   },
+   {
+    "id": "Chi2020_FindingUniversalGrammaticalRelationsMultilingual_7e569e",
+    "path": "pdfs/Chi2020_FindingUniversalGrammaticalRelationsMultilingual_7e569e.pdf",
+    "sha256": "48dd25436b3713fc0ee10bc72b3c21994136a93e0badea8885876376304f7b1d"
+   },
+   {
+    "id": "Mikhailov2021_MorphCallProbingMorphosyntacticContent_4c16e4",
+    "path": "pdfs/Mikhailov2021_MorphCallProbingMorphosyntacticContent_4c16e4.pdf",
+    "sha256": "fd60569e7ed0fcaa7402c4d73b2c9e85389a9fb2b2259b1ad206e930ada2bbb7"
+   },
+   {
+    "id": "Riemenschneider2025_CrossLingualGeneralizationCompressionFrom_527c1f",
+    "path": "pdfs/Riemenschneider2025_CrossLingualGeneralizationCompressionFrom_527c1f.pdf",
+    "sha256": "814eb03d422e391f3412c81c67e89b0c3b07b80a4a1ed79c97981805b3f68502"
+   },
+   {
+    "id": "Otmakhova2022_CrossLinguisticComparisonLinguisticFeature_9c8654",
+    "path": "pdfs/Otmakhova2022_CrossLinguisticComparisonLinguisticFeature_9c8654.pdf",
+    "sha256": "0ca83d505734e4aeb849c71a26fc56ef461eaeeaa5ff298c2b620714fdb41ef4"
+   },
+   {
+    "id": "Wang2024_ProbingEmergenceCrossLingualAlignment_2916ee",
+    "path": "pdfs/Wang2024_ProbingEmergenceCrossLingualAlignment_2916ee.pdf",
+    "sha256": "bc162f48892e426273e63fc53066954e8368365fc048e8e6069ceeb3be44eb2c"
+   },
+   {
+    "id": "Choenni2020_WhatDoesItMeanBe_042981",
+    "path": "pdfs/Choenni2020_WhatDoesItMeanBe_042981.pdf",
+    "sha256": "83512838a16059706682d346cacfedd6c54d2c4779b4c85ca2aed768d88e5a87"
+   },
+   {
+    "id": "Foroutan2022_DiscoveringLanguageNeutralSubNetworks_f9739c",
+    "path": "pdfs/Foroutan2022_DiscoveringLanguageNeutralSubNetworks_f9739c.pdf",
+    "sha256": "b829d43ae4401156b5c432b6c9688c75129de231eec36344d08143b343e9a22b"
+   },
+   {
+    "id": "Aghazadeh2022_MetaphorsPreTrainedLanguageModels_b36f33",
+    "path": "pdfs/Aghazadeh2022_MetaphorsPreTrainedLanguageModels_b36f33.pdf",
+    "sha256": "8c4de0aff1fd4e5f994c1b423beb1bcf0e99bdbc3a6ac97d72832c8d2c2358dd"
+   },
+   {
+    "id": "Conneau2020_UnsupervisedCrossLingualRepresentationLearning_cac9f9",
+    "path": "pdfs/Conneau2020_UnsupervisedCrossLingualRepresentationLearning_cac9f9.pdf",
+    "sha256": "bf2fbb1aa1805ab6f892a4a421ffd4d7575df37343980b9a3729855577d2d8a1"
+   },
+   {
+    "id": "Karthikeyan2019_CrossLingualAbilityMultilingualBERT_59f3ae",
+    "path": "pdfs/Karthikeyan2019_CrossLingualAbilityMultilingualBERT_59f3ae.pdf",
+    "sha256": "a2fc2c3bb4926282594e4b5a067099f303ecc9102bed3678ea73a64c6c321037"
+   },
+   {
+    "id": "Artetxe2020_CrossLingualTransferabilityMonolingualRepresentations_e6ad38",
+    "path": "pdfs/Artetxe2020_CrossLingualTransferabilityMonolingualRepresentations_e6ad38.pdf",
+    "sha256": "fdec97d333b03cc8c93666c456d672b2f1b3505be77fb3d3fa4ae36b278b332a"
+   },
+   {
+    "id": "Conneau2018_WhatYouCanCramInto_2cbe04",
+    "path": "pdfs/Conneau2018_WhatYouCanCramInto_2cbe04.pdf",
+    "sha256": "600f3bfaaca979f8aad1771378bd8c3b7ab9c53d9fa4669b91f2f7f5a339b363"
+   },
+   {
+    "id": "Lample2019_CrossLingualLanguageModelPretraining_6a97e2",
+    "path": "pdfs/Lample2019_CrossLingualLanguageModelPretraining_6a97e2.pdf",
+    "sha256": "d03c0acabcb8bf5043dafb81c8dd1880555a4f3376d5205f6c8e446ea835ad2a"
+   },
+   {
+    "id": "Conneau2018_XNLIEvaluatingCrossLingualSentence_6f6952",
+    "path": "pdfs/Conneau2018_XNLIEvaluatingCrossLingualSentence_6f6952.pdf",
+    "sha256": "72b424f062e37b22fd642b97bc8cf68f8faad1a012d7695a62ed825a3de93db1"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 257335,
+  "embed_cached": 56,
+  "rerank": 144374
+ },
+ "estimate": 467095,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls290/runs/2026-10-18_1823_ls290_rank.csv",
+   "fused_top10": [
+    "Stańczak2022_SameNeuronsDifferentLanguagesProbing_2ac58f",
+    "Stańczak2022_SameNeuronsDifferentLanguagesProbing_d43036",
+    "Zhao2023_JointMatrixFactorizationAnalysisMultilingual_b2193a",
+    "Mikhailov2021_MorphCallProbingMorphosyntacticContent_4c16e4",
+    "Wang2024_ProbingEmergenceCrossLingualAlignment_2916ee",
+    "Mueller2022_CausalAnalysisSyntacticAgreementNeurons_670814",
+    "Shapiro2021_MultilabelApproachMorphosyntacticProbing_aaa69a",
+    "Riemenschneider2025_CrossLingualGeneralizationCompressionFrom_527c1f",
+    "Otmakhova2022_CrossLinguisticComparisonLinguisticFeature_9c8654",
+    "Choenni2020_WhatDoesItMeanBe_042981"
+   ],
+   "first_query_top10": [
+    "Stańczak2022_SameNeuronsDifferentLanguagesProbing_2ac58f",
+    "Stańczak2022_SameNeuronsDifferentLanguagesProbing_d43036",
+    "Wang2024_ProbingEmergenceCrossLingualAlignment_2916ee",
+    "Zhao2023_JointMatrixFactorizationAnalysisMultilingual_b2193a",
+    "Mueller2022_CausalAnalysisSyntacticAgreementNeurons_670814",
+    "Mikhailov2021_MorphCallProbingMorphosyntacticContent_4c16e4",
+    "Shapiro2021_MultilabelApproachMorphosyntacticProbing_aaa69a",
+    "Otmakhova2022_CrossLinguisticComparisonLinguisticFeature_9c8654",
+    "Riemenschneider2025_CrossLingualGeneralizationCompressionFrom_527c1f",
+    "Foroutan2022_DiscoveringLanguageNeutralSubNetworks_f9739c"
+   ]
+  }
+ }
+}

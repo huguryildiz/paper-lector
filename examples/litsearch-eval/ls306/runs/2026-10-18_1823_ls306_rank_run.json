@@ -1,0 +1,239 @@
+{
+ "created": "2026-10-18T18:23:51",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "0e5229ec86d5a4989be35c121c546bbdc3135492cc7d4a9e5ee70baed1bfa972"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "1b5ea0bc0e10ba41ef0cacd3651079b547ee48f191b55819cb726c41a59953cb"
+   }
+  ]
+ },
+ "question": "What papers discuss the effect of false negatives among hard negatives in dense retriever training?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What papers discuss the effect of false negatives among hard negatives in dense retriever training?",
+   "keywords": "false negatives among hard negatives dense retriever training"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Dense retrieval models for passage search, trained with contrastive learning on hard negatives mined from the corpus, among which some are actually relevant passages that were never labelled.",
+   "keywords": "dense retriever hard negatives false negatives training passage retrieval unlabeled relevant"
+  }
+ },
+ "queries_sha": "37a265f8fc03",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 228,
+  "ids": [
+   "Zhou2022_DebiasedContrastiveLearningUnsupervisedSentence_f2c530",
+   "Ren2021_RocketQAv2JointTrainingMethodDense_b6ec91",
+   "Zhang2021_AdversarialRetrieverRankerDenseText_48be8c",
+   "Shen2022_RecoveringGoldFromBlackSand_184009",
+   "Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457",
+   "Wischounig2026_NegativeSamplingTechniquesDenseRetrieval_99cc1f",
+   "Cai2022_HardNegativesOrFalseNegatives_55584f",
+   "Gao2022_UnsupervisedCorpusAwareLanguageModel_2b4c83",
+   "Sciavolino2021_SimpleEntityCentricQuestionsChallenge_43f777",
+   "Hong2022_SentenceAwareContrastiveLearningOpen_2e07bc",
+   "Sun2022_ReduceCatastrophicForgettingDenseRetrieval_82db01",
+   "Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c",
+   "Qu2021_RocketQAOptimizedTrainingApproachDense_c68312",
+   "Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b",
+   "Nogueira2019_PassageReRankingBERT_a0a259",
+   "Guu2020_REALMRetrievalAugmentedLanguageModel_71c6a3",
+   "Xiong2020_ApproximateNearestNeighborNegativeContrastive_92c84b",
+   "Lin2021_BatchNegativesKnowledgeDistillationTightly_1aec77",
+   "Faghri2017_VSEImprovingVisualSemanticEmbeddings_764e4e",
+   "Gao2021_COILRevisitExactLexicalMatch_3e7ca9"
+  ],
+  "files": [
+   {
+    "id": "Zhou2022_DebiasedContrastiveLearningUnsupervisedSentence_f2c530",
+    "path": "pdfs/Zhou2022_DebiasedContrastiveLearningUnsupervisedSentence_f2c530.pdf",
+    "sha256": "a792b882f30cf5393dd9d555a2131ebcd4199b5c40fa6190bba9f42425048e98"
+   },
+   {
+    "id": "Ren2021_RocketQAv2JointTrainingMethodDense_b6ec91",
+    "path": "pdfs/Ren2021_RocketQAv2JointTrainingMethodDense_b6ec91.pdf",
+    "sha256": "12a28cf6d606fe9050303411ae0f167fd141174e1fc03063595f3c518e77d300"
+   },
+   {
+    "id": "Zhang2021_AdversarialRetrieverRankerDenseText_48be8c",
+    "path": "pdfs/Zhang2021_AdversarialRetrieverRankerDenseText_48be8c.pdf",
+    "sha256": "10cd8607710dac1259be487aa837891bcb7741b01cdbf90dad99354a038b5a19"
+   },
+   {
+    "id": "Shen2022_RecoveringGoldFromBlackSand_184009",
+    "path": "pdfs/Shen2022_RecoveringGoldFromBlackSand_184009.pdf",
+    "sha256": "71e95a6964a2e85b6b3364963c369c7cf2d4505d76b35716d12acdf9a6eabbef"
+   },
+   {
+    "id": "Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457",
+    "path": "pdfs/Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457.pdf",
+    "sha256": "df8feee3c22dd392cc17130235b3ccb73f2c7fd4c2ce51a5c5ed36445baa7ca5"
+   },
+   {
+    "id": "Wischounig2026_NegativeSamplingTechniquesDenseRetrieval_99cc1f",
+    "path": "pdfs/Wischounig2026_NegativeSamplingTechniquesDenseRetrieval_99cc1f.pdf",
+    "sha256": "12cce960e70a02398a7c609b63bfb3c7abaf9dd31be834ae5c6aa4b16f79d704"
+   },
+   {
+    "id": "Cai2022_HardNegativesOrFalseNegatives_55584f",
+    "path": "pdfs/Cai2022_HardNegativesOrFalseNegatives_55584f.pdf",
+    "sha256": "2d044486edff72b0aaa17bab04f95d298836d5810c0f34dba139c5e653bf7d9f"
+   },
+   {
+    "id": "Gao2022_UnsupervisedCorpusAwareLanguageModel_2b4c83",
+    "path": "pdfs/Gao2022_UnsupervisedCorpusAwareLanguageModel_2b4c83.pdf",
+    "sha256": "e8e96763e57b4b045f6e3aeb556c23cbf5815a97e30d0c6299b4422a0633a36a"
+   },
+   {
+    "id": "Sciavolino2021_SimpleEntityCentricQuestionsChallenge_43f777",
+    "path": "pdfs/Sciavolino2021_SimpleEntityCentricQuestionsChallenge_43f777.pdf",
+    "sha256": "ad3e0f708739eee8fbbcb5a51c523ccf8427969bcd14df4dc4cae71e20da3c4a"
+   },
+   {
+    "id": "Hong2022_SentenceAwareContrastiveLearningOpen_2e07bc",
+    "path": "pdfs/Hong2022_SentenceAwareContrastiveLearningOpen_2e07bc.pdf",
+    "sha256": "6e506f87f8947af50c7caeafc8f7b921918b69f581aed7d8203f74b6ee7cc467"
+   },
+   {
+    "id": "Sun2022_ReduceCatastrophicForgettingDenseRetrieval_82db01",
+    "path": "pdfs/Sun2022_ReduceCatastrophicForgettingDenseRetrieval_82db01.pdf",
+    "sha256": "7f073a6e9b3180fcbc3f3296f5621ba074a5012362305eee72c06d7841458659"
+   },
+   {
+    "id": "Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c",
+    "path": "pdfs/Karpukhin2020_DensePassageRetrievalOpenDomain_dae96c.pdf",
+    "sha256": "3e67fc1a9977715acf722d85f0b7d124b03715e975f6310a4d6c12094190912f"
+   },
+   {
+    "id": "Qu2021_RocketQAOptimizedTrainingApproachDense_c68312",
+    "path": "pdfs/Qu2021_RocketQAOptimizedTrainingApproachDense_c68312.pdf",
+    "sha256": "41cb8b3dd810a37625eb61abeedd49f1151131c5f1c56287167b41c8866eebb6"
+   },
+   {
+    "id": "Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b",
+    "path": "pdfs/Lee2019_LatentRetrievalWeaklySupervisedOpen_91fd0b.pdf",
+    "sha256": "796b27cd8e8199ae841bdb4584c774673fc3ed64aa25a12ddd61de7e79a8b1b0"
+   },
+   {
+    "id": "Nogueira2019_PassageReRankingBERT_a0a259",
+    "path": "pdfs/Nogueira2019_PassageReRankingBERT_a0a259.pdf",
+    "sha256": "b3f05b72d6d24b00761fb0a7363b6e7a10dac22b7f0abfaf4f5025bea7f8e22e"
+   },
+   {
+    "id": "Guu2020_REALMRetrievalAugmentedLanguageModel_71c6a3",
+    "path": "pdfs/Guu2020_REALMRetrievalAugmentedLanguageModel_71c6a3.pdf",
+    "sha256": "0ec1a7ab3de5514c6d3baa8af0322816d4ee7cd4c14b9f2c450cbc9da9e6b363"
+   },
+   {
+    "id": "Xiong2020_ApproximateNearestNeighborNegativeContrastive_92c84b",
+    "path": "pdfs/Xiong2020_ApproximateNearestNeighborNegativeContrastive_92c84b.pdf",
+    "sha256": "3ffc05cd484c56e33fc8806b17df9607043b336dd5c6c6ede83cd87955d23f1f"
+   },
+   {
+    "id": "Lin2021_BatchNegativesKnowledgeDistillationTightly_1aec77",
+    "path": "pdfs/Lin2021_BatchNegativesKnowledgeDistillationTightly_1aec77.pdf",
+    "sha256": "d83b02d6301771a01a37fb0450cbb922b62acead9e8ad872ddff0c0138c06a20"
+   },
+   {
+    "id": "Faghri2017_VSEImprovingVisualSemanticEmbeddings_764e4e",
+    "path": "pdfs/Faghri2017_VSEImprovingVisualSemanticEmbeddings_764e4e.pdf",
+    "sha256": "79807107f125b377f30ac63c96d610c49746d24e4677fe1cec6638953266babb"
+   },
+   {
+    "id": "Gao2021_COILRevisitExactLexicalMatch_3e7ca9",
+    "path": "pdfs/Gao2021_COILRevisitExactLexicalMatch_3e7ca9.pdf",
+    "sha256": "8fb9cdd8aa651c26bbc193d1f7aebc444fe6c4cd358d0f6ad61224e5365f75ec"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": [
+   [
+    "Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457",
+    "Qu2021_RocketQAOptimizedTrainingApproachDense_c68312"
+   ]
+  ]
+ },
+ "expect": "",
+ "usage": {
+  "embed": 204537,
+  "embed_cached": 36,
+  "rerank": 139413
+ },
+ "estimate": 390565,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls306/runs/2026-10-18_1823_ls306_rank.csv",
+   "fused_top10": [
+    "Wischounig2026_NegativeSamplingTechniquesDenseRetrieval_99cc1f",
+    "Shen2022_RecoveringGoldFromBlackSand_184009",
+    "Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457",
+    "Xiong2020_ApproximateNearestNeighborNegativeContrastive_92c84b",
+    "Qu2021_RocketQAOptimizedTrainingApproachDense_c68312",
+    "Gao2022_UnsupervisedCorpusAwareLanguageModel_2b4c83",
+    "Lin2021_BatchNegativesKnowledgeDistillationTightly_1aec77",
+    "Zhang2021_AdversarialRetrieverRankerDenseText_48be8c",
+    "Cai2022_HardNegativesOrFalseNegatives_55584f",
+    "Sun2022_ReduceCatastrophicForgettingDenseRetrieval_82db01"
+   ],
+   "first_query_top10": [
+    "Wischounig2026_NegativeSamplingTechniquesDenseRetrieval_99cc1f",
+    "Qu2020_RocketQAOptimizedTrainingApproachDense_6a9457",
+    "Shen2022_RecoveringGoldFromBlackSand_184009",
+    "Qu2021_RocketQAOptimizedTrainingApproachDense_c68312",
+    "Cai2022_HardNegativesOrFalseNegatives_55584f",
+    "Zhang2021_AdversarialRetrieverRankerDenseText_48be8c",
+    "Xiong2020_ApproximateNearestNeighborNegativeContrastive_92c84b",
+    "Sun2022_ReduceCatastrophicForgettingDenseRetrieval_82db01",
+    "Lin2021_BatchNegativesKnowledgeDistillationTightly_1aec77",
+    "Ren2021_RocketQAv2JointTrainingMethodDense_b6ec91"
+   ]
+  }
+ }
+}

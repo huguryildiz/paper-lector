@@ -1,0 +1,192 @@
+{
+ "created": "2026-10-18T18:28:54",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "186c405d5a0dba7c90ac7faa23aa7232c6042d04fb207b12052213a1eb3e5f53"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "5eb1d5b49a29bf39a01caff0cd4ccbae31b3ea49978ed45220b7ef4f7a7bbbff"
+   }
+  ]
+ },
+ "question": "Are there any papers that use a world model for planning to ensure that decisions meet constraints?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Are there any papers that use a world model for planning to ensure that decisions meet constraints?",
+   "keywords": "world model planning decisions satisfy constraints"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Agents or reinforcement learning systems that learn a world model of their environment and use it to plan action sequences while making sure that the resulting decisions satisfy safety or other constraints.",
+   "keywords": "world model planning constraints safe reinforcement learning constrained model-based decision making"
+  }
+ },
+ "queries_sha": "4449dd9f052b",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 13,
+  "windows": 215,
+  "ids": [
+   "Huang2023_SafeDreamerSafeReinforcementLearningWorld_51d847",
+   "Freeman2019_LearningPredictWithoutLookingAhead_278ec8",
+   "Chen2022_TransDreamerReinforcementLearningTransformerWorld_ed2b49",
+   "Nath2026_PixelsProofsProbabilisticallySafeLatent_0d9480",
+   "Wei2026_WhatMustWorldModelDistinguish_f07275",
+   "Bhamidipaty2026_ImperfectWorldModelsAreExploitable_762829",
+   "Zoellner2026_TemporalLogicGuidanceActionOnly_380d65",
+   "Kim2026_Planning8TokensCompactDiscrete_feb959",
+   "Li2026_HowMuchPlanningIsEnough_d819b6",
+   "Zhang2026_GeoWorldADGeometryWorldActionModel_c2d941",
+   "Xu2026_EndEndDifferentiablePredictiveControl_e2c5dd",
+   "Zhaoyan2026_MedicalWorldModelsHealthcareFoundations_c024d4",
+   "Ruddell2026_StructuralRigidity57TokenPredictive_9e73dd"
+  ],
+  "files": [
+   {
+    "id": "Huang2023_SafeDreamerSafeReinforcementLearningWorld_51d847",
+    "path": "pdfs/Huang2023_SafeDreamerSafeReinforcementLearningWorld_51d847.pdf",
+    "sha256": "daeb8e67400e98f9988209cec5803d22381d2aeae3d05f17e4b4d25dcecacc3f"
+   },
+   {
+    "id": "Freeman2019_LearningPredictWithoutLookingAhead_278ec8",
+    "path": "pdfs/Freeman2019_LearningPredictWithoutLookingAhead_278ec8.pdf",
+    "sha256": "834893de4beb46c547fb1e9ee93c38f8f2660307ad80a3f21d1f04c85d545b5d"
+   },
+   {
+    "id": "Chen2022_TransDreamerReinforcementLearningTransformerWorld_ed2b49",
+    "path": "pdfs/Chen2022_TransDreamerReinforcementLearningTransformerWorld_ed2b49.pdf",
+    "sha256": "caaebea6b0527edf0f6bc537720b8d5e23b98b08afeb7f7f6899c18d9ae70925"
+   },
+   {
+    "id": "Nath2026_PixelsProofsProbabilisticallySafeLatent_0d9480",
+    "path": "pdfs/Nath2026_PixelsProofsProbabilisticallySafeLatent_0d9480.pdf",
+    "sha256": "4855a9aad71ccff9d6fae0dc0a8e844870186feb3f11cf9dd88e83fb28257d4c"
+   },
+   {
+    "id": "Wei2026_WhatMustWorldModelDistinguish_f07275",
+    "path": "pdfs/Wei2026_WhatMustWorldModelDistinguish_f07275.pdf",
+    "sha256": "675f228a0eb1f0c5def3725c8802491954c975355c33ae1e8cb22e1f77fc0a40"
+   },
+   {
+    "id": "Bhamidipaty2026_ImperfectWorldModelsAreExploitable_762829",
+    "path": "pdfs/Bhamidipaty2026_ImperfectWorldModelsAreExploitable_762829.pdf",
+    "sha256": "b347b9f2d1c644fd5fdd36b980f28a03b3cfd1c18eaa5f2cdf5838951c4b72c1"
+   },
+   {
+    "id": "Zoellner2026_TemporalLogicGuidanceActionOnly_380d65",
+    "path": "pdfs/Zoellner2026_TemporalLogicGuidanceActionOnly_380d65.pdf",
+    "sha256": "66d1c73f2b7e39e101c0abeaccea1a546fe9ce4af7f93cf3534a1f288f9b7bd7"
+   },
+   {
+    "id": "Kim2026_Planning8TokensCompactDiscrete_feb959",
+    "path": "pdfs/Kim2026_Planning8TokensCompactDiscrete_feb959.pdf",
+    "sha256": "fdc79e7dc817b842a5dd378dcc73576ea0bdbfb6e1591b1bffda218b8bb963c6"
+   },
+   {
+    "id": "Li2026_HowMuchPlanningIsEnough_d819b6",
+    "path": "pdfs/Li2026_HowMuchPlanningIsEnough_d819b6.pdf",
+    "sha256": "43d460277b52ac81bb4e62f146be261d214fd225914ae89c48a6f6e65ceb2d7e"
+   },
+   {
+    "id": "Zhang2026_GeoWorldADGeometryWorldActionModel_c2d941",
+    "path": "pdfs/Zhang2026_GeoWorldADGeometryWorldActionModel_c2d941.pdf",
+    "sha256": "7bceb7b2414049137fb3bcec5344fd011b47db89e91d9c5f452475d1f37056c1"
+   },
+   {
+    "id": "Xu2026_EndEndDifferentiablePredictiveControl_e2c5dd",
+    "path": "pdfs/Xu2026_EndEndDifferentiablePredictiveControl_e2c5dd.pdf",
+    "sha256": "b264580ba62b09c2d82c7729f3f039ade0d88912dc72dc8dfa5d55cd7a71f2c6"
+   },
+   {
+    "id": "Zhaoyan2026_MedicalWorldModelsHealthcareFoundations_c024d4",
+    "path": "pdfs/Zhaoyan2026_MedicalWorldModelsHealthcareFoundations_c024d4.pdf",
+    "sha256": "7c2dfebc567a3da46d9d077e8c84a5d4730f3e110e11f87bb92cfa81f6c01c26"
+   },
+   {
+    "id": "Ruddell2026_StructuralRigidity57TokenPredictive_9e73dd",
+    "path": "pdfs/Ruddell2026_StructuralRigidity57TokenPredictive_9e73dd.pdf",
+    "sha256": "992fc7619bc7cc10bebeb35863f0cc7f31a630cb2ebc38f0c2e7f7a244dc242f"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 25436,
+  "embed_cached": 193,
+  "rerank": 88587
+ },
+ "estimate": 332517,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls510/runs/2026-10-18_1828_ls510_rank.csv",
+   "fused_top10": [
+    "Huang2023_SafeDreamerSafeReinforcementLearningWorld_51d847",
+    "Zoellner2026_TemporalLogicGuidanceActionOnly_380d65",
+    "Nath2026_PixelsProofsProbabilisticallySafeLatent_0d9480",
+    "Zhang2026_GeoWorldADGeometryWorldActionModel_c2d941",
+    "Wei2026_WhatMustWorldModelDistinguish_f07275",
+    "Chen2022_TransDreamerReinforcementLearningTransformerWorld_ed2b49",
+    "Kim2026_Planning8TokensCompactDiscrete_feb959",
+    "Freeman2019_LearningPredictWithoutLookingAhead_278ec8",
+    "Zhaoyan2026_MedicalWorldModelsHealthcareFoundations_c024d4",
+    "Bhamidipaty2026_ImperfectWorldModelsAreExploitable_762829"
+   ],
+   "first_query_top10": [
+    "Huang2023_SafeDreamerSafeReinforcementLearningWorld_51d847",
+    "Zoellner2026_TemporalLogicGuidanceActionOnly_380d65",
+    "Nath2026_PixelsProofsProbabilisticallySafeLatent_0d9480",
+    "Wei2026_WhatMustWorldModelDistinguish_f07275",
+    "Zhang2026_GeoWorldADGeometryWorldActionModel_c2d941",
+    "Kim2026_Planning8TokensCompactDiscrete_feb959",
+    "Zhaoyan2026_MedicalWorldModelsHealthcareFoundations_c024d4",
+    "Li2026_HowMuchPlanningIsEnough_d819b6",
+    "Chen2022_TransDreamerReinforcementLearningTransformerWorld_ed2b49",
+    "Bhamidipaty2026_ImperfectWorldModelsAreExploitable_762829"
+   ]
+  }
+ }
+}

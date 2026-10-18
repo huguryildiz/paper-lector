@@ -6,3 +6,4 @@ pdfs/
 !runs/
 fetch.out
 *.log
+*.out

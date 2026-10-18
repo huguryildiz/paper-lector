@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:30:20",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "a6077f82d0105eaa87438d2b9d86dd45d916436b143cd441ac6b7f850e0a90da"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "96400f69cbd023704083b7451a4c58691d2e7b7b42ad153903178e90f7da00f1"
+   }
+  ]
+ },
+ "question": "What paper first proposes that simply reversing the output can significantly enhance the sample efficiency and the performance of the arithmetic capability of a decoder-only Transformer model?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What paper first proposes that simply reversing the output can significantly enhance the sample efficiency and the performance of the arithmetic capability of a decoder-only Transformer model?",
+   "keywords": "reversing output improves sample efficiency arithmetic decoder-only Transformer"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Arithmetic ability of decoder-only Transformer language models, such as addition and multiplication of multi-digit numbers, and how the format in which the answer digits are written affects training sample efficiency.",
+   "keywords": "arithmetic decoder-only Transformer addition multiplication digits reverse order output format sample efficiency"
+  }
+ },
+ "queries_sha": "258cd42f0772",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 357,
+  "ids": [
+   "Lee2023_TeachingArithmeticSmallTransformers_b0d184",
+   "Shen2024_RevOrderNovelMethodEnhancedArithmetic_e58a69",
+   "Chunyuan2024_LanguageModelsAreSymbolicLearners_6f92c6",
+   "Guo2023_ArthModelEnhanceArithmeticSkillsLarge_8a009b",
+   "Junyu2024_ExecutingArithmeticFineTuningLarge_f5f9f0",
+   "Zhen2023_GPTCanSolveMathematicalProblems_406d26",
+   "Pappas2020_GroundedCompositionalOutputsAdaptiveLanguage_b26075",
+   "Alur2025_ImpossibilityInversePermutationLearningTransformer_ad08cf",
+   "Tiedong2023_GoatFineTunedLLaMAOutperforms_2199d1",
+   "Jing2023_LimitationsLanguageModelsArithmeticSymbolic_40f5e2",
+   "Nogueira2021_InvestigatingLimitationsTransformersSimpleArithmetic_419c85",
+   "Stolfo2023_MechanisticInterpretationArithmeticReasoningLanguage_44f453",
+   "B2020_LanguageModelsAreFewShot_c78ddc",
+   "Kitaev2020_ReformerEfficientTransformer_b7291f",
+   "Imani2023_MathPrompterMathematicalReasoningUsingLarge_cb9273",
+   "Weng2023_LargeLanguageModelsAreBetter_79b2e3",
+   "Sukhbaatar2019_AdaptiveAttentionSpanTransformers_df9423",
+   "Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75",
+   "Baevski2018_AdaptiveInputRepresentationsNeuralLanguage_63b4be",
+   "Jason2022_EmergentAbilitiesLargeLanguageModels_621a50"
+  ],
+  "files": [
+   {
+    "id": "Lee2023_TeachingArithmeticSmallTransformers_b0d184",
+    "path": "pdfs/Lee2023_TeachingArithmeticSmallTransformers_b0d184.pdf",
+    "sha256": "04fa6877bab7df0c3e5cec0b469e1f6b43013c2c52b96b937bcca40f3aa91ea5"
+   },
+   {
+    "id": "Shen2024_RevOrderNovelMethodEnhancedArithmetic_e58a69",
+    "path": "pdfs/Shen2024_RevOrderNovelMethodEnhancedArithmetic_e58a69.pdf",
+    "sha256": "3fea825d1bb224388a002fd2fbfba97439dc9b1af5ae01deecaac0c3e5a60c7d"
+   },
+   {
+    "id": "Chunyuan2024_LanguageModelsAreSymbolicLearners_6f92c6",
+    "path": "pdfs/Chunyuan2024_LanguageModelsAreSymbolicLearners_6f92c6.pdf",
+    "sha256": "dcfb41fe7bc2c4eaf740a3948061157b1e73ae7903668b227b86e438074ce229"
+   },
+   {
+    "id": "Guo2023_ArthModelEnhanceArithmeticSkillsLarge_8a009b",
+    "path": "pdfs/Guo2023_ArthModelEnhanceArithmeticSkillsLarge_8a009b.pdf",
+    "sha256": "8f5ab9b8e5dca8956e1d98e590fde6a8bceb437621aff1c7177841349226b73c"
+   },
+   {
+    "id": "Junyu2024_ExecutingArithmeticFineTuningLarge_f5f9f0",
+    "path": "pdfs/Junyu2024_ExecutingArithmeticFineTuningLarge_f5f9f0.pdf",
+    "sha256": "38611f933ccc8220806230853b7d6b9abbab2d1df73931494dd7aa0417aa5d26"
+   },
+   {
+    "id": "Zhen2023_GPTCanSolveMathematicalProblems_406d26",
+    "path": "pdfs/Zhen2023_GPTCanSolveMathematicalProblems_406d26.pdf",
+    "sha256": "8909dc77125bd107ae42b03edf8d5bb153b66b1370f2bd5418a085f468f1b038"
+   },
+   {
+    "id": "Pappas2020_GroundedCompositionalOutputsAdaptiveLanguage_b26075",
+    "path": "pdfs/Pappas2020_GroundedCompositionalOutputsAdaptiveLanguage_b26075.pdf",
+    "sha256": "67ba8545f39bb04cec2dc47733f81975d85256ba3a44aa6ce926d0245fccc675"
+   },
+   {
+    "id": "Alur2025_ImpossibilityInversePermutationLearningTransformer_ad08cf",
+    "path": "pdfs/Alur2025_ImpossibilityInversePermutationLearningTransformer_ad08cf.pdf",
+    "sha256": "3684635baca2de7b11254119738814782c8b7e3ca89c352e0b028612b2c8749d"
+   },
+   {
+    "id": "Tiedong2023_GoatFineTunedLLaMAOutperforms_2199d1",
+    "path": "pdfs/Tiedong2023_GoatFineTunedLLaMAOutperforms_2199d1.pdf",
+    "sha256": "68c990f6c66b241fedf3be0a2c4c7eba353b8711d65aff93459c955fbb91da2a"
+   },
+   {
+    "id": "Jing2023_LimitationsLanguageModelsArithmeticSymbolic_40f5e2",
+    "path": "pdfs/Jing2023_LimitationsLanguageModelsArithmeticSymbolic_40f5e2.pdf",
+    "sha256": "bb17a6d0d08f692cbb7d855c2610295c95c9444b819beabe0d37933e200c7270"
+   },
+   {
+    "id": "Nogueira2021_InvestigatingLimitationsTransformersSimpleArithmetic_419c85",
+    "path": "pdfs/Nogueira2021_InvestigatingLimitationsTransformersSimpleArithmetic_419c85.pdf",
+    "sha256": "7d1b7e40c06eae1d2ed38fcdb588379eef45445e9688a6d81cef9b026b37439d"
+   },
+   {
+    "id": "Stolfo2023_MechanisticInterpretationArithmeticReasoningLanguage_44f453",
+    "path": "pdfs/Stolfo2023_MechanisticInterpretationArithmeticReasoningLanguage_44f453.pdf",
+    "sha256": "da3a6151eef5771f86af2dd5aa66beed3e38fad2f4e1c5e09311c68c1313ae49"
+   },
+   {
+    "id": "B2020_LanguageModelsAreFewShot_c78ddc",
+    "path": "pdfs/B2020_LanguageModelsAreFewShot_c78ddc.pdf",
+    "sha256": "97fd272f1fdfc18677462d0292f5fbf26ca86b4d1b485c2dba03269b643a0e83"
+   },
+   {
+    "id": "Kitaev2020_ReformerEfficientTransformer_b7291f",
+    "path": "pdfs/Kitaev2020_ReformerEfficientTransformer_b7291f.pdf",
+    "sha256": "f86f29116ea4a04321f4ab8727283096c544255bd31f7efbc10e56390a8b5e8b"
+   },
+   {
+    "id": "Imani2023_MathPrompterMathematicalReasoningUsingLarge_cb9273",
+    "path": "pdfs/Imani2023_MathPrompterMathematicalReasoningUsingLarge_cb9273.pdf",
+    "sha256": "231bff860184e97da50ca74a557c868598671e1da94fdefc2c236ca5460703a7"
+   },
+   {
+    "id": "Weng2023_LargeLanguageModelsAreBetter_79b2e3",
+    "path": "pdfs/Weng2023_LargeLanguageModelsAreBetter_79b2e3.pdf",
+    "sha256": "e85895a3ef23f6685d1831a1dd1dd14efc5c704d7d9bc734216b2318163af340"
+   },
+   {
+    "id": "Sukhbaatar2019_AdaptiveAttentionSpanTransformers_df9423",
+    "path": "pdfs/Sukhbaatar2019_AdaptiveAttentionSpanTransformers_df9423.pdf",
+    "sha256": "b088be3b06375c4710aa95cab41bc201e45d799402c1e5ea5fae87d19f8d4ee9"
+   },
+   {
+    "id": "Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75",
+    "path": "pdfs/Liu2018_GeneratingWikipediaSummarizingLongSequences_fa4c75.pdf",
+    "sha256": "2f797175167100cf2c2584a045fffe7c662df7cb0c4be06c88a4d8f6b36e1768"
+   },
+   {
+    "id": "Baevski2018_AdaptiveInputRepresentationsNeuralLanguage_63b4be",
+    "path": "pdfs/Baevski2018_AdaptiveInputRepresentationsNeuralLanguage_63b4be.pdf",
+    "sha256": "89b6349a21cee65a5ac0e756ab44817c96eb66b04c7de1062a88d9b00fee165f"
+   },
+   {
+    "id": "Jason2022_EmergentAbilitiesLargeLanguageModels_621a50",
+    "path": "pdfs/Jason2022_EmergentAbilitiesLargeLanguageModels_621a50.pdf",
+    "sha256": "f457f08102eb381f2300e1653bf4c82a9aa5dce0eb8dba8fe744ccc2500c3755"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 150612,
+  "embed_cached": 223,
+  "rerank": 146462
+ },
+ "estimate": 548485,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls549/runs/2026-10-18_1830_ls549_rank.csv",
+   "fused_top10": [
+    "Lee2023_TeachingArithmeticSmallTransformers_b0d184",
+    "Shen2024_RevOrderNovelMethodEnhancedArithmetic_e58a69",
+    "Zhen2023_GPTCanSolveMathematicalProblems_406d26",
+    "Nogueira2021_InvestigatingLimitationsTransformersSimpleArithmetic_419c85",
+    "Junyu2024_ExecutingArithmeticFineTuningLarge_f5f9f0",
+    "Jing2023_LimitationsLanguageModelsArithmeticSymbolic_40f5e2",
+    "Tiedong2023_GoatFineTunedLLaMAOutperforms_2199d1",
+    "Stolfo2023_MechanisticInterpretationArithmeticReasoningLanguage_44f453",
+    "Chunyuan2024_LanguageModelsAreSymbolicLearners_6f92c6",
+    "Kitaev2020_ReformerEfficientTransformer_b7291f"
+   ],
+   "first_query_top10": [
+    "Lee2023_TeachingArithmeticSmallTransformers_b0d184",
+    "Shen2024_RevOrderNovelMethodEnhancedArithmetic_e58a69",
+    "Junyu2024_ExecutingArithmeticFineTuningLarge_f5f9f0",
+    "Zhen2023_GPTCanSolveMathematicalProblems_406d26",
+    "Nogueira2021_InvestigatingLimitationsTransformersSimpleArithmetic_419c85",
+    "Jing2023_LimitationsLanguageModelsArithmeticSymbolic_40f5e2",
+    "Kitaev2020_ReformerEfficientTransformer_b7291f",
+    "Stolfo2023_MechanisticInterpretationArithmeticReasoningLanguage_44f453",
+    "Alur2025_ImpossibilityInversePermutationLearningTransformer_ad08cf",
+    "Chunyuan2024_LanguageModelsAreSymbolicLearners_6f92c6"
+   ]
+  }
+ }
+}

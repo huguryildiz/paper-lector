@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:31:38",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "c0ee9ec0e80acd4b7f365c4b075758c5bf5430a3ceba817cade1e70d408426ff"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "50c7834a98bf5ab2a25f8d3f96ae391e877a8c762f0ab4524c07e1848d049c5b"
+   }
+  ]
+ },
+ "question": "Which paper first found that REINFORCE works better than actor critic algorithms like PPO for RL finetuning of pretrained chemistry language models (Transformers and RNNs)?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which paper first found that REINFORCE works better than actor critic algorithms like PPO for RL finetuning of pretrained chemistry language models (Transformers and RNNs)?",
+   "keywords": "REINFORCE better than PPO actor critic RL finetuning pretrained chemistry language models"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Pretrained chemistry language models, both Transformers and RNNs, that generate molecules as strings and are fine-tuned with reinforcement learning algorithms such as REINFORCE and PPO.",
+   "keywords": "chemistry language models molecule generation SMILES reinforcement learning REINFORCE PPO fine-tuning Transformer RNN"
+  }
+ },
+ "queries_sha": "2e76df68fc63",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 343,
+  "ids": [
+   "Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2",
+   "Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200",
+   "Han2024_DPOMeetsPPOReinforcedToken_625a52",
+   "Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0",
+   "Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4",
+   "Lin2026_FineTuningDiffusionModelsMolecular_7471fd",
+   "Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4",
+   "Dai2019_TransformerXLAttentiveLanguageModels_dd4bce",
+   "Zaken2022_BitFitSimpleParameterEfficientFine_57fd1d",
+   "Ding2021_CogViewMasteringTextImageGeneration_f7bcef",
+   "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+   "Kasai2021_FinetuningPretrainedTransformersIntoRNNs_f0b9f1",
+   "Qi2026_RethinkingTrustRegionLLMReinforcement_c8a5e9",
+   "Chen2020_DistillingKnowledgeLearnedBERTText_f5d7c2",
+   "Tran2026_ExploitingTreeStructureCreditAssignment_1fd95b",
+   "Levine2026_TSSRTwoStageSwapReward_8066cd",
+   "Gheini2021_CrossAttentionIsAllYou_20a962",
+   "Luo2026_OnlineFinetuningDecisionTransformersPure_874633",
+   "Cao2024_EnhancingReinforcementLearningDenseRewards_deb929",
+   "Dai2023_WhyCanGPTLearnContext_4171a8"
+  ],
+  "files": [
+   {
+    "id": "Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2",
+    "path": "pdfs/Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2.pdf",
+    "sha256": "2ab9e5e73c53229ef8ca9f8572f00e389cc51ab3e4878f2a4dd80fc8dff78fb9"
+   },
+   {
+    "id": "Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200",
+    "path": "pdfs/Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200.pdf",
+    "sha256": "8e6111e714b671a4ebf0550855a94d594200e705f0a4da79338ed5cb17e1434b"
+   },
+   {
+    "id": "Han2024_DPOMeetsPPOReinforcedToken_625a52",
+    "path": "pdfs/Han2024_DPOMeetsPPOReinforcedToken_625a52.pdf",
+    "sha256": "64255c6ab8b390494c9516aecb5a70adf011f809ff4d2e29b03c37ed1f0fcd7b"
+   },
+   {
+    "id": "Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0",
+    "path": "pdfs/Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0.pdf",
+    "sha256": "86440453d4f04bb8012b56c5eada3abb39ce35c249015c02e59e3d72f5223cb4"
+   },
+   {
+    "id": "Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4",
+    "path": "pdfs/Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4.pdf",
+    "sha256": "b3e73b6d82dc8ec5e031dc125110cb7ae861e8781895e5cade74f21a99840e02"
+   },
+   {
+    "id": "Lin2026_FineTuningDiffusionModelsMolecular_7471fd",
+    "path": "pdfs/Lin2026_FineTuningDiffusionModelsMolecular_7471fd.pdf",
+    "sha256": "189c2c1f98dfce9f24e68f0498c74649581df783c7526e05929dea76441faeff"
+   },
+   {
+    "id": "Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4",
+    "path": "pdfs/Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4.pdf",
+    "sha256": "b2624b925e16da7ff419364d8b1631735a8a7ee438e66eabc1467035d61dc6a6"
+   },
+   {
+    "id": "Dai2019_TransformerXLAttentiveLanguageModels_dd4bce",
+    "path": "pdfs/Dai2019_TransformerXLAttentiveLanguageModels_dd4bce.pdf",
+    "sha256": "2438bdcddc0db3328a78d108df6438c180f97ef6a12c555eb10a5d6e0e4d734b"
+   },
+   {
+    "id": "Zaken2022_BitFitSimpleParameterEfficientFine_57fd1d",
+    "path": "pdfs/Zaken2022_BitFitSimpleParameterEfficientFine_57fd1d.pdf",
+    "sha256": "0081928bfff2264ecd55f299fcf03d2177124d0516706d1f2f4f0b3b79c4098b"
+   },
+   {
+    "id": "Ding2021_CogViewMasteringTextImageGeneration_f7bcef",
+    "path": "pdfs/Ding2021_CogViewMasteringTextImageGeneration_f7bcef.pdf",
+    "sha256": "6032d61ddc251944fd9af403471ca34c07e26fdfe8ba1ca2bde9ce34d4471881"
+   },
+   {
+    "id": "Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9",
+    "path": "pdfs/Yang2019_XLNetGeneralizedAutoregressivePretrainingLanguage_6b10c9.pdf",
+    "sha256": "51ebaf21e4cd586761016a64b2b753ee5ca05dd52a0de6bf8058a7eb8e932d91"
+   },
+   {
+    "id": "Kasai2021_FinetuningPretrainedTransformersIntoRNNs_f0b9f1",
+    "path": "pdfs/Kasai2021_FinetuningPretrainedTransformersIntoRNNs_f0b9f1.pdf",
+    "sha256": "c8926f2f6173ad5ede8b4e142adf0846d90215748a56107e27aa69faf697d170"
+   },
+   {
+    "id": "Qi2026_RethinkingTrustRegionLLMReinforcement_c8a5e9",
+    "path": "pdfs/Qi2026_RethinkingTrustRegionLLMReinforcement_c8a5e9.pdf",
+    "sha256": "e27a6333f8e3b7790145d25e1be19bf7e6164c9c4ae1651ccc2640bf8302eb3c"
+   },
+   {
+    "id": "Chen2020_DistillingKnowledgeLearnedBERTText_f5d7c2",
+    "path": "pdfs/Chen2020_DistillingKnowledgeLearnedBERTText_f5d7c2.pdf",
+    "sha256": "ca5987ed1ede4066bcb6b9df53c2bb966db2cfe0dd87a681b1a34c1d8cf97bdb"
+   },
+   {
+    "id": "Tran2026_ExploitingTreeStructureCreditAssignment_1fd95b",
+    "path": "pdfs/Tran2026_ExploitingTreeStructureCreditAssignment_1fd95b.pdf",
+    "sha256": "af0bd516e816d1dd19d661571035776ce8568d1c408606a7148dd2bae984c266"
+   },
+   {
+    "id": "Levine2026_TSSRTwoStageSwapReward_8066cd",
+    "path": "pdfs/Levine2026_TSSRTwoStageSwapReward_8066cd.pdf",
+    "sha256": "0b976ad58a27cea839c0a7951f45046ede68dafdfbd012fbbbde1ab52c4edc2e"
+   },
+   {
+    "id": "Gheini2021_CrossAttentionIsAllYou_20a962",
+    "path": "pdfs/Gheini2021_CrossAttentionIsAllYou_20a962.pdf",
+    "sha256": "a469633512d671a15bd1e865c7de0bc1b8f9aa48f39df7f3dfdc9f72cdded7e8"
+   },
+   {
+    "id": "Luo2026_OnlineFinetuningDecisionTransformersPure_874633",
+    "path": "pdfs/Luo2026_OnlineFinetuningDecisionTransformersPure_874633.pdf",
+    "sha256": "c6ad3512456da0f83bf34ba95911eb47075f658d6ac03c8fa392c1e424d0fecd"
+   },
+   {
+    "id": "Cao2024_EnhancingReinforcementLearningDenseRewards_deb929",
+    "path": "pdfs/Cao2024_EnhancingReinforcementLearningDenseRewards_deb929.pdf",
+    "sha256": "4f72368d745cac97e393c7e3d9b7fd4c37eb5b52e844cdbec43801a0a79ab323"
+   },
+   {
+    "id": "Dai2023_WhyCanGPTLearnContext_4171a8",
+    "path": "pdfs/Dai2023_WhyCanGPTLearnContext_4171a8.pdf",
+    "sha256": "509a88cb53f8092cdd0cc16338b20d926985f9ca6a9ac37bbf3f5089c6ffe80c"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 326157,
+  "embed_cached": 44,
+  "rerank": 148535
+ },
+ "estimate": 529658,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls575/runs/2026-10-18_1831_ls575_rank.csv",
+   "fused_top10": [
+    "Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2",
+    "Levine2026_TSSRTwoStageSwapReward_8066cd",
+    "Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200",
+    "Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0",
+    "Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4",
+    "Han2024_DPOMeetsPPOReinforcedToken_625a52",
+    "Luo2026_OnlineFinetuningDecisionTransformersPure_874633",
+    "Lin2026_FineTuningDiffusionModelsMolecular_7471fd",
+    "Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4",
+    "Cao2024_EnhancingReinforcementLearningDenseRewards_deb929"
+   ],
+   "first_query_top10": [
+    "Ghugare2023_SearchingHighValueMoleculesUsing_93e2a2",
+    "Levine2026_TSSRTwoStageSwapReward_8066cd",
+    "Rohit2025_UnderstandingReinforcementLearningModelTraining_7e19d0",
+    "Ouyang2026_AdoptingReinforcementLearningVerifiableRewards_ded200",
+    "Havrilla2024_TeachingLargeLanguageModelsReason_de2dd4",
+    "Han2024_DPOMeetsPPOReinforcedToken_625a52",
+    "Luo2026_OnlineFinetuningDecisionTransformersPure_874633",
+    "Nishikawa2026_ReinforcementLearningHierarchicalReasoningRewards_e3d4c4",
+    "Tran2026_ExploitingTreeStructureCreditAssignment_1fd95b",
+    "Qi2026_RethinkingTrustRegionLLMReinforcement_c8a5e9"
+   ]
+  }
+ }
+}

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 3-4,Štefánik2023_SoftAlignmentObjectivesRobustAdaptation_f44c4c,0.032787,,1,0.8555,1,0.7188,p. 3-4; p. 1-2; p. 2-3,p. 2-3; p. 1-2; p. 3-4,12938,True,True,full_text
+2,,,,,p. 2-3; p. 4-6; p. 9-10,Puri2026_ReachingBeyondModeRLDistributional_3afa19,0.032258,,2,0.7461,2,0.6953,p. 2-3; p. 12-18; p. 4-6,p. 2-3; p. 9-10; p. 3-4,16855,True,True,full_text
+3,,,,,p. 1-2; p. 3-4; p. 6-7,Yang2024_SingleGroundTruthIsNot_4c36a2,0.031498,,4,0.6602,3,0.6289,p. 3-4; p. 1-2; p. 8-12,p. 3-4; p. 1-2; p. 6-7,27177,True,True,full_text
+4,,,,,p. 1-2; p. 4-6; p. 11-14,Khan2026_ConsensusBasedFrameworkRelativePreference_dd225d,0.031258,,5,0.6445,3,0.6289,p. 1-2; p. 4-6; p. 11-14,p. 1-2; p. 4-6; p. 11-14,6107,True,True,full_text
+5,,,,,p. 1-2; p. 13-14; p. 17-18,Mehrotra2026_MultiPerspectiveLLMAnnotationsValid_999db0,0.030366,,3,0.6836,9,0.5195,p. 1-2; p. 2-3; p. 13-14,p. 1-2; p. 2-3; p. 17-18,18737,True,True,full_text
+6,,,,,p. 1-2; p. 8-12; p. 23-24,Wang2026_EvaluatingCalibratingLLMConfidenceQuestions_235738,0.03009,,8,0.5664,5,0.6133,p. 1-2; p. 12-13; p. 8-12,p. 1-2; p. 23-24; p. 8-12,31674,True,True,full_text
+7,,,,,p. 1-2; p. 3-4,Robert2025_AssessingRelevanceCodeReviewsAuthored_f839b3,0.029437,,6,0.6094,10,0.5156,p. 1-2; p. 4; p. 2-3,p. 1-2; p. 3-4; p. 2-3,4522,True,True,full_text
+8,,,,,p. 3-4,Torun2026_EvaluationLLMBasedSoftwareEngineering_4c8766,0.02885,,13,0.5117,6,0.5781,p. 4-5; p. 3-4,p. 4-5; p. 3-4,6161,True,True,full_text
+9,,,,,p. 1-2; p. 3-5,Niewiński2019_GEMGenerativeEnhancedModelAdversarial_218820,0.028439,,7,0.5781,14,0.4551,p. 1-2; p. 3-5; p. 5-7,p. 3-5; p. 1-2; p. 4-6,4883,True,True,full_text
+10,,,,,p. 1-2; p. 4-5,Chaudhary2024_TowardsUnderstandingRobustnessLLMBased_665c74,0.028382,,9,0.5391,12,0.4844,p. 1-2; p. 4-5; p. 4-7,p. 1-2; p. 4-7; p. 4-5,6582,True,True,full_text
+11,,,,,p. 7-8; p. 1-2,Holtzman2019_CuriousCaseNeuralTextDegeneration_f59af3,0.028039,,15,0.5039,8,0.5273,p. 2-4; p. 1-2; p. 7-8,p. 6-7; p. 2-3; p. 7-8,11122,True,True,full_text
+12,,,,,p. 1-3; p. 7-8; p. 4-6,Maya2024_FactualityOrFictionBenchmarkingModern_662860,0.027912,,17,0.4961,7,0.543,p. 1-3; p. 7-8; p. 5-7,p. 4-6; p. 7-8; p. 1-3,7658,True,True,full_text
+13,,,,,p. 4-5; p. 13-14; p. 40-45,Lin2022_TruthfulQAMeasuringHowModelsMimic_ed37bc,0.027619,,10,0.5352,15,0.4473,p. 13-14; p. 4-5; p. 14-15,p. 40-45; p. 5-6; p. 4-5,26316,True,True,full_text
+14,,,,,p. 2-3; p. 4-5,Lewis2020_AffordanceCompiledIntelligenceObservableOnly_e75e40,0.027588,,12,0.5234,13,0.4727,p. 3-4; p. 2-3; p. 4-5,p. 3-4; p. 4-5; p. 2-3,11630,True,True,full_text
+15,,,,,p. 1-2; p. 4-5,Maynez2020_FaithfulnessFactualityAbstractiveSummarization_bf1b0c,0.026905,,18,0.457,11,0.5117,p. 4-5; p. 2-3; p. 1-2,p. 1-2; p. 2-3; p. 4-5,13160,True,True,full_text
+16,,,,,p. 2-4; p. 17-18,He2026_ImplicitReasoningLargeLanguageModel_9df05a,0.026686,,13,0.5117,17,0.4082,p. 1-2; p. 4-5; p. 2-4,p. 4-5; p. 17-18; p. 2-4,18757,True,True,full_text
+17,,,,,p. 8-9; p. 17-19; p. 3-4,Kim2024_AutomaticJailbreakingTextImageGenerative_05a879,0.026585,,11,0.5312,20,0.3496,p. 17-19; p. 4-5; p. 8-9,p. 8-9; p. 17-19; p. 3-4,15700,True,True,full_text
+18,,,,,p. 10-11; p. 1-2; p. 4-5,Keskar2019_CTRLConditionalTransformerLanguageModel_aeeebe,0.026491,,15,0.5039,16,0.4219,p. 4-5; p. 10-11; p. 1-2,p. 9-10; p. 10-11; p. 2-3,11694,True,True,full_text
+19,,,,,p. 2-3; p. 4-5; p. 8-9,Gehman2020_RealToxicityPromptsEvaluatingNeuralToxicDegeneration_712c0e,0.025479,,18,0.457,19,0.375,p. 4-5; p. 5-6; p. 8-9,p. 2-3; p. 15-16; p. 3-4,19182,True,True,full_text
+20,,,,,p. 1-2; p. 3-4; p. 5,Ji2023_TowardsMitigatingLLMHallucinationSelf_201abf,0.025321,,20,0.4316,18,0.3887,p. 5-6; p. 5; p. 1-2,p. 2-3; p. 13-14; p. 3-4,14570,True,True,full_text

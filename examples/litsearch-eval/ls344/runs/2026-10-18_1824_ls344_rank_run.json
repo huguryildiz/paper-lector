@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:24:48",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "3a9e83ac92c2f67bc61d796e43d20d7a388c8b05b7a8309a743a072b1f9eaf6e"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "b166fb2b0f161720d5783d200822224c320975028ce6d99617f8f2daba6b70fb"
+   }
+  ]
+ },
+ "question": "Which work introduces sparse attention modules and evaluate specifically on summarization?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which work introduces sparse attention modules and evaluate specifically on summarization?",
+   "keywords": "sparse attention modules evaluated on summarization"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Transformer models with sparse attention patterns that handle long input sequences efficiently, with evaluation focused specifically on abstractive summarization of long documents.",
+   "keywords": "sparse attention Transformer long documents summarization efficient attention"
+  }
+ },
+ "queries_sha": "760528c3fc78",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 247,
+  "ids": [
+   "Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199",
+   "Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1",
+   "Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82",
+   "Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac",
+   "Pilault2020_ExtractiveAbstractiveNeuralDocumentSummarization_f408aa",
+   "Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5",
+   "Guo2022_LongT5EfficientTextTextTransformer_dedf6b",
+   "Sandeep2019_ExtractiveAbstractiveNeuralDocumentSummarization_9a18e1",
+   "Cohan2018_DiscourseAwareAttentionModelAbstractive_22b6b6",
+   "Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444",
+   "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+   "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+   "Rush2015_NeuralAttentionModelAbstractiveSentence_569c68",
+   "Gehrmann2018_BottomUpAbstractiveSummarization_2f53f1",
+   "Zaheer2020_BigBirdTransformersLongerSequences_19eb07",
+   "Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2",
+   "Chen2018_FastAbstractiveSummarizationReinforceSelected_62139f",
+   "Gu2016_IncorporatingCopyingMechanismSequenceSequence_e578a6",
+   "Kitaev2020_ReformerEfficientTransformer_b7291f",
+   "Chopra2016_AbstractiveSentenceSummarizationAttentiveRecurrent_e1dced"
+  ],
+  "files": [
+   {
+    "id": "Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199",
+    "path": "pdfs/Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199.pdf",
+    "sha256": "f1887c6101d8eaf2d346913222f59003c265a811c5053b8cd1df4ace5c23aa5b"
+   },
+   {
+    "id": "Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1",
+    "path": "pdfs/Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1.pdf",
+    "sha256": "dd0da0c92e68e5cb9b5fdd7d9424fc5a0be6bf366f7871dc6db28724c94a9322"
+   },
+   {
+    "id": "Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82",
+    "path": "pdfs/Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82.pdf",
+    "sha256": "d2ecb9770cbaf1c94cd5b686e9ceaaa0b3d7c7c641caaeab7104cceffeaa805e"
+   },
+   {
+    "id": "Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac",
+    "path": "pdfs/Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac.pdf",
+    "sha256": "f601b570d7c609063915847ddfda3d183cbeb34b781816261d1f8c183994143f"
+   },
+   {
+    "id": "Pilault2020_ExtractiveAbstractiveNeuralDocumentSummarization_f408aa",
+    "path": "pdfs/Pilault2020_ExtractiveAbstractiveNeuralDocumentSummarization_f408aa.pdf",
+    "sha256": "9446f2516a0865f89f207861a55f311dba6130b23bda6381ab18fa3b1ad60d34"
+   },
+   {
+    "id": "Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5",
+    "path": "pdfs/Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5.pdf",
+    "sha256": "5036ecab2ab0d5e6ba68f325ecfbdffb03164dc2f980fd518cb6c94742ce15c0"
+   },
+   {
+    "id": "Guo2022_LongT5EfficientTextTextTransformer_dedf6b",
+    "path": "pdfs/Guo2022_LongT5EfficientTextTextTransformer_dedf6b.pdf",
+    "sha256": "c5d767d26a906c65c8b66b9d8fb29e16e62075ebb9318f3cad6c757810c765e4"
+   },
+   {
+    "id": "Sandeep2019_ExtractiveAbstractiveNeuralDocumentSummarization_9a18e1",
+    "path": "pdfs/Sandeep2019_ExtractiveAbstractiveNeuralDocumentSummarization_9a18e1.pdf",
+    "sha256": "fb62fae292cf103df6961423c8045d320757a16ccaf1bab382357a2f18ff78bc"
+   },
+   {
+    "id": "Cohan2018_DiscourseAwareAttentionModelAbstractive_22b6b6",
+    "path": "pdfs/Cohan2018_DiscourseAwareAttentionModelAbstractive_22b6b6.pdf",
+    "sha256": "ea4f39aec37e8dc4f562789a2cffb75302d33879026725d3ae98965d8433fa2f"
+   },
+   {
+    "id": "Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444",
+    "path": "pdfs/Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444.pdf",
+    "sha256": "c4e5d095feb22c3d709d1949f7c2d5a7d00f9f6588ceb77e1c2aac3f4bec7260"
+   },
+   {
+    "id": "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+    "path": "pdfs/See2017_GetPointSummarizationPointerGenerator_5a6ecd.pdf",
+    "sha256": "499a1f95e7f291821233351fc6fd1beecce55dbb2cae05bcf7386ab6df6aef89"
+   },
+   {
+    "id": "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+    "path": "pdfs/Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600.pdf",
+    "sha256": "da82d4aa7b37683b9e756b50c29db0f37de73e8add2429f4ddbebfb11921088d"
+   },
+   {
+    "id": "Rush2015_NeuralAttentionModelAbstractiveSentence_569c68",
+    "path": "pdfs/Rush2015_NeuralAttentionModelAbstractiveSentence_569c68.pdf",
+    "sha256": "8eaa93abb80fb589574f733bac4295ebe49727190943cda03944cccb7ca447f0"
+   },
+   {
+    "id": "Gehrmann2018_BottomUpAbstractiveSummarization_2f53f1",
+    "path": "pdfs/Gehrmann2018_BottomUpAbstractiveSummarization_2f53f1.pdf",
+    "sha256": "bdf00c21b4f0aef37a823351859e4600a13b1e4cd3e25ca3215a57ae04be5c63"
+   },
+   {
+    "id": "Zaheer2020_BigBirdTransformersLongerSequences_19eb07",
+    "path": "pdfs/Zaheer2020_BigBirdTransformersLongerSequences_19eb07.pdf",
+    "sha256": "9dc448464532d61f084de6a224b84acf3b421142e05a40ebfb982b4eca5834a2"
+   },
+   {
+    "id": "Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2",
+    "path": "pdfs/Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2.pdf",
+    "sha256": "f86a162404da6e8d6acbdc67878b578ae8ae67385eb14c318ddeef89f11278d6"
+   },
+   {
+    "id": "Chen2018_FastAbstractiveSummarizationReinforceSelected_62139f",
+    "path": "pdfs/Chen2018_FastAbstractiveSummarizationReinforceSelected_62139f.pdf",
+    "sha256": "a9cbaffdf1e333ad577cda88ba60001db4fc7a9b9286628185c83d8cf9e250a3"
+   },
+   {
+    "id": "Gu2016_IncorporatingCopyingMechanismSequenceSequence_e578a6",
+    "path": "pdfs/Gu2016_IncorporatingCopyingMechanismSequenceSequence_e578a6.pdf",
+    "sha256": "37e1c0466dacf3fd2ec5f50c1c28daa1c7e989d9d1e1c0b6131541577d9ffab4"
+   },
+   {
+    "id": "Kitaev2020_ReformerEfficientTransformer_b7291f",
+    "path": "pdfs/Kitaev2020_ReformerEfficientTransformer_b7291f.pdf",
+    "sha256": "f86f29116ea4a04321f4ab8727283096c544255bd31f7efbc10e56390a8b5e8b"
+   },
+   {
+    "id": "Chopra2016_AbstractiveSentenceSummarizationAttentiveRecurrent_e1dced",
+    "path": "pdfs/Chopra2016_AbstractiveSentenceSummarizationAttentiveRecurrent_e1dced.pdf",
+    "sha256": "daa52f44f9da274fa5d7d9100330449c5b1b963be9fdc2d7fbbb77b6a67970df"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 223704,
+  "embed_cached": 39,
+  "rerank": 147738
+ },
+ "estimate": 419568,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls344/runs/2026-10-18_1824_ls344_rank.csv",
+   "fused_top10": [
+    "Zaheer2020_BigBirdTransformersLongerSequences_19eb07",
+    "Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444",
+    "Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199",
+    "Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1",
+    "Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5",
+    "Guo2022_LongT5EfficientTextTextTransformer_dedf6b",
+    "Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82",
+    "Pilault2020_ExtractiveAbstractiveNeuralDocumentSummarization_f408aa",
+    "Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac",
+    "Sandeep2019_ExtractiveAbstractiveNeuralDocumentSummarization_9a18e1"
+   ],
+   "first_query_top10": [
+    "Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444",
+    "Zaheer2020_BigBirdTransformersLongerSequences_19eb07",
+    "Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1",
+    "Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5",
+    "Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199",
+    "Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82",
+    "Guo2022_LongT5EfficientTextTextTransformer_dedf6b",
+    "Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac",
+    "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+    "Rush2015_NeuralAttentionModelAbstractiveSentence_569c68"
+   ]
+  }
+ }
+}

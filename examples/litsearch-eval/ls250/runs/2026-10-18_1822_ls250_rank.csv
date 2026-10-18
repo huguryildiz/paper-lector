@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 9-13; p. 1-2; p. 4-5,Li2020_UNIMOTowardsUnifiedModalUnderstanding_0ffd65,0.032002,,2,0.7895,3,0.8077,p. 8-9; p. 1-2; p. 9-13,p. 9-13; p. 2-3; p. 4-5,14403,True,True,full_text
+1,,,,,p. 3-4; p. 9-13; p. 1-2,Li2021_AlignBeforeFuseVisionLanguage_db7a60,0.032002,,3,0.7792,2,0.8502,p. 3-4; p. 2-3; p. 9-13,p. 3-4; p. 1-2; p. 9-13,12633,True,True,full_text
+3,,,,,p. 1-2; p. 8-9; p. 4-5,Jia2021_ScalingUpVisualVisionLanguage_bdf13d,0.031545,,6,0.7635,1,0.8907,p. 1-2; p. 8-9; p. 4-5,p. 1-2; p. 8-9; p. 2-3,13051,True,True,full_text
+4,,,,,p. 4-6; p. 9-14,Roy2024_BenchmarkingVisionLanguageContrastiveMethods_422d68,0.031319,,1,0.8056,7,0.7533,p. 9-14; p. 4-6; p. 14-15,p. 4-6; p. 9-14; p. 3-4,18202,True,True,full_text
+5,,,,,p. 1-2; p. 16-17; p. 3-4,Singh2023_CoarseFineContrastiveLearningImage_601780,0.030777,,4,0.7735,6,0.7618,p. 1-2; p. 10-14; p. 16-17,p. 1-2; p. 16-17; p. 3-4,25178,True,True,full_text
+6,,,,,p. 1-2; p. 3-4,Wang2021_UFOUniFiedTransfOrmerVisionLanguage_48aec5,0.030331,,8,0.7433,4,0.7818,p. 1-2; p. 3-4; p. 2-3,p. 2-3; p. 1-2; p. 3-4,15510,True,True,full_text
+7,,,,,p. 2-4; p. 11-14,Zhang2020_ContrastiveLearningMedicalVisualRepresentations_750bef,0.029877,,9,0.7194,5,0.773,p. 4-5; p. 2-4; p. 13-15,p. 4-5; p. 2-4; p. 11-14,19618,True,True,full_text
+8,,,,,p. 7-8; p. 1-2; p. 5-6,Tian2019_ContrastiveMultiviewCoding_cbb147,0.02967,,5,0.7706,10,0.6868,p. 1-2; p. 9-12; p. 7-8,p. 2-3; p. 5-6; p. 7-8,32941,True,False,full_text
+9,,,,,p. 2-3; p. 7-11,Wang2022_MedCLIPContrastiveLearningFromUnpaired_3311e9,0.02901,,7,0.7518,11,0.6821,p. 2-3; p. 3-4; p. 7-11,p. 3-4; p. 7-11; p. 2-3,8539,True,False,full_text
+10,,,,,p. 3-4; p. 1-2; p. 9-10,Gan2020_LargeScaleAdversarialTrainingVision_3c219a,0.028405,,13,0.5951,8,0.7056,p. 2-3; p. 3-4; p. 9-10,p. 3-4; p. 1-2; p. 3-5,14430,True,True,full_text
+11,,,,,p. 7-8; p. 1-2; p. 3-4,Bachman2019_LearningRepresentationsMaximizingMutualInformation_e466dd,0.027588,,12,0.6103,13,0.6069,p. 7-8; p. 2-3; p. 6-7,p. 1-2; p. 7-8; p. 3-4,8900,True,True,full_text
+12,,,,,p. 9-10; p. 3-4; p. 28-29,Tongzhou2020_UnderstandingContrastiveRepresentationLearningThrough_e7c12f,0.02748,,17,0.578,9,0.6934,p. 9-10; p. 10-14; p. 3-4,p. 9-10; p. 8-9; p. 28-29,67458,True,True,full_text
+13,,,,,p. 2-3; p. 4; p. 7-9,Tian2020_WhatMakesGoodViewsContrastive_d400ea,0.027418,,11,0.6122,15,0.5904,p. 2-3; p. 1-2; p. 7-9,p. 2-3; p. 3-4; p. 4,36909,True,True,full_text
+14,,,,,p. 1-2; p. 3-4; p. 7-8,Li2020_PrototypicalContrastiveLearningUnsupervisedRepresentations_f7f3ec,0.027106,,10,0.6212,18,0.5619,p. 1-2; p. 7-8; p. 3-4,p. 1-2; p. 3-4; p. 7-8,12051,True,True,full_text
+15,,,,,p. 2-3; p. 6-7; p. 22-23,Robinson2020_ContrastiveLearningHardNegativeSamples_5862b9,0.027027,,14,0.587,14,0.5944,p. 1-2; p. 6-7; p. 2-3,p. 2-3; p. 26-27; p. 22-23,25171,True,True,full_text
+16,,,,,p. 2-3; p. 4-5; p. 9-10,Kim2021_ViLTVisionLanguageTransformerWithout_61fc65,0.026547,,19,0.5566,12,0.6401,p. 2-3; p. 9-10; p. 1-2,p. 4-5; p. 2-3; p. 1-3,12350,True,True,full_text
+17,,,,,p. 1-2; p. 3-4; p. 7-8,Khosla2020_SupervisedContrastiveLearning_5ce2a6,0.02632,,15,0.5846,17,0.5734,p. 2-3; p. 8-13; p. 4-5,p. 1-2; p. 3-4; p. 7-8,16996,True,True,full_text
+18,,,,,p. 8-9; p. 1-2; p. 3-4,Mathilde2020_UnsupervisedLearningVisualFeaturesContrasting_cfa70c,0.025658,,16,0.5782,20,0.5157,p. 8-9; p. 3-4; p. 2-3,p. 1-2; p. 8-9; p. 5-6,16955,True,True,full_text
+18,,,,,p. 1-2; p. 4-5; p. 8-9,Cho2021_UnifyingVisionLanguageTasksText_4cee57,0.025658,,20,0.5181,16,0.5888,p. 8-9; p. 4-5; p. 1-2,p. 4-5; p. 3-4; p. 1-2,14038,True,True,full_text
+20,,,,,p. 2,Chen2020_ImprovedBaselinesMomentumContrastiveLearning_94a973,0.025479,,18,0.5591,19,0.5224,p. 2,p. 2,2779,True,False,full_text

@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:29:59", "question": "What is the first paper that theoretically studies training neural networks under small initialization?", "name": "ls539", "queries": "queries.json", "queries_sha": "27eed4f6a65f", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1829", "abstracts": ""}

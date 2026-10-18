@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:27:12", "question": "Is there any paper that investigates backdoor attacks across various types of tasks, not limited to classification, in language models?", "name": "ls399", "queries": "queries.json", "queries_sha": "eada4b5b2e25", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1826", "abstracts": ""}

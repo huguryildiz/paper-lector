@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 2-3; p. 4-5,Yang2021_MTAGModalTemporalAttentionGraph_c36047,0.032522,,1,0.8567,2,0.9122,p. 2-3; p. 3-4; p. 4-5,p. 2-3; p. 3-4; p. 4-5,10032,True,True,full_text
+1,,,,,p. 1-2; p. 3-5; p. 9-10,Mai2020_AnalyzingUnalignedMultimodalSequenceGraph_a7e8ad,0.032522,,2,0.8559,1,0.9176,p. 1-2; p. 5; p. 2-3,p. 1-2; p. 9-10; p. 3-5,15704,True,True,full_text
+3,,,,,p. 1-2; p. 3-4,Zhangfeng2025_GraphBasedInteractionAugmentationNetwork_219ae0,0.031258,,3,0.6991,5,0.793,p. 2-3; p. 1-2; p. 3-4,p. 1-2; p. 2-3; p. 3-4,7843,True,True,full_text
+3,,,,,p. 1-2; p. 4-5; p. 7-9,Tsai2019_MultimodalTransformerUnalignedMultimodalLanguage_b51274,0.031258,,5,0.6384,3,0.8118,p. 2-3; p. 5-6; p. 4-5,p. 8-11; p. 1-2; p. 7-9,11802,True,True,full_text
+5,,,,,p. 2-4; p. 5-6,Nguyen2023_ConversationUnderstandingUsingRelationalTemporal_db6bdc,0.03125,,4,0.6967,4,0.8034,p. 2-4; p. 4-5; p. 3-5,p. 2-4; p. 5-6; p. 4-5,12480,True,True,full_text
+6,,,,,p. 1-2; p. 3-4,Li2023_JoyfulJointModalityFusionGraph_ece990,0.029857,,6,0.5633,8,0.6658,p. 4-5; p. 1-2; p. 2-3,p. 1-2; p. 2-3; p. 3-4,19460,True,True,full_text
+7,,,,,p. 3-4; p. 8-9; p. 1-2,Yin2020_NovelGraphBasedMultiModal_95d14b,0.029851,,7,0.5621,7,0.6677,p. 1-2; p. 3-4; p. 8-9,p. 8-9; p. 1-3; p. 3-4,8839,True,True,full_text
+8,,,,,p. 2-3; p. 4-5; p. 7-8,Liang2018_MultimodalLanguageAnalysisRecurrentMultistage_d0fcd5,0.029644,,9,0.537,6,0.6866,p. 7-8; p. 2-3; p. 4-5,p. 3-4; p. 2-3; p. 8-9,9717,True,True,full_text
+9,,,,,p. 2-3; p. 9-10,Luo2021_ScaleVLADImprovingMultimodalSentimentAnalysis_97ccf3,0.029199,,8,0.5383,9,0.6438,p. 2-3; p. 9-10,p. 2-3; p. 9-10,11720,True,True,full_text
+10,,,,,p. 3-5; p. 1-2; p. 8-9,Mai2019_DivideConquerCombineHierarchicalFeature_568091,0.02837,,10,0.5057,11,0.6086,p. 3-4; p. 3-5; p. 5-6,p. 1-2; p. 3-5; p. 8-9,10315,True,True,full_text
+10,,,,,p. 7-8; p. 17-19; p. 1-2,Tsai2018_LearningFactorizedMultimodalRepresentations_f4dbec,0.02837,,11,0.5014,10,0.6294,p. 14-15; p. 7-8; p. 17-19,p. 17-19; p. 7-8; p. 1-2,21859,True,True,full_text
+12,,,,,p. 8; p. 11-12,Zeng2021_WhichIsMakingContributionModulating_b35575,0.027778,,12,0.4998,12,0.6069,p. 11-12; p. 8; p. 8-11,p. 11-12; p. 8-11; p. 8,12392,True,True,full_text
+13,,,,,p. 2-3; p. 4-5; p. 6-7,Wu2021_TextCenteredSharedPrivateFramework_f6a8e7,0.027212,,13,0.4692,14,0.5995,p. 8-9; p. 2-3; p. 6-7,p. 2-3; p. 4-5; p. 3-4,8464,True,True,full_text
+14,,,,,p. 5-6; p. 1-2,Hu2022_UniMSETowardsUnifiedMultimodalSentiment_e4b7d7,0.026519,,18,0.433,13,0.6007,p. 5-6; p. 1-2; p. 6-7,p. 5-6; p. 4-5; p. 2-4,11138,True,True,full_text
+15,,,,,p. 5-6; p. 1-2; p. 8-11,Hazarika2020_MISAModalityInvariantSpecificRepresentations_a45c22,0.026501,,14,0.4689,17,0.5835,p. 5-6; p. 8-11; p. 1-2,p. 5-6; p. 11-12; p. 2-3,14923,True,False,full_text
+16,,,,,p. 1-2; p. 4-6; p. 9,Zadeh2017_TensorFusionNetworkMultimodalSentiment_6848b5,0.026491,,15,0.466,16,0.5842,p. 1-2; p. 9; p. 4-6,p. 4-6; p. 1-2; p. 5-7,9670,True,True,full_text
+16,,,,,p. 1-2; p. 4-5,Gu2018_MultimodalAffectiveAnalysisUsingHierarchical_ec2758,0.026491,,16,0.4623,15,0.5883,p. 1-2; p. 4-5; p. 2-3,p. 1-2; p. 2-3; p. 5-6,8847,True,True,full_text
+18,,,,,p. 2-3; p. 7-8,Han2021_ImprovingMultimodalFusionHierarchicalMutual_228d26,0.025645,,17,0.4458,19,0.5387,p. 2-3; p. 3-4; p. 7-8,p. 3-4; p. 2-3; p. 3-5,11211,True,True,full_text
+19,,,,,p. 3-4; p. 1-2; p. 8-9,Zhang2023_LearningLanguageGuidedAdaptiveHyper_b2c2f9,0.025321,,20,0.4021,18,0.5512,p. 1-2; p. 3-4; p. 8-9,p. 3-4; p. 1-3; p. 4-5,11456,True,True,full_text
+20,,,,,p. 2-3; p. 6-7; p. 8-9,Zadeh2016_MOSIMultimodalCorpusSentimentIntensity_67bb4f,0.025158,,19,0.4195,20,0.5261,p. 6-7; p. 3-4; p. 2-3,p. 8-9; p. 2-3; p. 6-7,7638,True,True,full_text

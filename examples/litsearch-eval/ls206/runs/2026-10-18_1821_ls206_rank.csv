@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 3-4; p. 5-8,Vamvas2022_AsLittleAsPossibleAs_e2d255,0.032522,,1,0.9141,2,0.8125,p. 3-4; p. 5-8; p. 1-2,p. 1-2; p. 9-10; p. 2-3,7750,True,True,full_text
+1,,,,,p. 2-3; p. 8-9,Dale2023_HalOmiManuallyAnnotatedBenchmarkMultilingual_f1cbb7,0.032522,,2,0.8203,1,0.8164,p. 8-9; p. 2-3; p. 7-8,p. 1-2; p. 8-9; p. 2-3,9625,True,True,full_text
+3,,,,,p. 1-3; p. 8-9; p. 4-5,Huang2024_OTTAWAOptimalTransporTAdaptiveWord_df27ac,0.031754,,2,0.8203,4,0.7852,p. 1-3; p. 7-8; p. 8-9,p. 1-3; p. 8-9; p. 4-5,12113,True,False,full_text
+4,,,,,p. 2-3; p. 8-9,Dale2023_HalOmiManuallyAnnotatedBenchmarkMultilingual_2cab3c,0.031498,,4,0.8164,3,0.8086,p. 8-9; p. 2-3; p. 6-8,p. 1-2; p. 8-9; p. 2-3,9538,True,True,full_text
+5,,,,,p. 1-2; p. 5-6; p. 11-13,Raunak2022_SALTEDFrameworkSAlientLongTail_731caf,0.030769,,5,0.6992,5,0.7539,p. 11-13; p. 1-2; p. 5-6,p. 11-13; p. 1-2; p. 5-6,13415,True,True,full_text
+6,,,,,p. 2-3; p. 7-9; p. 14-15,Guerreiro2023_LookingNeedleHaystackComprehensiveStudy_048c87,0.029857,,8,0.6484,6,0.7305,p. 2-3; p. 14-15; p. 15-17,p. 2-3; p. 1-3; p. 7-9,12830,True,True,full_text
+7,,,,,p. 1-2; p. 14-17; p. 9-10,Benkirane2024_MachineTranslationHallucinationDetectionLow_6a7231,0.029644,,9,0.6133,6,0.7305,p. 1-2; p. 9-10; p. 14-17,p. 12-15; p. 1-2; p. 14-17,12812,True,True,full_text
+8,,,,,p. 1-2; p. 4-5,Yang2019_ReducingWordOmissionErrorsNeural_da4377,0.02885,,6,0.6953,13,0.6289,p. 4-5; p. 1-2,p. 1-2; p. 4-5,5007,True,True,full_text
+9,,,,,p. 2-3; p. 9-13; p. 4-6,Dale2023_DetectingMitigatingHallucinationsMachineTranslation_5b71ba,0.028595,,12,0.5898,8,0.7031,p. 9-13; p. 2-3; p. 4-6,p. 2-4; p. 9-13; p. 2-3,8981,True,True,full_text
+10,,,,,p. 1-2; p. 8-12; p. 14-15,Guerreiro2023_OptimalTransportUnsupervisedHallucinationDetection_63fd52,0.028577,,11,0.5938,9,0.6992,p. 16-17; p. 8-12; p. 1-2,p. 1-2; p. 2-3; p. 14-15,15087,True,True,full_text
+11,,,,,p. 1-2; p. 7; p. 4-5,Popović2020_RelationsBetweenComprehensibilityAdequacyErrors_ca00a0,0.028083,,7,0.6914,16,0.5742,p. 7; p. 1-2; p. 2-4,p. 7; p. 1-2; p. 4-5,6600,True,True,full_text
+12,,,,,p. 1-2; p. 5-6; p. 7-8,Raunak2021_CuriousCaseHallucinationsNeuralMachine_42c6dd,0.027598,,14,0.4844,11,0.668,p. 1-2; p. 5-6; p. 7-8,p. 1-2; p. 7-8; p. 5-6,9392,True,True,full_text
+13,,,,,p. 1-2; p. 3-4,Himmi2024_EnhancedHallucinationDetectionNeuralMachine_b187c7,0.027588,,13,0.5625,12,0.6484,p. 1-2; p. 1-3; p. 2-3,p. 1-2; p. 1-3; p. 3-4,6273,True,True,full_text
+14,,,,,p. 5-7; p. 1-2; p. 10-12,Müller2019_DomainRobustnessNeuralMachineTranslation_271358,0.027444,,16,0.4629,10,0.6758,p. 1-2; p. 5-7; p. 6-8,p. 5-7; p. 2-4; p. 10-12,8853,True,True,full_text
+15,,,,,p. 2-3; p. 5-6; p. 8-9,Bentivogli2016_NeuralVersusPhraseBasedMachine_b96354,0.027273,,10,0.5977,17,0.5508,p. 2-3; p. 5-6; p. 8-9,p. 5-6; p. 2-3; p. 4-5,9127,True,True,full_text
+16,,,,,p. 1-2; p. 3-4,Wang2020_ExposureBiasHallucinationDomainShift_27276a,0.026501,,17,0.4531,14,0.6172,p. 1-2; p. 3-4; p. 4-5,p. 1-2; p. 3-4; p. 4-5,6350,True,True,full_text
+17,,,,,p. 6-8; p. 3-4; p. 13-14,SánchezCartagena2021_RethinkingDataAugmentationLowResource_a8b02a,0.026154,,18,0.4492,15,0.5859,p. 6-8; p. 7-9; p. 3-4,p. 6-8; p. 7-9; p. 13-14,12696,True,True,full_text
+18,,,,,p. 1-2; p. 4,Popović2015_ChrFCharacterNGramF_72ab1f,0.025833,,15,0.4668,20,0.4102,p. 4; p. 1-2,p. 4; p. 1-2,3445,True,True,full_text
+19,,,,,p. 7-8; p. 1-2; p. 14-15,Bojar2018_Findings2018ConferenceMachineTranslation_f5cbb9,0.025321,,20,0.4219,18,0.4375,p. 1-2; p. 7-8; p. 6-7,p. 7-8; p. 14-15; p. 17-18,37197,True,True,full_text
+20,,,,,p. 8-9; p. 10-11; p. 15-16,Barrault2019_Findings2019ConferenceMachineTranslation_7ee06c,0.025316,,19,0.4434,19,0.4297,p. 35-44; p. 8-9; p. 10-11,p. 20-21; p. 8-9; p. 15-16,64953,True,False,full_text

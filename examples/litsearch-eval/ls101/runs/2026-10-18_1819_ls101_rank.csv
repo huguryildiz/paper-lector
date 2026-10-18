@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 6-7; p. 3-4,Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0,0.032787,,1,0.8555,1,0.8975,p. 1-2; p. 6-7; p. 3-4,p. 1-2; p. 7-8; p. 6-7,8800,True,True,full_text
+2,,,,,p. 1-2; p. 9; p. 3-4,Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15,0.032258,,2,0.8164,2,0.8925,p. 9; p. 3-4; p. 1-2,p. 1-2; p. 6-7; p. 9,9604,True,True,full_text
+3,,,,,p. 4-5; p. 8-12,Chen2023_TowardExpandingScopeRadiologyReport_f210de,0.031746,,3,0.7773,3,0.8281,p. 4-5; p. 5-8; p. 8-12,p. 4-5; p. 8-12; p. 5-8,7350,True,True,full_text
+4,,,,,p. 1-2; p. 3-4; p. 6-8,Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c,0.030777,,4,0.7461,6,0.723,p. 1-2; p. 3-4; p. 6-8,p. 6-8; p. 1-2; p. 3-4,10539,True,True,full_text
+4,,,,,p. 3-4; p. 8-9,Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06,0.030777,,6,0.6992,4,0.7916,p. 3-4; p. 8-9; p. 4-5,p. 2-3; p. 3-4; p. 4-5,7723,True,True,full_text
+6,,,,,p. 2-3; p. 4-5,Zhang2018_LearningSummarizeRadiologyFindings_19206b,0.03031,,7,0.6523,5,0.7909,p. 2-3; p. 5-6; p. 4-5,p. 2-3; p. 4-5; p. 3-4,9012,True,True,full_text
+7,,,,,p. 1-3; p. 5-6; p. 8-9,Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0,0.029631,,7,0.6523,8,0.6984,p. 1-3; p. 8-9; p. 3-4,p. 1-3; p. 6-7; p. 5-6,9247,True,True,full_text
+8,,,,,p. 1-2; p. 5-6,Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668,0.029469,,5,0.7109,11,0.6204,p. 6-7; p. 1-2; p. 5-6,p. 1-2; p. 6-7; p. 5-6,9678,False,True,full_text
+9,,,,,p. 2-3,Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6,0.029211,,10,0.6094,7,0.7186,p. 2-3; p. 3-4,p. 2-3; p. 1-2,5387,True,True,full_text
+10,,,,,p. 3-4; p. 1-2; p. 8-9,Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37,0.028986,,9,0.6328,9,0.6798,p. 1-2; p. 3-4; p. 8-9,p. 3-4; p. 2-3; p. 9-12,14303,True,True,full_text
+11,,,,,p. 3-5; p. 1-2; p. 12-14,Liu2019_ClinicallyAccurateChestXRay_c61dc7,0.027799,,14,0.5625,10,0.6252,p. 3-5; p. 1-2; p. 12-14,p. 2-3; p. 3-5; p. 4-6,13936,True,True,full_text
+12,,,,,p. 4-5; p. 1-2; p. 7-9,Chen2021_CrossModalMemoryNetworksRadiology_41eae3,0.027778,,12,0.5664,12,0.6056,p. 1-3; p. 9; p. 4-5,p. 1-2; p. 7-9; p. 4-5,9328,True,True,full_text
+13,,,,,p. 2-3; p. 4-5,Huang2020_KnowledgeGraphAugmentedAbstractiveSummarization_d1f089,0.027598,,11,0.5781,14,0.5686,p. 2-3; p. 3-4; p. 4-5,p. 2-3; p. 4-5; p. 3-4,11495,True,True,full_text
+14,,,,,p. 8-9; p. 1-2; p. 6-7,Chen2020_GeneratingRadiologyReportsMemoryDriven_ffb016,0.027588,,12,0.5664,13,0.5994,p. 2-3; p. 8-9; p. 6-7,p. 1-2; p. 8-9; p. 7-8,9719,True,True,full_text
+15,,,,,p. 1-2; p. 4-6; p. 11-12,Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2,0.026491,,16,0.4297,15,0.447,p. 1-2; p. 11-12; p. 4-6,p. 1-2; p. 11-12; p. 4-6,8693,True,True,full_text
+16,,,,,p. 2-3; p. 5-6,Liu2019_TextSummarizationPretrainedEncoders_a91a93,0.026145,,17,0.4199,16,0.4443,p. 2-3; p. 3-4; p. 5-6,p. 2-3; p. 3-4; p. 5-6,10971,True,True,full_text
+17,,,,,p. 1-2; p. 5-6; p. 3-4,Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec,0.025992,,15,0.4375,19,0.3978,p. 5-6; p. 1-2; p. 7-8,p. 5-6; p. 1-2; p. 3-4,9464,True,True,full_text
+18,,,,,p. 10-11; p. 4-5; p. 6-7,Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600,0.025808,,18,0.4023,17,0.4394,p. 10-11; p. 7-8; p. 6-7,p. 4-5; p. 10-11; p. 5-6,10848,True,True,full_text
+19,,,,,p. 1-2; p. 19-20; p. 45-46,Zhang2019_PEGASUSPreTrainingExtractedGap_9cee88,0.025479,,19,0.4004,18,0.4074,p. 45-46; p. 1-2; p. 19-20,p. 45-46; p. 1-2; p. 19-20,81334,True,True,full_text
+20,,,,,p. 4-5; p. 1-2; p. 8-9,See2017_GetPointSummarizationPointerGenerator_5a6ecd,0.025,,20,0.3828,20,0.3873,p. 1-2; p. 4-5; p. 8-9,p. 4-5; p. 9; p. 1-3,9312,True,True,full_text

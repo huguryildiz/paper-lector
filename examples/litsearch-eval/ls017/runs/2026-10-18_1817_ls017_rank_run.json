@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:17:50",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "0ee77e52d0cdb0586f0d4a2ab18e435123baf3bff5d632a2e9698d64bab9f8f5"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "d4a4c762dfe3547e4e105cdb3e4f7ed9eff3a1206b64bc01cfbce2b0c0560365"
+   }
+  ]
+ },
+ "question": "Can you recommend a paper that uses an NLI model for sentence-level relation extraction using hypothesis generation and verification with entity-type constraints?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Can you recommend a paper that uses an NLI model for sentence-level relation extraction using hypothesis generation and verification with entity-type constraints?",
+   "keywords": "NLI model sentence-level relation extraction hypothesis generation verification entity type constraints"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Sentence-level relation extraction between entity pairs, cast as natural language inference where relation hypotheses are generated and verified, with constraints from entity types.",
+   "keywords": "relation extraction natural language inference NLI hypothesis verification entity types sentence-level"
+  }
+ },
+ "queries_sha": "440d13638e3d",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 221,
+  "ids": [
+   "Sainz2021_LabelVerbalizationEntailmentEffectiveZero_949687",
+   "Yin2021_DocNLILargeScaleDatasetDocument_53566f",
+   "Vania2022_ImprovingDistantlySupervisedDocumentLevel_5bc5e6",
+   "Mishra2020_LookingBeyondSentenceLevelNatural_ccbf8b",
+   "Feng2026_LearningPropositionLevelLinksFrom_ac1dff",
+   "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+   "Hogan2024_EntangledRelationsLeveragingNLIMeta_a88a49",
+   "Sainz2022_TextualEntailmentEventArgumentExtraction_64e567",
+   "Liu2016_ResearchAttentionMemoryNetworksAs_ff86a5",
+   "Xu2023_CanNLIProvideProperIndirect_c21fc6",
+   "Zhang2017_PositionAwareAttentionSupervisedData_e76aea",
+   "Soares2019_MatchingBlanksDistributionalSimilarityRelation_0b3086",
+   "Vashishth2018_RESIDEImprovingDistantlySupervisedNeural_c8a6f8",
+   "Zeng2020_DoubleGraphBasedReasoningDocument_51c322",
+   "Miwa2016_EndEndRelationExtractionUsing_0b2022",
+   "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+   "Zhang2018_GraphConvolutionOverPrunedDependency_d00fab",
+   "Zhou2021_ImprovedBaselineSentenceLevelRelation_57e1ef",
+   "Yaghoobzadeh2017_NoiseMitigationNeuralEntityTyping_9f1823",
+   "Guo2019_AttentionGuidedGraphConvolutionalNetworks_309e67"
+  ],
+  "files": [
+   {
+    "id": "Sainz2021_LabelVerbalizationEntailmentEffectiveZero_949687",
+    "path": "pdfs/Sainz2021_LabelVerbalizationEntailmentEffectiveZero_949687.pdf",
+    "sha256": "b4762b56241857ed2541171a4210e4eec54bb71af43ffdcf2cb5b78e5dd3c614"
+   },
+   {
+    "id": "Yin2021_DocNLILargeScaleDatasetDocument_53566f",
+    "path": "pdfs/Yin2021_DocNLILargeScaleDatasetDocument_53566f.pdf",
+    "sha256": "dae4ef79292f9d6e135c51c043944c246dabb3def59bfb1d319618a28b59c691"
+   },
+   {
+    "id": "Vania2022_ImprovingDistantlySupervisedDocumentLevel_5bc5e6",
+    "path": "pdfs/Vania2022_ImprovingDistantlySupervisedDocumentLevel_5bc5e6.pdf",
+    "sha256": "01883338b2f01250140ec6999c5c46740570fcbb66b510490dfa1394eba7efa4"
+   },
+   {
+    "id": "Mishra2020_LookingBeyondSentenceLevelNatural_ccbf8b",
+    "path": "pdfs/Mishra2020_LookingBeyondSentenceLevelNatural_ccbf8b.pdf",
+    "sha256": "7e39e21cd89ed05022fefa03eaf8dac97605b3da4c4d6be49f28cde13bc7154f"
+   },
+   {
+    "id": "Feng2026_LearningPropositionLevelLinksFrom_ac1dff",
+    "path": "pdfs/Feng2026_LearningPropositionLevelLinksFrom_ac1dff.pdf",
+    "sha256": "99a1bbc15f3209374d2b7125f348f7d414292365ecee6067f94270b30a41566f"
+   },
+   {
+    "id": "Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06",
+    "path": "pdfs/Bowman2015_LargeAnnotatedCorpusLearningNatural_241c06.pdf",
+    "sha256": "7c57361a3046e360750747fb2a9bfe6caac873ac8e16035e52178712d859fdd4"
+   },
+   {
+    "id": "Hogan2024_EntangledRelationsLeveragingNLIMeta_a88a49",
+    "path": "pdfs/Hogan2024_EntangledRelationsLeveragingNLIMeta_a88a49.pdf",
+    "sha256": "8fb99a9d052eaf6bced273c2c51cabb74c2008260cc35a3b8288cea324dad4d3"
+   },
+   {
+    "id": "Sainz2022_TextualEntailmentEventArgumentExtraction_64e567",
+    "path": "pdfs/Sainz2022_TextualEntailmentEventArgumentExtraction_64e567.pdf",
+    "sha256": "ff4baf3bfdc270aedbb8806295eb41a3fb634d915fb0b0c74719591dd8dc4211"
+   },
+   {
+    "id": "Liu2016_ResearchAttentionMemoryNetworksAs_ff86a5",
+    "path": "pdfs/Liu2016_ResearchAttentionMemoryNetworksAs_ff86a5.pdf",
+    "sha256": "7dc17952679d4c708b0b8b59e7c0d387ca331700b2dbb882f2b7e86417bb9061"
+   },
+   {
+    "id": "Xu2023_CanNLIProvideProperIndirect_c21fc6",
+    "path": "pdfs/Xu2023_CanNLIProvideProperIndirect_c21fc6.pdf",
+    "sha256": "0c430feb4815498a52afa2d79d888b2c45b2cfeb4292ef924fa38179168fd2e2"
+   },
+   {
+    "id": "Zhang2017_PositionAwareAttentionSupervisedData_e76aea",
+    "path": "pdfs/Zhang2017_PositionAwareAttentionSupervisedData_e76aea.pdf",
+    "sha256": "5ed883827ef117dec5d03cd73dcd62695e5d153e49d2f772cf162167097a7a19"
+   },
+   {
+    "id": "Soares2019_MatchingBlanksDistributionalSimilarityRelation_0b3086",
+    "path": "pdfs/Soares2019_MatchingBlanksDistributionalSimilarityRelation_0b3086.pdf",
+    "sha256": "c5144402fcefdab3fae4887d798c0bb6a7bf33dea9c28adf9349ce46bc2804d8"
+   },
+   {
+    "id": "Vashishth2018_RESIDEImprovingDistantlySupervisedNeural_c8a6f8",
+    "path": "pdfs/Vashishth2018_RESIDEImprovingDistantlySupervisedNeural_c8a6f8.pdf",
+    "sha256": "89d80e43e633fa10bcca585c09a99611bfb55f90070440ece7e6209b513ea918"
+   },
+   {
+    "id": "Zeng2020_DoubleGraphBasedReasoningDocument_51c322",
+    "path": "pdfs/Zeng2020_DoubleGraphBasedReasoningDocument_51c322.pdf",
+    "sha256": "87b8869b39e3be4ff63797736e15da80bc6c6240d65ef0a8847f201b82cfc601"
+   },
+   {
+    "id": "Miwa2016_EndEndRelationExtractionUsing_0b2022",
+    "path": "pdfs/Miwa2016_EndEndRelationExtractionUsing_0b2022.pdf",
+    "sha256": "de973745ba2a67b1587c36fabc20e59773cfb4e902695654e865e037fb0dd933"
+   },
+   {
+    "id": "Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4",
+    "path": "pdfs/Shin2020_AutoPromptElicitingKnowledgeFromLanguage_54e5c4.pdf",
+    "sha256": "9e77217618c4164472ba73f01c2371ce4a59c2ee8d307c83a874abe5f631129a"
+   },
+   {
+    "id": "Zhang2018_GraphConvolutionOverPrunedDependency_d00fab",
+    "path": "pdfs/Zhang2018_GraphConvolutionOverPrunedDependency_d00fab.pdf",
+    "sha256": "2eeca7ecb19395bd1dd74a3f175aaa16ec4b252eb7ebc887c40e55df4bf36848"
+   },
+   {
+    "id": "Zhou2021_ImprovedBaselineSentenceLevelRelation_57e1ef",
+    "path": "pdfs/Zhou2021_ImprovedBaselineSentenceLevelRelation_57e1ef.pdf",
+    "sha256": "2aea677be0a7cbf5a0b91d17eb1027798a7f901d513f61dccc5725d557972e57"
+   },
+   {
+    "id": "Yaghoobzadeh2017_NoiseMitigationNeuralEntityTyping_9f1823",
+    "path": "pdfs/Yaghoobzadeh2017_NoiseMitigationNeuralEntityTyping_9f1823.pdf",
+    "sha256": "fbd3a248adbc6b8807e92db659320f7942381c3085533b953dcf4b383698b342"
+   },
+   {
+    "id": "Guo2019_AttentionGuidedGraphConvolutionalNetworks_309e67",
+    "path": "pdfs/Guo2019_AttentionGuidedGraphConvolutionalNetworks_309e67.pdf",
+    "sha256": "39ca05ca364d9a90ac741839ccf89ba1ebc1dd7c27cc511d2c26715509819541"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 153282,
+  "embed_cached": 77,
+  "rerank": 142596
+ },
+ "estimate": 389067,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls017/runs/2026-10-18_1817_ls017_rank.csv",
+   "fused_top10": [
+    "Hogan2024_EntangledRelationsLeveragingNLIMeta_a88a49",
+    "Sainz2021_LabelVerbalizationEntailmentEffectiveZero_949687",
+    "Xu2023_CanNLIProvideProperIndirect_c21fc6",
+    "Vania2022_ImprovingDistantlySupervisedDocumentLevel_5bc5e6",
+    "Zhou2021_ImprovedBaselineSentenceLevelRelation_57e1ef",
+    "Vashishth2018_RESIDEImprovingDistantlySupervisedNeural_c8a6f8",
+    "Sainz2022_TextualEntailmentEventArgumentExtraction_64e567",
+    "Miwa2016_EndEndRelationExtractionUsing_0b2022",
+    "Feng2026_LearningPropositionLevelLinksFrom_ac1dff",
+    "Liu2016_ResearchAttentionMemoryNetworksAs_ff86a5"
+   ],
+   "first_query_top10": [
+    "Hogan2024_EntangledRelationsLeveragingNLIMeta_a88a49",
+    "Sainz2021_LabelVerbalizationEntailmentEffectiveZero_949687",
+    "Vania2022_ImprovingDistantlySupervisedDocumentLevel_5bc5e6",
+    "Xu2023_CanNLIProvideProperIndirect_c21fc6",
+    "Zhou2021_ImprovedBaselineSentenceLevelRelation_57e1ef",
+    "Sainz2022_TextualEntailmentEventArgumentExtraction_64e567",
+    "Vashishth2018_RESIDEImprovingDistantlySupervisedNeural_c8a6f8",
+    "Feng2026_LearningPropositionLevelLinksFrom_ac1dff",
+    "Liu2016_ResearchAttentionMemoryNetworksAs_ff86a5",
+    "Miwa2016_EndEndRelationExtractionUsing_0b2022"
+   ]
+  }
+ }
+}

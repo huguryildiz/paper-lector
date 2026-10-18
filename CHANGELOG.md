@@ -7,6 +7,7 @@ Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_ran
 - `fetch_pdf.py` reads the arXiv id from more landing pages: `export.arxiv.org`, `arxiv.org/pdf/` and `arxiv-vanity.com/papers/`, with any query string dropped. A look-alike host such as `notarxiv.org` no longer counts.
 - SKILL: when asking for papers to expect near the top, the agent offers only "none" and the user's own papers.
 - README shortened, with a Benchmarks section.
+- SKILL and REFERENCE no longer suggest `main` only for single-paper questions: a rebuilt 48-question LitSearch set (`examples/litsearch-eval`) found no difference.
 
 ## 0.2.0 (2026-10-18)
 

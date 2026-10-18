@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:20:47", "question": "Could you recommend a study that investigates the improvement of knowledge representation learning by incorporating global context into graph attention networks?", "name": "ls143", "queries": "queries.json", "queries_sha": "01caae36cde7", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1820", "abstracts": ""}

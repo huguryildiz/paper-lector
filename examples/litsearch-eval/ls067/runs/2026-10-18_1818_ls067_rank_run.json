@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:18:46",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "fdb731eb0998e706d858f2eeec5a2988bf91ec248311d21f0f417a5c16f006a0"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "bb4039e328137f003b9363919513ebfc38a21053b8786607d6db9fffc90ede7b"
+   }
+  ]
+ },
+ "question": "What are some recent advancements in training systems to parse complex multi-hop questions into a sequence of simpler query steps for improved question answering?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "What are some recent advancements in training systems to parse complex multi-hop questions into a sequence of simpler query steps for improved question answering?",
+   "keywords": "train systems parse complex multi-hop questions into simpler query steps question answering"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Complex multi-hop questions, and question decomposition systems that break them into a sequence of simpler sub-questions or query steps for question answering.",
+   "keywords": "multi-hop question decomposition sub-questions simpler queries question answering sequence"
+  }
+ },
+ "queries_sha": "e794eac8e02a",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 236,
+  "ids": [
+   "Wolfson2020_BreakItDownQuestionUnderstanding_2b156a",
+   "Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a",
+   "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+   "Xie2022_CalibratingTrustMultiHopQuestion_6e1153",
+   "Zhang2019_LearningOrderSubQuestionsComplex_216490",
+   "Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764",
+   "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75",
+   "Ho2023_AnalyzingEffectivenessUnderlyingReasoningTasks_d50ccd",
+   "Min2019_MultiHopReadingComprehensionThrough_1ed07f",
+   "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_45c436",
+   "Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750",
+   "Lee2026_DecomposeRefineStructuredLegalQuestion_5ec472",
+   "Gupta2020_ReinforcedMultiTaskApproachMulti_01c22d",
+   "Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5",
+   "Rajpurkar2016_SQuAD100000QuestionsMachine_463332",
+   "Rajpurkar2018_KnowWhatYouDonT_925a9c",
+   "Qiu2019_DynamicallyFusedGraphNetworkMulti_49a0c1",
+   "Fang2020_HierarchicalGraphNetworkMultiHop_5cb845",
+   "Ding2019_CognitiveGraphMultiHopReading_255386",
+   "Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b"
+  ],
+  "files": [
+   {
+    "id": "Wolfson2020_BreakItDownQuestionUnderstanding_2b156a",
+    "path": "pdfs/Wolfson2020_BreakItDownQuestionUnderstanding_2b156a.pdf",
+    "sha256": "43dd5604beaa212255d60dc9c4f8ad630ce94bbaeaaf064da3bbb3c0f325a623"
+   },
+   {
+    "id": "Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a",
+    "path": "pdfs/Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a.pdf",
+    "sha256": "df7b75b1f258c782abbdf91fcb5cbadb519165c5038ad808ebcce66e27e54738"
+   },
+   {
+    "id": "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+    "path": "pdfs/Tang2021_DoMultiHopQuestionAnswering_99e6d5.pdf",
+    "sha256": "8759137f8f0094ca3b042c0707988a67d4172255ee38e49dcd748e2f789e5fd3"
+   },
+   {
+    "id": "Xie2022_CalibratingTrustMultiHopQuestion_6e1153",
+    "path": "pdfs/Xie2022_CalibratingTrustMultiHopQuestion_6e1153.pdf",
+    "sha256": "cf48c5a2dbe9a7fd3fa04b2d1e792a03c2d17551ea68babff9d45019f5b1dcce"
+   },
+   {
+    "id": "Zhang2019_LearningOrderSubQuestionsComplex_216490",
+    "path": "pdfs/Zhang2019_LearningOrderSubQuestionsComplex_216490.pdf",
+    "sha256": "05c254eb762a15995f753278cf4ca8d829ea5d0afc28e5467a6c1a89d217a69f"
+   },
+   {
+    "id": "Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764",
+    "path": "pdfs/Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764.pdf",
+    "sha256": "88e96b9498e77c6e59128e51cbb1e8b6e047663f2ffdb2e2fbc6a2ec14a84030"
+   },
+   {
+    "id": "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75",
+    "path": "pdfs/Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75.pdf",
+    "sha256": "c61ae489c72feb587ff65faf0f57836a9a517825eb3ec986bd3ed101eaf1c348"
+   },
+   {
+    "id": "Ho2023_AnalyzingEffectivenessUnderlyingReasoningTasks_d50ccd",
+    "path": "pdfs/Ho2023_AnalyzingEffectivenessUnderlyingReasoningTasks_d50ccd.pdf",
+    "sha256": "1aa6df9b22040ff286c3517f2e842969969066f0895238c12fe03781a2283799"
+   },
+   {
+    "id": "Min2019_MultiHopReadingComprehensionThrough_1ed07f",
+    "path": "pdfs/Min2019_MultiHopReadingComprehensionThrough_1ed07f.pdf",
+    "sha256": "0dd2f8d959d492af0aa105217a7192cf69434728dd33678f2d1fca666a285a14"
+   },
+   {
+    "id": "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_45c436",
+    "path": "pdfs/Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_45c436.pdf",
+    "sha256": "df757cadf174ffc15ca88ec05b523430a465e93be9f5d163ef65204980a58836"
+   },
+   {
+    "id": "Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750",
+    "path": "pdfs/Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750.pdf",
+    "sha256": "a830d7048772405485d0b8893e008f7b7142baaac5e15c20fae9941e3e8987bd"
+   },
+   {
+    "id": "Lee2026_DecomposeRefineStructuredLegalQuestion_5ec472",
+    "path": "pdfs/Lee2026_DecomposeRefineStructuredLegalQuestion_5ec472.pdf",
+    "sha256": "1c3984aa9f19e7260b417660981d8ea3809b148b7e5f5b5b330a129db4ad2ed5"
+   },
+   {
+    "id": "Gupta2020_ReinforcedMultiTaskApproachMulti_01c22d",
+    "path": "pdfs/Gupta2020_ReinforcedMultiTaskApproachMulti_01c22d.pdf",
+    "sha256": "91e2edb58ee7d48807338b18bad0efabe03f45c905acf3f61bdc9d7d6a21a2f0"
+   },
+   {
+    "id": "Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5",
+    "path": "pdfs/Yang2018_HotpotQADatasetDiverseExplainableMulti_bc6ee5.pdf",
+    "sha256": "4ac04d526dfdf4a2549e4a7fcebe0c55a8ff0071b61ea53615e49c3a778f907c"
+   },
+   {
+    "id": "Rajpurkar2016_SQuAD100000QuestionsMachine_463332",
+    "path": "pdfs/Rajpurkar2016_SQuAD100000QuestionsMachine_463332.pdf",
+    "sha256": "476a94d1a414d2f5cedf42730b81dba4114d0cb8b637912ce585fb615209abc1"
+   },
+   {
+    "id": "Rajpurkar2018_KnowWhatYouDonT_925a9c",
+    "path": "pdfs/Rajpurkar2018_KnowWhatYouDonT_925a9c.pdf",
+    "sha256": "c69190f82a892d2502a0610e5957a17f19ec1145875a974aaac4e26d400edb0e"
+   },
+   {
+    "id": "Qiu2019_DynamicallyFusedGraphNetworkMulti_49a0c1",
+    "path": "pdfs/Qiu2019_DynamicallyFusedGraphNetworkMulti_49a0c1.pdf",
+    "sha256": "67a66a6cf9bdde56a31c5fc5f89416ccd3310c091122e33e789d5af013c06fef"
+   },
+   {
+    "id": "Fang2020_HierarchicalGraphNetworkMultiHop_5cb845",
+    "path": "pdfs/Fang2020_HierarchicalGraphNetworkMultiHop_5cb845.pdf",
+    "sha256": "e2c0970db3428637ec19e6fa7aed8abdfe730d8df0ead87031487eefd01ca2d8"
+   },
+   {
+    "id": "Ding2019_CognitiveGraphMultiHopReading_255386",
+    "path": "pdfs/Ding2019_CognitiveGraphMultiHopReading_255386.pdf",
+    "sha256": "1c3d324a2c68e35cf2d4ad89789cdf2f2b3ab4bd049204bb195b2a7023991d7e"
+   },
+   {
+    "id": "Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b",
+    "path": "pdfs/Chen2017_ReadingWikipediaAnswerOpenDomain_1c974b.pdf",
+    "sha256": "908af6e79a228a5c577f694f924c9db43ed3ed1e5149bffe0008aa334769d6d6"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 200306,
+  "embed_cached": 50,
+  "rerank": 144019
+ },
+ "estimate": 404491,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls067/runs/2026-10-18_1818_ls067_rank.csv",
+   "fused_top10": [
+    "Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a",
+    "Wolfson2020_BreakItDownQuestionUnderstanding_2b156a",
+    "Min2019_MultiHopReadingComprehensionThrough_1ed07f",
+    "Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750",
+    "Xie2022_CalibratingTrustMultiHopQuestion_6e1153",
+    "Zhang2019_LearningOrderSubQuestionsComplex_216490",
+    "Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764",
+    "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75",
+    "Tang2021_DoMultiHopQuestionAnswering_99e6d5",
+    "Lee2026_DecomposeRefineStructuredLegalQuestion_5ec472"
+   ],
+   "first_query_top10": [
+    "Perez2020_UnsupervisedQuestionDecompositionQuestionAnswering_4b1b9a",
+    "Wolfson2020_BreakItDownQuestionUnderstanding_2b156a",
+    "Min2019_MultiHopReadingComprehensionThrough_1ed07f",
+    "Ni2025_StepChainGraphRAGReasoningOverKnowledge_63d750",
+    "Xie2022_CalibratingTrustMultiHopQuestion_6e1153",
+    "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_5a9b75",
+    "Zhang2019_LearningOrderSubQuestionsComplex_216490",
+    "Mao2022_ExplainableQuestionAnsweringBasedSemantic_77a764",
+    "Zhang2023_ReasoningOverHierarchicalQuestionDecomposition_45c436",
+    "Fang2020_HierarchicalGraphNetworkMultiHop_5cb845"
+   ]
+  }
+ }
+}

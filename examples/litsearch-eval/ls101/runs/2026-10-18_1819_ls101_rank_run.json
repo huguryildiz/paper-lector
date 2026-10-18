@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:19:29",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "65e44e376998902db33cddcd341d2bb452dc4d07550def45256b25fa252cdf35"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "78a2c6cfafc0000df7d4c6857d59602d0611adef5fb5831fde11a1d3972b7d48"
+   }
+  ]
+ },
+ "question": "Are there any research papers investigating the improvement of radiology report summarization through the application of graph neural networks in conjunction with biomedical entity extraction?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Are there any research papers investigating the improvement of radiology report summarization through the application of graph neural networks in conjunction with biomedical entity extraction?",
+   "keywords": "radiology report summarization graph neural networks biomedical entity extraction"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "Automatic summarization of radiology reports, turning the findings section into an impression, using graph neural networks built over biomedical entities extracted from the report text.",
+   "keywords": "radiology report summarization graph neural network biomedical entity extraction findings impression"
+  }
+ },
+ "queries_sha": "a8671299c221",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 275,
+  "ids": [
+   "Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15",
+   "Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0",
+   "Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668",
+   "Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0",
+   "Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06",
+   "Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec",
+   "Chen2020_GeneratingRadiologyReportsMemoryDriven_ffb016",
+   "Chen2021_CrossModalMemoryNetworksRadiology_41eae3",
+   "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+   "Liu2019_ClinicallyAccurateChestXRay_c61dc7",
+   "Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37",
+   "Zhang2018_LearningSummarizeRadiologyFindings_19206b",
+   "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+   "Liu2019_TextSummarizationPretrainedEncoders_a91a93",
+   "Zhang2019_PEGASUSPreTrainingExtractedGap_9cee88",
+   "Huang2020_KnowledgeGraphAugmentedAbstractiveSummarization_d1f089",
+   "Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2",
+   "Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6",
+   "Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c",
+   "Chen2023_TowardExpandingScopeRadiologyReport_f210de"
+  ],
+  "files": [
+   {
+    "id": "Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15",
+    "path": "pdfs/Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15.pdf",
+    "sha256": "fd1ad23ffca5c2642eeb49dc8d159496b1e2746e841b79e12398caa1f4154204"
+   },
+   {
+    "id": "Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0",
+    "path": "pdfs/Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0.pdf",
+    "sha256": "46fcc0cd0c115cd9caf4b31d81192ffc62cb36b6e92753e58b7442c119f8c994"
+   },
+   {
+    "id": "Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668",
+    "path": "pdfs/Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668.pdf",
+    "sha256": "82f8a03b75dd61ecd7ed0b2b6e359d4ec3f2dad918ac43dcbefc4ec16bd4036c"
+   },
+   {
+    "id": "Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0",
+    "path": "pdfs/Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0.pdf",
+    "sha256": "f5c7f8c0dabe5f2de2ff4bd78b8e5b59d39393e16dd0679245ef4169145ec174"
+   },
+   {
+    "id": "Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06",
+    "path": "pdfs/Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06.pdf",
+    "sha256": "96d0430caab45b0dd388d8a9df336c4d313505b3b38a2a6215a601fb37e7a9be"
+   },
+   {
+    "id": "Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec",
+    "path": "pdfs/Kipf2016_SemiSupervisedClassificationGraphConvolutional_abceec.pdf",
+    "sha256": "a654f884db04a317b0f2414a83f2ba32a9f8442d29bcf1cb5f73f7af78a98070"
+   },
+   {
+    "id": "Chen2020_GeneratingRadiologyReportsMemoryDriven_ffb016",
+    "path": "pdfs/Chen2020_GeneratingRadiologyReportsMemoryDriven_ffb016.pdf",
+    "sha256": "b5f05a563e0611b91cbc9576851f503ff758d6e9d42f05fba7b55b8bda89ec9b"
+   },
+   {
+    "id": "Chen2021_CrossModalMemoryNetworksRadiology_41eae3",
+    "path": "pdfs/Chen2021_CrossModalMemoryNetworksRadiology_41eae3.pdf",
+    "sha256": "6daccef6ae7fb17c5740676659fb5645905b00c8a7717ad2a4821c85cb602093"
+   },
+   {
+    "id": "See2017_GetPointSummarizationPointerGenerator_5a6ecd",
+    "path": "pdfs/See2017_GetPointSummarizationPointerGenerator_5a6ecd.pdf",
+    "sha256": "499a1f95e7f291821233351fc6fd1beecce55dbb2cae05bcf7386ab6df6aef89"
+   },
+   {
+    "id": "Liu2019_ClinicallyAccurateChestXRay_c61dc7",
+    "path": "pdfs/Liu2019_ClinicallyAccurateChestXRay_c61dc7.pdf",
+    "sha256": "7afd88fd70c2a34ddd3fffa7a1ddbafa5d6ed878c2bb47b105e9197bdbf0c85b"
+   },
+   {
+    "id": "Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37",
+    "path": "pdfs/Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37.pdf",
+    "sha256": "e14c1540c8eac7e705942fee5bf17533125bab8eb89a50f5bd588f451107b0b4"
+   },
+   {
+    "id": "Zhang2018_LearningSummarizeRadiologyFindings_19206b",
+    "path": "pdfs/Zhang2018_LearningSummarizeRadiologyFindings_19206b.pdf",
+    "sha256": "ffacc4e88a3fab2883879c7371a5dba7050484c7cbf513c057577fbfcbadaab3"
+   },
+   {
+    "id": "Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600",
+    "path": "pdfs/Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600.pdf",
+    "sha256": "da82d4aa7b37683b9e756b50c29db0f37de73e8add2429f4ddbebfb11921088d"
+   },
+   {
+    "id": "Liu2019_TextSummarizationPretrainedEncoders_a91a93",
+    "path": "pdfs/Liu2019_TextSummarizationPretrainedEncoders_a91a93.pdf",
+    "sha256": "26dc6cb0f01b75599edbdc7d4ab59eed017c5736b5edf9d20607f3374413b31c"
+   },
+   {
+    "id": "Zhang2019_PEGASUSPreTrainingExtractedGap_9cee88",
+    "path": "pdfs/Zhang2019_PEGASUSPreTrainingExtractedGap_9cee88.pdf",
+    "sha256": "6def8a879088190aa3d33ab54a9a3fd25acbedde4335781ad77d246d675d8b2b"
+   },
+   {
+    "id": "Huang2020_KnowledgeGraphAugmentedAbstractiveSummarization_d1f089",
+    "path": "pdfs/Huang2020_KnowledgeGraphAugmentedAbstractiveSummarization_d1f089.pdf",
+    "sha256": "489bfa103b2180e6336598c911ba0e9f8aafb8d90ff9024682b960e497b4e140"
+   },
+   {
+    "id": "Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2",
+    "path": "pdfs/Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2.pdf",
+    "sha256": "f86a162404da6e8d6acbdc67878b578ae8ae67385eb14c318ddeef89f11278d6"
+   },
+   {
+    "id": "Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6",
+    "path": "pdfs/Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6.pdf",
+    "sha256": "4e73e04c9554a7fee516b245c1f25b080b1810499b045261b2673db6266002ad"
+   },
+   {
+    "id": "Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c",
+    "path": "pdfs/Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c.pdf",
+    "sha256": "9576b5b641c7367300782cd8ed450384efe90aa9311aecabfd60c5de570cc327"
+   },
+   {
+    "id": "Chen2023_TowardExpandingScopeRadiologyReport_f210de",
+    "path": "pdfs/Chen2023_TowardExpandingScopeRadiologyReport_f210de.pdf",
+    "sha256": "eb4cac1f2a71a35860bbf70c56e724eaeb2b1c20f086f48aa5fcff67d0796801"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 170548,
+  "embed_cached": 112,
+  "rerank": 138407
+ },
+ "estimate": 448123,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls101/runs/2026-10-18_1819_ls101_rank.csv",
+   "fused_top10": [
+    "Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0",
+    "Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15",
+    "Chen2023_TowardExpandingScopeRadiologyReport_f210de",
+    "Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c",
+    "Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06",
+    "Zhang2018_LearningSummarizeRadiologyFindings_19206b",
+    "Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0",
+    "Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668",
+    "Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6",
+    "Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37"
+   ],
+   "first_query_top10": [
+    "Hu2022_GraphEnhancedContrastiveLearningRadiology_273cb0",
+    "Hu2021_WordGraphGuidedSummarizationRadiology_dd7f15",
+    "Chen2023_TowardExpandingScopeRadiologyReport_f210de",
+    "Delbrouck2022_ImprovingFactualCorrectnessRadiologyReport_27fa6c",
+    "Yan2022_MemoryAlignedKnowledgeGraphClinically_b7f668",
+    "Wu2024_RadBARTsumDomainSpecificAdaptionDenoising_7a6b06",
+    "Kale2023_KGVLBARTKnowledgeGraphAugmented_4a48d0",
+    "Zhang2018_LearningSummarizeRadiologyFindings_19206b",
+    "Zhang2020_OptimizingFactualCorrectnessSummaryStudy_a49f37",
+    "Sotudeh2020_AttendMedicalOntologiesContentSelection_65b7f6"
+   ]
+  }
+ }
+}

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 22; p. 3-4,Wang2024_ReMoEFullyDifferentiableMixtureExperts_eaefc8,0.032522,,2,0.707,1,0.8438,p. 1-2; p. 22; p. 3-4,p. 1-2; p. 22; p. 10-15,18790,True,True,full_text
+2,,,,,p. 1-2; p. 3-4; p. 9-15,Vahidi2026_DirMoEDirichletRoutedMixtureExperts_18c086,0.032002,,3,0.6836,2,0.832,p. 1-2; p. 3-4; p. 9-15,p. 1-2; p. 3-4; p. 9-15,11963,True,True,full_text
+3,,,,,p. 2-3; p. 4-5; p. 14-15,Puigcerver2023_FromSparseSoftMixturesExperts_bbfa24,0.031545,,1,0.7148,6,0.7539,p. 3-4; p. 2-3; p. 4-5,p. 3-4; p. 2-3; p. 14-15,32223,True,True,full_text
+4,,,,,p. 2-3; p. 4-5,Zasada2026_SoftMoESoftDifferentiableRoutingMixture_43e1a4,0.031258,,5,0.6328,3,0.8125,p. 2-3; p. 3-4; p. 1-2,p. 3-4; p. 4-5; p. 2-3,12244,True,True,full_text
+5,,,,,p. 1-2; p. 3-4; p. 9-10,Zhong2024_LoryFullyDifferentiableMixtureExperts_2a7100,0.03125,,4,0.668,4,0.7852,p. 1-2; p. 3-4; p. 9-10,p. 1-2; p. 3-4; p. 9-10,15378,True,True,full_text
+6,,,,,p. 1-2; p. 5-7; p. 3-4,Chen2022_TowardsUnderstandingMixtureExpertsDeep_dd7164,0.02967,,10,0.5664,5,0.7617,p. 1-2; p. 3-4; p. 5-7,p. 1-2; p. 5-7; p. 7-9,43193,True,True,full_text
+7,,,,,p. 1-2; p. 8-9; p. 5-6,Chung2024_BeyondParameterCountImplicitBias_7ac1d2,0.029211,,7,0.5742,10,0.6758,p. 1-2; p. 8-9; p. 5-6,p. 1-2; p. 9-13; p. 8-9,15688,True,True,full_text
+8,,,,,p. 1-2,Sander2023_FastDifferentiableSparseTopK_e041d8,0.02901,,7,0.5742,11,0.6602,p. 2-3; p. 1-2,p. 2-3; p. 1-2,16377,True,True,full_text
+9,,,,,p. 3-4; p. 1-2; p. 13-14,Shazeer2017_OutrageouslyLargeNeuralNetworksSparsely_61750f,0.02885,,6,0.582,13,0.6523,p. 1-2; p. 3-4; p. 4-5,p. 2-3; p. 13-14; p. 3-4,15823,True,True,full_text
+10,,,,,p. 1-2; p. 5; p. 3-4,Eigen2013_LearningFactoredRepresentationsDeepMixture_3650dc,0.028814,,7,0.5742,12,0.6562,p. 1-2; p. 3-4; p. 5,p. 1-2; p. 5; p. 5-7,6018,True,True,full_text
+11,,,,,p. 1-2; p. 9-14; p. 39-40,Chowdhury2023_PatchLevelRoutingMixtureExperts_3e06eb,0.02879,,11,0.5625,8,0.6836,p. 1-2; p. 40-41; p. 9-14,p. 2; p. 2-3; p. 39-40,40599,True,True,full_text
+12,,,,,p. 3-5; p. 7-8; p. 27-29,Fedus2021_SwitchTransformersScalingTrillionParameter_2511d6,0.028439,,14,0.5469,7,0.6875,p. 3-5; p. 27-29; p. 5-7,p. 5-7; p. 3-5; p. 7-8,23413,True,True,full_text
+13,,,,,p. 1-2; p. 4-5,Zhang2022_MoEficationTransformerFeedForwardLayers_36be4c,0.027826,,15,0.5352,9,0.6797,p. 1-2; p. 2-3; p. 5-6,p. 1-2; p. 4-5; p. 2-3,11987,True,True,full_text
+14,,,,,p. 1-2; p. 3-4; p. 7-11,Makkuva2019_LearningGatedNeuralNetworks_c15e91,0.026857,,13,0.5508,16,0.6094,p. 1-2; p. 7-11; p. 3-4,p. 1-2; p. 3-4; p. 2-3,17946,True,True,full_text
+15,,,,,p. 1-2; p. 5-6,He2023_MergingExpertsIntoOneImproving_586e3d,0.026547,,12,0.5586,19,0.543,p. 1-2; p. 2-4; p. 5-6,p. 1-2; p. 2-4; p. 5-6,6356,True,True,full_text
+16,,,,,p. 8-10; p. 1-2; p. 4-5,Dai2022_StableMoEStableRoutingStrategyMixture_d593b6,0.026501,,17,0.5195,14,0.6484,p. 8-10; p. 6-7; p. 1-2,p. 1-3; p. 8-10; p. 4-5,9987,True,True,full_text
+17,,,,,p. 2-3; p. 4-5,Hihn2021_MixtureVariationalExpertsContinualLearning_8a2621,0.02632,,17,0.5195,15,0.6172,p. 3-4; p. 2-3; p. 4-5,p. 3-4; p. 2-3; p. 4-5,11018,True,True,full_text
+18,,,,,p. 3-4; p. 1-2; p. 9-11,He2023_PADNetEfficientFrameworkDynamic_18294b,0.026154,,15,0.5352,18,0.5625,p. 3-4; p. 4-6; p. 1-2,p. 3-4; p. 4-6; p. 9-11,11165,True,True,full_text
+19,,,,,p. 2-3; p. 4-6,Kim2021_ScalableEfficientMoETrainingMultitask_87946b,0.025645,,19,0.5078,17,0.5898,p. 4-6; p. 2-3; p. 6-7,p. 6-7; p. 4-6; p. 2-3,14327,True,True,full_text
+20,,,,,p. 1-2; p. 9-11,Gormley2018_MixturesExpertsModels_e369a7,0.025,,20,0.459,20,0.4668,p. 1-2; p. 10-12; p. 9-11,p. 1-2; p. 9-11; p. 10-12,26129,True,True,full_text

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 2-3; p. 4-5,Wei2019_EDAEasyDataAugmentationTechniques_b2faad,0.032787,,1,0.8438,1,0.8516,p. 2-3; p. 4-5,p. 2-3; p. 4-5,5045,True,True,full_text
+2,,,,,p. 2-3; p. 10-11; p. 5-9,Chopard2021_LearningDataAugmentationSchedulesNatural_e4ac9f,0.032002,,2,0.6992,3,0.6602,p. 2-3; p. 10-11; p. 11-12,p. 2-3; p. 10-11; p. 5-9,12423,True,True,full_text
+3,,,,,p. 8-19; p. 1-3; p. 20-21,Feng2021_SurveyDataAugmentationApproachesNLP_d4e4cb,0.031258,,3,0.6836,5,0.6523,p. 3-5; p. 1-3; p. 8-19,p. 9-20; p. 8-19; p. 20-21,12122,True,True,full_text
+4,,,,,p. 1-2; p. 5,Dai2020_AnalysisSimpleDataAugmentationNamed_d9cd25,0.030798,,7,0.6445,3,0.6602,p. 5; p. 2-3; p. 1-2,p. 1-2; p. 5; p. 2-3,5391,True,True,full_text
+5,,,,,p. 1-2; p. 5-6,Guo2019_AugmentingDataMixupSentenceClassification_b0e781,0.030077,,6,0.6562,7,0.6328,p. 5-6; p. 1-2; p. 2-3,p. 5-6; p. 1-2; p. 2-3,5260,True,True,full_text
+6,,,,,p. 3-4; p. 5; p. 1-2,Şahin2018_DataAugmentationDependencyTreeMorphing_aafded,0.029828,,13,0.5977,2,0.6719,p. 3-4; p. 2-3; p. 5,p. 1-2; p. 3-4; p. 5,5340,True,True,full_text
+7,,,,,p. 1-2; p. 5-7; p. 9-10,Wang2018_SwitchOutEfficientDataAugmentationAlgorithm_b8982b,0.029762,,3,0.6836,12,0.6055,p. 5-7; p. 1-2; p. 9-10,p. 1-2; p. 7-8; p. 5-7,8902,True,True,full_text
+8,,,,,p. 1-2; p. 3-4,Okimura2022_ImpactDataAugmentationDownstreamPerformance_0237b7,0.02967,,5,0.6602,10,0.6211,p. 1-2; p. 4-5; p. 3-4,p. 3-4; p. 1-2; p. 4-5,5824,True,True,full_text
+9,,,,,p. 1-2; p. 3-4,Wang2021_LinguisticKnowledgeDataAugmentationNatural_3bb23c,0.029418,,9,0.6367,7,0.6328,p. 2-3; p. 3-4; p. 1-2,p. 2-3; p. 4-5; p. 1-2,10584,True,True,full_text
+10,,,,,p. 4-6; p. 9-11,Morris2020_TextAttackFrameworkAdversarialAttacksData_7f17ec,0.028665,,14,0.582,6,0.6445,p. 5-9; p. 9-11; p. 4-6,p. 4-6; p. 5-9; p. 9-11,12035,True,True,full_text
+11,,,,,p. 1-2; p. 3-4,Kobayashi2018_ContextualAugmentationDataAugmentationWords_8ba284,0.028577,,11,0.6211,9,0.6289,p. 1-2; p. 4-5; p. 2-3,p. 1-2; p. 3-4; p. 2-3,4540,True,True,full_text
+12,,,,,p. 8-11; p. 1-2; p. 5-6,Chuang2022_DiffCSEDifferenceBasedContrastiveLearning_42aee5,0.028083,,7,0.6445,16,0.5742,p. 5-6; p. 6-7; p. 8-11,p. 8-11; p. 1-3; p. 1-2,11649,True,True,full_text
+13,,,,,p. 1-2; p. 3-5,Gao2019_SoftContextualDataAugmentationNeural_d7b3bb,0.027799,,10,0.6328,14,0.5859,p. 1-2; p. 2-4; p. 4-5,p. 2-4; p. 1-2; p. 3-5,4347,True,True,full_text
+14,,,,,p. 4-5; p. 14-15; p. 18-19,Xie2019_UnsupervisedDataAugmentationConsistencyTraining_f64b7e,0.027588,,12,0.6016,13,0.5898,p. 14-15; p. 18-19; p. 4-5,p. 14-15; p. 18-19; p. 4-5,16161,True,True,full_text
+15,,,,,p. 1-2; p. 3-4,Kumar2020_DataAugmentationUsingPreTrained_0176c0,0.027242,,16,0.5586,11,0.6172,p. 3-4; p. 1-2; p. 4-5,p. 3-4; p. 1-2; p. 4-5,7277,True,True,full_text
+16,,,,,p. 1-2; p. 3-4,Fadaee2017_DataAugmentationLowResourceNeural_a9fcf5,0.026667,,15,0.5625,15,0.5781,p. 3-4; p. 2-3; p. 1-2,p. 2-3; p. 1-2; p. 3-4,5282,True,True,full_text
+17,,,,,p. 2-3,DeVries2017_ImprovedRegularizationConvolutionalNeuralNetworks_922b3d,0.025974,,17,0.5117,17,0.5,p. 3-4; p. 2-3,p. 2-3; p. 3-4,8070,True,True,full_text
+18,,,,,p. 3-4; p. 1-2,Wang2015_ThatSSoAnnoyingLexical_cdbcfd,0.025641,,18,0.4531,18,0.4805,p. 3-4; p. 4-5; p. 1-2,p. 3-4; p. 4-5; p. 2-3,5227,True,True,full_text
+19,,,,,p. 4-5; p. 6-7,Sutskever2014_SequenceSequenceLearningNeuralNetworks_3b444c,0.025316,,19,0.4297,19,0.4121,p. 4-5; p. 5-6; p. 7-8,p. 5-6; p. 4-5; p. 6-7,7140,True,True,full_text
+20,,,,,p. 3-4; p. 7-8; p. 1-2,Socher2013_RecursiveDeepModelsSemanticCompositionality_3bf41a,0.025,,20,0.4062,20,0.3965,p. 3-4; p. 7-8; p. 2-3,p. 3-4; p. 7-8; p. 1-2,9837,True,True,full_text

@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 5-6; p. 8-12,Cao2023_PuMerPruningMergingTokensEfficient_1b1252,0.032266,,1,0.9296,3,0.8836,p. 1-2; p. 2-4; p. 5-6,p. 1-2; p. 2-4; p. 8-12,9997,True,True,full_text
+2,,,,,p. 1-2; p. 3-5; p. 9,Guo2025_STARStageWiseAttentionGuided_d01f3e,0.031778,,5,0.7666,1,0.8922,p. 1-2; p. 3-5; p. 9,p. 1-2; p. 3-5; p. 9,8712,True,True,full_text
+3,,,,,p. 4-5; p. 9,Chu2023_MobileVLMFastStrongOpenVision_28a242,0.031754,,2,0.8108,4,0.8685,p. 4-5; p. 9; p. 9-10,p. 4-5; p. 3-4; p. 9,17550,True,True,full_text
+4,,,,,p. 3; p. 8-11,Renzulli2026_TORINOTokenReductionInterpretableConcept_a01ea6,0.031054,,7,0.7586,2,0.8838,p. 3; p. 8-11; p. 3-4,p. 3; p. 3-4; p. 8-11,23924,True,True,full_text
+5,,,,,p. 2-3; p. 10-13,Rao2021_DynamicViTEfficientVisionTransformersDynamic_35ebaa,0.030366,,3,0.8002,9,0.7516,p. 2-3; p. 10-13; p. 3-5,p. 2-3; p. 3-5; p. 10-13,10414,True,True,full_text
+6,,,,,p. 2-3; p. 4-5,Singh2026_DUETVLMDualStageUnified_6a80f2,0.030303,,6,0.7638,6,0.8592,p. 2-3; p. 4-5,p. 2-3; p. 4-5,16727,True,True,full_text
+7,,,,,p. 2-4; p. 9-12; p. 7-8,Zhao2026_FocusThenContextSubjectCentric_cead20,0.03009,,8,0.7466,5,0.8657,p. 7-8; p. 9-12; p. 2-4,p. 2-4; p. 9-12; p. 8-9,17927,True,True,full_text
+8,,,,,p. 1-2; p. 3-4; p. 6-7,Jing2026_P4QCoDesigningTokenPruning_e0067e,0.029418,,9,0.7243,7,0.845,p. 3-4; p. 1-2; p. 6-7,p. 3-4; p. 1-2; p. 6-7,13612,True,True,full_text
+9,,,,,p. 1-2; p. 3-4,Bolya2022_TokenMergingYourViTBut_e66777,0.029139,,4,0.792,14,0.676,p. 1-2; p. 2-3; p. 3-4,p. 1-2; p. 2-3; p. 4-5,20125,True,True,full_text
+10,,,,,p. 2-3; p. 9-10; p. 4-5,Wen2025_TokenPruningMultimodalLargeLanguage_f05665,0.028992,,10,0.7228,8,0.8061,p. 10-13; p. 2-3; p. 9-10,p. 2-3; p. 4-5; p. 9-10,13276,True,False,full_text
+11,,,,,p. 1-2; p. 6-7; p. 3-4,Wang2020_MiniVLMSmallerFasterVisionLanguage_110c29,0.027984,,13,0.6594,10,0.7424,p. 1-2; p. 6-7; p. 3-4,p. 1-2; p. 2-3; p. 6-7,10597,True,False,full_text
+12,,,,,p. 1-2; p. 3-4,Ren2023_TESTATemporalSpatialTokenAggregation_d39824,0.027973,,11,0.7097,12,0.7315,p. 1-2; p. 3-4; p. 2-3,p. 3-4; p. 1-2; p. 2-3,13997,True,True,full_text
+13,,,,,p. 1-2; p. 3-4,Marin2021_TokenPoolingVisionTransformers_ff513e,0.027588,,12,0.6995,13,0.6956,p. 3-4; p. 4-5; p. 1-2,p. 3-4; p. 1-2; p. 4-5,14667,True,True,full_text
+14,,,,,p. 2-3; p. 8-13,Zhang2024_TinyChartEfficientChartUnderstandingProgram_4f8c48,0.027418,,15,0.6478,11,0.7377,p. 2-3; p. 8-13,p. 2-3; p. 3-5,15135,True,True,full_text
+15,,,,,p. 9-10; p. 1-2; p. 3-4,Ye2021_TRBERTDynamicTokenReduction_2eac12,0.026334,,14,0.6573,18,0.5213,p. 9-10; p. 10-13; p. 3-4,p. 1-2; p. 9-10; p. 10-13,11501,True,True,full_text
+16,,,,,p. 6-7; p. 9-14; p. 1-2,Li2021_AlignBeforeFuseVisionLanguage_db7a60,0.02632,,17,0.6043,15,0.6465,p. 9-14; p. 2-3; p. 6-7,p. 9-14; p. 6-7; p. 1-2,12633,True,True,full_text
+17,,,,,p. 9-16; p. 1-2; p. 4-5,Wang2021_SimVLMSimpleVisualLanguageModel_bb7b01,0.025978,,18,0.5722,16,0.6126,p. 4-5; p. 9-16; p. 2-4,p. 9-16; p. 8-9; p. 1-2,11931,True,True,full_text
+18,,,,,p. 1-2; p. 4-5; p. 7-8,Nawrot2023_EfficientTransformersDynamicTokenPooling_ba5bb3,0.025816,,16,0.6321,19,0.5009,p. 1-2; p. 7-8; p. 4-5,p. 1-2; p. 4-5; p. 9-13,10671,True,True,full_text
+19,,,,,p. 1-2; p. 7-8,Jiang2024_MedMoEMixtureDomainSpecific_df88e5,0.025645,,19,0.4902,17,0.5543,p. 1-2; p. 8-12; p. 7-8,p. 1-2; p. 8-12; p. 7-8,12305,True,True,full_text
+20,,,,,p. 1-2; p. 12-13,Li2023_EvaluatingObjectHallucinationLargeVision_bb3778,0.025,,20,0.4892,20,0.4877,p. 1-2; p. 2-3; p. 12-13,p. 1-2; p. 2-3; p. 12-13,12924,True,True,full_text

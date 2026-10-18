@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 8-9; p. 1-2; p. 26-28,Zaheer2020_BigBirdTransformersLongerSequences_19eb07,0.032522,,2,0.7356,1,0.9023,p. 8-9; p. 1-2; p. 26-28,p. 8-9; p. 38-39; p. 2-3,34417,True,True,full_text
+2,,,,,p. 1-2; p. 4-8,Manakul2021_SparsitySentenceStructureEncoderDecoder_0e7444,0.032266,,1,0.7551,3,0.8516,p. 4-8; p. 2-3; p. 1-2,p. 1-2; p. 4-8; p. 2-3,8853,True,True,full_text
+3,,,,,p. 1-2; p. 6-7; p. 8-9,Huang2021_EfficientAttentionsLongDocumentSummarization_2d6199,0.031514,,5,0.6155,2,0.8594,p. 6-7; p. 2-3; p. 1-2,p. 1-2; p. 8-9,15318,True,True,full_text
+4,,,,,p. 1-2; p. 4-5,Liu2021_HETFORMERHeterogeneousTransformerSparseAttention_0306e1,0.031498,,3,0.7206,4,0.832,p. 1-3; p. 1-2; p. 4-5,p. 5-9; p. 1-2; p. 2-3,6170,True,True,full_text
+5,,,,,p. 3-4; p. 5-6,Liu2022_LeveragingLocalityAbstractiveTextSummarization_4740b5,0.030777,,4,0.6759,6,0.7539,p. 5-6; p. 3-4; p. 4,p. 4; p. 3-4; p. 5-6,11030,True,False,full_text
+6,,,,,p. 1-3; p. 8-9,Guo2022_LongT5EfficientTextTextTransformer_dedf6b,0.03031,,7,0.5704,5,0.8086,p. 1-3; p. 9-12; p. 8-9,p. 9-12; p. 1-3; p. 8-9,14044,True,False,full_text
+7,,,,,p. 2-4; p. 8-9,Pu2023_IncorporatingDistributionsDiscourseStructureLong_93ee82,0.029644,,6,0.5942,9,0.6953,p. 4-6; p. 2-3; p. 2-4,p. 2-4; p. 1-2; p. 8-9,11087,True,True,full_text
+8,,,,,p. 1-2; p. 4-5,Pilault2020_ExtractiveAbstractiveNeuralDocumentSummarization_f408aa,0.028624,,13,0.505,7,0.7422,p. 5-6; p. 2-3; p. 1-2,p. 1-2; p. 4-5; p. 1,14956,True,True,full_text
+9,,,,,p. 1-2; p. 3-4,Cao2022_HIBRIDSAttentionHierarchicalBiasesStructure_a596ac,0.028595,,8,0.5467,12,0.6641,p. 2-3; p. 3-4; p. 1-2,p. 2-3; p. 1-2; p. 3-4,17828,True,True,full_text
+10,,,,,p. 1-2; p. 3-4; p. 6-7,Sandeep2019_ExtractiveAbstractiveNeuralDocumentSummarization_9a18e1,0.027864,,16,0.4905,8,0.7148,p. 2-3; p. 6-7; p. 1-2,p. 1-2; p. 3-4; p. 2-3,12581,True,True,full_text
+11,,,,,p. 2-3; p. 4-5; p. 7-8,Nallapati2016_AbstractiveTextSummarizationUsingSequence_f04600,0.027826,,9,0.5399,15,0.5586,p. 8-9; p. 2-3; p. 5-6,p. 7-8; p. 2-3; p. 4-5,10848,True,True,full_text
+12,,,,,p. 3-4; p. 1-2; p. 5,Cohan2018_DiscourseAwareAttentionModelAbstractive_22b6b6,0.027799,,14,0.5025,10,0.6797,p. 3-4; p. 2-3,p. 3-4; p. 1-2; p. 5,6057,True,True,full_text
+13,,,,,p. 5-7; p. 1-2; p. 8-12,Paulus2017_DeepReinforcedModelAbstractiveSummarization_7e83e2,0.027598,,11,0.5369,14,0.6016,p. 1-2; p. 5-7; p. 7-8,p. 2-3; p. 8-12; p. 5-7,8693,True,True,full_text
+14,,,,,p. 1-2; p. 6-7; p. 4-5,Rush2015_NeuralAttentionModelAbstractiveSentence_569c68,0.027273,,10,0.5385,17,0.5273,p. 6-7; p. 4-5; p. 1-2,p. 6-7; p. 8-9; p. 1-2,9883,True,True,full_text
+15,,,,,p. 9-13; p. 14-15; p. 1-2,Chen2018_FastAbstractiveSummarizationReinforceSelected_62139f,0.027032,,15,0.4964,13,0.625,p. 9-13; p. 14-15; p. 5-6,p. 1-2; p. 9-13; p. 14-15,15473,True,True,full_text
+16,,,,,p. 1-2; p. 4; p. 5,Chopra2016_AbstractiveSentenceSummarizationAttentiveRecurrent_e1dced,0.026709,,12,0.5215,18,0.5078,p. 4; p. 1-2; p. 5,p. 4; p. 1-2; p. 4-5,5371,True,True,full_text
+17,,,,,p. 8-12; p. 1-2; p. 3-4,Kitaev2020_ReformerEfficientTransformer_b7291f,0.026585,,20,0.4685,11,0.6719,p. 5-6; p. 8-12; p. 3-4,p. 2-3; p. 8-12; p. 1-2,8558,True,True,full_text
+18,,,,,p. 4-5; p. 1-3; p. 6-7,See2017_GetPointSummarizationPointerGenerator_5a6ecd,0.025978,,18,0.4847,16,0.5312,p. 4-5; p. 6-7; p. 5-6,p. 4-5; p. 5-6; p. 1-3,9312,True,True,full_text
+19,,,,,p. 4-5; p. 6-7,Gu2016_IncorporatingCopyingMechanismSequenceSequence_e578a6,0.025487,,17,0.4858,20,0.4707,p. 5-6; p. 6-7; p. 4-5,p. 5-6; p. 4-5; p. 6-7,12130,True,True,full_text
+20,,,,,p. 2-3; p. 5-6; p. 9-12,Gehrmann2018_BottomUpAbstractiveSummarization_2f53f1,0.025316,,19,0.4818,19,0.5039,p. 2-3; p. 2-4; p. 9-12,p. 2-3; p. 5-6; p. 2-4,9851,True,True,full_text

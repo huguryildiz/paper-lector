@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 3-4; p. 1-2; p. 12-17,Min2023_EarlyNeuronAlignmentTwoLayer_782d93,0.032787,,1,0.7734,1,0.8906,p. 1-2; p. 3-4; p. 4-5,p. 2-3; p. 3-4; p. 12-17,38082,True,True,full_text
+2,,,,,p. 1-2; p. 3-5; p. 6-7,Kumar2025_TowardsUnderstandingGradientFlowDynamics_73ecee,0.032258,,2,0.7188,2,0.8359,p. 1-2; p. 3-5; p. 6-7,p. 3-5; p. 1-2; p. 7-8,65261,True,True,full_text
+3,,,,,p. 2-3; p. 11-13; p. 50-51,Frei2022_ImplicitBiasLeakyReLUNetworks_48fd81,0.031498,,3,0.6641,4,0.7852,p. 2-3; p. 3-4; p. 50-51,p. 2-3; p. 3-4; p. 11-13,41533,True,True,full_text
+4,,,,,p. 7-8; p. 1-2; p. 4-5,Azulay2021_ImplicitBiasInitializationShapeBeyond_72138b,0.030769,,5,0.6328,5,0.7734,p. 7-8; p. 1-2; p. 9-10,p. 7-8; p. 15-16; p. 4-5,28277,True,True,full_text
+5,,,,,p. 2-3; p. 4-5; p. 7-9,Du2018_GradientDescentProvablyOptimizesOver_f4d92e,0.030366,,9,0.543,3,0.7969,p. 3-4; p. 4-5; p. 2-3,p. 4-5; p. 2-3; p. 7-9,15765,True,True,full_text
+6,,,,,p. 1-2; p. 3-5,Gissin2019_ImplicitBiasDepthHowIncremental_935819,0.030331,,4,0.6602,8,0.7148,p. 1-2; p. 2-3; p. 3-5,p. 1-2; p. 2-3; p. 3-5,17731,True,True,full_text
+7,,,,,p. 3-4; p. 6-7; p. 23-24,Binghui2024_FeatureAveragingImplicitBiasGradient_119417,0.029857,,8,0.6055,6,0.7617,p. 3-4; p. 38-39; p. 24-25,p. 3-4; p. 23-24; p. 6-7,61968,True,True,full_text
+8,,,,,p. 3-5; p. 11-13; p. 16-17,Han2025_PreciseGradientDescentTrainingDynamics_c55d20,0.029644,,6,0.625,9,0.7031,p. 3-5; p. 2-4; p. 12-14,p. 16-17; p. 3-5; p. 11-13,83893,True,True,full_text
+9,,,,,p. 8-9; p. 1-2; p. 3-4,Yun2020_UnifyingViewImplicitBiasTraining_1f534d,0.029437,,10,0.5391,6,0.7617,p. 1-2; p. 8-9; p. 3-4,p. 8-9; p. 9-10; p. 34-35,40918,True,True,full_text
+10,,,,,p. 9-10; p. 12-13; p. 2-3,AllenZhu2018_ConvergenceTheoryDeepLearningOver_25e537,0.028624,,7,0.6133,13,0.6562,p. 2-3; p. 9-10; p. 12-13,p. 8-9; p. 9-10; p. 12-13,47957,True,True,full_text
+11,,,,,p. 6-7; p. 31-32; p. 1-2,Pesme2021_ImplicitBiasSGDDiagonalLinear_04a6e2,0.02837,,10,0.5391,11,0.6758,p. 1-2; p. 6-7; p. 31-32,p. 31-32; p. 4-6; p. 6-7,30067,True,True,full_text
+12,,,,,p. 2-3; p. 8-9,Marcotte2025_IntrinsicTrainingDynamicsDeepNeural_b0efeb,0.027799,,14,0.5156,10,0.6875,p. 2-3; p. 8-9,p. 9-10; p. 2-3,42867,True,True,full_text
+13,,,,,p. 1-2; p. 4-5; p. 14-15,Du2018_GradientDescentFindsGlobalMinima_8a1357,0.027402,,14,0.5156,12,0.6641,p. 1-2; p. 14-15,p. 1-2; p. 4-5,42631,True,True,full_text
+14,,,,,p. 2-3; p. 4-5,Yang2019_ScalingLimitsWideNeuralNetworks_d34789,0.027222,,12,0.5273,15,0.6172,p. 4-5; p. 2-3; p. 3-4,p. 3-4; p. 4-5; p. 2-3,64403,True,True,full_text
+15,,,,,p. 10-11; p. 1-2; p. 3-4,Hui2020_ImplicitBiasGradientDescentMean_805cfa,0.027212,,13,0.5195,14,0.6484,p. 4-5; p. 3-4; p. 10-11,p. 10-11; p. 29-30; p. 1-2,78107,True,True,full_text
+16,,,,,p. 2-3; p. 35-37; p. 40-41,Chatterji2021_InterplayBetweenImplicitBiasBenign_118ab0,0.026145,,16,0.4902,17,0.5898,p. 2-3; p. 40-41; p. 35-37,p. 2-3; p. 35-37; p. 34-35,33046,True,True,full_text
+17,,,,,p. 1-2; p. 3-4; p. 6-7,Schechtman2025_LateStageTrainingDynamicsStochastic_3d51ca,0.025978,,18,0.4434,16,0.5977,p. 1-2; p. 6-7; p. 2-3,p. 1-2; p. 3-4; p. 2-3,21556,True,True,full_text
+18,,,,,p. 13-14; p. 2-3; p. 44-45,Bohan2020_ImplicitBiasAdaptiveOptimizationAlgorithms_52824f,0.025808,,17,0.4629,18,0.543,p. 13-14; p. 55-57; p. 2-3,p. 13-14; p. 14-15; p. 44-45,52379,True,True,full_text
+19,,,,,p. 1-2; p. 4-5; p. 9,Ioffe2015_BatchNormalizationAcceleratingDeepNetwork_9d1804,0.025479,,18,0.4434,19,0.4844,p. 9; p. 4-5; p. 1-2,p. 9; p. 1-2; p. 4-5,12195,False,True,full_text
+20,,,,,p. 2-3; p. 7-8; p. 12-13,Zhang2016_UnderstandingDeepLearningRequiresRethinking_fb7fb5,0.025158,,20,0.4414,19,0.4844,p. 2-3; p. 3-4; p. 12-13,p. 2-3; p. 7-8; p. 3-4,11261,True,True,full_text

@@ -1,0 +1,1 @@
+{"created": "2026-10-18T18:25:49", "question": "Is there a dataset that allows to perform aspect-based sentiment classification on French news?", "name": "ls363", "queries": "queries.json", "queries_sha": "4dda9f569bef", "fuse": ["Q0", "Q1"], "provider": "voyage", "out": "runs/2026-10-18_1825", "abstracts": ""}

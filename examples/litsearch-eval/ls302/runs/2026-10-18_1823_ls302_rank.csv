@@ -1,0 +1,21 @@
+fused_rank,citation,link,cited_by,cited_pct,start_pages,paper,fused_score,cited_at,Q0_main_rank,Q0_main_score,Q1_subject_rank,Q1_subject_score,Q0_main_pages,Q1_subject_pages,tokens,bib_cut,abstract_found,source
+1,,,,,p. 1-2; p. 7-8,Lavertu2026_RefndPreventingDataLeakageRelational_552285,0.032522,,1,0.6338,2,0.7065,p. 1-2; p. 8-9; p. 7-8,p. 1-2; p. 8-9; p. 7-8,8002,True,True,full_text
+2,,,,,p. 1-2; p. 3-4; p. 5-12,Bushuiev2024_RevealingDataLeakageProteinInteraction_24d1b6,0.032018,,4,0.5841,1,0.7083,p. 5-12; p. 1-2; p. 3-4,p. 5-12; p. 3-4; p. 1-2,7382,True,True,full_text
+3,,,,,p. 2-4; p. 7-8; p. 5-6,Tze2026_EnhancingAutomatedMachineLearningHomogeneous_53889d,0.031281,,2,0.595,6,0.6305,p. 1-2; p. 7-8; p. 2-4,p. 7-8; p. 2-4; p. 5-6,7578,True,True,full_text
+4,,,,,p. 1-2; p. 7-8,Søgaard2021_WeNeedTalkAboutRandom_39bd06,0.031258,,3,0.5844,5,0.6378,p. 7-8; p. 1-2; p. 4-7,p. 1-2; p. 7-8; p. 2,6594,True,True,full_text
+4,,,,,p. 2-4; p. 30-32; p. 23-25,Roth2026_GrammarMachineLearningWorkflowsRejecting_6f3ec3,0.031258,,5,0.5733,3,0.6814,p. 23-25; p. 30-32; p. 2-4,p. 4-6; p. 30-32; p. 2-4,20337,True,True,full_text
+6,,,,,p. 1-3; p. 4-5,Jacovi2023_StopUploadingTestDataPlain_06f36e,0.03055,,7,0.5676,4,0.6501,p. 4-5; p. 5-6; p. 1-3,p. 2-4; p. 4-5; p. 1-3,7070,True,True,full_text
+7,,,,,p. 2-4; p. 12-14,Kabane2024_ImpactSamplingTechniquesDataLeakage_c7ba16,0.030077,,6,0.5688,7,0.5926,p. 2-4; p. 4-6; p. 12-14,p. 2-4; p. 12-14; p. 4-6,7515,True,True,full_text
+8,,,,,p. 1-3; p. 4-8,Catania2022_BeyondRandomSplitAssessingStatistical_ed0361,0.029412,,8,0.5587,8,0.5728,p. 1-3; p. 7-10; p. 4-8,p. 7-10; p. 4-8; p. 1-3,4829,True,True,full_text
+9,,,,,p. 1-2; p. 9-13,Tan2021_CriticalLookCurrentTrainTest_854782,0.028778,,9,0.5375,10,0.536,p. 1-2; p. 9-13; p. 13-16,p. 1-2; p. 9-13; p. 13-16,10371,True,True,full_text
+9,,,,,p. 1-2; p. 3-4; p. 9-14,Northcutt2021_PervasiveLabelErrorsTestSets_e1c825,0.028778,,10,0.5154,9,0.5557,p. 1-2; p. 3-4; p. 9-14,p. 1-2; p. 3-4; p. 9-14,17454,True,True,full_text
+11,,,,,p. 1-2; p. 3-4,Wadduwage2026_BeyondPerfectScoresProofContradiction_d5c7e5,0.028169,,11,0.4966,11,0.5239,p. 1-2; p. 3-4; p. 2-4,p. 1-2; p. 3-4; p. 2-4,13070,True,True,full_text
+12,,,,,p. 1-2; p. 6-7,Hannun2021_MeasuringDataLeakageMachineLearning_d4ae9c,0.027588,,13,0.4151,12,0.5201,p. 1-2; p. 6-7; p. 2,p. 1-2; p. 6-7; p. 2,12188,True,True,full_text
+13,,,,,p. 4-5; p. 6-7; p. 9-17,Gomes2017_AtomicConvolutionalNetworksPredictingProtein_9d8a85,0.027402,,12,0.4154,14,0.4777,p. 4-5; p. 5-6; p. 9-17,p. 4-5; p. 5-6; p. 6-7,7555,True,True,full_text
+14,,,,,p. 3-4; p. 6-7; p. 27-29,Huang2021_TherapeuticsDataCommonsMachineLearning_2b62d8,0.027212,,14,0.41,13,0.5076,p. 27-29; p. 6-7; p. 3-4,p. 27-29; p. 6-7; p. 3-4,35691,True,True,full_text
+15,,,,,p. 1-2; p. 11-13; p. 3,Mittal2023_ResponsibleMachineLearningDatasetsFairness_cf22c5,0.026491,,15,0.4083,16,0.4196,p. 1-2; p. 11-13; p. 5-6,p. 3; p. 11-13; p. 1-2,13987,True,True,full_text
+16,,,,,p. 1-2; p. 8-9,Jin2021_CAFECatastrophicDataLeakageVertical_832251,0.02632,,17,0.363,15,0.436,p. 8-9; p. 9-10; p. 1-2,p. 8-9; p. 1-2; p. 9-10,17776,True,True,full_text
+17,,,,,p. 3; p. 1-2; p. 7-10,Zhang2019_EffectTranslationeseMachineTranslationTest_69d34a,0.025816,,16,0.39,19,0.3891,p. 1-2; p. 3; p. 7-10,p. 2-3; p. 3; p. 3-4,30405,True,True,full_text
+18,,,,,p. 3-4; p. 5-7; p. 8-9,Anh2018_GoogleSpeechCommandsMusanTest_6811a9,0.025645,,19,0.3602,17,0.3992,p. 5-7; p. 3-4; p. 8-9,p. 5-7; p. 8-9; p. 3-4,7528,True,True,full_text
+19,,,,,p. 2-3,Denton2020_BringingPeopleBackContestingBenchmark_bc71d4,0.025641,,18,0.3615,18,0.3919,p. 2-3; p. 2-4; p. 3-4,p. 2-3; p. 2-4; p. 3-4,4358,True,True,full_text
+20,,,,,p. 7; p. 8-12; p. 5-6,Gal2015_DropoutAsBayesianApproximationRepresenting_59dd2e,0.025,,20,0.3522,20,0.3618,p. 7; p. 8-12; p. 5-6,p. 7; p. 7-8; p. 8-12,10623,True,True,full_text

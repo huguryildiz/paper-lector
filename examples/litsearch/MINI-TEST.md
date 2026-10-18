@@ -77,3 +77,16 @@ Main only still wins, and the interval for all 46 stays above zero, but the effe
 **Recommendation.** Keep the default (main + subject) in `SKILL.md`, and add one sentence: when the question points at one specific paper, main only ranked the gold paper higher in 22 of 46 questions and lower in 4 here; the other slots still get their own columns, so nothing is lost by reading them. A switch of the default needs a test on broad questions first. No edit to `SKILL.md` or `rank.py` was made.
 
 PDFs deleted after the runs.
+
+## Rebuilt set, 20 PDFs per question, voyage (2026-10-18)
+
+The working folder above was deleted, so the set was rebuilt from DEIXIS's data in [`examples/litsearch-eval`](../litsearch-eval) (`build.py`, `subset.py`): the same first 50 seeded questions, gold plus the first 19 downloaded arXiv or ACL papers of DEIXIS's pre-rerank list, 20 PDFs per question (8 and 13 in two questions with short lists). 48 questions were usable; 2 lost their gold PDF. `main` is the LitSearch question as written, and `subject` was written again, blind, from the question alone by a fresh Sonnet agent, then frozen (`FROZEN.sha256`) before any ranking. `rank.py --ids subset20.csv`, voyage, hybrid only. Tokens: 10.2M embedding (more taken from the cache), 6.8M rerank. Metrics: `evaluate20.py`, `results20.json`.
+
+| Order | hit@3 | hit@5 | hit@10 | MRR |
+| --- | --- | --- | --- | --- |
+| voyage, main only | 0.75 | 0.85 | 0.96 | 0.71 |
+| voyage, fused (main + subject) | 0.75 | 0.88 | 0.96 | 0.72 |
+
+Main only against fused: MRR −0.01 (95% interval −0.07 to +0.05); main better in 7 questions, worse in 7.
+
+**The main-only gain did not come back.** With new blind `subject` queries, the two orders are equal. The earlier +0.12 on 46 questions came from one set of `subject` sentences and 40-PDF collections, and its out-of-sample part was already small (+0.07, interval crossing zero). The questions here are mostly the same ones, so this is not independent data on the questions; what changed is the `subject` text and the collection size. 20 PDFs make the task easier than 40, so these numbers are not comparable with the tables above; the comparison of main and fused within this table is. Read together, the evidence does not support recommending main only: how much `subject` helps or hurts depends on how it is written.

@@ -1,0 +1,234 @@
+{
+ "created": "2026-10-18T18:28:32",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-3-g76db4d9-dirty",
+ "argv": [
+  "--ids",
+  "subset20.csv"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "1b24f26f674aa7482618f91c985940c09af4813109138cd4a52af3b7dc399f70"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "ec1aed7f9b77d46187e0a5dcd21a365d43639b0260f782f0df14d2507dae0688"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "e425cec4a9ace5b34959b30f3adfae16c915f51ad603bddadf4734d6ab7f0710"
+   }
+  ]
+ },
+ "question": "Which papers develop methods to make in-context learning more computationally efficient?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question (LitSearch wording)",
+   "text": "Which papers develop methods to make in-context learning more computationally efficient?",
+   "keywords": "make in-context learning computationally efficient"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "what is studied",
+   "text": "In-context learning with large language models, where long prompts of demonstration examples make inference computationally expensive in time and memory.",
+   "keywords": "in-context learning efficiency computational cost demonstrations prompt compression inference speed"
+  }
+ },
+ "queries_sha": "56ed61523c91",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 20,
+  "windows": 316,
+  "ids": [
+   "Ye2023_FiDICLFusionDecoderApproach_19e189",
+   "Khatri2025_CompressingManyShotsContextLearning_28e2ce",
+   "Cheng2023_BatchPromptingEfficientInferenceLarge_7eb76f",
+   "Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f",
+   "Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac",
+   "Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9",
+   "Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54",
+   "Pantelidis2025_EfficientTextClassificationConformalContext_efc7cb",
+   "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+   "Golchin2025_TowardsComputeOptimalManyShot_6380a2",
+   "Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379",
+   "Chung2024_SelectionPSelfSupervisedTask_180cf3",
+   "Pu2024_StyleCompressLLMBasedPrompt_9dc84c",
+   "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+   "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+   "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+   "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+   "Jiang2023_LLMLinguaCompressingPromptsAcceleratedInference_28d90a",
+   "Dai2023_WhyCanGPTLearnContext_4171a8",
+   "Li2023_FindingSupportExamplesContextLearning_7a9b60"
+  ],
+  "files": [
+   {
+    "id": "Ye2023_FiDICLFusionDecoderApproach_19e189",
+    "path": "pdfs/Ye2023_FiDICLFusionDecoderApproach_19e189.pdf",
+    "sha256": "2cd96b2b28ed7a3daf002b8ebe6d115396d4d78200b96d4f02b97e2d99b8c46e"
+   },
+   {
+    "id": "Khatri2025_CompressingManyShotsContextLearning_28e2ce",
+    "path": "pdfs/Khatri2025_CompressingManyShotsContextLearning_28e2ce.pdf",
+    "sha256": "7dc4ded2bf5c668dd753407270c2b420ae3e7759de421c8680f5bb7775917cac"
+   },
+   {
+    "id": "Cheng2023_BatchPromptingEfficientInferenceLarge_7eb76f",
+    "path": "pdfs/Cheng2023_BatchPromptingEfficientInferenceLarge_7eb76f.pdf",
+    "sha256": "388864dfa6944a41e2207a1c76a574aa6e7bb29f1073ba0e4e94c9caa1c5e0be"
+   },
+   {
+    "id": "Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f",
+    "path": "pdfs/Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f.pdf",
+    "sha256": "152e045ae8de4e752efae794f79fed2c96b026dd8180a8921ef6a0f6e773ca19"
+   },
+   {
+    "id": "Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac",
+    "path": "pdfs/Zhao2023_RepresentativeDemonstrationSelectionContextLearning_eed3ac.pdf",
+    "sha256": "0a9ac5b9d586bcfb3c88fd1c399bc81170a0388cca01973b5a698331b3ce3ffa"
+   },
+   {
+    "id": "Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9",
+    "path": "pdfs/Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9.pdf",
+    "sha256": "c3593725f85361e42b0e2b6a031f31b88ef4022f75e6ff4e28ad06a6dfa76abb"
+   },
+   {
+    "id": "Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54",
+    "path": "pdfs/Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54.pdf",
+    "sha256": "6c1018fcf4174599423a6211fb7db48b563a0af37072dbe9687863a088e8e94f"
+   },
+   {
+    "id": "Pantelidis2025_EfficientTextClassificationConformalContext_efc7cb",
+    "path": "pdfs/Pantelidis2025_EfficientTextClassificationConformalContext_efc7cb.pdf",
+    "sha256": "61b4b79f12df62005b45a8d1a800866363ded1ce2a9a8aa831ce17b2f7c9202c"
+   },
+   {
+    "id": "Wu2023_SelfAdaptiveContextLearningInformation_50efe9",
+    "path": "pdfs/Wu2023_SelfAdaptiveContextLearningInformation_50efe9.pdf",
+    "sha256": "bcc3efa0a2854cb4a9eaa7bc4c2adbc63204d095564dd4276a756a696b0f5465"
+   },
+   {
+    "id": "Golchin2025_TowardsComputeOptimalManyShot_6380a2",
+    "path": "pdfs/Golchin2025_TowardsComputeOptimalManyShot_6380a2.pdf",
+    "sha256": "2c413d04d3ba85d52617f836b8640e483f80833041a0daf185235b7875ba2b55"
+   },
+   {
+    "id": "Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379",
+    "path": "pdfs/Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379.pdf",
+    "sha256": "decb9465077e470957b3d0eda495f1b6f7088a67273401da70ba7c11cf9c10d4"
+   },
+   {
+    "id": "Chung2024_SelectionPSelfSupervisedTask_180cf3",
+    "path": "pdfs/Chung2024_SelectionPSelfSupervisedTask_180cf3.pdf",
+    "sha256": "161b4200007cdc020518bcdea3228760e400b25ca3af82a549650d7f165f8fee"
+   },
+   {
+    "id": "Pu2024_StyleCompressLLMBasedPrompt_9dc84c",
+    "path": "pdfs/Pu2024_StyleCompressLLMBasedPrompt_9dc84c.pdf",
+    "sha256": "49dccdbdfe1ea3ca068d9658124dac8691bb45474df87140751e747c7364663d"
+   },
+   {
+    "id": "Xie2021_ExplanationContextLearningAsImplicit_f73edf",
+    "path": "pdfs/Xie2021_ExplanationContextLearningAsImplicit_f73edf.pdf",
+    "sha256": "ad9be01798fcf4fdc66ff3630f7a6f1cc157c04d51d0821d7798e028cb175c4b"
+   },
+   {
+    "id": "Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f",
+    "path": "pdfs/Min2022_RethinkingRoleDemonstrationsWhatMakes_40cf3f.pdf",
+    "sha256": "3a9e7466738095af6d63d49af69c95c7bcf652d76bae07fcf963f42198d4cea4"
+   },
+   {
+    "id": "Rubin2022_LearningRetrievePromptsContextLearning_47f9ec",
+    "path": "pdfs/Rubin2022_LearningRetrievePromptsContextLearning_47f9ec.pdf",
+    "sha256": "d18479bda48c0f1bfc6bc05cdf3496aef400ee2c40970bf72bf0d3ccfd0f928b"
+   },
+   {
+    "id": "Zhang2022_ActiveExampleSelectionContextLearning_7093af",
+    "path": "pdfs/Zhang2022_ActiveExampleSelectionContextLearning_7093af.pdf",
+    "sha256": "1d1c116f1d66da865d8c27b51081f8e45639a0843709c3af15f4616cece56e65"
+   },
+   {
+    "id": "Jiang2023_LLMLinguaCompressingPromptsAcceleratedInference_28d90a",
+    "path": "pdfs/Jiang2023_LLMLinguaCompressingPromptsAcceleratedInference_28d90a.pdf",
+    "sha256": "0cd06ff6bf440d4a560937195c03dc56a1234ede8eec48129164c940262c90d8"
+   },
+   {
+    "id": "Dai2023_WhyCanGPTLearnContext_4171a8",
+    "path": "pdfs/Dai2023_WhyCanGPTLearnContext_4171a8.pdf",
+    "sha256": "509a88cb53f8092cdd0cc16338b20d926985f9ca6a9ac37bbf3f5089c6ffe80c"
+   },
+   {
+    "id": "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+    "path": "pdfs/Li2023_FindingSupportExamplesContextLearning_7a9b60.pdf",
+    "sha256": "d3776613de9b70e5fedbe012cc8934e94764ce965681e623e5b4790e8bfe3324"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": []
+ },
+ "expect": "",
+ "usage": {
+  "embed": 185500,
+  "embed_cached": 147,
+  "rerank": 147208
+ },
+ "estimate": 501153,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/litsearch-eval/ls495/runs/2026-10-18_1828_ls495_rank.csv",
+   "fused_top10": [
+    "Khatri2025_CompressingManyShotsContextLearning_28e2ce",
+    "Golchin2025_TowardsComputeOptimalManyShot_6380a2",
+    "Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f",
+    "Chung2024_SelectionPSelfSupervisedTask_180cf3",
+    "Ye2023_FiDICLFusionDecoderApproach_19e189",
+    "Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54",
+    "Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379",
+    "Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9",
+    "Cheng2023_BatchPromptingEfficientInferenceLarge_7eb76f",
+    "Jiang2023_LLMLinguaCompressingPromptsAcceleratedInference_28d90a"
+   ],
+   "first_query_top10": [
+    "Ye2023_FiDICLFusionDecoderApproach_19e189",
+    "Khatri2025_CompressingManyShotsContextLearning_28e2ce",
+    "Golchin2025_TowardsComputeOptimalManyShot_6380a2",
+    "Zhang2025_LinearTimeDemonstrationSelectionContext_ae105f",
+    "Chung2024_SelectionPSelfSupervisedTask_180cf3",
+    "Shaoyi2025_SubmodularContextPartitioningCompressionContext_156379",
+    "Purohit2025_SampleEfficientDemonstrationSelectionContext_c55c54",
+    "Li2023_FindingSupportExamplesContextLearning_7a9b60",
+    "Pantelidis2025_EfficientTextClassificationConformalContext_efc7cb",
+    "Wang2026_MetaSelEfficientDemonstrationSelection_f4c6a9"
+   ]
+  }
+ }
+}
