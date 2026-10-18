@@ -19,7 +19,7 @@
 <text x="596" y="198" fill="#c9d4e3" font-size="14" text-anchor="middle">1</text>
 <text x="680" y="198" fill="#c9d4e3" font-size="14" text-anchor="middle">1</text>
 <rect x="766" y="181" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="198" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
+<text x="809" y="198" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 9-13</text>
 <text x="34" y="250" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">2</text>
 <text x="64" y="241" fill="#e6edf3" font-size="14.5" font-weight="600">Detecting Hallucinated Content in Conditional Neural Sequ…</text>
 <text x="64" y="259" fill="#8b9bb4" font-size="12.5">Zhou et al., 2020<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
@@ -34,14 +34,14 @@
 <text x="596" y="302" fill="#c9d4e3" font-size="14" text-anchor="middle">3</text>
 <text x="680" y="302" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
 <rect x="766" y="285" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="302" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 9-10</text>
+<text x="809" y="302" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
 <text x="34" y="354" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">4</text>
 <text x="64" y="345" fill="#e6edf3" font-size="14.5" font-weight="600">Understanding Factuality in Abstractive Summarization wit…</text>
 <text x="64" y="363" fill="#8b9bb4" font-size="12.5">Pagnoni et al., 2021<tspan fill="#5fd39a" font-weight="600">  ·  LitSearch gold</tspan></text>
 <text x="596" y="354" fill="#c9d4e3" font-size="14" text-anchor="middle">4</text>
 <text x="680" y="354" fill="#c9d4e3" font-size="14" text-anchor="middle">6</text>
 <rect x="766" y="337" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="354" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 10-11</text>
+<text x="809" y="354" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 1-2</text>
 <rect x="16" y="374" width="848" height="48" rx="8" fill="#111b2e"/>
 <text x="34" y="406" fill="#F2B544" font-size="18" font-weight="700" text-anchor="middle">5</text>
 <text x="64" y="397" fill="#e6edf3" font-size="14.5" font-weight="600">Evaluating Attribution in Dialogue Systems: The BEGIN Ben…</text>
@@ -49,6 +49,6 @@
 <text x="596" y="406" fill="#c9d4e3" font-size="14" text-anchor="middle">5</text>
 <text x="680" y="406" fill="#c9d4e3" font-size="14" text-anchor="middle">5</text>
 <rect x="766" y="389" width="86" height="24" rx="12" fill="#F2B544" fill-opacity="0.16" stroke="#F2B544" stroke-opacity="0.5"/>
-<text x="809" y="406" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 16-17</text>
+<text x="809" y="406" fill="#F2B544" font-size="13" font-weight="600" text-anchor="middle">p. 10-11</text>
 <text x="28" y="448" fill="#6b7a92" font-size="12">Top 5 of 40 PDFs · voyage-4-large + rerank-3 · fused over main and subject · the 5 LitSearch gold papers rank 1, 2, 3, 4, 7</text>
 </svg>

@@ -60,4 +60,4 @@ python ../../scripts/rank.py --out runs/<new-name> --expect maynez2020_2005-0066
 python make_svg.py runs/<new-name>_paper-lector_rank.csv ../../assets/example-output.svg
 ```
 
-`runs/litsearch_hybrid.csv` and `runs/litsearch_run.json` are the run behind the README image, made with an earlier version under the names it gave its outputs then.
+`runs/2026-10-18_audit_paper-lector_rank.csv` and its `_rank_run.json` are the run behind the README image. It replaced an earlier run that left the bibliography in 29 of the 40 PDFs (their author-year reference lists went unrecognised), so the reranker read reference pages of three of the top five papers; the gold papers' ranks (1, 2, 3, 4, 7) did not change.

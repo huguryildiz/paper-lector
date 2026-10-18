@@ -130,28 +130,28 @@ $PY $PL/scripts/rank.py --abstracts $A
 
 The keyword search returned 137 works and the semantic search the 50 closest. They share 20, so 167 distinct works came out, and `search_overlap.py` reported LOW OVERLAP: only 40% of the semantic works were in the keyword results. `fetch_pdf.py` downloaded 73 open-access PDFs. For each paper it could not get, it wrote a `MANUAL` line with the publisher page, where the PDF can be downloaded by hand.
 
-Ranking scored the 73 PDFs on full text and 149 papers on their abstracts; 76 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.59M tokens and every embedding came from the cache: a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
+Ranking scored the 73 PDFs on full text and 147 papers on their abstracts; 74 of these had no PDF, and 8 had no abstract and stayed unranked. Rerank used 1.57M tokens. Embeddings are cached, so a rerun pays only for new text, and `rank.py` stops before any API call if the token estimate is above 15M.
 
-**4. Read the output.** [`runs/2026-10-18_0151_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0151_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
+**4. Read the output.** [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/entanglement-scheduling/runs/2026-10-18_0317_entanglement-scheduling_rank.csv) has one row per paper, PDFs first by `fused_rank`, then the papers with no PDF by `abs_fused_rank`. The first columns are for reading: the full-text rank and the abstract rank, the citation, a link, the citation count and its percentile, and `start_pages`. `start_pages` gives up to three page ranges where the fused queries' windows agree. Every other column follows. `_rank_run.json` records everything needed to repeat the run, and runs are never overwritten. Scanned PDFs with no text are skipped and listed in the dry run and `_rank_run.json`.
 
 A high rank means the text resembles the question. It does not mean the paper is good or that it answers the question.
 
-**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 30 seconds) gave [`runs/2026-10-18_0246_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0246_entanglement-scheduling_rank-local.csv). Its order agrees with Voyage at Spearman 0.71 on full text and 0.72 on abstracts (139 papers), but the two top 10s share only 4 papers. Voyage's top 10 with the place each paper got from the local run:
+**5. Without a Voyage key.** The same 73 PDFs ranked with `--provider local` (model2vec, no API call, 30 seconds) gave [`runs/2026-10-18_0318_entanglement-scheduling_rank-local.csv`](examples/entanglement-scheduling/runs/2026-10-18_0318_entanglement-scheduling_rank-local.csv). Its order agrees with Voyage at Spearman 0.70 on full text and 0.71 on abstracts (139 papers), but the two top 10s share only 5 papers. Voyage's top 10 with the place each paper got from the local run:
 
 | Voyage | Local | Paper |
 | ---: | ---: | --- |
 | 1 | 5 | Ni & Ho (2026), Scheduling concurrent entanglement requests in quantum networks |
 | 2 | 2 | Li et al. (2021), Effective routing design for remote entanglement generation |
 | 3 | 25 | Ni et al. (2025), Entanglement request scheduling using deep Q-network |
-| 4 | 22 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
-| 5 | 6 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
+| 4 | 6 | Abreu et al. (2026), QoS-aware reinforcement learning routing |
+| 5 | 19 | Gu et al. (2023), ESDI: entanglement scheduling and distribution |
 | 6 | 4 | Kumar et al. (2026), Making quantum networks work: routing |
-| 7 | 31 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
-| 8 | 34 | Halder et al. (2024), Optimal routing and end-to-end entanglement distribution |
-| 9 | 19 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
-| 10 | 44 | Tran et al. (2026), Dynamic entanglement packet scheduling |
+| 7 | 51 | Rode et al. (2026), Learning policies for simultaneous entanglement requests |
+| 8 | 8 | Fittipaldi et al. (2023), Linear algebraic framework for dynamic scheduling |
+| 9 | 18 | Fittipaldi et al. (2022), Linear algebraic framework for the quantum internet |
+| 10 | 38 | Tran et al. (2026), Dynamic entanglement packet scheduling |
 
-The local run keeps the papers that share the question's words, but loses several that answer its specific part, scheduling among many users: three scheduling papers drop from the top 4 and top 10 to places 22 to 44, and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 47. Its first place is a general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 22nd. Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
+The local run keeps the papers that share the question's words, but loses several that answer its specific part, scheduling among many users: four scheduling papers drop from the top 10 to places 19 to 51, and Erçetin & Gedik (2026), *Fidelity-age-aware scheduling*, drops from 15 to 46. Its first place is a general survey, Gkelias et al. (2026), *Quantum networking fundamentals*, which Voyage puts 23rd. Static token vectors measure shared vocabulary; Voyage's reranker reads the query and the passage together. Use `local` to get started, and read further down its list than you would with Voyage.
 
 ## Search modes
 

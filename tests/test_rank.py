@@ -465,7 +465,8 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert by['Ocean2023']['abstract_from'] == '' and by['Ocean2023']['abs_fused_rank'] == ''   # no abstract anywhere:
     assert by['Ocean2023']['fused_rank'] != ''                            # unranked on abstracts, ranked on full text
     assert by['Ocean2023']['citation'] == '(n.d.). Seawater links.' and by['Ocean2023']['link'] == 'https://arxiv.org/abs/2205.06300'
-    assert sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank']) == [1, 2, 3]
+    ranks = sorted(int(r['abs_fused_rank']) for r in rows if r['abs_fused_rank'])
+    assert len(ranks) == 3 and ranks[0] == 1                              # ties share a rank
     run = json.load(open(project / 'runs/a_paper-lector_rank_run.json'))
     assert run['abstracts']['abstract_only'] == ['Lovelace2025_SwitchMemorySchedulingWaitingUsers', 'Ng2024_NoAbstractHere']
     assert run['abstracts']['no_abstract'] == ['Ocean2023', 'Ng2024_NoAbstractHere']
@@ -727,3 +728,265 @@ def test_start_pages_votes_once_per_query_skips_overlaps_and_breaks_ties_by_page
     # equal counts ordered by page number, not as strings (p. 9 before p. 10); at most k
     assert rank.start_pages(['p. 10; p. 9; p. 2-3; p. 20']) == 'p. 2-3; p. 9; p. 10'
     assert rank.start_pages(['p. 3']) == 'p. 3' and rank.start_pages(['', None]) == ''
+
+
+FILLER = ' '.join(f'sentence{i} about networks and scheduling of requests.' for i in range(60))
+REFS = lambda n: '\n'.join(f'[{i}] A. Author{i}, Title number {i}, Journal {i}, 20{i % 20:02d}.' for i in range(1, n + 1))
+
+
+def test_bibliography_before_the_middle_is_cut_and_appendices_stay():
+    text = 'Title\nAbstract\n' + FILLER * 3 + '\nReferences\n' + REFS(40) + '\nAppendix A: Proofs\n' + FILLER * 6
+    assert text.index('References') < 0.5 * len(text)                 # a long appendix puts the list in the first half
+    out, cut, _ = rank.clean(text)
+    assert cut and 'Title number 7' not in out and 'Appendix A: Proofs' in out
+    text = 'Title\n' + FILLER * 6 + '\nReferences\n' + REFS(30) + '\n\nA\n\nProof of Theorem 1\n\nWe restate Theorem 1. ' + FILLER * 2
+    out, cut, _ = rank.clean(text)
+    assert cut and 'Title number 7' not in out and 'We restate Theorem 1' in out      # lettered appendix, no heading word
+
+
+def test_running_bibliography_header_and_chapter_bibliographies():
+    entry = '[Aco+{i}] Name Surname{i}. "A title {i}". In: Journal {i} (2024), pp. 1-2.'
+    pages = ''.join('\nBibliography\n' + '\n'.join(entry.format(i=10 * p + k) for k in range(8)) for p in range(6))
+    out, cut, shifts = rank.clean(FILLER * 8 + pages + '\nBibliography\n[@Fit23] P. Fittipaldi. Simulator.\n')
+    assert cut and 'A title 12' not in out and len(shifts) == 1       # one list, though every page repeats its header
+    text = FILLER * 4 + '\nReferences\n' + REFS(20) + '\nChapter 2\nsecond chapter body. ' + FILLER * 4 + '\nReferences\n' + REFS(20)
+    out, cut, shifts = rank.clean(text)
+    assert cut and 'second chapter body' in out and 'Title number 3' not in out and len(shifts) == 2
+    for at, n in shifts:                                               # positions map back to the original text
+        assert out[at:at + 20] == text[at + sum(k for a, k in shifts if a < at) + n:][:20]
+
+
+def test_misplaced_heading_starts_the_cut_at_the_first_entry():
+    gap = 'The success probability of the strategy is given by a closed form expression. ' * 25
+    text = FILLER * 6 + '\nR EFERENCES\n' + gap + '\n' + REFS(30) + '\n'
+    out, cut, _ = rank.clean(text)
+    assert cut and gap.strip() in out and 'Title number 1,' not in out
+
+
+def test_numbered_dated_body_is_not_a_bibliography():
+    lead = 'Introduction and method.\n' * 100
+    events = ('Milestones:\n1. Prototype deployed in 2019 with passive sensing.\n2. Network expanded in 2020 to relay '
+              'nodes.\n3. Scheduler redesigned in 2021 for active sensing.\nConclusion\nOur main result stays.\n')
+    out, cut, _ = rank.clean(lead + events)
+    assert not cut and 'Our main result stays.' in out
+    refs = '\n'.join(f'{i}. Wehner S, Elkouss D ({2000 + i}) Quantum internet part {i}. Science {i}.' for i in range(1, 6))
+    out, cut, _ = rank.clean(lead + 'conclusion stays\n' + refs)            # "Surname AB," authors, no heading
+    assert cut and 'conclusion stays' in out and 'Wehner' not in out
+
+
+def test_ligatures_match_plain_letters():
+    assert rank.bm25_scores(['puriﬁcation raises ﬁdelity', 'unrelated text'], 'purification fidelity')[0] > 0
+    lead = rank.words('Efﬁcient puriﬁcation for high ﬁdelity entanglement distribution J. Doe').split()
+    assert rank.title_cover(rank.words('Efficient purification for high fidelity entanglement distribution'), lead) == 1.0
+
+
+def test_short_abstract_and_the_word_introduction_inside_one():
+    short = 'We study scheduling of stored entangled pairs. Our policy reduces waiting time under noisy quantum memories.'
+    text = 'T\nAbstract\n' + short + '\n1. Introduction\nbody'
+    assert rank.abstract(text) == (short, (11, 11 + len(short) + 1))    # 113 characters, under the old 300 minimum
+    ab = 'We study ' + 'quantum memories ' * 12 + 'since the introduction of cutoffs, a threshold policy is optimal. END.'
+    assert rank.abstract('T\nAbstract\n' + ab + '\n1. Introduction\nbody')[0].endswith('END.')
+
+
+def test_watermark_only_scan_is_skipped(project, offline, monkeypatch, capsys):
+    from conftest import make_pdf
+    make_pdf(project / 'papers/topic/Scan1970.pdf', [['Downloaded from IEEE Xplore. Restrictions apply.', f'{i}'] for i in range(5)])
+    assert rank.windows(project / 'papers/topic/Scan1970.pdf', WordTokenizer())[0] == []
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/w')])
+    run = json.load(open(project / 'runs/w_paper-lector_rank_run.json'))
+    assert [x['id'] for x in run['corpus']['skipped']] == ['Scan1970']
+
+
+def test_uppercase_extension_missing_source_and_download_dir(project, offline, monkeypatch, capsys):
+    from conftest import make_pdf
+    make_pdf(project / 'papers/topic/Upper.PDF', [['Upper case title', 'Abstract', 'stored pairs ' * 30]])
+    known = {'gone': {'pdf': project / 'nowhere.pdf', 'doi': '10.1/g'}}
+    assert 'Upper' in rank.find_pdfs([project / 'papers'], known)
+    assert 'sources key gone' in capsys.readouterr().err
+    cfg = json.loads((project / 'literature.json').read_text())
+    (project / 'literature.json').write_text(json.dumps(dict(cfg, download_dir='downloads')))
+    (project / 'downloads').mkdir()
+    make_pdf(project / 'downloads/New2026.pdf', [['New result', 'Abstract', 'stored pairs ' * 30]])
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/d')])
+    assert 'outside pdf_dirs; ranked too' in capsys.readouterr().err
+    assert 'New2026' in json.load(open(project / 'runs/d_paper-lector_rank_run.json'))['corpus']['ids']
+
+
+def test_versions_parts_and_retitled_records(tmp_path):
+    w = rank.words
+    assert not rank.same_title(w('Optimal policies in repeater chains with cutoffs: Part I'), w('Optimal policies in repeater chains with cutoffs: Part II'))
+    ab = 'We schedule entanglement purification and route flows under fidelity constraints in quantum networks.'
+    pre = {'doi': '10.48550/arxiv.2408.08243', 'title': 'From Entanglement Purification Scheduling to Fidelity-constrained Multi-Flow Routing',
+           'first_author': 'Ziyue Jia', 'year': 2024, 'abstract': ab}
+    pub = dict(pre, doi='10.1109/icnp.1', title='From Entanglement Purification Scheduling to Fidelity-Constrained Entanglement Routing')
+    assert rank.retitled(pre, pub) and not rank.retitled(pre, dict(pub, first_author='Other Person'))
+    assert not rank.retitled(pre, dict(pub, abstract='A different study of satellite links and optical ground stations.'))
+    s = tmp_path / 's.jsonl'
+    s.write_text(''.join(json.dumps(r) + '\n' for r in [pre, pub]))
+    assert len(rank.abstract_corpus([s], [], [], None, [])) == 1
+
+
+def test_repeated_record_fills_the_missing_abstract(tmp_path):
+    s = tmp_path / 's.jsonl'
+    s.write_text(json.dumps({'openalex': 'W1', 'title': 'Quantum scheduling methods', 'abstract': ''}) + '\n'
+                 + json.dumps({'openalex': 'W1', 'doi': '10.1/a', 'title': 'Other', 'abstract': 'The abstract.'}) + '\n')
+    a = rank.abstract_corpus([s], [], [], None, [])
+    assert len(a) == 1 and a[0]['text'] == 'The abstract.' and a[0]['title'] == 'Quantum scheduling methods'
+
+
+def test_record_naming_two_pdfs_goes_to_its_doi_and_logged_copy_found_by_sha(project, capsys):
+    (project / 'sources.csv').write_text('key,pdf_path,doi\npre,,10.48550/arxiv.2205.06300\nprint,,10.1/published\n')
+    cfg = rank.common.load_config(start=project)
+    P = [{'id': k, 'path': str(project / f'{k}.pdf'), 'sha256': k, 'head': '', 'abstract_found': False, 'wins': [i]}
+         for i, k in enumerate(['pre', 'print'])]
+    W = [{'full': {'text': 'unrelated opening'}}] * 2
+    s = project / 's.jsonl'
+    s.write_text(json.dumps({'doi': '10.1/published', 'arxiv': '2205.06300', 'title': 'Q', 'abstract': 'Shared.'}) + '\n')
+    A = {x['id']: x for x in rank.abstract_corpus([s], P, W, cfg, [])}
+    assert A['print']['text'] == 'Shared.' and A['pre']['text'] == '' and 'two versions' in capsys.readouterr().err
+    (project / 'sources.csv').write_text('key,pdf_path,doi\n')
+    (project / 'papers/new').mkdir()
+    (project / 'papers/new/fetch_log.jsonl').write_text(json.dumps({'id': '10.1/published', 'status': 'HAVE',
+                                                                   'file': 'gone.pdf', 'sha256': 'print'}) + '\n')
+    A = {x['id']: x for x in rank.abstract_corpus([s], P, W, rank.common.load_config(start=project), [project / 'papers'])}
+    assert A['print']['text'] == 'Shared.'                            # the log's file is gone; its SHA-256 still ties it
+
+
+def test_embeddings_follow_the_response_index_and_refuse_zero_vectors(offline, monkeypatch):
+    from collections import Counter
+    monkeypatch.setattr(rank, 'call', lambda ep, b: {'data': [{'index': 1, 'embedding': [0., 1.]}, {'index': 0, 'embedding': [1., 0.]}],
+                                                    'usage': {'total_tokens': 2}})
+    got = rank.embed([('alpha', 1), ('beta', 1)], 'document', Counter(), [('s', 0, 'p. 1'), ('s', 1, 'p. 1')])
+    assert np.array_equal(got, np.eye(2))
+    monkeypatch.setattr(rank, 'call', lambda ep, b: {'data': [{'index': 0, 'embedding': [0., 0.]}], 'usage': {'total_tokens': 1}})
+    with pytest.raises(SystemExit, match='zero'):
+        rank.embed([('gamma', 1)], 'document', Counter(), [('s', 2, 'p. 1')])
+
+
+def test_every_text_cell_is_escaped_and_escapes_never_collide(project, offline, monkeypatch):
+    from conftest import make_pdf
+    assert rank.cell('=x') != rank.cell("'=x") and rank.cell("'x") == "''x"
+    make_pdf(project / 'papers/topic/=formula.pdf', [['first distinct body ' * 10]])
+    make_pdf(project / "papers/topic/'=formula.pdf", [['second distinct body ' * 10]])
+    s = project / 's.jsonl'
+    s.write_text(json.dumps({'doi': '10.1/q', 'title': 'LIFO', 'authors': ['=HYPERLINK("x")'], 'abstract': 'A.'}) + '\n')
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/c'), '--abstracts', str(s)])
+    rows = list(csv.DictReader(open(project / 'runs/c_paper-lector_rank.csv')))
+    assert len({r['paper'] for r in rows}) == len(rows)
+    assert all(not v or v[0] not in '=+-@' for r in rows for v in r.values())
+    rank.main(['--out', str(project / 'runs/c2'), '--ids', str(project / 'runs/c_paper-lector_rank.csv')])   # reads back
+
+
+def test_expect_with_no_full_text_paper(project, offline, monkeypatch, capsys):
+    monkeypatch.chdir(project)
+    (project / 'empty').mkdir()
+    (project / 'sources.csv').write_text('key,pdf_path,doi\n')
+    s = project / 's.jsonl'
+    s.write_text(json.dumps({'openalex': 'W1', 'title': 'No PDF', 'abstract': 'A quantum switch study.'}) + '\n')
+    rank.main(['--out', str(project / 'runs/e'), '--dirs', str(project / 'empty'), '--abstracts', str(s), '--expect', 'x'])
+    assert 'sanity check skipped' in capsys.readouterr().out and (project / 'runs/e_paper-lector_rank_run.json').exists()
+
+
+def test_page_labels_after_a_mid_text_cut(project, offline):
+    from conftest import make_pdf
+    p = project / 'chapters.pdf'
+    make_pdf(p, [['chapter one body'] * 30, ['References'] + REFS(20).split('\n'), ['chapter two body'] * 30])
+    wins, *_ = rank.windows(p, WordTokenizer())
+    assert any('two' in w['text'] and w['pages'] == 'p. 3' for w in wins)
+    assert not any('Title number' in w['text'] for w in wins)
+
+
+def test_author_year_bibliography_is_cut_and_its_cited_appendix_stays():
+    refs = '\n'.join(f'Name{i} Surname, Other Author, and Third Person. 20{i % 20:02d}. A title about topic {i}. In '
+                     f'Proceedings of the Annual Meeting, pages {i}-{i + 9}.' for i in range(1, 40))
+    appendix = 'We follow the set-up of (Karpukhin et al., 2020) and use Adam (Kingma and Ba, 2014), as Galley et al. (2018) did. ' * 30
+    out, cut, _ = rank.clean(FILLER * 6 + '\nReferences\n' + refs + '\n' + appendix)
+    assert cut and 'topic 7.' not in out and appendix.strip() in out   # ACL style; in-text citation years are no list
+
+
+def test_abstract_heading_forms_and_ends():
+    ab = 'We study ' + 'stored pairs at a switch ' * 10
+    assert rank.abstract('Title\nA BSTRACT\n' + ab + '\n1 I NTRODUCTION\nbody')[0].startswith('We study')    # ICLR
+    assert rank.abstract('Here we abstract the network as a graph ' + ab + '\n1. Introduction\nbody')[0] is None
+    assert rank.abstract('see ieeexplore.ieee.org/abstract/document/1 ' + ab + '\nI. INTRODUCTION\nbody')[0] is None
+    got = rank.abstract('T\nAbstract—' + ab + '\nIndex Terms—quantum networks, scheduling\nI. INTRODUCTION\nbody')[0]
+    assert got.endswith('switch') and 'Index' not in got
+    long = 'We study ' + 'stored pairs at a quantum switch with memories. ' * 70                     # about 3,400 characters
+    assert rank.abstract('T\nAbstract\n' + long + '\n1. Introduction\nbody')[0] is not None
+
+
+def test_entries_printed_above_the_heading_are_cut_too():
+    above = '\n'.join(f'[{i}] A. Author{i}, Leaked title {i}, Journal {i}, 20{i % 20:02d}.' for i in range(18, 30))
+    out, cut, _ = rank.clean(FILLER * 6 + '\nconclusion stays here.\n' + above + '\nReferences\n' + REFS(17) + '\n')
+    assert cut and 'conclusion stays here.' in out and 'Leaked title' not in out and 'Title number 3' not in out
+
+
+def test_body_between_heading_and_first_entry_stays_and_algorithm_lines_are_no_entry():
+    gap = 'CONCLUSION\nOur top down inventory of design requirements stays in the text.\n' + 'x' * 400 + '\n'
+    out, cut, _ = rank.clean(FILLER * 6 + '\nReferences\n' + gap + REFS(40) + '\n')
+    assert cut and 'Our top down inventory' in out and 'Title number 3' not in out
+    algo = '\n'.join(f'{i}.\nfor each request r do update the queue' for i in range(1, 6))
+    nature = '\n'.join(f'Author{i}, B. Title number {i}. Nature {i}, 1-2 (20{i % 20:02d}).' for i in range(1, 40))
+    out, cut, _ = rank.clean(FILLER * 6 + '\nReferences\n' + 'Theorem 1 holds. ' * 120 + '\n' + algo + '\n' + nature)
+    assert cut and 'for each request r do' in out and 'Title number 3.' not in out
+
+
+def test_lettered_appendix_and_bibliography_styles():
+    acl = '\n'.join(f'Name{i} Surname and Other Person. 20{i % 20:02d}. A title about topic {i}. In Proceedings, '
+                    f'pages {i}-{i + 9}.' for i in range(1, 40))
+    appendix = '\n\nA\n\nModels Set-Up\n\nWe train with Adam as in Sennrich et al.\n(2017) for 2048 steps. ' + FILLER
+    out, cut, _ = rank.clean(FILLER * 6 + '\nReferences\n' + acl + appendix)
+    assert cut and 'topic 7.' not in out and 'Models Set-Up' in out and 'We train with Adam' in out
+    apa = '\n'.join(f'Smith{i} ({2000 + i % 20}). A title {i}. Journal of Things, {i}, 1-9.' for i in range(1, 40))
+    out, cut, _ = rank.clean(FILLER * 6 + '\nReferences\n' + apa + '\n')
+    assert cut and 'A title 7.' not in out                            # "Surname (2020)." is an entry, not a citation
+    plain = '\n'.join(f'{i} L. K. Grover{i}, Phys. Rev. Lett. {i}, 325 (19{90 + i % 9}).' for i in range(1, 30))
+    out, cut, _ = rank.clean(FILLER * 6 + '\n' + plain + '\n')
+    assert cut and 'Grover7' not in out                               # no heading, no bracket or period
+    alpha = '\n'.join(f'[Aco+{i:02d}] Name Surname. "A title {i}". In: Journal (20{i % 20:02d}).' for i in range(1, 40))
+    out, cut, _ = rank.clean(FILLER * 6 + '\nBibliography\n' + alpha + '\n')
+    assert cut and 'A title 7"' not in out
+
+
+def test_a_list_numbered_on_after_an_appendix_page_is_cut_again():
+    first = '\n'.join(f'[{i}] A. Author{i}, Title number {i}, Journal, 20{i % 20:02d}.' for i in range(1, 56))
+    rest = '\n'.join(f'[{i}] A. Author{i}, Title number {i}, Journal, 20{i % 20:02d}.' for i in range(56, 73))
+    out, cut, shifts = rank.clean(FILLER * 6 + '\nReferences\n' + first + '\nAppendix A\nproof text. ' + FILLER + '\n' + rest + '\n')
+    assert cut and len(shifts) == 2 and 'proof text' in out and 'Title number 60' not in out
+
+
+def test_two_pages_of_the_same_text_are_no_scan(tmp_path):
+    from conftest import make_pdf
+    make_pdf(tmp_path / 'Twice.pdf', [['The same substantive text about scheduling.', f'{i}'] for i in (1, 2)])
+    assert rank.windows(tmp_path / 'Twice.pdf', WordTokenizer())[0]
+
+
+def test_quote_prefixed_ids_read_back_to_their_own_pdf(project, offline, monkeypatch):
+    from conftest import make_pdf
+    make_pdf(project / "papers/topic/'paper.pdf", [['first body ' * 10]])
+    make_pdf(project / "papers/topic/''paper.pdf", [['second body ' * 10]])
+    monkeypatch.chdir(project)
+    rank.main(['--out', str(project / 'runs/q')])
+    rank.main(['--out', str(project / 'runs/q2'), '--ids', str(project / 'runs/q_paper-lector_rank.csv')])
+    run = json.load(open(project / 'runs/q2_paper-lector_rank_run.json'))
+    assert {f['id']: f['path'].rsplit('/', 1)[1] for f in run['corpus']['files'] if 'paper' in f['id']} == \
+        {"'paper": "'paper.pdf", "''paper": "''paper.pdf"}
+
+
+def test_merged_record_keeps_doi_first_and_full_author_names(project, tmp_path):
+    (project / 'sources.csv').write_text('key,pdf_path,doi\npre,,10.48550/arxiv.2205.06300\nprint,,10.1/published\n')
+    cfg = rank.common.load_config(start=project)
+    P = [{'id': k, 'path': str(project / f'{k}.pdf'), 'sha256': k, 'head': '', 'abstract_found': False, 'wins': [i]}
+         for i, k in enumerate(['pre', 'print'])]
+    s = tmp_path / 's.jsonl'
+    s.write_text(json.dumps({'arxiv': '2205.06300', 'title': 'Q', 'abstract': ''}) + '\n'
+                 + json.dumps({'arxiv': '2205.06300', 'doi': '10.1/published', 'title': 'Q', 'abstract': 'Shared.'}) + '\n')
+    A = {x['id']: x for x in rank.abstract_corpus([s], P, [{'full': {'text': 'x'}}] * 2, cfg, [])}
+    assert A['print']['text'] == 'Shared.' and A['pre']['text'] == ''
+    ab = 'We schedule entanglement purification and route flows under fidelity constraints in quantum networks.'
+    a = {'title': 'Efficient scheduling of entangled pairs in quantum switch networks', 'first_author': 'Alice Smith', 'year': 2024, 'abstract': ab}
+    b = dict(a, title='Efficient routing of entangled pairs in quantum switch networks', first_author='Bob Smith')
+    assert not rank.retitled(a, b) and rank.retitled(a, dict(b, first_author='Alice Smith'))

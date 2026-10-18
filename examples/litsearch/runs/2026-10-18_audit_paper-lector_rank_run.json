@@ -1,6 +1,6 @@
 {
- "created": "2026-10-17T22:11:05",
- "paper_lector_commit": "6e94ec8",
+ "created": "2026-10-18T03:17:52",
+ "paper_lector_commit": "0635f0b",
  "question": "Which studies should I look into that have explored the task of factuality in abstractive summarization and proposed ways to detect hallucinated content in generated text?",
  "queries": {
   "Q0": {
@@ -43,7 +43,7 @@
  },
  "corpus": {
   "papers": 40,
-  "windows": 491,
+  "windows": 404,
   "ids": [
    "bao2021_2105-02482",
    "bogoychev2021_2101-00421",
@@ -293,14 +293,14 @@
  },
  "expect": "maynez2020_2005-00661,zhou2020_2011-02593,nie2019_P19-1256,pagnoni2021_2104-13346,kryscinski2019_1910-12840",
  "usage": {
-  "embed": 537299,
-  "embed_cached": 0,
-  "rerank": 291440
+  "embed": 35288,
+  "embed_cached": 370,
+  "rerank": 279440
  },
- "estimate": 840486,
+ "estimate": 728549,
  "outputs": {
   "hybrid": {
-   "csv": "runs/litsearch_hybrid.csv",
+   "csv": "runs/2026-10-18_audit_paper-lector_rank.csv",
    "fused_top10": [
     "maynez2020_2005-00661",
     "zhou2020_2011-02593",
@@ -319,11 +319,11 @@
     "kryscinski2019_1910-12840",
     "pagnoni2021_2104-13346",
     "dziri2021_2105-00071",
-    "raunak2021_2104-06683",
     "li2020_2010-05202",
+    "raunak2021_2104-06683",
     "jachim2021_2104-00782",
     "nie2019_P19-1256",
-    "liu2019_1910-09796"
+    "muller2019_1911-03109"
    ]
   }
  }

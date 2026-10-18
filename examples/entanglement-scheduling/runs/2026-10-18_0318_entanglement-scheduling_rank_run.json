@@ -1,6 +1,6 @@
 {
- "created": "2026-10-18T02:46:54",
- "paper_lector_commit": "c768b4c",
+ "created": "2026-10-18T03:19:16",
+ "paper_lector_commit": "0635f0b",
  "question": "Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?",
  "queries": {
   "Q0": {
@@ -63,7 +63,7 @@
  },
  "corpus": {
   "papers": 73,
-  "windows": 1425,
+  "windows": 1414,
   "ids": [
    "Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe",
    "Alavisamani2026_ReFINESchedulingDistillationCodingRate_e6c480",
@@ -507,14 +507,19 @@
    }
   ],
   "skipped": [],
-  "possible_duplicates": []
+  "possible_duplicates": [
+   [
+    "Chung2021_IllinoisExpressQuantumNetworkIEQNET_4125d8",
+    "Chung2022_DesignImplementationIllinoisExpressQuantum_4487bb"
+   ]
+  ]
  },
  "expect": "",
  "usage": {},
- "estimate": 3208788,
+ "estimate": 3190586,
  "outputs": {
   "local": {
-   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/entanglement-scheduling/runs/2026-10-18_0246_entanglement-scheduling_rank-local.csv",
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/entanglement-scheduling/runs/2026-10-18_0318_entanglement-scheduling_rank-local.csv",
    "fused_top10": [
     "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
     "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
@@ -524,7 +529,7 @@
     "Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe",
     "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
     "Fittipaldi2023_LinearAlgebraicFrameworkDynamicScheduling_fb29d4",
-    "Nguyen2022_MultipleEntanglementRoutingFrameworkQuantum_c7e54d",
+    "Skrzypczyk2021_ArchitectureMeetingQualityServiceRequirements_210d96",
     "Shaban2024_SPARQEfficientEntanglementDistributionRouting_405be9"
    ],
    "first_query_top10": [
@@ -532,12 +537,12 @@
     "Fittipaldi2023_LinearAlgebraicFrameworkDynamicScheduling_fb29d4",
     "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
     "Vardoyan2023_QuantumNetworkUtilityMaximization_087691",
-    "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
     "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+    "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
     "Haldar2024_FastReliableEntanglementDistributionQuantum_1e26b0",
     "Shaban2024_SPARQEfficientEntanglementDistributionRouting_405be9",
-    "Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb",
-    "Nguyen2022_MultipleEntanglementRoutingFrameworkQuantum_c7e54d"
+    "Verzotti2023_OptimalQuantumNetworkDecongestionStrategies_74d815",
+    "Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb"
    ]
   }
  },

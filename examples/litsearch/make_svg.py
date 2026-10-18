@@ -2,7 +2,7 @@
 
 Every number in the image comes from the CSV and its run record (_rank_run.json, or _run.json for older runs); titles, authors and gold labels come from papers.json.
 
-  python make_svg.py runs/litsearch_hybrid.csv ../../assets/example-output.svg
+  python make_svg.py runs/2026-10-18_audit_paper-lector_rank.csv ../../assets/example-output.svg
 """
 import csv, json, sys
 from html import escape

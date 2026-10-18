@@ -1,8 +1,8 @@
 """Rank a PDF collection against frozen research-question slots and give a reading order with starting pages.
 
 Method:
-  1. Whole PDF through pdftotext; the bibliography is cut after a References heading or, with none, from the
-     first numbered entry in the second half that more entries follow; appendices and supplementary material stay.
+  1. Whole PDF through pdftotext; every bibliography is cut, from a References heading or, with none, from a
+     numbered list of dated, authored entries, up to where the entries stop; appendices and later chapters stay.
   2. 1,200-token windows with 200-token overlap (Voyage's tokenizer), each labelled with its PDF pages. Windows leave
      out the head of step 4 (the abstract, or the opening 1,000 tokens), which the reranker reads first anyway.
   3. Per paper and query, windows are ranked by Reciprocal Rank Fusion (k = 60) of voyage-4-large cosine
@@ -54,6 +54,8 @@ STOP = set('a an the of for and or in on with to via under by at as is are be be
            'from into over than then which when where while what who how does do can not no '
            've ile bir bu şu için da de olan olarak gibi daha en çok her ise veya ya ki ne'.split())
 KEY = None
+LIGATURES = str.maketrans({'\ufb00': 'ff', '\ufb01': 'fi', '\ufb02': 'fl', '\ufb03': 'ffi', '\ufb04': 'ffl',
+                           '\ufb05': 'st', '\ufb06': 'st'})       # pdftotext keeps a font's ligature glyphs
 
 
 def call(ep, body):
@@ -84,8 +86,11 @@ def embed(items, input_type, usage, srcs):
     for part in batches(todo, lambda x: x[1][1], EMBED_BATCH, MAX_ITEMS):
         r = call('embeddings', {'input': [it[0] for _, it in part], 'model': EMBED, 'input_type': input_type, 'truncation': False})
         usage['embed'] += r['usage']['total_tokens']
-        for (k, _), x in zip(part, r['data']):
-            vec[k] = np.asarray(x['embedding'], np.float32)
+        got = {x.get('index', i): np.asarray(x['embedding'], np.float32) for i, x in enumerate(r['data'])}
+        if sorted(got) != list(range(len(part))) or any(not np.isfinite(v).all() or not np.linalg.norm(v) for v in got.values()):
+            sys.exit('Voyage returned an incomplete, zero or non-finite embedding batch; nothing ranked. Run again')
+        for i, (k, _) in enumerate(part):
+            vec[k] = got[i]
         db.executemany('insert or replace into emb values (?, ?)', [(k, vec[k].tobytes()) for k, _ in part])
         db.commit()
     now = datetime.datetime.now().isoformat(timespec='seconds')      # after the vectors, so every src row has one
@@ -163,6 +168,10 @@ def find_pdfs(dirs, known, ids=None, allow_empty=False):
     """Paper id -> PDF. Papers in the sources table keep their key; every other PDF is named by its file stem.
     A byte-identical copy of a PDF already found is skipped with a note."""
     out = {k: v['pdf'] for k, v in known.items() if v['pdf'] and v['pdf'].is_file()}
+    for k, v in known.items():
+        if v['pdf'] and k not in out and (not ids or k in ids):
+            print(f'note: sources key {k}: {v["pdf"]} not found; a copy in the PDF folders is ranked under its file '
+                  f'name, without the sources DOI', file=sys.stderr)
     taken = {p.resolve() for p in out.values()}
     seen = {}
     for k, p in list(out.items()):
@@ -175,7 +184,7 @@ def find_pdfs(dirs, known, ids=None, allow_empty=False):
     if gone:
         sys.exit(f'PDF folder not found: {", ".join(gone)}. Check "pdf_dirs" in the config or --dirs')
     for d in dirs:
-        for p in sorted(Path(d).rglob('*.pdf')):
+        for p in sorted(Path(d).rglob('*.pdf', case_sensitive=False)):
             if p.resolve() in taken:
                 continue
             d = digest(p)
@@ -188,8 +197,9 @@ def find_pdfs(dirs, known, ids=None, allow_empty=False):
                 print(f'note: {p} has the same name as {out[p.stem]}; ranked as {pid}', file=sys.stderr)
             out[pid] = p; taken.add(p.resolve()); seen[d] = pid
     if ids:
-        # An id read back from our own CSV may carry the ' that cell() put in front of it.
-        ids = [i[1:] if i not in out and i[:1] == "'" and cell(i[1:]) == i and i[1:] in out else i for i in ids]
+        # An id read back from our own CSV carries the ' that cell() put in front of it: decoded first, since cell()
+        # is one to one ("''p" is the id "'p"); an id written by hand without it is taken as it is.
+        ids = [i[1:] if i[:1] == "'" and cell(i[1:]) == i and i[1:] in out else i for i in ids]
         missing = [i for i in ids if i not in out]
         if missing:
             sys.exit(f'no PDF for {missing}')
@@ -207,16 +217,32 @@ BIB = (r'r ?eferences|b ?ibliography|kaynaklar|kaynakça|literatur|literaturverz
        r'|библиография|список использованных источников')
 APPENDIX = (r'a ?ppendix\b|a ?ppendices\b|s ?upplement(?:al|ary)\s+(?:materials?|information|notes?|methods)\b|ekler\b|ek\s*[A-Z0-9]?\s*$|anhang\b|annexes?\b'
             r'|ap[ée]ndices?\b|anexos?\b|appendice\b|ap[êe]ndices?\b|приложени[ея]\b')
-ABSTRACT = r'abstract|özet|öz|zusammenfassung|kurzfassung|r[ée]sum[ée]|resumen|riassunto|resumo|аннотация|реферат'
+ABSTRACT = r'a ?bstract|özet|öz|zusammenfassung|kurzfassung|r[ée]sum[ée]|resumen|riassunto|resumo|аннотация|реферат'
 INTRO = (r'i ?ntroduction|g[iİ]r[iİ][şŞ]|einleitung|einführung|introducci[oó]n|introduzione|introdu[çc][ãa]o'
          r'|введение')
-CITES = [r'(?m)^\s*\[\d+\]', r'\(\d{4}\)|, \d{4}\.', r'(?m)^\s*\d{1,3}\.\s+\S.*\b(?:19|20)\d{2}\b']
+KEYWORDS = r'index terms|key ?words|ccs concepts|anahtar kelimeler|schlüsselwörter|mots[- ]cl[ée]s|palabras clave'
+CITES = [r'(?m)^\s*\[\d+\]', r'\(\d{4}\)|, \d{4}\.', r'(?m)^\s*\d{1,3}\.\s+\S.*\b(?:19|20)\d{2}\b',
+         r'(?m)(?:^|\.\s)(?:19|20)\d{2}[a-z]?\.(?:\s|$)',     # ACL style, "and C. Manning. 2015. Title"
+         r'(?m)^\s*\[[A-Za-z+@][\w+@]*\d{2}[a-z]?\]']           # biblatex alphabetic keys, "[Aco+24]"
+
+
+Y = r'(?:19\d{2}|20[0-3]\d)'                                  # a publication year; table values like 2048 are not
+YEAR = re.compile(rf'\b{Y}\b')
+AUTHOR = re.compile(rf'(?<!\w)[A-ZА-ЯÀ-Ý]\.|\b[A-Z][\w\'-]+ [A-Z]{{1,3}}(?:,| \()|\({Y}[a-z]?\)'
+                    r'|(?i:\bet al\b|\bdoi\b|arxiv|\bvol\.|\bpp\.|\bproc\.)')   # "A. Author", "Author AB,", "(2019)"
+IN_TEXT = re.compile(rf'\([^()\n]{{0,80}}?(?:et al\.?|&|\band\b|,)[^()\n]{{0,80}}?\b{Y}[a-z]?[^()\n]{{0,40}}\)'
+                     rf'|\b[A-Z][\w-]+(?: et al\.?)?\s+\({Y}[a-z]?\)(?!\.)')   # "(Liu et al., 2020a)", "Galley et al. (2018)"
+FIRST_ENTRY = re.compile(r'(?m)^[ \t]*(?:\[1\]|1\.|1(?=[ \t]+[A-Z]\.))\s')
+LETTERED = re.compile(r'(?m)^[ \t]*[A-H]\.?[ \t]*\n(?:[ \t]*\n)*[ \t]*[A-Z][\w-]*(?:[ \t]+[\w-]+){0,7}[ \t]*$'
+                      r'|^[ \t]*[A-H](?:\.[ \t]*|[ \t]+)[A-Z][\w-]*(?:[ \t]+[\w-]+){0,7}[ \t]*$')   # "A\n\nProof of Theorem 1"
+BIB_BLOCK, BIB_YEARS = 1500, 3        # a bibliography holds a year every few lines; body text, a proof or a table rarely
 
 
 def numbered_refs(tail):
-    """True when tail opens a reference list with no heading: entries numbered 1, 2, 3, ... in order, as "[n]" or
-    "n.", at least 3 of them, and nearly every entry holds a year. Numbered body paragraphs or lists have no years."""
-    for pat in (r'(?m)^\s*\[(\d{1,3})\]\s', r'(?m)^\s*(\d{1,3})\.\s'):
+    """True when tail opens a reference list with no heading: entries numbered 1, 2, 3, ... in order, as "[n]", "n."
+    or "n A." (pdftotext dropped the bracket), at least 3 of them, nearly every entry holds a year and most name an
+    author (an initial, "et al.") or a venue. Numbered body paragraphs or lists, dated ones too, have no such entries."""
+    for pat in (r'(?m)^\s*\[(\d{1,3})\]\s', r'(?m)^\s*(\d{1,3})\.\s', r'(?m)^\s*(\d{1,3})\s+(?=[A-Z]\.)'):
         ms = list(re.finditer(pat, tail))
         n = 0
         while n < len(ms) and int(ms[n].group(1)) == n + 1:
@@ -224,35 +250,136 @@ def numbered_refs(tail):
         if n < 3:
             continue
         ends = [m.start() for m in ms[1:n]] + [ms[n].start() if n < len(ms) else len(tail)]
-        dated = sum(bool(re.search(r'\b(?:1[89]|20)\d{2}\b', tail[m.start():e])) for m, e in zip(ms[:n], ends))
-        if dated >= max(3, 0.8 * n):
+        entries = [tail[m.end():e] for m, e in zip(ms[:n], ends)]
+        dated = sum(bool(YEAR.search(x)) for x in entries)
+        named = sum(bool(AUTHOR.search(x)) for x in entries)
+        if dated >= max(3, 0.8 * n) and named >= 0.6 * n:
             return True
     return False
 
 
-def clean(text):
-    """Cut the bibliography if a References heading (in any language in BIB) in the second half is followed by
-    citation entries; with no such heading (APS and Nature styles print none), cut from the first entry "[1]" or
-    "1. Author ... year" in the second half that is followed by more entries. Keep appendices."""
-    heads = [m for m in re.finditer(rf'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?({BIB})\s*:?\s*$', text, re.I)
-             if m.start() > len(text) * 0.5]
-    cites = lambda at: any(len(re.findall(c, text[at:at + 5000])) >= 3 for c in CITES)
-    start = heads[-1].start() if heads and cites(heads[-1].start()) else None
-    if start is None:
-        start = next((m.start() for m in re.finditer(r'(?m)^\s*(?:\[1\]|1\.)\s', text)
-                      if m.start() > len(text) * 0.5 and numbered_refs(text[m.start():m.start() + 6000])), None)
-    if start is None:
-        return text, False, None
+def masked(text, a, b):
+    """text[a:b] with in-text citations blanked out, positions kept."""
+    return IN_TEXT.sub(lambda m: ' ' * len(m.group()), text[a:b])
+
+
+def dense(text, a, stop):
+    """True when text[a:a + BIB_BLOCK] (cut at stop) holds a year every BIB_BLOCK / BIB_YEARS characters or more,
+    leaving out the years of in-text citations (an appendix of an author-year paper cites as densely as a list)."""
+    n = min(BIB_BLOCK, stop - a)
+    return n > 0 and len(YEAR.findall(masked(text, a, a + n))) >= BIB_YEARS * n / BIB_BLOCK
+
+
+def first_entries(text, a, b):
+    """Starts of the entries "[1]", "1." or "1 A." between a and b that read like a reference (an author or venue in
+    the next 200 characters), not line 1 of an algorithm or a numbered step."""
+    return [m.start() for m in FIRST_ENTRY.finditer(text, a, b) if AUTHOR.search(text, m.end(), m.end() + 200)]
+
+
+def bib_start(text, head):
+    """Where the entries under a References heading begin: at its entry "[1]" when one follows more than 300 and
+    less than BIB_BLOCK characters on (pdftotext left a column of body text between them), else right at the heading; or, when
+    pdftotext put the heading away from the list (two-column pages), where the first dense stretch within 4,500
+    characters starts: at its entry "[1]" if one comes before it, else at the first of the dated lines that lead into
+    it. None if no such stretch."""
+    for a in range(head, min(head + 3 * BIB_BLOCK + 1, len(text)), BIB_BLOCK):
+        if dense(text, a, len(text)):
+            if a == head:
+                first = first_entries(text, head, head + BIB_BLOCK)
+                return first[0] if first and first[0] - head > 300 else head
+            first = first_entries(text, head, a)
+            if first:
+                return first[-1]
+            s = YEAR.search(text, a).start()
+            while s - 400 > head and YEAR.search(text, s - 400, s):
+                s -= 400
+            return text.rfind('\n', 0, s) + 1
+    return None
+
+
+def walk_back(text, s, floor):
+    """Entries pdftotext printed before the list's start (a column that comes out above its References heading): s
+    moves back over 600-character stretches that each hold 2 or more years (in-text citations aside), at most 6,000
+    characters and never before floor."""
+    lim = max(floor, s - 6000)
+    while s - 600 >= lim:
+        ys = [m.start() for m in YEAR.finditer(masked(text, s - 600, s))]
+        if len(ys) < 2:
+            break
+        s = text.rfind('\n', 0, s - 600 + ys[0]) + 1
+    return s
+
+
+def bib_end(text, start):
+    """Where the reference list that starts at start ends: at an appendix heading (the word, or a letter and a short
+    title, "A\\n\\nProof of Theorem 1", that thin text follows), or where the entries stop, that is the first stretch
+    of BIB_BLOCK characters with fewer than BIB_YEARS years (one such stretch between two dense ones is a gap inside the
+    list). The end falls just after that stretch's last dated line (in-text citations aside)."""
     app = re.search(rf'(?m)^\s*(?:[A-Z]\.?\s*)?({APPENDIX})', text[start:], re.I)
-    if not app:
-        return text[:start], True, None
-    return text[:start] + text[start + app.start():], True, (start, app.start())
+    stop = start + app.start() if app else len(text)
+    let = next((m.start() for m in LETTERED.finditer(text, start, stop) if not dense(text, m.start(), len(text))), None)
+    stop = let if let is not None else stop
+    a = start
+    while a < stop and (dense(text, a, stop) or (a + BIB_BLOCK < stop and dense(text, a + BIB_BLOCK, stop))):
+        a += BIB_BLOCK
+    if a >= stop:
+        return stop
+    b = max(start, a - BIB_BLOCK)                         # the last dense stretch and the first thin one
+    last = [b + m.end() for m in YEAR.finditer(masked(text, b, min(a + BIB_BLOCK, stop)))]
+    if not last:
+        return a
+    nl = text.find('\n', last[-1])
+    return min(stop, nl + 1 if nl >= 0 else stop)
+
+
+def clean(text):
+    """Cut every bibliography: from a References heading (in any language in BIB) followed by citation entries, or,
+    with no heading (APS and Nature styles print none), from an entry "[1]", "1." or "1 A." past the first fifth that
+    more dated, authored entries follow. A cut also takes the entries pdftotext printed just above its heading
+    (walk_back), ends where the entries stop (bib_end), and a list numbered on after an appendix page ("[56]" after
+    "[55]") is cut again; appendices, lettered ones too, and the chapters after a chapter's own bibliography stay.
+    Returns (text, cut, shifts): shifts lists (position in the returned text, characters removed there) for mapping
+    positions back to the original."""
+    cites = lambda at: any(len(re.findall(c, text[at:at + 5000])) >= 3 for c in CITES)
+    heads = [bib_start(text, m.start()) for m in
+             re.finditer(rf'(?m)^\s*(?:[IVX]+\.\s*|\d+\.?\s*)?({BIB})\s*:?\s*$', text, re.I) if cites(m.start())]
+    starts = sorted((s, True) for s in heads if s is not None)         # (start, may take entries printed above it)
+    if not starts:
+        starts = [(m, False) for m in first_entries(text, int(len(text) * 0.2), len(text))
+                  if numbered_refs(text[m:m + 6000])][:1]
+    spans = []
+    while starts:
+        s, headed = starts.pop(0)
+        if spans and s < spans[-1][1]:
+            continue                                  # a running "Bibliography" header inside a list already cut
+        if headed:
+            s = walk_back(text, s, spans[-1][1] if spans else 0)
+        e = bib_end(text, s)
+        if e <= s:
+            continue
+        spans.append((s, e))
+        nums = [int(x) for x in re.findall(r'(?m)^\s*\[(\d{1,3})\]', text[s:e])]
+        more = re.compile(rf'(?m)^\s*\[{max(nums) + 1}\]\s').search(text, e) if nums else None
+        if more and dense(text, more.start(), len(text)):
+            starts = sorted(starts + [(more.start(), False)])
+    if not spans:
+        return text, False, []
+    out, shifts, prev, removed = [], [], 0, 0
+    for s, e in spans:
+        out.append(text[prev:s])
+        removed += e - s
+        shifts.append((s - (removed - (e - s)), e - s))
+        prev = e
+    out.append(text[prev:])
+    return ''.join(out), True, shifts
 
 
 def abstract(text):
-    """The abstract and its character span in text, or (None, None)."""
-    m = re.search(rf'\b(?:{ABSTRACT})\b\W{{0,3}}(.{{300,3000}}?)(?=\b(?:I\.|1\.?)?\s*(?:{INTRO})\b)',
-                  text[:15000], re.I | re.S)
+    """The abstract and its character span in text, or (None, None): the text after an Abstract heading at the start
+    of a line, up to an Introduction heading or an Index Terms / Keywords / CCS Concepts line, 100 to 4,000
+    characters."""
+    m = re.search(rf'(?m:^)[ \t]*(?:{ABSTRACT})\b\W{{0,3}}(.{{100,4000}}?)'
+                  rf'(?=(?m:^)[ \t]*(?:(?:I\.|1\.?)?\s*(?:{INTRO})\b|(?:{KEYWORDS})\b))', text[:15000], re.I | re.S)
     return (m.group(1).strip(), m.span(1)) if m else (None, None)
 
 
@@ -269,20 +396,33 @@ def pdf_pages(path):
         raise ExtractError(f'pdftotext took more than {PDFTOTEXT_SECONDS} s')
     if r.returncode:
         raise ExtractError(f'pdftotext failed (exit {r.returncode}): {r.stderr.strip()[:200]}')
-    pages = r.stdout.split('\f')
+    pages = r.stdout.translate(LIGATURES).split('\f')
     if len(pages) > 1 and not pages[-1].strip():
         pages.pop()                      # pdftotext ends every page with a form feed, so the last piece is empty
     return pages
 
 
+def text_layer_only_repeats(pages):
+    """True for a PDF of three or more pages whose text, past the lines every page repeats (a publisher's watermark
+    or running header), holds fewer than 3 distinct words (page numbers not counted): a scan with no real text layer."""
+    lines = [{l.strip() for l in p.splitlines() if l.strip()} for p in pages]
+    if len(lines) < 3:
+        return False
+    same = set.intersection(*lines)
+    rest = {w for ls in lines for l in ls - same for w in re.findall(r'[^\W\d_]\w*', lower(l))}
+    return len(rest) < 3
+
+
 def windows(path, tok):
     pages = pdf_pages(path)
+    if text_layer_only_repeats(pages):
+        return [], '', False, False, 0
     starts, text = [], ''
     for p in pages:
         starts.append(len(text)); text += re.sub(r'[ \t]+', ' ', p) + '\n'
-    body, cut, shift = clean(text)
+    body, cut, shifts = clean(text)
     enc = tok.encode(body, add_special_tokens=False)
-    orig = lambda c: c + shift[1] if shift and c >= shift[0] else c
+    orig = lambda c: c + sum(n for at, n in shifts if c >= at)
     page_of = lambda c: sum(1 for s in starts if s <= orig(c))
     ab, ab_span = abstract(body)
     head = ab if ab else tok.decode(enc.ids[:HEAD])
@@ -326,7 +466,7 @@ def near_duplicates(P, threshold=0.8):
 
 def lower(s):
     """Lowercase that keeps Turkish dotted capital I as one letter (plain str.lower adds a combining dot)."""
-    return s.replace('İ', 'i').lower()
+    return s.replace('İ', 'i').translate(LIGATURES).lower()
 
 
 def bm25_scores(docs, query, k1=1.2, b=0.75):
@@ -378,8 +518,9 @@ def sha(s):
 
 
 def cell(s):
-    """A paper id safe to open in a spreadsheet: a leading = + - @ (a formula there) gets a ' in front."""
-    return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r') else s
+    """A text cell safe to open in a spreadsheet: a leading = + - @ (a formula there) gets a ' in front, and so does a
+    leading ' (which a spreadsheet hides), so two different texts never give the same cell."""
+    return "'" + s if s[:1] in ('=', '+', '-', '@', '\t', '\r', "'") else s
 
 
 def unique_pages(s):
@@ -427,7 +568,7 @@ def rid(x):
 
 
 def words(s):
-    return ' '.join(re.findall(r'\w+', (s or '').lower()))
+    return ' '.join(re.findall(r'\w+', (s or '').translate(LIGATURES).lower()))
 
 
 TITLE_STOP = {'a', 'an', 'the', 'of', 'for', 'and', 'or', 'in', 'on', 'with', 'to', 'via', 'under', 'by', 'at', 'from',
@@ -438,7 +579,25 @@ def same_title(a, b):
     """Two versions of one paper: normalised titles at least 95% alike letter by letter ("Fidelity-Guarantee" and
     "Fidelity-Guaranteed"); different papers with near titles stay apart (about 87% for those seen so far)."""
     import difflib
+    num = lambda s: {w for w in s.split() if re.fullmatch(r'\d+|x{0,3}(?:ix|iv|v?i{0,3})', w)}
+    if num(a) != num(b):
+        return False                                      # "Part I" and "Part II": different papers
     return difflib.SequenceMatcher(None, a, b, autojunk=False).ratio() >= 0.95
+
+
+def retitled(r, h):
+    """Records r and h are one paper retitled between preprint and print: the same first author (full name), years
+    at most one apart, titles at least 85% alike with the same numbers, and abstracts sharing 80% of their words."""
+    import difflib
+    if not r or not h:
+        return False
+    sur = lambda x: words(x.get('first_author') or (x.get('authors') or [''])[0]).split()
+    ab = lambda x: {w for w in re.findall(r'[^\W\d_]{4,}', lower(x.get('abstract') or '')) if w not in STOP}
+    ta, tb, aa, bb = words(r.get('title')), words(h.get('title')), ab(r), ab(h)
+    num = lambda s: {w for w in s.split() if re.fullmatch(r'\d+|x{0,3}(?:ix|iv|v?i{0,3})', w)}
+    return bool(sur(r)) and sur(r) == sur(h) and r.get('year') and h.get('year') and abs(r['year'] - h['year']) <= 1 \
+        and num(ta) == num(tb) and difflib.SequenceMatcher(None, ta, tb, autojunk=False).ratio() >= 0.85 \
+        and bool(aa) and bool(bb) and len(aa & bb) / len(aa | bb) >= 0.8
 
 
 def title_cover(title, lead):
@@ -491,32 +650,41 @@ def abstract_corpus(paths, P, W, cfg, dirs):
     """Papers for the abstract order: every PDF paper (its search record's abstract, else the abstract read from the
     PDF) and every search record with no PDF (abstract_only). A record belongs to a PDF through the sources table's
     DOI, an OK line in fetch_log.jsonl, or its title on the PDF's first page."""
-    recs, seen = [], set()
+    recs, seen = [], {}                                  # seen: normalised id -> index in recs
     for path in paths:
         for n, line in enumerate(open(path, encoding='utf-8'), 1):
             if not line.strip():
                 continue
             r = json.loads(line)
-            ids = {i for i in (rid(r.get('doi')), rid(r.get('openalex')), rid(r.get('arxiv'))) if i}
+            ids = list(dict.fromkeys(i for i in (rid(r.get('doi')), rid(r.get('arxiv')), rid(r.get('openalex'))) if i))
             if not ids:
                 print(f'note: {path} line {n}: no doi, arxiv or openalex id ({r.get("title")}); left out', file=sys.stderr)
                 continue
-            if not ids & seen:
-                recs.append((r, ids))
-            seen |= ids
+            k = next((seen[i] for i in ids if i in seen), None)
+            if k is None:
+                k = len(recs); recs.append((dict(r), ids))
+            else:                                         # the same paper again: the first record's fields win, the
+                held, held_ids = recs[k]                  # later one fills the empty ones (an abstract, a DOI)
+                held.update({f: v for f, v in r.items() if v not in (None, '', []) and held.get(f) in (None, '', [])})
+                held_ids[:] = list(dict.fromkeys([i for i in (rid(held.get('doi')), rid(held.get('arxiv')),
+                                                              rid(held.get('openalex'))) if i] + held_ids + ids))
+            for i in ids:
+                seen.setdefault(i, k)
     sel = {p['id'] for p in P}
     owner = {}                                            # normalised id -> PDF paper id (only papers in this run)
     for key, v in common.sources(cfg).items():
         if key in sel and v['doi'] and rid(v['doi']):
             owner[rid(v['doi'])] = key
     by_path = {Path(p['path']).resolve(): p for p in P}
+    by_sha = {p['sha256']: p for p in P}
     logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
             for f in Path(d).rglob('fetch_log.jsonl')}
     for f in sorted(logs):
         for line in open(f, encoding='utf-8'):
             e = json.loads(line)
             p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
-            if e.get('status', 'OK') == 'OK' and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
+            p = p or by_sha.get(e.get('sha256'))          # a byte-identical copy ranked in the logged file's place
+            if e.get('status', 'OK') in ('OK', 'HAVE') and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
                 owner[rid(e['id'])] = p['id']             # the logged file, in the log's own folder, unchanged
     first = {p['id']: words(W[p['wins'][0]]['full']['text']).split()[:40] for p in P}    # title and authors
 
@@ -533,7 +701,11 @@ def abstract_corpus(paths, P, W, cfg, dirs):
                    'from': 'pdf' if p['abstract_found'] else '', 'rec': None} for p in P}
     taken, left = set(), []
     for r, ids in recs:                                   # ids first, so a title never takes a paper a DOI owns
-        pid = next((owner[i] for i in ids if i in owner), None)
+        pids = list(dict.fromkeys(owner[i] for i in ids if i in owner))   # by the record's DOI, then arXiv, then OpenAlex
+        if len(pids) > 1:
+            print(f'note: {r.get("doi") or r.get("openalex")} names {" and ".join(pids)} (two versions); its abstract '
+                  f'goes to {pids[0]}, the one its {"DOI" if rid(r.get("doi")) in owner else "first id"} names', file=sys.stderr)
+        pid = pids[0] if pids else None
         if pid is None:
             left.append(r); continue
         if pid not in taken:
@@ -542,10 +714,10 @@ def abstract_corpus(paths, P, W, cfg, dirs):
             if r.get('abstract'):
                 A[pid].update(text=r['abstract'], **{'from': 'search'})
         # else: a second record with the same id as a paper already matched
-    same = {words(A[k]['title']): k for k in taken if A[k]['title']}   # titles already held, word for word
+    same = {words(A[k]['title']): k for k in sorted(taken) if A[k]['title']}   # titles already held, word for word
     for r in left:
         t = words(r.get('title'))
-        twin = next((k for k in same if len(t.split()) >= 4 and same_title(t, k)), None)
+        twin = next((k for k in same if len(t.split()) >= 4 and (same_title(t, k) or retitled(r, A[same[k]]['rec']))), None)
         if twin is not None:
             print(f'note: {r.get("doi") or r.get("openalex")} has the title of {same[twin]} (another version); '
                   f'counted once', file=sys.stderr)
@@ -684,7 +856,10 @@ def main(argv=None):
         if variants != ['hybrid']:
             sys.exit('--variants applies to the voyage provider only')
         variants = ['local']
-    dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else cfg['pdf_dirs']
+    dirs = [Path(d) for d in a.dirs.split(',')] if a.dirs else list(cfg['pdf_dirs'])
+    if not a.dirs and cfg['download_dir'].is_dir() and not any(cfg['download_dir'].resolve().is_relative_to(Path(d).resolve()) for d in dirs):
+        dirs.append(cfg['download_dir'])         # fetch_pdf.py saves there; not ranking it would drop papers unseen
+        print(f'note: download_dir {cfg["download_dir"]} is outside pdf_dirs; ranked too', file=sys.stderr)
     ids, want_sha = read_ids(a.ids) if a.ids else (None, {})
     outs = [Path(run_name(a.out, a.name))] + [Path(csv_name(a.out, a.name, v)) for v in variants]
     lock = Path(run_name(a.out, a.name, 'lock'))
@@ -746,7 +921,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
     AR = [x for x in A if x['text']]
     byid = {p['id']: p for p in P}
     for x in A:
-        x['doc'] = 'Abstract: ' + (x['title'] + '. ' if x['from'] == 'search' and x['title'] else '') + x['text']
+        x['doc'] = 'Abstract: ' + x['text']           # no title: a PDF-only paper has none to add
         if x['source'] == 'full_text' and x['from'] == 'search':
             p = byid[x['id']]
             # The text the windows left out is no longer the head: the PDF's opening, or a PDF abstract that the
@@ -877,7 +1052,7 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                 + ['abstract_from']
         lead = ['fused_rank'] + ['abs_fused_rank'] * bool(a.abstracts) + ['citation', 'link', 'cited_by', 'cited_pct', 'start_pages']
         head = lead + [h for h in head if h not in lead]          # reading columns first, the rest in their old order
-        val = lambda h, v: cell(v) if h == 'paper' else v
+        val = lambda h, v: cell(v) if isinstance(v, str) else v
         known = common.sources(cfg)
         info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], source=x['source'],
                               link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec']),
@@ -896,7 +1071,9 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
                 w.writerow([val(h, dict(info[x['id']], paper=x['id']).get(h)) for h in head])
         outputs[variant] = {'csv': str(path), 'fused_top10': [r['paper'] for r in order[:10]], 'first_query_top10': sanity}
         print(f'[{variant}] fused top 10: ' + ', '.join(r['paper'] for r in order[:10]))
-        if a.expect:
+        if a.expect and sanity is None:
+            print(f'[{variant}] sanity check skipped: no paper ranked on full text')
+        elif a.expect:
             exp = [k for k in a.expect.split(',') if k]
             print(f'[{variant}] sanity check: {sum(k in sanity for k in exp)} of {len(exp)} expected papers in '
                   f'{next(iter(Q))} top 10; missing: {[k for k in exp if k not in sanity]}')

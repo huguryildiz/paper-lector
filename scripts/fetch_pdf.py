@@ -3,8 +3,10 @@
 Order tried: arXiv, then every OpenAlex location that lists a pdf_url.
 A file is kept only if it starts with %PDF. Publisher pages that answer 403
 are reported as MANUAL with their landing URL: ask a person to download them.
-Existing files are never overwritten. A DOI already in the sources table counts as held, and a download that is
-byte-identical to a PDF already in the folders is not saved. Only http(s) URLs on public addresses are fetched (every
+When no URL could be reached at all (network down, DNS, timeouts), the paper is an ERROR to retry, not MANUAL.
+Existing files are never overwritten. A DOI already in the sources table counts as held when its PDF is there, and a
+download that is byte-identical to a PDF already in the folders is not saved (fetch_log.jsonl gets a HAVE line tying
+the id to that PDF). Only http(s) URLs on public addresses are fetched (every
 redirect is checked too), at most 100 MB and 5 minutes per file. Each saved PDF gets a line in fetch_log.jsonl in the
 download folder (status OK: id, URL, file and SHA-256), and so does each MANUAL paper (id, title, landing URL).
 Exit status 1 if any paper was not obtained or skipped.
@@ -123,7 +125,8 @@ def save(out, data):
 
 
 def log_line(dest, rec):
-    """Append one record to fetch_log.jsonl in the download folder: OK for a saved PDF, MANUAL for one to get by hand."""
+    """Append one record to fetch_log.jsonl in the download folder: OK for a saved PDF, HAVE for a download identical
+    to a PDF already held (file: that PDF, relative to the folder), MANUAL for one to get by hand."""
     rec['fetched'] = datetime.datetime.now().isoformat(timespec='seconds')
     with open(dest / 'fetch_log.jsonl', 'a', encoding='utf-8') as log:
         log.write(json.dumps(rec) + '\n')
@@ -153,7 +156,12 @@ def main(argv=None):
     dest = Path(a.dest) if a.dest else cfg['download_dir']
     dest.mkdir(parents=True, exist_ok=True)
     roots = [dest] + ([d for d in cfg['pdf_dirs'] if d != dest] if cfg else [])
-    held = {v['doi']: k for k, v in common.sources(cfg).items() if v['doi']}
+    held = {}
+    for k, v in common.sources(cfg).items():
+        if v['doi'] and v['pdf'] and v['pdf'].is_file():
+            held[v['doi']] = k
+        elif v['doi'] and v['pdf']:
+            print(f'NOTE    sources key {k}: {v["pdf"]} not found; fetching its DOI again', file=sys.stderr)
     digests, count = None, {'OK': 0, 'HAVE': 0, 'MANUAL': 0, 'ERROR': 0, 'SKIP': skips}
     for ident in ids:
         doi = common.doi_of(ident)
@@ -171,16 +179,21 @@ def main(argv=None):
         have = next((h for r in roots for h in r.rglob(out.name)), None)
         if have:
             print(f'HAVE    {ident} -> {have}'); count['HAVE'] += 1; continue
-        for url in candidates(ident, w):
+        urls, answered = candidates(ident, w), False       # answered: a server replied (an HTTP error, not a PDF)
+        for url in urls:
             try:
                 data = fetch(url)
             except Exception as e:
+                answered = answered or not isinstance(e, OSError) or isinstance(e, urllib.error.HTTPError)
                 print(f'  fail  {url}: {e}', file=sys.stderr); continue
+            answered = True
             if data:
                 if digests is None:
-                    digests = {common.sha256_file(h): h for r in roots for h in r.rglob('*.pdf')}
+                    digests = {common.sha256_file(h): h for r in roots for h in r.rglob('*.pdf', case_sensitive=False)}
                 d = hashlib.sha256(data).hexdigest()
                 if d in digests:
+                    log_line(dest, {'id': ident, 'status': 'HAVE', 'url': url, 'file': os.path.relpath(digests[d], dest),
+                                    'sha256': d})
                     print(f'HAVE    {ident} -> {digests[d]} (same file)'); count['HAVE'] += 1; break
                 if not save(out, data):
                     print(f'HAVE    {ident} -> {out}'); count['HAVE'] += 1; break
@@ -191,6 +204,8 @@ def main(argv=None):
         else:
             if failed:
                 print(f'ERROR   {ident}: OpenAlex lookup failed ({failed})'); count['ERROR'] += 1; continue
+            if urls and not answered:                       # every URL failed on the network: try again later
+                print(f'ERROR   {ident}: no PDF URL could be reached (network)'); count['ERROR'] += 1; continue
             land = ((w or {}).get('primary_location') or {}).get('landing_page_url') or (f'https://doi.org/{doi}' if doi else ident)
             log_line(dest, {'id': ident, 'status': 'MANUAL', 'title': (w or {}).get('display_name'), 'url': land})
             print(f'MANUAL  {ident}: {land}'); count['MANUAL'] += 1

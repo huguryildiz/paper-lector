@@ -122,7 +122,10 @@ def test_duplicate_source_keys_are_refused(project):
     ('10.48550/arxiv.2205.06300', ('arxiv', '2205.06300')),
     ('10.48550/arXiv.2205.06300', ('arxiv', '2205.06300')),
     ('arXiv:2205.06300', ('arxiv', '2205.06300')),
-    ('https://arxiv.org/abs/2205.06300v2', ('arxiv', '2205.06300v2')),
+    ('https://arxiv.org/abs/2205.06300v2', ('arxiv', '2205.06300')),          # arXiv DOIs carry no version
+    ('2105.02482v3', ('arxiv', '2105.02482')),
+    ('https://www.doi.org/10.1109/ABC.1', ('doi', '10.1109/abc.1')),
+    ('https://doi.org/10.1109/ABC.1?utm=x#top', ('doi', '10.1109/abc.1')),
     ('https://openalex.org/W123', ('openalex', 'W123')),
     ('W123', ('openalex', 'W123')),
 ])
@@ -140,3 +143,14 @@ def test_retry_covers_cut_off_body(monkeypatch):
         return 'ok'
     monkeypatch.setattr(common.time, 'sleep', lambda s: None)
     assert common.retry(flaky) == 'ok' and len(calls) == 2
+
+
+def test_empty_source_key_is_refused(project):
+    (project / 'sources.csv').write_text('key,pdf_path,doi\n,papers/topic/Queue2022.pdf,10.1/q\n')
+    with pytest.raises(SystemExit, match='empty "key"'):
+        common.sources(common.load_config(start=project))
+
+
+def test_env_value_with_inline_comment(tmp_path):
+    (tmp_path / '.env').write_text('A=abc  # my key\nB="x # y"\nC=plain\n')
+    assert common._read_env(tmp_path / '.env') == {'A': 'abc', 'B': 'x # y', 'C': 'plain'}

@@ -61,7 +61,8 @@ def _read_env(path):
         for line in open(path, encoding='utf-8'):
             m = re.match(r'\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$', line)
             if m and not line.lstrip().startswith('#'):
-                vals[m.group(1)] = m.group(2).strip('\'"')
+                v = m.group(2)
+                vals[m.group(1)] = v[1:-1] if len(v) > 1 and v[0] == v[-1] and v[0] in '\'"' else re.sub(r'\s+#.*$', '', v)
     return vals
 
 
@@ -139,9 +140,17 @@ def open_json(req, timeout, tries=4):
 
 def norm_id(x):
     """('doi', '10.x/y') or ('arxiv', '2205.06300') or ('openalex', 'W123'). DOIs are lowercased; an arXiv DOI
-    (10.48550/arXiv.N) becomes its arXiv id; doi.org, arxiv.org and openalex.org URLs and doi:/arXiv: prefixes go."""
+    (10.48550/arXiv.N) becomes its arXiv id, without a version (v2); doi.org, arxiv.org and openalex.org URLs (and a
+    DOI URL's ?query or #fragment) and doi:/arXiv: prefixes go."""
+    kind, v = _norm_id(x)
+    return (kind, re.sub(r'v\d+$', '', v)) if kind == 'arxiv' else (kind, v)
+
+
+def _norm_id(x):
     x = x.strip()
-    x = re.sub(r'(?i)^(?:https?://)?(?:dx\.)?doi\.org/|^doi:', '', x)
+    if re.match(r'(?i)^(?:https?://)?(?:www\.|dx\.)?doi\.org/', x):
+        x = re.split(r'[?#]', re.sub(r'(?i)^(?:https?://)?(?:www\.|dx\.)?doi\.org/', '', x))[0]
+    x = re.sub(r'(?i)^doi:', '', x)
     m = re.match(r'(?i)^(?:https?://)?(?:www\.)?arxiv\.org/(?:abs|pdf)/(.+?)(?:\.pdf)?$', x)
     if m:
         return 'arxiv', m.group(1)
@@ -181,7 +190,9 @@ def sources(cfg):
     if rows and 'key' not in rows[0]:
         sys.exit(f'{cfg["sources"]}: needs a "key" column')
     out = {}
-    for r in rows:
+    for n, r in enumerate(rows, 2):
+        if not (r['key'] or '').strip():
+            sys.exit(f'{cfg["sources"]} line {n}: empty "key"; every row needs one (it names the paper in the results)')
         if r['key'] in out:
             sys.exit(f'{cfg["sources"]}: key "{r["key"]}" appears twice; keys must be unique')
         pdf = (r.get('pdf_path') or '').split(';')[0].strip()

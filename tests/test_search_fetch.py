@@ -404,3 +404,34 @@ def test_openalex_error_bodies(body, msg):
     import io
     got = openalex_search.common.openalex_error(urllib.error.HTTPError('u', 400, 'Bad', {}, io.BytesIO(body)), 'k')
     assert got is None if msg is None else re.search(msg, got)
+
+
+def test_missing_source_pdf_is_fetched_again_and_a_byte_copy_is_logged(project, monkeypatch, capsys):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    (project / 'sources.csv').write_text('key,pdf_path,doi\ngone,papers/Missing.pdf,10.1/missing\n')
+    held = (project / 'papers/topic/Ocean2023.pdf').read_bytes()
+    looked = []
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: looked.append(ident) or {
+        'doi': 'https://doi.org/' + ident, 'display_name': 'Ocean', 'best_oa_location': {'pdf_url': 'http://oa/x'}, 'locations': []})
+    monkeypatch.setattr(fetch_pdf, 'fetch', lambda url: held)
+    fetch_pdf.main(['10.1/missing'])
+    assert looked == ['10.1/missing'] and 'not found; fetching its DOI again' in capsys.readouterr().err
+    e = json.loads((project / 'papers/new/fetch_log.jsonl').read_text())
+    assert (e['id'], e['status'], e['file']) == ('10.1/missing', 'HAVE', '../topic/Ocean2023.pdf')
+
+
+def test_network_failures_are_an_error_not_manual(project, monkeypatch, capsys):
+    monkeypatch.chdir(project)
+    monkeypatch.setenv('OPENALEX_API_KEY', 'test')
+    monkeypatch.setattr(fetch_pdf, 'openalex', lambda ident: {'doi': 'https://doi.org/' + ident, 'display_name': 'X',
+                                                              'best_oa_location': {'pdf_url': 'http://oa/x'}, 'locations': []})
+    def down(url):
+        raise urllib.error.URLError('no route to host')
+    monkeypatch.setattr(fetch_pdf, 'fetch', down)
+    try:
+        fetch_pdf.main(['10.9/down'])
+    except SystemExit:
+        pass
+    assert 'ERROR   10.9/down: no PDF URL could be reached' in capsys.readouterr().out
+    assert not (project / 'papers/new/fetch_log.jsonl').exists()
