@@ -44,6 +44,8 @@ paper-lector is an agent skill for Claude Code and Codex with three scripts:
 
 A high rank means the text resembles the question, not that the paper is good or answers it. [`SKILL.md`](SKILL.md) is the guide the agent reads; [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
 
+Tools that answer questions over PDFs, such as PaperQA2 or NotebookLM, write an answer with citations. paper-lector writes no answer: it gives an order and page ranges, which you check by reading. Hosted research assistants such as Elicit, Undermind or Consensus search and summarize on their side; paper-lector ranks the PDFs you already hold, keeps every input and output as a local file, and records what a rerun needs (frozen queries, the SHA-256 of every PDF, versions). It suits a collection larger than you can read for one question.
+
 ## Install
 
 macOS or Linux (on Windows, use WSL), Python 3.12 and `pdftotext` from poppler: `brew install python@3.12 poppler` on macOS, `sudo apt install python3.12 python3.12-venv poppler-utils` on Ubuntu 24.04.
@@ -123,13 +125,24 @@ The output, [`runs/2026-10-18_0317_entanglement-scheduling_rank.csv`](examples/e
 
 ## Benchmarks
 
-Small tests, made to check the default settings rather than to rank paper-lector against other tools:
+One set can be rerun from this repository, [`examples/litsearch-eval`](examples/litsearch-eval): 48 [LitSearch](https://huggingface.co/datasets/princeton-nlp/LitSearch) questions, each pointing at one known paper, with 20 PDFs per question (8 and 13 in two questions): the known paper and the first candidates another search pipeline (DEIXIS) retrieved for the same question, so the distractors are on topic. The `subject` queries were written blind from the question and frozen with SHA-256 before any ranking. Voyage provider.
 
-- **One known paper per question** ([LitSearch](https://huggingface.co/datasets/princeton-nlp/LitSearch)). With Voyage and the default order (`main` + `subject`), the known paper landed in the top 3 in 61% of 46 questions with a few dozen on-topic PDFs each, and in 75% of 48 questions with 20 PDFs each; in the top 10 in 89% and 96%. Ranking on `main` alone was better on the first set and equal on the second, so the default stays. A reranker that read only the abstracts of the first set's papers (`rerank-3-lite`) put 48% in the top 3. On 19 questions, the local model put the paper in the top 10 in 63%.
-- **Survey references** (7 IEEE surveys). The local model told a survey's references apart from a neighbouring survey's references with an average precision of 0.60, against 0.35 for a random order. It did poorly where surveys share half their references.
-- **Local against Voyage** (the example's 73 PDFs). The two orders agree at Spearman 0.79, and their top 10s share 5 papers. The local model loses papers that answer the narrow part of the question.
+| Order | hit@3 | hit@5 | hit@10 | MRR |
+| --- | --- | --- | --- | --- |
+| Random (expected value) | 0.16 | 0.26 | 0.52 | 0.18 |
+| paper-lector, default (`main` + `subject`) | 0.75 | 0.88 | 0.96 | 0.72 |
+| paper-lector, `main` only | 0.75 | 0.85 | 0.96 | 0.71 |
 
-Numbers and caveats are in [`examples/litsearch/MINI-TEST.md`](examples/litsearch/MINI-TEST.md) and the example's runs.
+hit@k is the share of questions with the known paper in the top k; MRR is the mean of 1 / its rank.
+
+What this does not show yet:
+
+- **Whether the full text helps.** BM25 on the full text and the same reranker on the abstract alone have not been run on this set; [`baselines20.py`](examples/litsearch-eval/baselines20.py) runs both. In an earlier test on 19 of these questions with a median of 32 PDFs each (its working folder was not kept), an abstract-only reranker (`rerank-3-lite`) put the known paper in the top 3 in 11 of the 13 questions where its candidate list held it; paper-lector did so in 12 with `main` only and in 8 with the default. So far the order is no better than an abstract reranker's; what the full text adds for certain is `start_pages`.
+- **Other fields.** LitSearch questions are about machine learning and NLP papers.
+
+Two smaller checks, both with the local model: it told seven IEEE surveys' references apart from a neighbouring survey's with an average precision of 0.60, against 0.35 for a random order, but the three quantum surveys share about half their references, and for one of them it did no better than random. On the example's 73 PDFs its order agrees with Voyage's at Spearman 0.79, and the two top 10s share 5 papers.
+
+Numbers and caveats: [`examples/litsearch/MINI-TEST.md`](examples/litsearch/MINI-TEST.md) and [`results20.json`](examples/litsearch-eval/results20.json).
 
 ## Tests
 
