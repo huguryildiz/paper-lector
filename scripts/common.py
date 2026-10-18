@@ -7,7 +7,7 @@ try:
 except ImportError:                                   # not on Windows
     fcntl = None
 
-VERSION = '0.1.0'
+VERSION = '0.2.0'
 CONFIG_NAME = 'literature.json'
 LABELS = ('main', 'subject', 'approach', 'outcome', 'context', 'comparison')
 DEFAULT_FUSE_LABELS = ('main', 'subject')
