@@ -1,8 +1,8 @@
-# $0 mini test, 2026-10-18
+# Mini tests, 2026-10-18
 
-The working folder this test ran in (`examples/litsearch-eval/`: PDFs, scripts, frozen queries) was deleted after the write-up; the folder names below refer to it.
+The first sections (surveys, LitSearch on DEIXIS data, the 27 added questions) ran in a working folder that was deleted after the write-up; `surveys/`, `deixis-ls/` and the scripts named there refer to it and are not in this repository, so those numbers cannot be rerun from it. The last section, "Rebuilt set", can: its set is [`examples/litsearch-eval`](../litsearch-eval).
 
-Local models only (`--provider local`, potion-science-32M and potion-retrieval-32M), no API calls for ranking. OpenAlex cost of building the survey set: about $0.02. Queries were written blind by a separate agent (survey abstract, or LitSearch question, as its only input) and frozen with SHA-256 before any PDF was ranked.
+The first two sections used local models only (`--provider local`, potion-science-32M and potion-retrieval-32M), no API calls for ranking; the voyage runs below say so. OpenAlex cost of building the survey set: about $0.02. Queries were written blind by a separate agent (survey abstract, or LitSearch question, as its only input) and frozen with SHA-256 before any PDF was ranked.
 
 ## Surveys (`surveys/`)
 
@@ -33,7 +33,7 @@ Mean over 7 questions: AP 0.60 (95% bootstrap 0.51 to 0.70) for science and 0.61
 
 On the 13 questions where DEIXIS's list holds the gold paper: DEIXIS rerank puts it in the top 3 in 11, paper-lector local in 4 or 5. MRR 0.69 against 0.27 to 0.36. retrieval beats science on MRR by 0.10 (95% interval −0.21 to −0.00, science minus retrieval), a borderline difference on 19 questions.
 
-Caveat: the distractors are DEIXIS's own top candidates, so they are hard and on topic. The pilot (voyage, easier distractors) had MRR 0.93; that and this are not comparable.
+Caveat: the distractors are DEIXIS's own top candidates, so they are hard and on topic. DEIXIS's list misses the gold paper in 6 of the 19 questions, which caps its rerank at 13 of 19; compare it with the other orders on those 13 (below), not on the table's totals. The pilot (voyage, easier distractors) had MRR 0.93; that and this are not comparable.
 
 ### Voyage on the same 19 collections
 
@@ -58,7 +58,7 @@ voyage fused against local retrieval fused: MRR +0.13 (−0.03 to +0.30). voyage
 - The default fuse (main + subject) cost about 0.2 MRR here. That is a finding about the default, measured on 19 narrow questions: worth a larger check before changing `SKILL.md`, which recommends main + subject.
 - The local models separate a survey's references from a neighbouring survey's clearly (AP 0.60 against 0.35), but on narrow questions they rank the gold paper far below voyage (MRR 0.37 against 0.71).
 
-PDFs were deleted after the runs. `download.py` in each folder re-downloads them.
+PDFs were deleted after the runs; the `download.py` scripts were in the deleted folder.
 
 ## Voyage main against fused on 27 more questions (n = 46)
 
@@ -90,3 +90,15 @@ The working folder above was deleted, so the set was rebuilt from DEIXIS's data 
 Main only against fused: MRR −0.01 (95% interval −0.07 to +0.05); main better in 7 questions, worse in 7.
 
 **The main-only gain did not come back.** With new blind `subject` queries, the two orders are equal. The earlier +0.12 on 46 questions came from one set of `subject` sentences and 40-PDF collections, and its out-of-sample part was already small (+0.07, interval crossing zero). The questions here are mostly the same ones, so this is not independent data on the questions; what changed is the `subject` text and the collection size. 20 PDFs make the task easier than 40, so these numbers are not comparable with the tables above; the comparison of main and fused within this table is. Read together, the evidence does not support recommending main only: how much `subject` helps or hurts depends on how it is written.
+
+### Baselines (not run yet)
+
+The table above has no baseline but random, whose expected values on this set are hit@3 0.16, hit@5 0.26, hit@10 0.52, MRR 0.18 (one gold paper among 20, or 8 and 13). [`baselines20.py`](../litsearch-eval/baselines20.py) adds BM25 on the full text and on the abstract, and, with `--voyage`, rerank-3 on the abstract alone: rank.py's last step without the windows, the comparison that shows what the full text adds to the order. All use the LitSearch question as written. From `examples/litsearch-eval`, after `download.sh`:
+
+```bash
+../../.venv/bin/python baselines20.py                  # random and BM25, offline
+../../.venv/bin/python baselines20.py --voyage --dry   # token estimate
+../../.venv/bin/python baselines20.py --voyage         # writes baselines20.json
+```
+
+The script was checked only on synthetic PDFs with a stubbed tokenizer and reranker; no result on the real set exists yet.
