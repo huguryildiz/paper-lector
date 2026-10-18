@@ -1,0 +1,689 @@
+{
+ "created": "2026-10-18T05:43:21",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.1.0-8-g87d2f76",
+ "argv": [
+  "--provider",
+  "local",
+  "--local-model",
+  "retrieval",
+  "--abstracts",
+  "runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl,runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl"
+ ],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/queries.json",
+   "sha256": "de341d7fc176cd694b1778ba6c070cb2eab8a3b34e5f2e7b5ea8e4f840e0793c"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "b190a49a9ac8e1de110e99e900089089e1b6c2cde152e44b1d28660b8e4a3d3b"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "pdfs/fetch_log.jsonl",
+    "sha256": "3d32f3454ff96a80da5dc216697237bbba7cc70c68653c501dcf710376a90678"
+   }
+  ]
+ },
+ "question": "Which methods (optimization, heuristics, reinforcement learning) have been used to schedule entanglement distribution in a multi-user quantum network, and with which metrics were they compared?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question",
+   "text": "Which methods, such as mathematical optimization, heuristics or reinforcement learning, have been used to schedule entanglement distribution among multiple users in a quantum network, and which performance metrics were used to compare them?",
+   "keywords": "entanglement distribution scheduling multi-user quantum network optimization heuristic reinforcement learning metrics"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "multi-user quantum network",
+   "text": "A multi-user quantum network of repeaters, switches and quantum memories serving many concurrent entanglement requests between different source-destination pairs or user groups that share limited link and memory resources.",
+   "keywords": "multi-user quantum network repeater switch quantum memory concurrent requests source destination pairs"
+  },
+  "Q2": {
+   "label": "approach",
+   "description": "method families",
+   "text": "Entanglement routing and scheduling algorithms based on integer or linear programming, Markov decision processes, greedy or heuristic path selection, and deep reinforcement learning policies that decide which requests to serve, when and on which paths.",
+   "keywords": "entanglement routing scheduling integer linear programming Markov decision process heuristic greedy deep reinforcement learning path selection"
+  },
+  "Q3": {
+   "label": "outcome",
+   "description": "metrics",
+   "text": "Performance measured by entanglement rate or throughput, end-to-end fidelity, latency and waiting time, fairness across users, fraction of requests satisfied, and memory or resource usage.",
+   "keywords": "entanglement rate throughput fidelity latency waiting time fairness request satisfaction memory utilization"
+  },
+  "Q4": {
+   "label": "comparison",
+   "description": "baselines",
+   "text": "Proposed methods compared against baselines such as shortest-path routing, greedy allocation and first-come-first-served service.",
+   "keywords": "baseline shortest path greedy first-come-first-served FCFS"
+  }
+ },
+ "queries_sha": "1d2a390bf89d",
+ "fuse": [
+  "Q0",
+  "Q1",
+  "Q2",
+  "Q3"
+ ],
+ "models": {
+  "provider": "local",
+  "embed": "minishlab/potion-retrieval-32M@6fc8051fab2a1e0ee76689cf08c853792ac285e7",
+  "rerank": null,
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 73,
+  "windows": 1414,
+  "ids": [
+   "Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe",
+   "Alavisamani2026_ReFINESchedulingDistillationCodingRate_e6c480",
+   "Andreesen2026_ModularTopologyAwareSoftwareStack_f5d781",
+   "Anon2022_ReinforcementLearningModelQuantumNetwork_4400cc",
+   "Beauchamp2025_ModularQuantumNetworkArchitectureIntegrating_1214ab",
+   "Bhambay2025_OptimalSchedulingQuantumSwitch_d1e13e",
+   "Bhambay2025_ProportionalFairSchedulerWavelengthMultiplexed_7362c9",
+   "Bone2024_ThresholdsDistributedSurfaceCodePresence_da0f4f",
+   "Cacciapuoti2026_QuantumInternetProtocolSuiteBeyond_5dea4f",
+   "Chakraborty2020_EntanglementDistributionQuantumNetworkMulticommodity_c36fec",
+   "Chander2026_EntanglementDistillationSwappingSchedulingQuantum_8c286e",
+   "Chandra2022_SchedulingQuantumTeleportationNoisyMemories_f67565",
+   "Chandra2024_NetworkOperationsSchedulingDistributedQuantum_2e9cc3",
+   "Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59",
+   "Chehimi2025_EntanglementDistributionDelayOptimizationQuantum_96e452",
+   "Chen2025_AdaptiveResourceOrchestrationDistributedQuantum_f624f3",
+   "Chen2026_ConsensusProtocolsEntanglementAwareScheduling_bbad88",
+   "Chung2021_IllinoisExpressQuantumNetworkIEQNET_4125d8",
+   "Chung2022_DesignImplementationIllinoisExpressQuantum_4487bb",
+   "Clark2022_TowardsFullyConnectedManyUser_36dd9f",
+   "Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820",
+   "Dai2021_EntanglementSwappingQuantumSwitchesProtocol_89f6e9",
+   "Díaz2026_EntanglementSwappingSchedulingQuantumRepeater_4f14e4",
+   "Erçetin2026_FidelityAgeAwareSchedulingQuantum_5cd630",
+   "Fittipaldi2022_LinearAlgebraicFrameworkQuantumInternet_d45823",
+   "Fittipaldi2023_LinearAlgebraicFrameworkDynamicScheduling_fb29d4",
+   "Fittipaldi2025_DynamicSchedulingFiberSpaceborneQuantum_472f29",
+   "Gauthier2026_ArqonSuiteControlApplicationsEnabling_b5afad",
+   "Ghaderibaneh2022_PreDistributionEntanglementsQuantumNetworks_40bcf7",
+   "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
+   "Goisman2026_EfficientRoutingSpectrumAllocationArbitrary_4567a0",
+   "Gu2023_ESDIEntanglementSchedulingDistributionQuantum_369f66",
+   "Haldar2024_FastReliableEntanglementDistributionQuantum_1e26b0",
+   "Halder2024_OptimalRoutingEndEndEntanglement_859862",
+   "Halder2026_PathBasedEntanglementPurificationModel_018df8",
+   "Hidalgo2026_OptimizingEntanglementDistributionProtocolsMaximizing_7789c6",
+   "Hu2024_DynamicRoutingSpaceGroundIntegrated_52e0cb",
+   "Islam2025_AdaptiveEntanglementGenerationQuantumRouting_48412c",
+   "Jia2024_FromEntanglementPurificationSchedulingFidelity_0689a9",
+   "Kar2026_UtilityOptimalEntanglementRoutingQuantum_088756",
+   "Kaur2023_EntanglementDistributionTwoDimensionalSquare_f5d99f",
+   "Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb",
+   "Lavi2026_OneShotRoutingQuantumNetworks_69fae7",
+   "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+   "Li2025_OptimisingEntanglementDistributionPoliciesClassical_adfeed",
+   "Madhavi2018_PowerOptimizedQuantumDataAggregation_a5ce53",
+   "Mandilara2026_OptimalEntanglementRoutingQuantumRepeater_280cda",
+   "Meuser2025_RELiQScalableEntanglementRoutingReinforcement_510425",
+   "Nguyen2022_MultipleEntanglementRoutingFrameworkQuantum_c7e54d",
+   "Ni2025_EntanglementRequestSchedulingQuantumNetworks_a1cdfe",
+   "Ni2026_JointOptimizationRoutingPurificationMeet_0da8e9",
+   "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
+   "Panigrahy2022_OptimalEntanglementDistributionUsingSatellite_b22d10",
+   "Patil2026_QuantumRepeaterProtocolUsingQuantum_a07f69",
+   "Pirker2026_CentralizingTaskBasedApproachQuantum_f0d875",
+   "Pouryousef2023_QuantumOverlayNetworkEfficientEntanglement_129c14",
+   "Pouryousef2025_NetworkAwareSchedulingRemoteGate_8b90ae",
+   "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+   "Rengaswamy2024_EntanglementPurificationQuantumLDPCCodes_406baa",
+   "Rode2026_LearningInterpretingPoliciesSimultaneousEntanglement_73e877",
+   "Semenenko2022_EntanglementGenerationQuantumNetworkFinite_afaacf",
+   "Shaban2024_SPARQEfficientEntanglementDistributionRouting_405be9",
+   "Sharma2026_PerformanceAnalysisQAOAAcrossDistributed_7c6e37",
+   "Silva2025_EntanglementImprovesCoordinationDistributedSystems_fe54c3",
+   "Skrzypczyk2021_ArchitectureMeetingQualityServiceRequirements_210d96",
+   "Smith2026_ToolsReducingServiceTimeNear_8421fd",
+   "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
+   "Vardoyan2023_QuantumNetworkUtilityMaximization_087691",
+   "Vasantam2021_StabilityAnalysisQuantumNetworkMax_24bcb6",
+   "Verzotti2023_OptimalQuantumNetworkDecongestionStrategies_74d815",
+   "Wang2026_ScalabilityBottlenecksEntanglementBasedSatellite_3e9e42",
+   "Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af",
+   "Yaghoobianzadeh2026_ContinuousVariableTeleportationEntanglementDistribution_fd4bc5"
+  ],
+  "files": [
+   {
+    "id": "Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe",
+    "path": "pdfs/Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe.pdf",
+    "sha256": "d1fd876508cc283fec97cf126a0a3c719d777db81adb5dd15399c806721b97be"
+   },
+   {
+    "id": "Alavisamani2026_ReFINESchedulingDistillationCodingRate_e6c480",
+    "path": "pdfs/Alavisamani2026_ReFINESchedulingDistillationCodingRate_e6c480.pdf",
+    "sha256": "9addbec61ca867fb3a2331e979cf463c6a328b3c0acbc5a257c2e9ade0e9efaf"
+   },
+   {
+    "id": "Andreesen2026_ModularTopologyAwareSoftwareStack_f5d781",
+    "path": "pdfs/Andreesen2026_ModularTopologyAwareSoftwareStack_f5d781.pdf",
+    "sha256": "b28a35f801d93a07e3434ebad7bdcae3b18839097a4ee5f5ba5bb4481b154f3b"
+   },
+   {
+    "id": "Anon2022_ReinforcementLearningModelQuantumNetwork_4400cc",
+    "path": "pdfs/Anon2022_ReinforcementLearningModelQuantumNetwork_4400cc.pdf",
+    "sha256": "2c9714edf4c8dd7579eedcfe6097bc773f5eec14b20902aa69b1a7c808bde4a6"
+   },
+   {
+    "id": "Beauchamp2025_ModularQuantumNetworkArchitectureIntegrating_1214ab",
+    "path": "pdfs/Beauchamp2025_ModularQuantumNetworkArchitectureIntegrating_1214ab.pdf",
+    "sha256": "68391d0c22f7c37e0f8d04c431646384bc86c9dbeb572b5fe3d225f1dacec74c"
+   },
+   {
+    "id": "Bhambay2025_OptimalSchedulingQuantumSwitch_d1e13e",
+    "path": "pdfs/Bhambay2025_OptimalSchedulingQuantumSwitch_d1e13e.pdf",
+    "sha256": "2997512a79a0cc83766c8db85d33719ef4058699dd48ff16007b1df7ed017306"
+   },
+   {
+    "id": "Bhambay2025_ProportionalFairSchedulerWavelengthMultiplexed_7362c9",
+    "path": "pdfs/Bhambay2025_ProportionalFairSchedulerWavelengthMultiplexed_7362c9.pdf",
+    "sha256": "a1791d2ee595c323095d1e7d54bd7d8cd65594372e3ae58ac08c4007d46e91de"
+   },
+   {
+    "id": "Bone2024_ThresholdsDistributedSurfaceCodePresence_da0f4f",
+    "path": "pdfs/Bone2024_ThresholdsDistributedSurfaceCodePresence_da0f4f.pdf",
+    "sha256": "809e504d905bc9b6075691ae412852c3047050f2288577678e30d457940d5254"
+   },
+   {
+    "id": "Cacciapuoti2026_QuantumInternetProtocolSuiteBeyond_5dea4f",
+    "path": "pdfs/Cacciapuoti2026_QuantumInternetProtocolSuiteBeyond_5dea4f.pdf",
+    "sha256": "73fcb88cbfe68a7cf4e0a0a0f1b3c3cfbda0a4e389b9cc5ab2896fca072b9fda"
+   },
+   {
+    "id": "Chakraborty2020_EntanglementDistributionQuantumNetworkMulticommodity_c36fec",
+    "path": "pdfs/Chakraborty2020_EntanglementDistributionQuantumNetworkMulticommodity_c36fec.pdf",
+    "sha256": "85ce2a2e01b08cdd2b44fc257f8463e424f4ec1e63784ebda007facaf314b9df"
+   },
+   {
+    "id": "Chander2026_EntanglementDistillationSwappingSchedulingQuantum_8c286e",
+    "path": "pdfs/Chander2026_EntanglementDistillationSwappingSchedulingQuantum_8c286e.pdf",
+    "sha256": "ba2d7d7bb0032d80be89a85f4eb2586f3bb864527bd2fb1e7cdd9252ac96e251"
+   },
+   {
+    "id": "Chandra2022_SchedulingQuantumTeleportationNoisyMemories_f67565",
+    "path": "pdfs/Chandra2022_SchedulingQuantumTeleportationNoisyMemories_f67565.pdf",
+    "sha256": "c7f7b1c15a2cca15bbc84258b90e9cdb1909696aa68ed324356e30916b23c78a"
+   },
+   {
+    "id": "Chandra2024_NetworkOperationsSchedulingDistributedQuantum_2e9cc3",
+    "path": "pdfs/Chandra2024_NetworkOperationsSchedulingDistributedQuantum_2e9cc3.pdf",
+    "sha256": "6394ebd058e711f2702c64fce3856637ada167e4ea1d47c99b832da78db9bd21"
+   },
+   {
+    "id": "Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59",
+    "path": "pdfs/Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59.pdf",
+    "sha256": "7894408767e10db9a1466b62faa0c03f3bf45c2d6e7ea981943bd2dea2ea1ced"
+   },
+   {
+    "id": "Chehimi2025_EntanglementDistributionDelayOptimizationQuantum_96e452",
+    "path": "pdfs/Chehimi2025_EntanglementDistributionDelayOptimizationQuantum_96e452.pdf",
+    "sha256": "cff82f7dfd33871a8bfe787236e8d831c3e87df0516f244a34da5bc4c234e6f7"
+   },
+   {
+    "id": "Chen2025_AdaptiveResourceOrchestrationDistributedQuantum_f624f3",
+    "path": "pdfs/Chen2025_AdaptiveResourceOrchestrationDistributedQuantum_f624f3.pdf",
+    "sha256": "d9929631ea4eeb92ee222fe824b49b6644ec994f6a4c9ba79e588f26de3b0531"
+   },
+   {
+    "id": "Chen2026_ConsensusProtocolsEntanglementAwareScheduling_bbad88",
+    "path": "pdfs/Chen2026_ConsensusProtocolsEntanglementAwareScheduling_bbad88.pdf",
+    "sha256": "73986cd5de5b7e95807f2ca8b8db7d794b93e7677427845248abe55faec4ec17"
+   },
+   {
+    "id": "Chung2021_IllinoisExpressQuantumNetworkIEQNET_4125d8",
+    "path": "pdfs/Chung2021_IllinoisExpressQuantumNetworkIEQNET_4125d8.pdf",
+    "sha256": "ee3301dfcb89c764b64f3019c829664eab8b7c4c238d6da4cd3ca9162efcecc7"
+   },
+   {
+    "id": "Chung2022_DesignImplementationIllinoisExpressQuantum_4487bb",
+    "path": "pdfs/Chung2022_DesignImplementationIllinoisExpressQuantum_4487bb.pdf",
+    "sha256": "8a58f3e43de4646cc0337cfaba59cd3a153b746191771ff08963cfe178541669"
+   },
+   {
+    "id": "Clark2022_TowardsFullyConnectedManyUser_36dd9f",
+    "path": "pdfs/Clark2022_TowardsFullyConnectedManyUser_36dd9f.pdf",
+    "sha256": "6f8969d072732875c286f7a1653b800a7dfeff8faed77d686dce434ae351dac8"
+   },
+   {
+    "id": "Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820",
+    "path": "pdfs/Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820.pdf",
+    "sha256": "e2967cc2d897e3fa81abe60376db49575726f56482c4f7ab9add15961148a68b"
+   },
+   {
+    "id": "Dai2021_EntanglementSwappingQuantumSwitchesProtocol_89f6e9",
+    "path": "pdfs/Dai2021_EntanglementSwappingQuantumSwitchesProtocol_89f6e9.pdf",
+    "sha256": "f09a1a18ae49b2c32236dafd863f1f22e55a916d6e05504fb6a63a6b43d2f36e"
+   },
+   {
+    "id": "Díaz2026_EntanglementSwappingSchedulingQuantumRepeater_4f14e4",
+    "path": "pdfs/Díaz2026_EntanglementSwappingSchedulingQuantumRepeater_4f14e4.pdf",
+    "sha256": "3e179e5c34b87d1a41f89c002fbc638dd53f0876d0357789faf863c4836aa40d"
+   },
+   {
+    "id": "Erçetin2026_FidelityAgeAwareSchedulingQuantum_5cd630",
+    "path": "pdfs/Erçetin2026_FidelityAgeAwareSchedulingQuantum_5cd630.pdf",
+    "sha256": "0382e5123b7b6227d24550ab69d294ad286082b05fe8c0a832d74bd48af55fb3"
+   },
+   {
+    "id": "Fittipaldi2022_LinearAlgebraicFrameworkQuantumInternet_d45823",
+    "path": "pdfs/Fittipaldi2022_LinearAlgebraicFrameworkQuantumInternet_d45823.pdf",
+    "sha256": "8f7dda8fd7a9d2cd9a6b5a86b96eca3641a3bd44d1b3322dd8ae22b9ba1395a1"
+   },
+   {
+    "id": "Fittipaldi2023_LinearAlgebraicFrameworkDynamicScheduling_fb29d4",
+    "path": "pdfs/Fittipaldi2023_LinearAlgebraicFrameworkDynamicScheduling_fb29d4.pdf",
+    "sha256": "08b1872d609c86f217435094a503be9a799002df8fd9d2e2add3d77a83b1e8b9"
+   },
+   {
+    "id": "Fittipaldi2025_DynamicSchedulingFiberSpaceborneQuantum_472f29",
+    "path": "pdfs/Fittipaldi2025_DynamicSchedulingFiberSpaceborneQuantum_472f29.pdf",
+    "sha256": "4348712d01298811a3489105237fbef7df13750ada8568e13a666d821fc0cc7d"
+   },
+   {
+    "id": "Gauthier2026_ArqonSuiteControlApplicationsEnabling_b5afad",
+    "path": "pdfs/Gauthier2026_ArqonSuiteControlApplicationsEnabling_b5afad.pdf",
+    "sha256": "3fd5e88011bb5a272766eb8d647fe9097cc923dd44b8c0fe39a9b54d0586f267"
+   },
+   {
+    "id": "Ghaderibaneh2022_PreDistributionEntanglementsQuantumNetworks_40bcf7",
+    "path": "pdfs/Ghaderibaneh2022_PreDistributionEntanglementsQuantumNetworks_40bcf7.pdf",
+    "sha256": "f16b2f6194ce2049de334e98c0bb9089797db4ba8f0f65a72db65d6737c52fdf"
+   },
+   {
+    "id": "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
+    "path": "pdfs/Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7.pdf",
+    "sha256": "a5b90e30058b0794c823b9325a48e3fba61aeae51a8d085681242c993c499d29"
+   },
+   {
+    "id": "Goisman2026_EfficientRoutingSpectrumAllocationArbitrary_4567a0",
+    "path": "pdfs/Goisman2026_EfficientRoutingSpectrumAllocationArbitrary_4567a0.pdf",
+    "sha256": "d8c4d2220e1b82849d41757aafa047a6a2282b0810b895ba0e42374d1cc4f5e6"
+   },
+   {
+    "id": "Gu2023_ESDIEntanglementSchedulingDistributionQuantum_369f66",
+    "path": "pdfs/Gu2023_ESDIEntanglementSchedulingDistributionQuantum_369f66.pdf",
+    "sha256": "c2a9fac0f3fc8395a8b008e176537a6f348c0a1605788c90857e42600ae64846"
+   },
+   {
+    "id": "Haldar2024_FastReliableEntanglementDistributionQuantum_1e26b0",
+    "path": "pdfs/Haldar2024_FastReliableEntanglementDistributionQuantum_1e26b0.pdf",
+    "sha256": "41442d78efd89697a310440ee8c834d33cb5fda974bd190297bc7982bbcad91b"
+   },
+   {
+    "id": "Halder2024_OptimalRoutingEndEndEntanglement_859862",
+    "path": "pdfs/Halder2024_OptimalRoutingEndEndEntanglement_859862.pdf",
+    "sha256": "9e98715f8dec8931c389e50c6f461040a043e9cc01df14b4336f9cae368507fe"
+   },
+   {
+    "id": "Halder2026_PathBasedEntanglementPurificationModel_018df8",
+    "path": "pdfs/Halder2026_PathBasedEntanglementPurificationModel_018df8.pdf",
+    "sha256": "f86183e05820f7a560326ec03fdd60e0f1d78e6934141b170f5115ab37341dbb"
+   },
+   {
+    "id": "Hidalgo2026_OptimizingEntanglementDistributionProtocolsMaximizing_7789c6",
+    "path": "pdfs/Hidalgo2026_OptimizingEntanglementDistributionProtocolsMaximizing_7789c6.pdf",
+    "sha256": "ec0a60c4543c3d277b9593cfa3bd2939769acb444b9fde7b4b276bf05b39f4b5"
+   },
+   {
+    "id": "Hu2024_DynamicRoutingSpaceGroundIntegrated_52e0cb",
+    "path": "pdfs/Hu2024_DynamicRoutingSpaceGroundIntegrated_52e0cb.pdf",
+    "sha256": "cbebd7133ad9d64d4376734cff95099327d0d7d23bf744823b1479e024dfb279"
+   },
+   {
+    "id": "Islam2025_AdaptiveEntanglementGenerationQuantumRouting_48412c",
+    "path": "pdfs/Islam2025_AdaptiveEntanglementGenerationQuantumRouting_48412c.pdf",
+    "sha256": "67513493d92b1054494fff589bf15ca07cbc16c1445f09a0cdd2c52742cd1ac5"
+   },
+   {
+    "id": "Jia2024_FromEntanglementPurificationSchedulingFidelity_0689a9",
+    "path": "pdfs/Jia2024_FromEntanglementPurificationSchedulingFidelity_0689a9.pdf",
+    "sha256": "5fba8b15523045ec8789c32bab66039f5728a3a96920ff7447d1b0347c0037fc"
+   },
+   {
+    "id": "Kar2026_UtilityOptimalEntanglementRoutingQuantum_088756",
+    "path": "pdfs/Kar2026_UtilityOptimalEntanglementRoutingQuantum_088756.pdf",
+    "sha256": "86bab3e9861fc0ce982c175c7679e4cf01515fd958ac84a751374f0492258641"
+   },
+   {
+    "id": "Kaur2023_EntanglementDistributionTwoDimensionalSquare_f5d99f",
+    "path": "pdfs/Kaur2023_EntanglementDistributionTwoDimensionalSquare_f5d99f.pdf",
+    "sha256": "54f93223d5efe0760c78b5b2618ba953d6b2f78ba8b74389ae26cf6da0545ee5"
+   },
+   {
+    "id": "Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb",
+    "path": "pdfs/Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb.pdf",
+    "sha256": "f59dda5ccbfcb26983161e630a806205bd4c680bbcd6b0345f24ac241555abf0"
+   },
+   {
+    "id": "Lavi2026_OneShotRoutingQuantumNetworks_69fae7",
+    "path": "pdfs/Lavi2026_OneShotRoutingQuantumNetworks_69fae7.pdf",
+    "sha256": "df6368d2f5376decb0d8e6e2b49b9cad18ee1410f203e8eb04fd60e77b27bbc0"
+   },
+   {
+    "id": "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+    "path": "pdfs/Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4.pdf",
+    "sha256": "cb1714bca3967ecbe2cee3ac83297d9a34009c56afead547f2707301272325d3"
+   },
+   {
+    "id": "Li2025_OptimisingEntanglementDistributionPoliciesClassical_adfeed",
+    "path": "pdfs/Li2025_OptimisingEntanglementDistributionPoliciesClassical_adfeed.pdf",
+    "sha256": "b6595e8264a67b1001833ed1be182bb85d8ec033d4dd8e7977275f5963f9dcc4"
+   },
+   {
+    "id": "Madhavi2018_PowerOptimizedQuantumDataAggregation_a5ce53",
+    "path": "pdfs/Madhavi2018_PowerOptimizedQuantumDataAggregation_a5ce53.pdf",
+    "sha256": "05644cb2c521c45b7062747b90d7ce041741c2f404a4e8b8ae62acbfd63c8d34"
+   },
+   {
+    "id": "Mandilara2026_OptimalEntanglementRoutingQuantumRepeater_280cda",
+    "path": "pdfs/Mandilara2026_OptimalEntanglementRoutingQuantumRepeater_280cda.pdf",
+    "sha256": "ef7e7bf0edd0866a2d92b1e516e41c3739b66555529948b20941fec536d4316b"
+   },
+   {
+    "id": "Meuser2025_RELiQScalableEntanglementRoutingReinforcement_510425",
+    "path": "pdfs/Meuser2025_RELiQScalableEntanglementRoutingReinforcement_510425.pdf",
+    "sha256": "fe33d3785b1d69b872297885da4075a626e31d389f044c9095c74b6c8020b6d5"
+   },
+   {
+    "id": "Nguyen2022_MultipleEntanglementRoutingFrameworkQuantum_c7e54d",
+    "path": "pdfs/Nguyen2022_MultipleEntanglementRoutingFrameworkQuantum_c7e54d.pdf",
+    "sha256": "fa6f73af6c70f8bf99e6ddf11d62bdb819f590ee4382bc0203be5e86be143eed"
+   },
+   {
+    "id": "Ni2025_EntanglementRequestSchedulingQuantumNetworks_a1cdfe",
+    "path": "pdfs/Ni2025_EntanglementRequestSchedulingQuantumNetworks_a1cdfe.pdf",
+    "sha256": "43414c87f30571b36c4f9b3dd792c6ba32948a96bcf7fa16684266276a256156"
+   },
+   {
+    "id": "Ni2026_JointOptimizationRoutingPurificationMeet_0da8e9",
+    "path": "pdfs/Ni2026_JointOptimizationRoutingPurificationMeet_0da8e9.pdf",
+    "sha256": "5dadf9148f1137d308f79ba39f254268ac682671287be0a62baae45a6b85c818"
+   },
+   {
+    "id": "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
+    "path": "pdfs/Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813.pdf",
+    "sha256": "043fcabcca822a749a631bd9779a2bada090e8c03b4eedf7b95ab9be03c510cc"
+   },
+   {
+    "id": "Panigrahy2022_OptimalEntanglementDistributionUsingSatellite_b22d10",
+    "path": "pdfs/Panigrahy2022_OptimalEntanglementDistributionUsingSatellite_b22d10.pdf",
+    "sha256": "9267ea656c9caefbd7d7a867c9442c09ddaf865e3a0a7b7644e1730250d99eb7"
+   },
+   {
+    "id": "Patil2026_QuantumRepeaterProtocolUsingQuantum_a07f69",
+    "path": "pdfs/Patil2026_QuantumRepeaterProtocolUsingQuantum_a07f69.pdf",
+    "sha256": "37d931bdcd954a4d46bfe2d9b61c1b6d32818558b446fc3771fed43c0ddb4668"
+   },
+   {
+    "id": "Pirker2026_CentralizingTaskBasedApproachQuantum_f0d875",
+    "path": "pdfs/Pirker2026_CentralizingTaskBasedApproachQuantum_f0d875.pdf",
+    "sha256": "afd3e459d678ffaadca513b59ed6db13e43417f38163033fa912bfe4aab2e6e5"
+   },
+   {
+    "id": "Pouryousef2023_QuantumOverlayNetworkEfficientEntanglement_129c14",
+    "path": "pdfs/Pouryousef2023_QuantumOverlayNetworkEfficientEntanglement_129c14.pdf",
+    "sha256": "f23beb605a1fc2f742340fa4291cc3ac35856b1534bc1e3d3e09d5cecd3fae7a"
+   },
+   {
+    "id": "Pouryousef2025_NetworkAwareSchedulingRemoteGate_8b90ae",
+    "path": "pdfs/Pouryousef2025_NetworkAwareSchedulingRemoteGate_8b90ae.pdf",
+    "sha256": "ee2283e5495a7931947af5fd1f52cebf57a9e9fd1c5635c151a5d0b4e71a22a7"
+   },
+   {
+    "id": "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+    "path": "pdfs/Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692.pdf",
+    "sha256": "3c159a13178fa55d4212121d505b9aa8b54d66f0b8bb99d187106c6127be5bc0"
+   },
+   {
+    "id": "Rengaswamy2024_EntanglementPurificationQuantumLDPCCodes_406baa",
+    "path": "pdfs/Rengaswamy2024_EntanglementPurificationQuantumLDPCCodes_406baa.pdf",
+    "sha256": "956ec62654b34f9b752a2001e81b0c23a8dad155afe24fdda2508be9686a288f"
+   },
+   {
+    "id": "Rode2026_LearningInterpretingPoliciesSimultaneousEntanglement_73e877",
+    "path": "pdfs/Rode2026_LearningInterpretingPoliciesSimultaneousEntanglement_73e877.pdf",
+    "sha256": "cfd0eec4cdaa12b7c5af5f5b81ffe6ac6b8e0fe467f29eb92213ed270534e1d0"
+   },
+   {
+    "id": "Semenenko2022_EntanglementGenerationQuantumNetworkFinite_afaacf",
+    "path": "pdfs/Semenenko2022_EntanglementGenerationQuantumNetworkFinite_afaacf.pdf",
+    "sha256": "d6c07108a2db1e006031c84c1ff46d587cb2e11104f7a13f09bb9eea2ca56c16"
+   },
+   {
+    "id": "Shaban2024_SPARQEfficientEntanglementDistributionRouting_405be9",
+    "path": "pdfs/Shaban2024_SPARQEfficientEntanglementDistributionRouting_405be9.pdf",
+    "sha256": "65bf13f5d1ef9508360bb846b04862c19afc60c90ca60031caeda17e7db088d8"
+   },
+   {
+    "id": "Sharma2026_PerformanceAnalysisQAOAAcrossDistributed_7c6e37",
+    "path": "pdfs/Sharma2026_PerformanceAnalysisQAOAAcrossDistributed_7c6e37.pdf",
+    "sha256": "63922285815525a5b9b5af1ccb548ff6e1750e94bb1648cd96837860da6daedd"
+   },
+   {
+    "id": "Silva2025_EntanglementImprovesCoordinationDistributedSystems_fe54c3",
+    "path": "pdfs/Silva2025_EntanglementImprovesCoordinationDistributedSystems_fe54c3.pdf",
+    "sha256": "a0c765dc4620c84b1bb9690449c9819c0bd9eaec7cb828291c1b174e81c507e0"
+   },
+   {
+    "id": "Skrzypczyk2021_ArchitectureMeetingQualityServiceRequirements_210d96",
+    "path": "pdfs/Skrzypczyk2021_ArchitectureMeetingQualityServiceRequirements_210d96.pdf",
+    "sha256": "498cc28fefcba81ae22ab7e78a6534665e1828f0b575ae52d9f33706c449556b"
+   },
+   {
+    "id": "Smith2026_ToolsReducingServiceTimeNear_8421fd",
+    "path": "pdfs/Smith2026_ToolsReducingServiceTimeNear_8421fd.pdf",
+    "sha256": "ecf1565e8c018be6be81a17e4bfa2eb0182198296c9398b66b0b52cd46ecf20c"
+   },
+   {
+    "id": "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3",
+    "path": "pdfs/Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3.pdf",
+    "sha256": "f914bded693d5f5e434a65a8c7267c7c5bc375898ba7ba82829c80f7047688ff"
+   },
+   {
+    "id": "Vardoyan2023_QuantumNetworkUtilityMaximization_087691",
+    "path": "pdfs/Vardoyan2023_QuantumNetworkUtilityMaximization_087691.pdf",
+    "sha256": "44500d3291966fa042397007be64a47114bdea2576c7f02869c785e3f26564bb"
+   },
+   {
+    "id": "Vasantam2021_StabilityAnalysisQuantumNetworkMax_24bcb6",
+    "path": "pdfs/Vasantam2021_StabilityAnalysisQuantumNetworkMax_24bcb6.pdf",
+    "sha256": "ad3736c93bc660cc71d953d0b6011c0b0b0ce89a4e82d25a9ebc14a6628fce82"
+   },
+   {
+    "id": "Verzotti2023_OptimalQuantumNetworkDecongestionStrategies_74d815",
+    "path": "pdfs/Verzotti2023_OptimalQuantumNetworkDecongestionStrategies_74d815.pdf",
+    "sha256": "eabba53956f4e604cf67cbdb19f281ce7686ae322f549aeb12b3536a5c2d9048"
+   },
+   {
+    "id": "Wang2026_ScalabilityBottlenecksEntanglementBasedSatellite_3e9e42",
+    "path": "pdfs/Wang2026_ScalabilityBottlenecksEntanglementBasedSatellite_3e9e42.pdf",
+    "sha256": "c8f3e7aefe83c1d223c62a3786f418c98dc29c608554c5f9a71cbc8739c526f2"
+   },
+   {
+    "id": "Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af",
+    "path": "pdfs/Xiao2024_PurificationSchedulingControlThroughputMaximization_8ae5af.pdf",
+    "sha256": "29e679c15e56e0c29a1cc19478131a43e48a488b34f64868e2cf7f248647c941"
+   },
+   {
+    "id": "Yaghoobianzadeh2026_ContinuousVariableTeleportationEntanglementDistribution_fd4bc5",
+    "path": "pdfs/Yaghoobianzadeh2026_ContinuousVariableTeleportationEntanglementDistribution_fd4bc5.pdf",
+    "sha256": "3ccee1a1ba770d2cbb42ed1a67592bf6fdce6194d163b8e62aa41b930b169b79"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": [
+   [
+    "Chung2021_IllinoisExpressQuantumNetworkIEQNET_4125d8",
+    "Chung2022_DesignImplementationIllinoisExpressQuantum_4487bb"
+   ]
+  ]
+ },
+ "expect": "",
+ "usage": {},
+ "estimate": 3190586,
+ "outputs": {
+  "local": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/entanglement-scheduling/runs/2026-10-18_0542_entanglement-scheduling_rank-local.csv",
+   "fused_top10": [
+    "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
+    "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+    "Abreu2026_QoSAwareReinforcementLearningRouting_6b78fe",
+    "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
+    "Fittipaldi2025_DynamicSchedulingFiberSpaceborneQuantum_472f29",
+    "Kumar2026_MakingQuantumNetworksWorkRouting_daf7fb",
+    "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+    "Skrzypczyk2021_ArchitectureMeetingQualityServiceRequirements_210d96",
+    "Islam2025_AdaptiveEntanglementGenerationQuantumRouting_48412c",
+    "Hidalgo2026_OptimizingEntanglementDistributionProtocolsMaximizing_7789c6"
+   ],
+   "first_query_top10": [
+    "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
+    "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+    "Meuser2025_RELiQScalableEntanglementRoutingReinforcement_510425",
+    "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+    "Fittipaldi2025_DynamicSchedulingFiberSpaceborneQuantum_472f29",
+    "Kar2026_UtilityOptimalEntanglementRoutingQuantum_088756",
+    "Gkelias2026_QuantumNetworkingFundamentalsFromPhysical_b384c7",
+    "Vardoyan2023_QuantumNetworkUtilityMaximization_087691",
+    "Halder2024_OptimalRoutingEndEndEntanglement_859862",
+    "Tran2026_DynamicEntanglementPacketSchedulingQuantum_7e9aa3"
+   ]
+  }
+ },
+ "abstracts": {
+  "files": [
+   {
+    "path": "runs/2026-10-18_0144_entanglement-scheduling_exact_search.jsonl",
+    "sha256": "754baed3e1f1435376d2ea52a559b6c55b86a162ba97deb64820bd60523a6263"
+   },
+   {
+    "path": "runs/2026-10-18_0143_entanglement-scheduling_semantic_search.jsonl",
+    "sha256": "2042a3860a684bc3af08cfc9136c64ca6ae2f4b1a98414455715594741836385"
+   }
+  ],
+  "papers": 147,
+  "ranked": 139,
+  "abstract_only": [
+   "Cicconetti2021_RequestSchedulingQuantumNetworks",
+   "Chen2024_OptimumEntanglementPurificationSchedulingQuantum",
+   "Pouryousef2026_ResourceAllocationQuantumNetworks",
+   "Zhou2024_TowardsQoSAwareQuantumNetworks",
+   "Wang2026_EffectiveEntanglementSchedulingQuantumNetworks",
+   "Yu2025_TwoLevelControlFrameworkQuantum",
+   "Xiao2023_ConnectionlessEntanglementDistributionProtocolDesign",
+   "Huang2025_DeadlineAwareSchedulingEntanglementRequests",
+   "Dynerowicz2023_PosterMaximalRateEntanglementSwapping",
+   "Chu2025_DyQNetOptimizingDynamicEntanglementRouting",
+   "Le2022_EntanglementRoutingQuantumNetworksDeep",
+   "Blaise2026_EntanglementRoutingLargeScaleQuantum",
+   "Seok2025_EndEndEntanglementRequestScheduling",
+   "Islam2026_QuRAReinforcementLearningBasedRouting",
+   "Sarma2026_PhotonicHardwareNetworkArchitecturesQuantum",
+   "Yang2026_OnlineSchedulingDistributionQuantumCircuits",
+   "Liu2025_QuantumNetworkRoutingDesignDynamic",
+   "Yang2025_EfficientExecutionMultipleQuantumCircuits",
+   "Hu2026_EffectiveResourceSchedulingDesignConcurrent",
+   "Wang2025_TimeScheduledEndEndEntanglement",
+   "Liu2026_SwappingPurificationSchemeOptimizationEntanglement",
+   "Ni2026_RawDataPlotConcurrentEntanglement",
+   "Santra2018_OptimizedAccessTimeSchedulingQuantum",
+   "Bîrlică2026_EntanglementTreesOptimalEntanglementDistribution",
+   "Liu2025_JointSwappingPurificationFailuresEntanglement",
+   "Wang2023_EfficientSchedulingSchemeSwappingPurification",
+   "Guha2022_CenterQuantumNetworksPartII",
+   "Wang2026_SFTRAPSatisfyingFidelityThresholdRouting",
+   "Chen2025_TowardsStabilityUtilityMaximizationAdversarial",
+   "Skrzypczyk2020_DynamicTimeDivisionMultipleAccess",
+   "Zhou2025_OpticalFrequencyCombBasedMultichannel",
+   "Andreou2026_SchedulingLowProbabilityDetectionEntanglement",
+   "Tukkugudam2026_TowardScalableQuantumNetworksFidelity",
+   "Hatamleh2025_OptimizedDynamicResourceAllocationQuantum",
+   "Saudi2025_RoutingDesignEnhancementCapacityUtilisation",
+   "Trent2026_AppliedIdentityPhysicsFormallyVerified",
+   "Smith2026_DataCodeSupportingPublicationTools",
+   "Elsayed2026_JointModelingPerformanceEvaluationCommunication",
+   "Geruganti2026_GlobalQuantumCommunicationInfrastructureAtlas",
+   "Dai2022_CapacityRegionEntanglementSwitchingStability",
+   "Dai2020_OptimalProtocolsRemoteEntanglementDistribution",
+   "Vista2025_EntanglementRequestSchedulingQuantumDatacenter",
+   "Pouryousef2026_EfficientEntanglementSchedulingQuantumData",
+   "McArthur2025_SpaceQuantumCommunicationNetworks",
+   "Andreesen2026_DataReproductionPackageModularTopology",
+   "Zhou2023_TowardsFlowSchedulingQuantumData",
+   "Kaur2023_DistributionEntanglementTwoDimensionalSquare",
+   "Bhambay2025_OptimalSchedulingQuantumSwitchCapacity",
+   "Chen2025_QTestSimulationTestbedDistributedQuantum",
+   "Liu2026_MinimumCostSwappingPurificationScheduling",
+   "Jia2024_FidelityOrientedEntanglementDistributionQuantum",
+   "Liu2026_DistributedQuantumComputingEnhancedConnectivity",
+   "FernándezHerrerínÁlvarez2025_SimulatingQuantumSwitchConcurrentDemands",
+   "Selmi2026_SDNCONTROLLERDISTRIBUTEDQUANTUMCOMPUTING",
+   "Zhou2025_QuantumRoutingDesignImplementationLEO",
+   "Raza2026_TopologyAwareQuantumClassicalCo",
+   "Caldin2026_MERLINSPEAKSAddress202607",
+   "Jain2026_NetworkIntegratedSimulationsQuantumData",
+   "Ouardi2025_TemporalAngularQuantumAddressingTAQA",
+   "Tan2026_JointCircuitNetworkOrchestrationDistributed",
+   "Deng2026_DeepReinforcementLearningGraphNeural",
+   "Pasupuleti2026_CloudNativeTopologicalQuantumComputing",
+   "Wang2017_CASCenterExcellenceQuantumInformation",
+   "Olivas2025_ReinforcementLearningEntanglementSwappingQuantum",
+   "Halder2024_ConcurrentMultipathEntanglementDistributionQuantum",
+   "Agustí2025_ReinforcementLearningEntanglementDistributionQuantum",
+   "Goodenough2018_OptimisingDistributionEntanglementQuantumNetworks",
+   "Rehman2025_ReinforcementLearningFlexibleEntanglementRouting",
+   "Zhang2026_EntangledResourceAllocationAlgorithmQuantum",
+   "Gao2022_AdaptiveEfficientQubitAllocationUsing",
+   "Cen2025_EntanglementDistributionOverQuantumNetworks",
+   "Huang2023_HeuristicEntanglementRoutingQuantumNetworks",
+   "Regmi2022_DeterminingOptimalPoliciesQuantumNetworks",
+   "Wang2021_MultiHopBasedRoutingTime"
+  ],
+  "no_abstract": [
+   "Wang2026_ScalabilityBottlenecksEntanglementBasedSatellite_3e9e42",
+   "Chu2025_DyQNetOptimizingDynamicEntanglementRouting",
+   "Blaise2026_EntanglementRoutingLargeScaleQuantum",
+   "Guha2022_CenterQuantumNetworksPartII",
+   "Andreou2026_SchedulingLowProbabilityDetectionEntanglement",
+   "Zhou2025_QuantumRoutingDesignImplementationLEO",
+   "Goodenough2018_OptimisingDistributionEntanglementQuantumNetworks",
+   "Regmi2022_DeterminingOptimalPoliciesQuantumNetworks"
+  ],
+  "top10": [
+   "Ni2026_SchedulingConcurrentEntanglementRequestsQuantum_cea813",
+   "Cicconetti2021_RequestSchedulingQuantumNetworks",
+   "Ni2025_EntanglementRequestSchedulingQuantumNetworks_a1cdfe",
+   "Deng2026_DeepReinforcementLearningGraphNeural",
+   "Halder2024_ConcurrentMultipathEntanglementDistributionQuantum",
+   "Liu2025_QuantumNetworkRoutingDesignDynamic",
+   "Jia2024_FidelityOrientedEntanglementDistributionQuantum",
+   "Rode2026_LearningInterpretingPoliciesSimultaneousEntanglement_73e877",
+   "Prabu2026_PredictiveFidelityAwareRoutingAdaptive_b6e692",
+   "Pouryousef2026_ResourceAllocationQuantumNetworks"
+  ]
+ }
+}
