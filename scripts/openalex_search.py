@@ -130,16 +130,15 @@ def query_issues(q):
 def record(w, held):
     inv = w.get('abstract_inverted_index') or {}
     words = sorted((p, k) for k, ps in inv.items() for p in ps)
-    doi = (w.get('doi') or '').removeprefix('https://doi.org/').lower()
-    src = ((w.get('primary_location') or {}).get('source') or {}).get('display_name')
+    b = common.bib(w)
+    doi = b['doi']
     arxiv = next((l['landing_page_url'].split('/abs/')[-1] for l in w.get('locations') or []
                   if 'arxiv.org/abs/' in (l.get('landing_page_url') or '')), None)
     return {
         'openalex': w['id'].split('/')[-1], 'doi': doi, 'arxiv': arxiv,
-        'title': w.get('display_name'), 'year': w.get('publication_year'), 'venue': src,
+        'title': b['title'], 'year': b['year'], 'venue': b['venue'],
         'first_author': next((a['author']['display_name'] for a in w.get('authorships') or []), None),
-        'authors': [a['author']['display_name'] for a in w.get('authorships') or [] if a.get('author', {}).get('display_name')],
-        'biblio': {k: v for k, v in (w.get('biblio') or {}).items() if v},
+        'authors': b['authors'], 'biblio': b['biblio'],
         # citations change over time: keep the count, its percentile among works of the same field and year, and the date
         'cited_by': w.get('cited_by_count'),
         'cited_pct': round(100 * pct, 1) if (pct := (w.get('citation_normalized_percentile') or {}).get('value')) is not None else None,

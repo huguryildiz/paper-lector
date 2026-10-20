@@ -488,7 +488,7 @@ def test_abstracts_add_a_separate_order_with_abstract_only_papers(project, offli
     assert pay['link'] == 'https://doi.org/10.9/paywalled'
     assert (pay['cited_by'], pay['cited_pct'], pay['cited_at']) == ('12', '93.7', '2026-10-18')
     assert by['queue2022']['cited_by'] == ''                              # record without the fields
-    assert pay['citation'] == ('Ada Lovelace, Bo Li, Cy Young et al. (2025). Switch memory scheduling for waiting users. '
+    assert pay['citation'] == ('Ada Lovelace, Bo Li, Cy Young, Di Wu (2025). Switch memory scheduling for waiting users. '
                                'IEEE TQE, 6(2), 10\u201319.')
     assert by['Ng2024_NoAbstractHere']['abs_fused_rank'] == '' and rows[-1]['paper'] == 'Ng2024_NoAbstractHere'
     assert by['Ng2024_NoAbstractHere']['link'] == 'https://openalex.org/W7'
@@ -519,7 +519,23 @@ def test_abstracts_with_local_and_without_flag(project, offline, monkeypatch):
     rank.main(['--out', str(project / 'runs/c')])
     rows = list(csv.DictReader(open(project / 'runs/c_paper-lector_rank.csv')))
     assert all(r['source'] == 'full_text' for r in rows) and 'abs_fused_rank' not in rows[0]
-    assert {r['paper']: r['link'] for r in rows} == {'queue2022': 'https://doi.org/10.1/q', 'Switch2024': '', 'Ocean2023': ''}
+    assert {r['paper']: r['link'] for r in rows} == {'queue2022': 'https://doi.org/10.1/q', 'Switch2024': '',
+                                                     'Ocean2023': 'https://arxiv.org/abs/2205.06300'}   # from fetch_log
+
+
+def test_fetch_log_gives_link_and_citation_without_abstracts(project, offline, monkeypatch):
+    monkeypatch.chdir(project)
+    names = ['Ada Lovelace', 'Bo Li', 'Cy Young', 'Di Wu', 'Ed Ng', 'Fa Lo', 'Gu Ma']
+    (project / 'papers/topic/fetch_log.jsonl').write_text(
+        json.dumps({'id': '10.7/switch', 'status': 'OK', 'file': 'Switch2024.pdf', 'doi': '10.7/switch',
+                    'title': 'Switch scheduling', 'year': 2024, 'venue': 'IEEE TQE', 'authors': names,
+                    'biblio': {'volume': '5', 'first_page': '1', 'last_page': '9'}}) + '\n')
+    rank.main(['--out', str(project / 'runs/c')])
+    by = {r['paper']: r for r in csv.DictReader(open(project / 'runs/c_paper-lector_rank.csv'))}
+    assert by['Switch2024']['link'] == 'https://doi.org/10.7/switch'
+    assert by['Switch2024']['citation'] == ('Ada Lovelace, Bo Li, Cy Young, Di Wu, Ed Ng, Fa Lo et al. (2024). '
+                                            'Switch scheduling. IEEE TQE, 5, 1\u20139.')
+    assert by['queue2022']['link'] == 'https://doi.org/10.1/q' and by['queue2022']['citation'] == ''   # sources DOI only
 
 
 def test_queries_name_names_the_files_and_stays_with_the_question(project, offline, monkeypatch):

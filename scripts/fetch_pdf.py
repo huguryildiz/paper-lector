@@ -8,7 +8,8 @@ Existing files are never overwritten. A DOI already in the sources table counts 
 download that is byte-identical to a PDF already in the folders is not saved (fetch_log.jsonl gets a HAVE line tying
 the id to that PDF). Only http(s) URLs on public addresses are fetched (every
 redirect is checked too), at most 100 MB and 5 minutes per file. Each saved PDF gets a line in fetch_log.jsonl in the
-download folder (status OK: id, URL, file and SHA-256), and so does each MANUAL paper (id, title, landing URL).
+download folder (status OK: id, URL, file, SHA-256 and, from OpenAlex, title, authors, year, venue and volume/pages
+for the citation), and so does each MANUAL paper (id, title, landing URL).
 Exit status 1 if any paper was not obtained or skipped.
 File names end in a short hash of the DOI, so two papers with the same author, year and title words don't collide.
 
@@ -225,6 +226,7 @@ def main(argv=None):
         if have:
             print(f'HAVE    {ident} -> {have}'); count['HAVE'] += 1; continue
         urls, answered = candidates(ident, w), False       # answered: a server replied (an HTTP error, not a PDF)
+        meta = {k: v for k, v in common.bib(w).items() if v} if w else {}   # for the citation in rank.py's CSV
         for url in urls:
             try:
                 data = fetch(url)
@@ -240,7 +242,7 @@ def main(argv=None):
                 if d in digests:
                     try:
                         log_line(dest, {'id': ident, 'status': 'HAVE', 'url': url,
-                                        'file': os.path.relpath(digests[d], dest), 'sha256': d})
+                                        'file': os.path.relpath(digests[d], dest), 'sha256': d, **meta})
                     except OSError as e:
                         stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
                     print(f'HAVE    {ident} -> {digests[d]} (same file)'); count['HAVE'] += 1; break
@@ -250,7 +252,7 @@ def main(argv=None):
                 except OSError as e:
                     stop(dest, f'cannot save {out} ({e})', count)
                 try:
-                    log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data)})
+                    log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data), **meta})
                 except OSError as e:
                     out.unlink(missing_ok=True)       # a PDF with no OK line would lose its source URL and id
                     stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e}); {out.name} removed again', count)
