@@ -10,6 +10,9 @@ Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_ran
 - SKILL and REFERENCE no longer suggest `main` only for single-paper questions: a rebuilt 48-question LitSearch set (`examples/litsearch-eval`) found no difference.
 - README: the Benchmarks section is one table on the set that can be rerun, with the expected values of a random order, and says what is not measured yet; a paragraph says how paper-lector differs from question-answering tools and hosted research assistants.
 - `examples/litsearch-eval/baselines20.py`: BM25 (full text, abstract) and, with `--voyage`, rerank-3 on the abstract alone, scored like `evaluate20.py`. Not run on the real set yet.
+- `fetch_pdf.py` writes the work's title, authors, year, venue and volume/pages from OpenAlex into each `OK` and `HAVE` line of `fetch_log.jsonl`. `rank.py` fills `link` and `citation` from that line when there is no search record (no `--abstracts`) and no sources DOI; older lines give the link only. A broken `fetch_log.jsonl` line now stops every run, not only one with `--abstracts`.
+- `citation` lists up to six authors before "et al." (was three).
+- SKILL: the top 10 is reported as a table (#, reference, start pages, link), each reference written in the field's usual citation style (IEEE, APA, Vancouver) or the user's, from the CSV only; the progress list is also written once in chat.
 - MINI-TEST.md says which sections ran in the deleted working folder and cannot be rerun, and that DEIXIS's rerank misses the gold paper in 6 of its 19 questions.
 
 ## 0.2.0 (2026-10-18)

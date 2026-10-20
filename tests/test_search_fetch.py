@@ -142,6 +142,8 @@ def test_manual_papers_are_logged_with_status(project, monkeypatch, capsys):
     assert manual == [{'id': 'W9', 'status': 'MANUAL', 'title': 'Paywalled paper',
                        'url': 'https://publisher.example/w9', 'fetched': manual[0]['fetched']}]
     assert [r['id'] for r in rows if r['status'] == 'OK'] == ['2205.06300']
+    ok = next(r for r in rows if r['status'] == 'OK')
+    assert ok['title'] == '2205.06300' and 'authors' not in ok      # citation fields from OpenAlex, empty ones left out
 
 
 def test_lookup_error_is_not_reported_as_missing(project, monkeypatch, capsys):

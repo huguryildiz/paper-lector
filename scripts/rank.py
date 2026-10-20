@@ -766,11 +766,11 @@ def link(r, doi=None):
 
 
 def citation(r):
-    """Authors (year). Title. Venue, volume(issue), pages. Only what the search record holds."""
+    """Authors (year). Title. Venue, volume(issue), pages. Only what the record holds; up to six authors, then et al."""
     if not r:
         return ''
     names = r.get('authors') or ([r['first_author']] if r.get('first_author') else [])
-    who = ', '.join(names[:3]) + (' et al.' if len(names) > 3 else '')
+    who = ', '.join(names[:6]) + (' et al.' if len(names) > 6 else '')
     b = r.get('biblio') or {}
     where = '' if not r.get('venue') else r['venue'] + (f", {b['volume']}" if b.get('volume') else '') + (f"({b['issue']})" if b.get('issue') else '') \
         + (f", {b['first_page']}" if b.get('first_page') else '') \
@@ -789,6 +789,38 @@ def short_id(r, taken):
     while pid in taken:
         pid, n = f'{base}-{n}', n + 1
     return pid
+
+
+def logged(P, cfg, dirs):
+    """(paper id, line) for each OK or HAVE line in a fetch_log.jsonl that names a ranked PDF: the logged file in the
+    log's own folder, or a byte-identical copy ranked in its place, with the SHA-256 unchanged. One PDF can have several
+    lines (a preprint and its published DOI). A line holds the id and, from newer fetches, the citation fields."""
+    by_path = {Path(p['path']).resolve(): p for p in P}
+    by_sha = {p['sha256']: p for p in P}
+    logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
+            for f in Path(d).rglob('fetch_log.jsonl')}
+    out = []
+    for f in sorted(logs):
+        for n, line in enumerate(open(f, encoding='utf-8'), 1):
+            if not line.strip():
+                continue
+            try:
+                e = json.loads(line)
+                if not isinstance(e, dict):
+                    raise ValueError('not an object')
+            except ValueError as x:
+                sys.exit(f'{f} line {n}: not a JSON record ({x}); repair or delete that line, then run again')
+            p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
+            p = p or by_sha.get(e.get('sha256'))
+            if e.get('status', 'OK') in ('OK', 'HAVE') and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
+                out.append((p['id'], e))
+    return out
+
+
+def logged_rec(e):
+    """A fetch_log line as a search-like record, for link() and citation()."""
+    kind, v = rid(e['id'])
+    return {k: e[k] for k in ('doi', 'title', 'year', 'venue', 'authors', 'first_author', 'biblio') if e.get(k)} | {kind: v}
 
 
 def abstract_corpus(paths, P, W, cfg, dirs):
@@ -825,24 +857,8 @@ def abstract_corpus(paths, P, W, cfg, dirs):
     for key, v in common.sources(cfg).items():
         if key in sel and v['doi'] and rid(v['doi']):
             owner[rid(v['doi'])] = key
-    by_path = {Path(p['path']).resolve(): p for p in P}
-    by_sha = {p['sha256']: p for p in P}
-    logs = {f for d in list(dirs) + ([cfg['download_dir']] if cfg else []) if Path(d).is_dir()
-            for f in Path(d).rglob('fetch_log.jsonl')}
-    for f in sorted(logs):
-        for n, line in enumerate(open(f, encoding='utf-8'), 1):
-            if not line.strip():
-                continue
-            try:
-                e = json.loads(line)
-                if not isinstance(e, dict):
-                    raise ValueError('not an object')
-            except ValueError as x:
-                sys.exit(f'{f} line {n}: not a JSON record ({x}); repair or delete that line, then run again')
-            p = by_path.get((f.parent / e['file']).resolve()) if e.get('file') else None
-            p = p or by_sha.get(e.get('sha256'))          # a byte-identical copy ranked in the logged file's place
-            if e.get('status', 'OK') in ('OK', 'HAVE') and p and rid(e.get('id')) and e.get('sha256', p['sha256']) == p['sha256']:
-                owner[rid(e['id'])] = p['id']             # the logged file, in the log's own folder, unchanged
+    for pid, e in logged(P, cfg, dirs):
+        owner[rid(e['id'])] = pid                         # the logged file, in the log's own folder, unchanged
     first = {p['id']: words(W[p['wins'][0]]['full']['text']).split()[:40] for p in P}    # title and authors
 
     def by_title(t):
@@ -1281,8 +1297,15 @@ def rank(a, cfg, question, Q, fuse, qsha, provider, variants, dirs, ids, want_sh
         info = {x['id']: dict(abs_rows.get(x['id'], {}), abstract_from=x['from'], source=x['source'],
                               link=link(x['rec'], (known.get(x['id']) or {}).get('doi')), citation=citation(x['rec']),
                               **{k: (x['rec'] or {}).get(k) for k in ('cited_by', 'cited_pct', 'cited_at')}) for x in A}
+        fetched = {}                                       # a PDF's fetch_log line, the one with citation fields first
+        for pid, e in logged(P, cfg, dirs):
+            if pid not in fetched or (e.get('title') and not fetched[pid].get('title')):
+                fetched[pid] = logged_rec(e)
         for pid in meta:
             info.setdefault(pid, {'link': link(None, (known.get(pid) or {}).get('doi'))})
+            if pid in fetched:                             # no search record or sources DOI: the fetch log's
+                info[pid]['link'] = info[pid].get('link') or link(fetched[pid])
+                info[pid]['citation'] = info[pid].get('citation') or citation(fetched[pid])
         extra = sorted((x for x in A if x['source'] == 'abstract_only'),
                        key=lambda x: (info[x['id']].get('abs_fused_rank', math.inf), x['id']))
         path = Path(csv_name(a.out, a.name, variant))

@@ -236,6 +236,15 @@ def _norm_id(x):
     return 'arxiv', re.sub(r'(?i)^arxiv:', '', x)
 
 
+def bib(w):
+    """The bibliographic fields of an OpenAlex work: what a citation is built from."""
+    names = [a['author']['display_name'] for a in w.get('authorships') or [] if (a.get('author') or {}).get('display_name')]
+    return {'doi': (w.get('doi') or '').removeprefix('https://doi.org/').lower(), 'title': w.get('display_name'),
+            'year': w.get('publication_year'), 'venue': ((w.get('primary_location') or {}).get('source') or {}).get('display_name'),
+            'first_author': names[0] if names else None, 'authors': names,
+            'biblio': {k: v for k, v in (w.get('biblio') or {}).items() if v}}
+
+
 def doi_of(x):
     """The DOI OpenAlex files a DOI or arXiv id under (lowercase), or None for an OpenAlex id."""
     kind, v = norm_id(x)
