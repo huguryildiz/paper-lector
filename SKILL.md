@@ -51,7 +51,7 @@ If there is no `literature.json`, ask the user once where their PDFs are, then w
 
 Before Step 2, count the PDFs once each: `find <each pdf_dirs folder> <download_dir> -iname '*.pdf' | sort -u | wc -l` (give `download_dir` only when it lies outside `pdf_dirs`; `rank.py` ranks it too), plus the rows of `sources` whose file exists and lies outside those folders (a file inside them is already counted). If a folder is missing or the count is 0, stop and ask with AskUserQuestion: "Search OpenAlex and download open-access PDFs" (recommended; "Searching OpenAlex" below, then Fetch, then come back here), "Point to another PDF folder" (update `pdf_dirs`), or "Stop". Do not start the question screens for an empty collection.
 
-**Progress list.** If the host has a task-list tool (the plan list or TodoWrite in Claude Code, `update_plan` in Codex), show the run as a list before the first step and tick each step off as it finishes. One emoji per step, step names in the user's language:
+**Progress list.** If the host has a task-list tool (the plan list or TodoWrite in Claude Code, `update_plan` in Codex), show the run as a list before the first step and tick each step off as it finishes. Also write the same numbered list once in chat before the first step, because some hosts (the Claude desktop app) show the task list in a side pane the user may not have open; do not repeat it in chat later. One emoji per step, step names in the user's language:
 
 1. ⚙️ Check config and PDF folders
 2. 🔎 Choose search modes and approve the queries
