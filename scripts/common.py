@@ -64,6 +64,10 @@ def load_config(explicit=None, required=True, start=None):
     out['queries'] = (root / cfg['queries']).resolve() if cfg.get('queries') else None
     out['provider'] = rank.get('provider', 'voyage')
     out['local_model'] = rank.get('model')
+    base = cfg.get('sources_path_base', 'auto')
+    if base not in ('auto', 'config', 'source', 'repo'):
+        sys.exit(f'{path}: "sources_path_base" must be auto, config, source or repo')
+    out['sources_path_base'] = base
     return out
 
 
@@ -260,8 +264,33 @@ def sha256_file(path):
     return h.hexdigest()
 
 
+def source_pdf_path(value, cfg):
+    """Resolve one CSV path without guessing between distinct existing files.
+
+    Auto retains config-relative paths and accepts unique source/repository-relative
+    matches. Missing paths retain the legacy config-relative location for diagnostics.
+    """
+    path = Path(value).expanduser()
+    if path.is_absolute():
+        return path.resolve()
+    root = cfg['root'].resolve()
+    repo = next((p for p in (root, *root.parents) if (p / '.git').exists()), None)
+    bases = {'config': root, 'source': cfg['sources'].parent, 'repo': repo}
+    mode = cfg.get('sources_path_base', 'auto')
+    if mode != 'auto':
+        if bases[mode] is None:
+            sys.exit('sources_path_base=repo requires a .git directory or file above the config')
+        return (bases[mode] / path).resolve()
+    matches = list(dict.fromkeys((b / path).resolve() for b in bases.values()
+                                if b is not None and (b / path).is_file()))
+    if len(matches) > 1:
+        sys.exit(f'{cfg["sources"]}: ambiguous pdf_path {value!r}: {matches}; '
+                 'set sources_path_base to config, source or repo, or use an absolute path')
+    return matches[0] if matches else (root / path).resolve()
+
+
 def sources(cfg):
-    """Optional table of known papers: key -> {'pdf': Path or None, 'doi': str}."""
+    """Known papers: pdf is the first existing path; pdfs keeps all semicolon-separated paths."""
     if not cfg or not cfg['sources']:
         return {}
     if not cfg['sources'].is_file():
@@ -277,9 +306,11 @@ def sources(cfg):
             sys.exit(f'{cfg["sources"]} line {n}: empty "key"; every row needs one (it names the paper in the results)')
         if r['key'] in out:
             sys.exit(f'{cfg["sources"]}: key "{r["key"]}" appears twice; keys must be unique')
-        pdf = (r.get('pdf_path') or '').split(';')[0].strip()
+        pdfs = list(dict.fromkeys(source_pdf_path(p.strip(), cfg)
+                                 for p in (r.get('pdf_path') or '').split(';') if p.strip()))
+        pdf = next((p for p in pdfs if p.is_file()), pdfs[0] if pdfs else None)
         doi = (r.get('doi') or '').strip()
-        out[r['key']] = {'pdf': (cfg['root'] / pdf).resolve() if pdf else None, 'doi': doi_of(doi) if doi else ''}
+        out[r['key']] = {'pdf': pdf, 'pdfs': pdfs, 'doi': doi_of(doi) if doi else ''}
     return out
 
 

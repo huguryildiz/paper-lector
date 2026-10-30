@@ -42,6 +42,7 @@ Every script except `search_overlap.py` looks for `literature.json`, starting in
 - `pdf_dirs` (required): folders searched recursively for PDFs.
 - `download_dir`: where `fetch_pdf.py` saves; defaults to the first `pdf_dirs` entry. `rank.py` ranks it too when it lies outside `pdf_dirs`.
 - `sources` (optional): a CSV with `key`, `pdf_path` and `doi` columns. Papers listed there keep their key as id; other PDFs are named by file stem, with `-2`, `-3` added when two files share a name. If the file is missing, the scripts note it and continue without it.
+- `sources_path_base` (optional): `auto` (default), `config`, `source` or `repo`. For CSV `pdf_path` values, auto checks the config folder, CSV folder and nearest Git root above the config. It accepts one distinct existing file and stops on ambiguity; use an explicit base or absolute path to resolve it. Missing paths keep the config-relative location for diagnostics. Separate multiple PDFs with semicolons: the first existing one keeps the source key; additional files enter the corpus under their file stems, including outside `pdf_dirs`. Absolute paths stay absolute.
 - `queries`: the frozen queries file for `rank.py`. Keep queries files in a `queries/` folder named after their `name` (`queries/entanglement-scheduling.json`; a revision of the same question is `queries/entanglement-scheduling-v2.json` with the same `name`). The project keeps one `questions.jsonl`, beside the config's queries file (else in `queries/`), so every queries file is checked against the same history wherever it lies.
 - `rank` (optional): `{"provider": "voyage"}` (default) or `{"provider": "local"}`. `--provider` overrides it for one run.
 
@@ -93,8 +94,8 @@ OpenAlex without a key: fetch works. Keyword and citing searches return only the
 
 | Option | Flag | Tell the user |
 | --- | --- | --- |
-| Keyword (recommended) | `--exact '<boolean query>'` | Words in the title and abstract, with AND / OR / NOT and `*` wildcards. Every match, and the same list again on the same OpenAlex data. Misses papers that use other words |
-| Semantic (recommended) | `--semantic '<sentence>'` | Matches by meaning, so it finds papers in other words. At most 50 results, and the list can change between runs |
+| Keyword (recommended) | `--exact '<boolean query>'` | Words in the title and abstract, with AND / OR / NOT and `*` wildcards. Retrieves indexed matches within API limits. Misses papers that use other words; relevance and complete recall are not guaranteed |
+| Semantic (recommended) | `--semantic '<sentence>'` | Retrieves candidates by semantic similarity, including irrelevant ones. At most 50 results; the list can change between runs |
 | Citing works | `--cites <DOI, arXiv id or W id>` | Papers that cite one paper; forward in time |
 | References | `--refs <DOI, arXiv id or W id>` | Papers one paper cites; back in time |
 
@@ -207,10 +208,10 @@ When a script stops on an error (no network, a full disk, a refused key, Voyage'
 
 ## What to tell the user
 
-- A rank is a lead, not evidence. Similarity is not quality. A claim needs someone to read the page.
+- A rank is a lead, not evidence. Similarity does not establish quality, relevance or novelty. Query edits and overlap counts do not measure recall without a labelled reference set. A claim needs someone to read the page.
 - `_pages` and `start_pages` show where the reranker looked; the key passage can still sit elsewhere in the paper.
 - Publisher sites often refuse downloads (HTTP 403). Show every `MANUAL` paper in a table, never only the count: title and year (from the search JSONL), the DOI as a `https://doi.org/...` link (or the arXiv or W id when there is no DOI) and the landing URL from the `MANUAL` line. Never work around paywalls, logins or bot checks.
-- A preprint is not the published version; say which one was downloaded.
+- Report the requested publication separately from the downloaded PDF. Use `pdf_version`, `pdf_arxiv_id`, `pdf_date`, `identity_status`, `source_url` and `resolved_url` in the fetch log. A first-page arXiv stamp identifies that revision, not equivalence to the published article. Unrecognised or conflicting identity stays `unknown`, even if OpenAlex labels the location `publishedVersion`. Keep usable preprints, state the uncertainty, and inspect the PDF before citing it. The filename begins with publication metadata for lookup and adds an arXiv revision or `version-unknown` plus a content hash; its year is not the PDF date. Existing files keep their names and get a version report when encountered. An explicitly requested arXiv revision is downloaded only when its stamp matches.
 
 ## Examples
 

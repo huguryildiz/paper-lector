@@ -11,12 +11,13 @@ redirect is checked too), at most 100 MB and 5 minutes per file. Each saved PDF 
 download folder (status OK: id, URL, file, SHA-256 and, from OpenAlex, title, authors, year, venue and volume/pages
 for the citation), and so does each MANUAL paper (id, title, landing URL).
 Exit status 1 if any paper was not obtained or skipped.
-File names end in a short hash of the DOI, so two papers with the same author, year and title words don't collide.
+File names include publication metadata, an observed arXiv revision or unknown marker, and identifier/content hashes.
+Publication metadata and PDF version observations are recorded separately; neither a DOI nor a URL verifies an edition.
 
   python fetch_pdf.py 10.1109/JSAC.2024.1234567 2601.11698
   python fetch_pdf.py --from $SP/x17.jsonl
 """
-import argparse, datetime, hashlib, http.client, ipaddress, json, os, re, socket, sys, time, urllib.error, urllib.parse, urllib.request
+import argparse, datetime, hashlib, http.client, ipaddress, json, os, re, socket, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -41,13 +42,18 @@ def openalex(ident):
         raise
 
 
-def name_for(w, ident):
+def name_for(w, ident, provenance=None):
     surname = re.sub(r'\W', '', ((w.get('authorships') or [{}])[0].get('author', {}).get('display_name') or 'Anon').split()[-1])
     stop = {'a', 'an', 'the', 'of', 'for', 'and', 'in', 'on', 'with', 'to', 'via', 'under', 'by', 'at'}
     words = [x for x in re.findall(r'[A-Za-z0-9]+', w.get('display_name') or '') if x.lower() not in stop][:5]
     tag = hashlib.sha1(((w.get('doi') or '').removeprefix('https://doi.org/') or common.doi_of(ident) or ident).lower()
                        .encode()).hexdigest()[:6]
-    return f"{surname}{w.get('publication_year') or ''}_{''.join(x[:1].upper() + x[1:] for x in words)}_{tag}.pdf"
+    version = ''
+    if provenance is not None:
+        version = ('arxiv-' + provenance['pdf_arxiv_id'] if provenance['pdf_version'].startswith('arxiv_v')
+                   else 'version-unknown')
+        version = '_' + re.sub(r'[^A-Za-z0-9.-]', '-', version)
+    return f"{surname}{w.get('publication_year') or ''}_{''.join(x[:1].upper() + x[1:] for x in words)}{version}_{tag}.pdf"
 
 
 # arXiv landing pages: arxiv.org and export.arxiv.org (abs or pdf), arxiv-vanity.com/papers
@@ -57,7 +63,7 @@ ARXIV_LANDING = re.compile(r'(?i)^https?://(?:www\.|export\.)?arxiv\.org/(?:abs|
 
 def candidates(ident, w):
     urls = []
-    kind, v = common.norm_id(ident)
+    kind, v = common._norm_id(ident)  # preserve explicitly requested arXiv revisions for the download
     arx = v if kind == 'arxiv' else None
     for l in (w or {}).get('locations') or []:
         m = ARXIV_LANDING.match(l.get('landing_page_url') or '')
@@ -69,6 +75,74 @@ def candidates(ident, w):
         if l.get('pdf_url') and l['pdf_url'] not in urls:
             urls.append(l['pdf_url'])
     return urls
+
+
+ARXIV_ID = r'(?:\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?/\d{7})'
+ARXIV_STAMP = re.compile(r'^\s*arXiv:(' + ARXIV_ID + r'v\d+)\s+\[[^\]\n]+\]\s*'
+                         r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*$', re.MULTILINE)
+
+
+def pdf_provenance(data, ident, w=None, url=None):
+    """Describe the downloaded bytes separately from OpenAlex's publication record.
+
+    A first-page arXiv stamp is limited identity evidence. URL/metadata alone never
+    establishes a PDF revision or the version of record. Extraction failure is unknown.
+    """
+    final_url = getattr(data, 'final_url', url)
+    rec = {'requested_id': ident, 'publication': common.bib(w) if w else {},
+           'source_url': url, 'resolved_url': final_url, 'pdf_version': 'unknown',
+           'identity_status': 'unknown', 'version_basis': 'no_recognized_first_page_stamp'}
+    locations = [(w or {}).get('best_oa_location') or {}] + ((w or {}).get('locations') or [])
+    for loc in locations:
+        m = ARXIV_LANDING.match(loc.get('landing_page_url') or '')
+        arx_url = f'https://arxiv.org/pdf/{m.group(1) or m.group(2)}' if m else None
+        if url and url in (loc.get('pdf_url'), arx_url):
+            rec['location_version'] = loc.get('version') or 'unknown'
+            rec['publication_relation'] = 'openalex_location_link; not independently verified'
+            break
+    try:
+        result = subprocess.run(['pdftotext', '-f', '1', '-l', '1', '-layout', '-', '-'],
+                                input=data, capture_output=True, timeout=15)
+        if result.returncode:
+            rec['version_basis'] = 'text_extraction_failed'
+            return rec
+        stamps = set(ARXIV_STAMP.findall(result.stdout.decode('utf-8', errors='replace')))
+    except (OSError, subprocess.TimeoutExpired):
+        rec['version_basis'] = 'text_extraction_unavailable'
+        return rec
+    if len(stamps) != 1:
+        return rec
+    arxiv, date = next(iter(stamps))
+    rec.update(pdf_arxiv_id=arxiv, pdf_date=date, version_basis='pdf_first_page_arxiv_stamp')
+    # A redirect, requested revision or source URL naming another revision/id is a conflict.
+    expected = []
+    for address in (url, final_url):
+        m = ARXIV_LANDING.match(address or '')
+        if m:
+            expected.append(m.group(1) or m.group(2))
+    kind, value = common._norm_id(ident)
+    if kind == 'arxiv':
+        expected.append(value)
+    if any(common.norm_id(x) != common.norm_id(arxiv) or
+           (re.search(r'v\d+$', x) and x != arxiv) for x in expected):
+        rec['identity_status'] = 'conflicting_arxiv_identifiers'
+        return rec
+    rec['pdf_version'] = 'arxiv_' + re.search(r'v\d+$', arxiv).group()
+    rec['identity_status'] = 'arxiv_header_matches_source' if expected else 'arxiv_header_only'
+    return rec
+
+
+def version_note(rec):
+    return (f'version={rec["pdf_version"]}, identity={rec["identity_status"]}; '
+            'publication metadata does not verify the downloaded edition')
+
+
+class Download(bytes):
+    """Bytes with the final response URL, preserving the fetch() bytes interface."""
+    def __new__(cls, data, final_url):
+        obj = super().__new__(cls, data)
+        obj.final_url = final_url
+        return obj
 
 
 NAT64 = ipaddress.ip_network('64:ff9b::/96')
@@ -120,7 +194,7 @@ def fetch(url):
                 raise ValueError(f'download took more than {MAX_SECONDS} s')
         if length and len(data) < length:
             raise http.client.IncompleteRead(bytes(data), length - len(data))
-        return bytes(data)
+        return Download(data, r.geturl() if hasattr(r, 'geturl') else url)
     data = common.retry(once, tries=3, wait=5)
     return data if data[:4] == b'%PDF' else None
 
@@ -188,10 +262,12 @@ def main(argv=None):
     except OSError as e:
         sys.exit(f'cannot create the download folder {dest} ({e}); nothing fetched')
     roots = [dest] + ([d for d in cfg['pdf_dirs'] if d != dest] if cfg else [])
-    held = {}
+    held, source_files = {}, []
     for k, v in common.sources(cfg).items():
-        if v['doi'] and v['pdf'] and v['pdf'].is_file():
-            held[v['doi']] = k
+        files = [p for p in v.get('pdfs', []) if p.is_file() and is_pdf(p)]
+        source_files.extend(files)
+        if v['doi'] and files:
+            held[v['doi']] = (k, files)
         elif v['doi'] and v['pdf']:
             print(f'NOTE    sources key {k}: {v["pdf"]} not found; fetching its DOI again', file=sys.stderr)
     digests, count = None, {'OK': 0, 'HAVE': 0, 'MANUAL': 0, 'ERROR': 0, 'SKIP': skips}
@@ -204,8 +280,22 @@ def main(argv=None):
                      f'{left} of {len(ids)} not tried; run the same command again when online (PDFs already held are '
                      f'not fetched twice)')
         doi = common.doi_of(ident)
+        requested_kind, requested_value = common._norm_id(ident)
+        pinned = requested_kind == 'arxiv' and re.search(r'v\d+$', requested_value)
         if doi and held.get(doi):
-            print(f'HAVE    {ident} -> sources key {held[doi]}'); count['HAVE'] += 1; continue
+            k, files = held[doi]
+            match = next(((p, rec) for p in files
+                          if (rec := pdf_provenance(p.read_bytes(), ident))
+                          and (not pinned or rec.get('pdf_arxiv_id') == requested_value)), None)
+            if match:
+                p, rec = match
+                try:
+                    log_line(dest, {'id': ident, 'status': 'HAVE', 'file': os.path.relpath(p, dest),
+                                    'sha256': common.sha256_file(p), **rec})
+                except OSError as e:
+                    stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
+                print(f'HAVE    {ident} -> sources key {k} ({version_note(rec)})')
+                count['HAVE'] += 1; continue
         try:
             w, failed = openalex(ident), None
         except Exception as e:
@@ -224,7 +314,14 @@ def main(argv=None):
             print(f'ERROR   {ident}: {have} exists but is not a PDF (a broken download?); move it away and run again')
             count['ERROR'] += 1; continue
         if have:
-            print(f'HAVE    {ident} -> {have}'); count['HAVE'] += 1; continue
+            rec = pdf_provenance(have.read_bytes(), ident, w)
+            if not pinned or rec.get('pdf_arxiv_id') == requested_value:
+                try:
+                    log_line(dest, {'id': ident, 'status': 'HAVE', 'file': os.path.relpath(have, dest),
+                                    'sha256': common.sha256_file(have), **rec})
+                except OSError as e:
+                    stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
+                print(f'HAVE    {ident} -> {have} ({version_note(rec)})'); count['HAVE'] += 1; continue
         urls, answered = candidates(ident, w), False       # answered: a server replied (an HTTP error, not a PDF)
         meta = {k: v for k, v in common.bib(w).items() if v} if w else {}   # for the citation in rank.py's CSV
         for url in urls:
@@ -236,28 +333,44 @@ def main(argv=None):
             answered = True
             offline = 0
             if data:
+                provenance = pdf_provenance(data, ident, w, url)
+                if pinned and (provenance.get('pdf_arxiv_id') != requested_value or
+                               provenance['identity_status'] == 'conflicting_arxiv_identifiers'):
+                    print(f'  fail  {url}: requested arXiv revision not verified in PDF', file=sys.stderr)
+                    continue
                 if digests is None:
-                    digests = {common.sha256_file(h): h for r in roots for h in r.rglob('*.pdf', case_sensitive=False)}
+                    paths = source_files + [h for r in roots for h in r.rglob('*.pdf', case_sensitive=False)]
+                    digests = {common.sha256_file(h): h for h in paths}
                 d = hashlib.sha256(data).hexdigest()
+                # Two unrecognised revisions can share every publication field and URL.
+                base = Path(name_for(w or {}, ident, provenance))
+                out = dest / f'{base.stem}_{d[:12]}.pdf'
                 if d in digests:
                     try:
                         log_line(dest, {'id': ident, 'status': 'HAVE', 'url': url,
-                                        'file': os.path.relpath(digests[d], dest), 'sha256': d, **meta})
+                                        'file': os.path.relpath(digests[d], dest), 'sha256': d, **meta, **provenance})
                     except OSError as e:
                         stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e})', count)
-                    print(f'HAVE    {ident} -> {digests[d]} (same file)'); count['HAVE'] += 1; break
+                    print(f'HAVE    {ident} -> {digests[d]} (same file) ({version_note(provenance)})'); count['HAVE'] += 1; break
                 try:
-                    if not save(out, data):
-                        print(f'HAVE    {ident} -> {out}'); count['HAVE'] += 1; break
+                    created = save(out, data)
+                    if not created and common.sha256_file(out) != d:
+                        print(f'ERROR   {ident}: {out} contains different bytes; nothing overwritten')
+                        count['ERROR'] += 1; break
                 except OSError as e:
                     stop(dest, f'cannot save {out} ({e})', count)
+                status = 'OK' if created else 'HAVE'
                 try:
-                    log_line(dest, {'id': ident, 'status': 'OK', 'url': url, 'file': out.name, 'sha256': d, 'bytes': len(data), **meta})
+                    log_line(dest, {'id': ident, 'status': status, 'url': url, 'file': out.name, 'sha256': d,
+                                    'bytes': len(data), **meta, **provenance})
                 except OSError as e:
-                    out.unlink(missing_ok=True)       # a PDF with no OK line would lose its source URL and id
-                    stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e}); {out.name} removed again', count)
+                    if created:
+                        out.unlink(missing_ok=True)   # preserve any file owned by another process
+                    action = f'{out.name} removed again' if created else 'existing file preserved'
+                    stop(dest, f'cannot write {dest / "fetch_log.jsonl"} ({e}); {action}', count)
                 digests[d] = out
-                print(f'OK      {ident} -> {out}  ({len(data) // 1024} kB, {url})'); count['OK'] += 1; break
+                print(f'{status:8}{ident} -> {out}  ({len(data) // 1024} kB, {url}; {version_note(provenance)})')
+                count[status] += 1; break
             print(f'  fail  {url}: not a PDF', file=sys.stderr)
         else:
             if not answered and (net_down or urls):

@@ -295,8 +295,11 @@ def find_pdfs(dirs, known, ids=None, allow_empty=False):
     gone = [str(d) for d in dirs if not Path(d).is_dir()]
     if gone:
         sys.exit(f'PDF folder not found: {", ".join(gone)}. Check "pdf_dirs" in the config or --dirs')
-    for d in dirs:
-        for p in sorted(Path(d).rglob('*.pdf', case_sensitive=False)):
+    # Additional source paths also belong to the corpus, even outside pdf_dirs.
+    extra = [p for v in known.values() for p in v.get('pdfs', []) if p.is_file()]
+    groups = [extra] + [sorted(Path(d).rglob('*.pdf', case_sensitive=False)) for d in dirs]
+    for group in groups:
+        for p in group:
             if p.resolve() in taken:
                 continue
             d = digest(p)
