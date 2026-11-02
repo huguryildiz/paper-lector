@@ -11,7 +11,7 @@ Never paste an API key, a `.env` file or a key-bearing URL into an issue. Securi
 
 ## Changing the code
 
-A behaviour change touches the code, its tests, `SKILL.md` and `REFERENCE.md` together. Run the tests before a pull request:
+A behaviour change touches the code, its tests, the relevant file in `modes/` and `REFERENCE.md` together. Run the tests before a pull request:
 
 ```bash
 .venv/bin/pip install -r requirements.txt -c constraints.txt pytest==9.1.1

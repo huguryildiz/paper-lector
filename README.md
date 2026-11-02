@@ -42,9 +42,23 @@ paper-lector is an agent skill for Claude Code and Codex with three scripts:
 - `fetch_pdf.py` downloads open-access PDFs and lists the rest for manual download.
 - `rank.py` ranks your own PDFs against a few frozen research-question queries and tells you which pages to read first.
 
-A high rank means the text resembles the question, not that the paper is good or answers it. [`SKILL.md`](SKILL.md) is the guide the agent reads; [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
+A high rank means the text resembles the question, not that the paper is good or answers it. [`SKILL.md`](SKILL.md) routes the agent to a mode; [`modes/search-rank.md`](modes/search-rank.md) is the guide for these scripts; [`REFERENCE.md`](REFERENCE.md) has every option, output file and edge case.
 
 Tools that answer questions over PDFs, such as PaperQA2 or NotebookLM, write an answer with citations. paper-lector writes no answer: it gives an order and page ranges, which you check by reading. Hosted research assistants such as Elicit, Undermind or Consensus search and summarize on their side; paper-lector ranks the PDFs you already hold, keeps every input and output as a local file, and records what a rerun needs (frozen queries, the SHA-256 of every PDF, versions). It suits a collection larger than you can read for one question.
+
+## Modes
+
+Besides search and ranking, the package holds the research steps around them, as instructions for the agent. They use no extra code.
+
+| Mode | For |
+| --- | --- |
+| [`discover`](modes/discover.md) | Topics and contribution candidates, from a broken assumption or from a set of PDFs |
+| [`novelty-check`](modes/novelty-check.md) | A kill search: tries to refute a claim against prior work, gives a scoped verdict and labels the difference, with no novelty score |
+| [`test`](modes/test.md) | A small pilot model, or a claim test against the simplest explanation |
+| [`position`](modes/position.md) | A positioning table and related-work section for a stated result |
+| [`search-rank`](modes/search-rank.md) | The scripts above |
+
+A search that finds nothing is a lead. No mode concludes that an idea is original.
 
 ## Install
 
