@@ -2,7 +2,7 @@
 
 Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_rank_run.json` records the version and the commit (`-dirty` when a tracked file of the checkout differed from it).
 
-## Unreleased
+## 0.3.0 (2026-11-03)
 
 - The package now holds five modes behind one router: `discover`, `novelty-check`, `test`, `position` and `search-rank`. The old `SKILL.md` moved to `modes/search-rank.md`; search and fetch no longer need the ranking questions. Scripts are unchanged.
 - `fetch_pdf.py` reads the arXiv id from more landing pages: `export.arxiv.org`, `arxiv.org/pdf/` and `arxiv-vanity.com/papers/`, with any query string dropped. A look-alike host such as `notarxiv.org` no longer counts.
