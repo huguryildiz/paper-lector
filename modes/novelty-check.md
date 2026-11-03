@@ -17,6 +17,7 @@ Do this before any query, because a kill rule written after seeing results bends
 4. Write the **partial blockers**: for each component, the paper that would pre-empt it and which part of the claim dies. A known component is harmless if the claim never relied on it being new. It narrows the claim if the claim's value rested on it.
 5. Predict the outcome before searching. A miss is informative.
 6. Search the project for earlier kill searches and novelty notes. Record their claims, dates, queries, coverage limits and unresolved candidates. Reuse evidence only where its mapping supports the present sub-claim, and assess every named lead against the current claim. An old search misses newer work, so propose searches that cover it. Readings done for another claim give anchors, not verdicts.
+7. Pick the known set before any query. If the project has a bibliography (`.bib`, source table, evidence file), choose from it the entries that bear on this claim. Record the subset and how you chose it. The searches are later checked against it (step 3). A project bibliography built for a whole manuscript holds off-topic entries, so the full list is the wrong denominator.
 
 ## 2. Build queries through several lenses
 
@@ -27,7 +28,7 @@ The user's own sentence rarely finds the strongest rival. Rivals tend to use ano
 - **Abstract problem**: the same problem with the application removed. Use the neighbouring field's name as the keyword query's setting block. A semantic query with no field words drifts to unrelated work, so name the neighbouring field there too.
 - **Method-side neighbour**: the older field where the same structure appears under another name, such as inventory with perishability, replacement policies or stochastic processing networks. A wrong mapping finds nothing and looks like a clean result, so show the assumed mapping with the queries and ask the approver to correct it. If two mappings are plausible, cover both.
 - **Adjacent application**: the nearest other application of the same decision.
-- **Citation trail**: papers citing the closest anchors, which catches the newest work. Coverage of recent preprints is thin, so a zero here means little.
+- **Citation trail**, both directions, on the 3 to 5 closest papers. Run it as a second round, once screening has named them. Their reference lists (`--refs`) catch earlier work in the same community, often under words no keyword query used. Papers citing them (`--cites`) catch the newest work. Coverage of recent preprints is thin, so a zero from `--cites` means little.
 
 Six to ten queries are usually enough. Do not build every query by AND-ing all desired features: demanding every extension word can exclude the strongest comparator. Choose date limits for the question, not a default window; include older foundational results. Other search tools the user has may add a semantic lens; record which, and treat their output as leads.
 
@@ -35,12 +36,12 @@ Query rules are in "Searching OpenAlex" in [search-rank.md](search-rank.md). Its
 
 ## 3. Run and account for coverage
 
-Run `$PY $PL/scripts/openalex_search.py` with `--exact`, `--semantic` or `--cites`, plus `--name` and a new `.jsonl` path in `--out` outside tracked files. No `literature.json` is needed. Keep the JSONL and its `.query.json` record. Report for each query the total count, the records written, the records screened and the overlap. Keyless keyword and citing searches return at most 200 records and semantic searches at most 50; disclose whichever limit applied.
+Run `$PY $PL/scripts/openalex_search.py` with `--exact`, `--semantic`, `--cites` or `--refs`, plus `--name` and a new `.jsonl` path in `--out` outside tracked files. No `literature.json` is needed. Keep the JSONL and its `.query.json` record. Report for each query the total count, the records written, the records screened and the overlap. Keyless keyword and citing searches return at most 200 records and semantic searches at most 50; disclose whichever limit applied.
 
 - Match records against the project's source table yourself by DOI and arXiv id. The `in_sources` field is empty when no config exists, and a count of zero then means nothing.
 - Under low keyword and semantic overlap, keyword queries may be missing the field's words. If `search_overlap.py` says a keyword search holds fewer works than it matched, say so first: the cut alone can lower the overlap. Propose one revised query when the only-semantic titles show missing words, or state plainly that you did not revise.
 - Agree on a screening ceiling before the run; the default is 2,000 records per keyword string. A string above it is reported with its total and marked unscreened. That gap prevents confirming any related zero-blocker prediction.
-- If known papers exist, check whether the queries retrieve them. Report the numerator and denominator. Retrieving every known paper does not establish recall across the unknown literature.
+- Check the searches against the known set from step 1 after each round, by DOI and arXiv id. Report the numerator and denominator. A relevant known paper that was missed shows a missing word or lens: read its title and abstract, and assess it against the claim like any other record. Retrieving every known paper does not establish recall across the unknown literature.
 
 ## 4. Screen honestly
 

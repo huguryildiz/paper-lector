@@ -4,6 +4,11 @@ Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_ran
 
 ## Unreleased
 
+- `novelty-check`:
+  - The citation trail runs in both directions (`--refs` and `--cites`) on the 3 to 5 closest papers, as a second round after screening.
+  - The known set is picked from the project bibliography before any query, and every round is checked against it.
+  - In a test run, the keyword and semantic queries found 20 of a project's 63 bibliography entries, and 26 with the citation trail added. The trail also turned up two partial blockers the queries had missed, one from each direction.
+
 - `search_overlap.py` gives the overlap when the keyword file is empty (0 found, `LOW OVERLAP`) and says `overlap undefined` when there are no semantic works. It names each keyword file that holds fewer works than it matched (first page only without an API key, or `--max`), since the cut alone can lower the share.
 - One authorization rule in SKILL, used by `search-rank` and `novelty-check`: a generated query, seed id or mode is shown before it runs unless the user delegated running searches in that scope; a query the user wrote runs unchanged once it passes the syntax check.
 - `novelty-check`: the novelty type can be **Undetermined** when the papers read do not settle it. Frozen checks keep an evidence record with the version read, PDF hash, decisive quote and page, and retrieval date; cleanup deletes only what the run downloaded.
