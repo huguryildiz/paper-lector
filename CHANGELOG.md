@@ -2,6 +2,14 @@
 
 Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_rank_run.json` records the version and the commit (`-dirty` when a tracked file of the checkout differed from it).
 
+## Unreleased
+
+- `search_overlap.py` gives the overlap when the keyword file is empty (0 found, `LOW OVERLAP`) and says `overlap undefined` when there are no semantic works. It names each keyword file that holds fewer works than it matched (first page only without an API key, or `--max`), since the cut alone can lower the share.
+- One authorization rule in SKILL, used by `search-rank` and `novelty-check`: a generated query, seed id or mode is shown before it runs unless the user delegated running searches in that scope; a query the user wrote runs unchanged once it passes the syntax check.
+- `novelty-check`: the novelty type can be **Undetermined** when the papers read do not settle it. Frozen checks keep an evidence record with the version read, PDF hash, decisive quote and page, and retrieval date; cleanup deletes only what the run downloaded.
+- `position`: positioning rows can be results (bound, guarantee, counterexample, evidence, validity range), so a new result under the same assumptions has a row to differ on.
+- SKILL: "novel" also covers a different claimed result, matching the novelty-check facets.
+
 ## 0.3.0 (2026-11-03)
 
 - The package now holds five modes behind one router: `discover`, `novelty-check`, `test`, `position` and `search-rank`. The old `SKILL.md` moved to `modes/search-rank.md`; search and fetch no longer need the ranking questions. Scripts are unchanged.

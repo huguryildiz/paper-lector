@@ -5,7 +5,7 @@ Try to destroy a claim before anyone spends months on it. A search can kill or n
 ## Choose the level
 
 - **Light** (default): exploration. The claim and kill rule are written in the conversation and the approver accepts the queries. The approver is the user unless the project names someone else. No project records are written.
-- **Frozen**: only when the user asks. Suggest it once when the claim is about to be stated as a contribution in a manuscript. Everything in light, plus: claim, kill rule, predictions and queries are saved and approved before the run, and every retrieved title and abstract is screened. Strings do not change during the run; a supplemental search needs its own approval.
+- **Frozen**: only when the user asks. Suggest it once when the claim is about to be stated as a contribution in a manuscript. Everything in light, plus: claim, kill rule, predictions and queries are saved and approved before the run, and every retrieved title and abstract is screened. Strings do not change during the run; a supplemental search needs its own approval. An evidence record ([template](../templates/evidence-record.md)) keeps, for each decisive source, the version read, the SHA-256 of the PDF when one was read, the decisive quote with its page, and the retrieval date.
 
 ## 1. Write what would kill the claim
 
@@ -31,14 +31,14 @@ The user's own sentence rarely finds the strongest rival. Rivals tend to use ano
 
 Six to ten queries are usually enough. Do not build every query by AND-ing all desired features: demanding every extension word can exclude the strongest comparator. Choose date limits for the question, not a default window; include older foundational results. Other search tools the user has may add a semantic lens; record which, and treat their output as leads.
 
-Query rules are in "Searching OpenAlex" in [search-rank.md](search-rank.md). Its question screens and ranking steps do not apply here. One exception: keep metric terms when the metric is part of the claim. Show every generated query, the assumed mapping and a cap on open-access PDFs (five by default) before running, unless already authorized. Count previews are queries too.
+Query rules are in "Searching OpenAlex" in [search-rank.md](search-rank.md). Its question screens and ranking steps do not apply here. One exception: keep metric terms when the metric is part of the claim. Show every generated query, the assumed mapping and a cap on open-access PDFs (five by default) before running, under the authorization rule in [SKILL.md](../SKILL.md). Count previews are queries too.
 
 ## 3. Run and account for coverage
 
 Run `$PY $PL/scripts/openalex_search.py` with `--exact`, `--semantic` or `--cites`, plus `--name` and a new `.jsonl` path in `--out` outside tracked files. No `literature.json` is needed. Keep the JSONL and its `.query.json` record. Report for each query the total count, the records written, the records screened and the overlap. Keyless keyword and citing searches return at most 200 records and semantic searches at most 50; disclose whichever limit applied.
 
 - Match records against the project's source table yourself by DOI and arXiv id. The `in_sources` field is empty when no config exists, and a count of zero then means nothing.
-- Under low keyword and semantic overlap, keyword queries are probably missing the field's words. Propose one revised query, or state plainly that you did not revise.
+- Under low keyword and semantic overlap, keyword queries may be missing the field's words. If `search_overlap.py` says a keyword search holds fewer works than it matched, say so first: the cut alone can lower the overlap. Propose one revised query when the only-semantic titles show missing words, or state plainly that you did not revise.
 - Agree on a screening ceiling before the run; the default is 2,000 records per keyword string. A string above it is reported with its total and marked unscreened. That gap prevents confirming any related zero-blocker prediction.
 - If known papers exist, check whether the queries retrieve them. Report the numerator and denominator. Retrieving every known paper does not establish recall across the unknown literature.
 
@@ -82,6 +82,7 @@ Do this unless the verdict is Killed. The label describes the difference from th
    - **Consolidation**: a new relation inside one established line of work.
    - **Bridge**: it joins lines of work that the closest papers treat separately.
    - **Jump**: it adds an element absent from all closest papers.
+   - **Undetermined**: the evidence read does not settle the type; name the unread passage or unresolved mapping. Use it when a closest paper was read only by title or word search, or when an unread passage or unresolved mapping could change the type. An abstract that states the relevant facets can give a provisional type.
 3. **Level.** Say **novel candidate** when the idea differs from every closest paper in at least one facet or in their combination, and name the difference. Say **not novel** when a closest paper matches on all facets. Say **undetermined** when an unread paper or coverage gap could change this. A change of setting alone is novel only in that setting; say so.
 4. **Original: open questions.** Mark each as holds, fails or open: not stated, not implied, consequential, backed by evidence. A search can bear only on the first two. The last two need our own result, so without one they stay open.
 
@@ -97,4 +98,4 @@ Answer first in plain words, then keep it short:
 4. **What this does not show**: search scope, filters, unread papers, and whether predictions held.
 5. **Who must act**: the PDFs needed from the user, and which papers a person must read.
 
-Write "not found in the records screened", never "no one has done this". Save nothing to project records unless the user or the frozen level calls for it. Delete downloaded PDFs and text extracts when finished, keeping only what a later step will read.
+Write "not found in the records screened", never "no one has done this". Save nothing to project records unless the user or the frozen level calls for it. Delete the PDFs and text extracts this run downloaded once the report is done, keeping only what a later step will read; never delete the user's own files. In frozen mode, first copy the decisive quotes, pages, versions and hashes into the evidence record. A hash identifies the file read; it does not keep it.

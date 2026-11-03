@@ -33,7 +33,7 @@ Project rules override this package, including who approves work and who must re
 
 **Two levels.** Each claim names its level.
 
-- **Novel:** among the papers read, it differs from each in objective, method, evaluation, data or setting, or combines them in a way none does. This supports a scoped gap statement: "among the papers we read, as of this date, none gives X under Y".
+- **Novel:** among the papers read, it differs from each in objective, method, evaluation, data, setting or claimed result, or combines them in a way none does. This supports a scoped gap statement: "among the papers we read, as of this date, none gives X under Y".
 - **Original:** novel, and a careful reader of the closest work could not have obtained the result without doing the work, and having it changes a number, a ranking or a decision. All four must hold:
   1. **Not stated.** The closest papers do not give this result under these conditions.
   2. **Not implied.** It does not follow from a known result by a direct corollary, by putting values into a known formula, or from the structure of the model. Minimum cost not falling as a constraint tightens follows from the smaller feasible set; the size of the rise does not.
@@ -59,7 +59,7 @@ A new setting, method, data set, combination or formulation is novel, not origin
 
 **Authorization.**
 
-- Show generated queries before running them in a novelty check or ranking, unless already authorized. A query the user wrote, and a direct request to search or fetch with unpaid APIs, counts as authorized.
+- Searches use unpaid APIs. A query, seed id or mode the agent generated is shown before it runs. It runs without the approval screen only when the user has already delegated running the agent's searches in this scope ("search and run it yourself"); naming a topic is not delegation. A query or seed id the user wrote runs unchanged once it passes the syntax check; any change is shown again. A direct request to fetch open-access PDFs from a named search file is authorized. The mode question is skipped when the request names or implies the mode.
 - No experiment, solver campaign, training run or paid API run without authorization. An assessment does not grant it, and this package does not authorize publishing, external messages or new tools.
 - Save records only when asked or when the project's workflow calls for it, in the project's own files. Keep credentials and private drafts out of queries.
 

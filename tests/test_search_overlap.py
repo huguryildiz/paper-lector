@@ -29,3 +29,37 @@ def test_high_overlap_has_no_warning_and_unknown_mode_no_share(tmp_path, capsys)
     (tmp_path / 's.query.json').unlink()
     search_overlap.main([kw, sem])
     assert 'semantic works' not in capsys.readouterr().out
+
+
+def test_empty_keyword_file_still_gives_overlap(tmp_path, capsys):
+    kw = write(tmp_path, 'k', 'exact', [])
+    sem = write(tmp_path, 's', 'semantic', [{'openalex': 'W3', 'title': 'C', 'year': 2021}])
+    search_overlap.main([kw, sem])
+    out = capsys.readouterr().out
+    assert '0 of 1 (0%)  LOW OVERLAP' in out and 'only semantic: 2021  C' in out
+
+
+def test_cut_keyword_search_is_named(tmp_path, capsys):
+    kw = write(tmp_path, 'k', 'exact', [{'openalex': 'W1'}])
+    (tmp_path / 'k.query.json').write_text(json.dumps({'mode': 'exact', 'count': 900, 'written': 200,
+                                                       'keyless_first_page_only': True}))
+    sem = write(tmp_path, 's', 'semantic', [{'openalex': 'W2', 'title': 'B'}])
+    search_overlap.main([kw, sem])
+    out = capsys.readouterr().out
+    assert 'LOW OVERLAP' in out and 'keyword search holds 200 of 900 works in k.jsonl (first page only, no API key)' in out
+    (tmp_path / 'k.query.json').write_text(json.dumps({'mode': 'exact', 'count': 900, 'written': 50, 'max': 50,
+                                                       'keyless_first_page_only': False}))
+    search_overlap.main([kw, sem])
+    assert '50 of 900 works in k.jsonl (capped by --max 50)' in capsys.readouterr().out
+
+
+def test_empty_semantic_file_gives_undefined_overlap(tmp_path, capsys):
+    kw = write(tmp_path, 'k', 'exact', [{'openalex': 'W1'}])
+    sem = write(tmp_path, 's', 'semantic', [])
+    search_overlap.main([kw, sem])
+    out = capsys.readouterr().out
+    assert 'overlap undefined: no semantic works' in out and 'semantic works the keyword' not in out
+    (tmp_path / 'k.query.json').write_text(json.dumps({'mode': 'exact', 'count': 900, 'written': 200,
+                                                       'keyless_first_page_only': True}))
+    search_overlap.main([kw, sem])
+    assert '200 of 900 works in k.jsonl (first page only, no API key)' in capsys.readouterr().out

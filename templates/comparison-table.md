@@ -24,7 +24,7 @@ Substitute population, mechanism, outcome and measurement axes in fields without
 
 ## Positioning table
 
-Rows are assumptions the contribution keeps or breaks, not features. Tag each cell full text, abstract only or unverified. Use unknown for missing evidence and not applicable only when justified.
+Rows are assumptions the contribution keeps or breaks and results it changes (bound, guarantee, counterexample, evidence, validity range), not features. Tag each cell full text, abstract only or unverified. Use unknown for missing evidence and not applicable only when justified.
 
-| Assumption | Work A | Work B | This work |
+| Assumption or result | Work A | Work B | This work |
 | --- | --- | --- | --- |

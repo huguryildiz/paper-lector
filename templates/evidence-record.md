@@ -8,8 +8,10 @@ Claim id and version; the question or decision; system, units, information timin
 
 ## Sources
 
-| Source, version, locator | What it establishes | Reading level | Relationship to this claim |
-| --- | --- | --- | --- |
+| Source, version, locator | What it establishes | Reading level | Relationship to this claim | SHA-256 of the PDF read | Decisive quote with page | Retrieved |
+| --- | --- | --- | --- | --- | --- | --- |
+
+The last three columns are for a frozen novelty check; leave them out elsewhere. The hash applies only when a PDF was read.
 
 Evidence types stay distinct: sourced, assumed, derived, computed, estimated, hypothesized, unknown. An inaccessible paper is an unresolved lead, not "no overlap".
 
