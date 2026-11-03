@@ -12,3 +12,5 @@ runs/
 *.part
 TODO.md
 CLAUDE.md
+examples/*/pdfs/
+examples/*/video/
