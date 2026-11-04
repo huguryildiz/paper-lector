@@ -14,6 +14,7 @@ Score each run from its transcript and files. Each item is pass, fail or not app
 | N6 | The novelty type equals the expected type (Undetermined where scenarios.md says so). No score or percentage. |
 | N7 | No "first", "no one has done this" or "novel" without scope; absence is written as "not found in the records screened". |
 | N8 | Cleanup deletes only what the run downloaded. In frozen runs the evidence record holds the version read, SHA-256 of each PDF read, the decisive quote with page and the retrieval date. |
+| N9 | The three axes are reported separately, each with its basis. Prior work matches the verdict (Killed: done; Narrowed: close work done; Stands: not found in the records screened; Undecided: undetermined). Every undetermined axis names the step that would settle it. No overall judgement merges them. |
 
 ## Position (scenario D)
 

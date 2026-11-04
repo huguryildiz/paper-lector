@@ -1,6 +1,6 @@
 # Novelty check (kill search)
 
-Try to destroy a claim before anyone spends months on it. A search can kill or narrow a claim. It cannot prove that a claim is new, because indexes, vocabulary and unread papers all leave gaps. The output is a scoped verdict, a novelty label and a list of what stayed unresolved, never "this is original" or "this is the first".
+Try to destroy a claim before anyone spends months on it. A search can kill or narrow a claim. It cannot prove that a claim is new, because indexes, vocabulary and unread papers all leave gaps. The output is a scoped verdict, a novelty label, a three-axis judgement and a list of what stayed unresolved, never "this is original" or "this is the first".
 
 ## Choose the level
 
@@ -89,6 +89,22 @@ Do this unless the verdict is Killed. The label describes the difference from th
 
 Give no percentage or score. Experts disagree on graded novelty, and a number would suggest a precision the search lacks.
 
+## 8. Judge three axes
+
+Give each axis its own value; never merge them into one overall judgement. Each value comes with its basis (the papers behind it and their reading levels) and, when it is undetermined, the one step that would settle it: the passage to read, the PDF to get, the fact to ask the user.
+
+| Axis | Values |
+| --- | --- |
+| **Prior work** | **done**, **close work done**, **not found in the records screened**, **undetermined** |
+| **Support in the literature** | **supporting work found**, **conflicting evidence**, **no support found**, **undetermined** |
+| **Feasibility** | **feasible now**, **obstacle that can be overcome**, **serious obstacle**, **undetermined** |
+
+- **Prior work** follows the verdict: Killed is done, Narrowed is close work done, Stands is not found in the records screened, Undecided is undetermined. Under close work done, set the closest paper's result and our claim side by side in one sentence each, and name the difference that survives. Not found is never "new" or "original".
+- **Support in the literature** asks whether published work backs the claim's assumptions and mechanism, not whether the claim is true. Supporting work found names the paper and passage. Conflicting evidence names both sides. No support found means the screened records were searched for support and none turned up; undetermined means the relevant papers were not read beyond their abstracts or a mapping is unresolved. Our own result belongs to [test](test.md), not to this axis.
+- **Feasibility** asks whether the work could start with what exists: data, equipment, computation, a solver that scales, assumptions that hold in practice. Base it on what the papers report and what the user states about their resources. When the resources are not known, it is undetermined; ask rather than guess.
+
+Use undetermined whenever the evidence read does not settle an axis. An axis judged only from abstracts is marked provisional.
+
 ## Report
 
 Answer first in plain words, then keep it short:
@@ -96,7 +112,8 @@ Answer first in plain words, then keep it short:
 1. **Verdict** and the surviving claim, in plain sentences.
 2. **Closest work**: at most five rows of paper, what it does, how it differs, and reading level.
 3. **Novelty label**, unless the verdict is Killed.
-4. **What this does not show**: search scope, filters, unread papers, and whether predictions held.
-5. **Who must act**: the PDFs needed from the user, and which papers a person must read.
+4. **Three axes**: one line each with its value, basis and, when undetermined, the step that settles it.
+5. **What this does not show**: search scope, filters, unread papers, and whether predictions held.
+6. **Who must act**: the PDFs needed from the user, and which papers a person must read.
 
 Write "not found in the records screened", never "no one has done this". Save nothing to project records unless the user or the frozen level calls for it. Delete the PDFs and text extracts this run downloaded once the report is done, keeping only what a later step will read; never delete the user's own files. In frozen mode, first copy the decisive quotes, pages, versions and hashes into the evidence record. A hash identifies the file read; it does not keep it.

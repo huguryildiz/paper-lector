@@ -4,6 +4,7 @@ Versions follow `common.VERSION`; version 0.1.0 is git tag `v0.1.0`. Every `_ran
 
 ## Unreleased
 
+- `novelty-check` reports three separate axes, each with its basis and, when undetermined, the step that would settle it: prior work (done, close work done, not found in the records screened, undetermined; it follows the verdict), support in the literature (supporting work found, conflicting evidence, no support found, undetermined) and feasibility (feasible now, obstacle that can be overcome, serious obstacle, undetermined). Checklist item N9 scores it.
 - `novelty-check`:
   - The citation trail runs in both directions (`--refs` and `--cites`) on the 3 to 5 closest papers, as a second round after screening.
   - The known set is picked from the project bibliography before any query, and every round is checked against it.

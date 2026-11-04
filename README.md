@@ -83,7 +83,7 @@ Try to kill this.
 | Mode | For | Example request |
 | --- | --- | --- |
 | [`discover`](modes/discover.md) | Topics and contribution candidates | "I know MDPs and I'm moving into quantum networks. Which standard assumptions break there?" |
-| [`novelty-check`](modes/novelty-check.md) | Trying to refute a claim against prior work; a scoped verdict, no novelty score | "Has anyone shown X under Y? Try to kill it." |
+| [`novelty-check`](modes/novelty-check.md) | Trying to refute a claim against prior work; a scoped verdict and three axes (prior work, support, feasibility), no novelty score | "Has anyone shown X under Y? Try to kill it." |
 | [`test`](modes/test.md) | A small pilot model, or what a result establishes | "My policy beats greedy by 12%. What is the simple explanation?" |
 | [`position`](modes/position.md) | A positioning table and related-work section for a stated result | "Here is my result and the five closest PDFs. Write the related work." |
 | [`search-rank`](modes/search-rank.md) | The scripts above | "Find and rank papers on scheduling entanglement among many users." |
