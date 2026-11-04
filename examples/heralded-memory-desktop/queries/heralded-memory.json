@@ -1,0 +1,37 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question",
+      "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+      "keywords": "heralded entanglement remote quantum memories experiment rate fidelity storage time"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "the physical system",
+      "text": "Two spatially separated quantum memory nodes, such as trapped ions, neutral atoms, nitrogen-vacancy centres, rare-earth doped crystals or atomic ensembles, linked to each other by photons.",
+      "keywords": "quantum memory nodes trapped ion neutral atom NV centre rare-earth crystal atomic ensemble network node"
+    },
+    "Q2": {
+      "label": "approach",
+      "description": "the entangling protocol",
+      "text": "Heralded entanglement generation between memories by interfering emitted photons and performing a Bell-state measurement at a middle station, using single-photon, two-photon or DLCZ schemes.",
+      "keywords": "heralded entanglement Bell-state measurement photon interference single-photon two-photon DLCZ herald station"
+    },
+    "Q3": {
+      "label": "outcome",
+      "description": "the reported numbers",
+      "text": "The heralding rate or success probability of entanglement, the fidelity of the shared Bell state, and the storage or coherence time of the quantum memories.",
+      "keywords": "heralding rate success probability Bell-state fidelity storage time coherence time memory lifetime"
+    },
+    "Q4": {
+      "label": "context",
+      "description": "the distance and link",
+      "text": "Memory nodes placed in separate laboratories or buildings and connected by kilometres of optical fibre, often with frequency conversion to telecom wavelengths.",
+      "keywords": "separate laboratories buildings kilometres optical fibre telecom wavelength frequency conversion metropolitan link"
+    }
+  }
+}

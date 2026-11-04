@@ -1,0 +1,1008 @@
+{
+ "created": "2026-10-20T23:01:03",
+ "paper_lector_version": "0.2.0",
+ "paper_lector_commit": "v0.2.0-4-g824d368",
+ "argv": [],
+ "cwd": ".",
+ "inputs": {
+  "queries_file": {
+   "path": "queries/heralded-memory.json",
+   "sha256": "2a96a8f661443a476c77e2856ae6e35467d48812cdf520c86b9973340210bda7"
+  },
+  "config": {
+   "path": "literature.json",
+   "sha256": "eeb902da72256405a46a0451f008ebc0baad26af5e0736178ac47f55dc0927de"
+  },
+  "sources": null,
+  "fetch_logs": [
+   {
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/fetch_log.jsonl",
+    "sha256": "d7d5718074fd05cb5cd07c5ea61d21b6de873508ad27ad4b34b8a4eae2fb1213"
+   }
+  ]
+ },
+ "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+ "queries": {
+  "Q0": {
+   "label": "main",
+   "description": "core question",
+   "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+   "keywords": "heralded entanglement remote quantum memories experiment herald rate Bell state fidelity storage time"
+  },
+  "Q1": {
+   "label": "subject",
+   "description": "remote memory nodes",
+   "text": "Two spatially separated quantum memory nodes, such as trapped ions, neutral atoms, nitrogen-vacancy or silicon-vacancy centres in diamond, atomic ensembles or rare-earth doped crystals, linked by emitted photons.",
+   "keywords": "quantum memory node trapped ion neutral atom NV centre SiV diamond atomic ensemble rare-earth crystal spin photon"
+  },
+  "Q2": {
+   "label": "approach",
+   "description": "heralding protocol",
+   "text": "Photons emitted by each memory interfere at a central Bell-state measurement station, and a detection event heralds the entangled pair, as in Barrett-Kok, single-photon or DLCZ-type heralding schemes.",
+   "keywords": "heralding Bell state measurement two-photon interference single-photon detection Barrett-Kok DLCZ Hong-Ou-Mandel herald"
+  },
+  "Q3": {
+   "label": "outcome",
+   "description": "rate, fidelity, storage",
+   "text": "The experiment reports the heralding rate or success probability, the fidelity of the shared state to the target Bell state, and the memory coherence or storage time of the entangled pair.",
+   "keywords": "entanglement rate success probability heralding rate Bell state fidelity coherence time storage time memory lifetime"
+  },
+  "Q4": {
+   "label": "context",
+   "description": "separated labs over fibre",
+   "text": "The memory nodes sit in separate laboratories or buildings joined by optical fibre, from metres to tens of kilometres apart, sometimes with frequency conversion to telecom wavelengths.",
+   "keywords": "separate laboratories fibre link km distance telecom frequency conversion metropolitan network deployed fiber"
+  }
+ },
+ "queries_sha": "522bf772d34b",
+ "fuse": [
+  "Q0",
+  "Q1"
+ ],
+ "models": {
+  "provider": "voyage",
+  "embed": "voyage-4-large",
+  "rerank": "rerank-3",
+  "tokenizer": "https://huggingface.co/voyageai/voyage-4-large/resolve/bb931c2635a93efe400c24741363d8ff61d7bb32/tokenizer.json"
+ },
+ "versions": {
+  "os": "macOS-27.0.1-arm64-arm-64bit",
+  "python": "3.12.13",
+  "numpy": "2.5.4",
+  "tokenizers": "0.23.3",
+  "pdftotext": "pdftotext version 26.04.0",
+  "tokenizer_revision": "bb931c2635a93efe400c24741363d8ff61d7bb32"
+ },
+ "params": {
+  "window": 1200,
+  "step": 1000,
+  "rrf_k": 60,
+  "windows_per_paper": 3,
+  "max_overlap": 0.2
+ },
+ "corpus": {
+  "papers": 145,
+  "windows": 2288,
+  "ids": [
+   "Ainley2024_MultipartiteEntanglementMultiNodeQuantum_81bc17",
+   "Almanakly2025_DeterministicRemoteEntanglementUsingChiral_7608c9",
+   "Apolín2025_RecoilInducedErrorsTheirCorrection_e53279",
+   "Ataides2026_NeuralDecodersUniversalQuantumAlgorithms_df3933",
+   "Avis2024_AsymmetricNodePlacementFiberBased_a7831c",
+   "Behera2019_DemonstrationEntanglementPurificationSwappingProtocol_80f911",
+   "Benjamin2016_HidingQuantumCacheDiamonds_4eed8e",
+   "Bersin2024_TelecomNetworkingDiamondQuantumMemory_39dcfd",
+   "Bombín2021_InterleavingModularArchitecturesFaultTolerant_d74897",
+   "Borges2018_HeraldedEntanglingQuantumGateCavity_dcaf35",
+   "Businger2022_NonClassicalCorrelationsOver1250_3d80a7",
+   "Castellini2019_ActivatingRemoteEntanglementQuantumNetwork_c344c9",
+   "Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59",
+   "Chaudhary2022_StroboscopicQuantumNondemolitionMeasurementsEnhanced_f925fe",
+   "Choi2008_MappingPhotonicEntanglementIntoOut_cdc1d1",
+   "Chou2018_DeterministicTeleportationQuantumGateBetween_cd1ba7",
+   "Craddock2019_QuantumInterferenceBetweenPhotonsFrom_5fffe0",
+   "Cui2026_EntanglingAtomicQuantumMemoriesUsing_5c384e",
+   "Cui2026_TemporallyMultimodeIonIonEntanglement_d0272e",
+   "Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820",
+   "Dahlberg2022_NetQASMLowLevelInstructionSet_f6f017",
+   "Daiss2021_QuantumLogicGateBetweenDistant_4260bb",
+   "Dakis2024_HighThroughputAssessmentDefectNuclear_899dc4",
+   "Deep2026_QuantumEnhancedSingleMultiparameterMetrology_cfdb04",
+   "Dhara2023_EntanglingQuantumMemoriesHeraldedPhotonic_8b9c30",
+   "Dhara2025_EntanglingQuantumMemoriesChannelCapacity_7a4c0a",
+   "Dolde2014_HighFidelitySpinEntanglementUsing_f783d1",
+   "Dorner2003_EntanglingStringsNeutralAtoms1D_06e019",
+   "Duan2002_EntanglingManyAtomicEnsemblesThrough_32d0fa",
+   "Dyckovsky2012_AnalysisPhotonMediatedEntanglementBetween_c5b0bc",
+   "Fan2026_EntanglementDistributionAmongDistinctMechanical_0dde7e",
+   "Ficek2009_QuantumEntanglementDisentanglementMultiAtom_42cd7e",
+   "Flindt2007_SpinPhotonEntanglingDiode_32c837",
+   "Galetsky2025_FeasibilityLogicalBellStateGeneration_fe2956",
+   "Gao2025_RoomTemperatureQuantumEntanglementVan_4efdf2",
+   "Gautam2026_CoherentMicrowaveOpticalTransductionYb_d7aa54",
+   "Goncharov2025_RESEARCHAPPROACHESIMPLEMENTATIONQUANTUMREPEATER_151d38",
+   "Gour2004_RemotePreparationDistributionBipartiteEntangled_b30f01",
+   "Greve2013_CompleteTomographyHighFidelitySolid_858de0",
+   "Greve2022_EntanglementEnhancedMatterWaveInterferometry_7e9754",
+   "Grimbergen2026_ProbabilisticCutoffsHomogeneousQuantumRepeater_dc6c7c",
+   "Gritsch2024_OpticalSingleShotReadoutSpin_242e55",
+   "Guichard2025_MonitoringGenerationPhotonicLinearCluster_cc4331",
+   "Gupta2023_RobustMillisecondCoherenceTimesErbium_5e1080",
+   "Haah2012_LogicalOperatorTradeoffLocalQuantum_d0e0d0",
+   "Han2026_MeasurementFreeToricCodeMemory_1cbbd0",
+   "Hanamura2025_ScalableOpticalQuantumStateSynthesizer_ff7e94",
+   "Hannegan2021_ImprovingEntanglementGenerationRatesTrapped_786813",
+   "Hao2023_HybridPacketSwitchingAssistedClassical_75305d",
+   "Hermans2022_QubitTeleportationBetweenNonNeighbouring_88ea37",
+   "Heuck2020_PhotonPhotonInteractionsDynamicallyCoupled_ae75cb",
+   "Hilaire2021_ResourceRequirementsEfficientQuantumCommunication_f6be4c",
+   "Huang2025_RealizationFunctioningDualTypeTrapped_4b0e05",
+   "Humphreys2018_DeterministicDeliveryRemoteEntanglementQuantum_f2f5dc",
+   "Humphreys2018_PublisherCorrectionDeterministicDeliveryRemote_9706ee",
+   "Hänni2025_HeraldedEntanglementDemandSpinWave_d783f4",
+   "Irfan2026_AutonomousStabilizationRemoteEntanglementCascaded_8747a8",
+   "Jin2026_ProgrammableRydbergQuantumBusNonlocal_ae2d32",
+   "Jing2019_EntanglementThreeQuantumMemoriesInterference_ec58e2",
+   "Julsgaard2004_ExperimentalDemonstrationQuantumMemoryLight_c23dfe",
+   "Kalb2017_EntanglementDistillationBetweenSolidState_5bb901",
+   "Kalb2018_DephasingMechanismsDiamondBasedNuclear_5ecd55",
+   "Khazali2022_UniversalTerminalMobileEdgeQuantum_c10d3e",
+   "Knall2022_EfficientSourceShapedSinglePhotons_4ade59",
+   "Knaut2024_EntanglementNanophotonicQuantumMemoryNodes_4cef92",
+   "Krutyanskiy2023_MultimodeIonPhotonEntanglementOver_664116",
+   "Krutyanskiy2024_MultimodeIonPhotonEntanglementOver_490350",
+   "Kupriyanov2005_MultimodeEntanglementLightAtomicEnsembles_bc51a3",
+   "Kurokawa2022_RemoteEntanglementSuperconductingQubitsSolid_2c377e",
+   "Kurpiers2018_DeterministicQuantumStateTransferRemote_a47412",
+   "LagoRivera2021_TelecomHeraldedEntanglementBetweenMultimode_ea69dc",
+   "Landry2007_QuantumTeleportationOverSwisscomTelecommunication_6259a9",
+   "Laurat2007_HeraldedEntanglementBetweenAtomicEnsembles_9ad355",
+   "Leent2022_EntanglingSingleAtomsOver33_64b141",
+   "Li2018_QuantumMemoryGatesUsingType_4b0581",
+   "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+   "Li2025_ParallelizedTelecomQuantumNetworkingYtterbium_32b7fd",
+   "Li2026_OperationalCriteriaQuantumAdvantageLatency_40079b",
+   "Liao2016_XRayGeneratedHeraldedMacroscopical_068047",
+   "Lin2009_HeraldedQuantumMemorySinglePhoton_7c8104",
+   "Lin2025_ColdAtomicEnsemblesAsQuantum_426940",
+   "LindOlsen2026_UniversalQuantumComputationMultiMode_004f0b",
+   "Lipka2021_MassivelyMultiplexedGenerationBellType_ebfe37",
+   "Liu2016_DeterministicallyEntanglingTwoRemoteAtomic_e2c286",
+   "Liu2021_HeraldedEntanglementDistributionBetweenTwo_bafd43",
+   "Loenen2026_QuantumNetworkNodesRealTime_b15c80",
+   "Luo2025_EntanglingQuantumMemoriesOver420_a71f96",
+   "Manukhova2020_PulsedAtomMechanicalQuantumNon_8c1c91",
+   "Maunz2009_HeraldedQuantumGateBetweenRemote_02e22e",
+   "Merkouche2022_HeraldingMultiplePhotonicPulsedBell_413377",
+   "Mneimneh2026_DistributionLightMatterQuantumCorrelations_06fed3",
+   "Muschik2008_QuantumProcessingPhotonicStatesOptical_000171",
+   "Muschik2012_RobustEntanglementGenerationReservoirEngineering_2cb9d5",
+   "Mylavarapu2023_EntanglementTeleportation1DNetwork_7435bd",
+   "Nakav2025_QuantumCnotGateActivelySynchronized_bce54d",
+   "Nöller2025_InfiniteHierarchyMultiCopyQuantum_ebcb74",
+   "Olmschenk2009_QuantumTeleportationBetweenDistantMatter_b2228a",
+   "Ortiz2018_AdiabaticEntanglingGateBoseEinstein_f1a6d9",
+   "Pang2023_EntanglingMotionalAtomsOpticalLoop_875d6b",
+   "Patil2024_ImprovedDesignAllPhotonicQuantum_dc376a",
+   "Petrosyan2005_TowardsDeterministicOpticalQuantumComputation_e9a2ec",
+   "Pettersson2017_LightMediatedNonGaussianAtomic_8e0171",
+   "Pick2021_BoostingPhotonicQuantumComputationModerate_9ffbe9",
+   "Piparo2017_MemoryAssistedQuantumKeyDistribution_53836b",
+   "Piparo2018_MemoryAssistedQuantumKeyDistribution_f60423",
+   "Puigibert2020_EntanglementNonlocalityBetweenDisparateSolid_a6d6ea",
+   "Qiu2026_ThermalNoiseResilientMicrowaveQuantum_016193",
+   "Raniwala2025_SpinOptomechanicalCavityInterfacesDeep_f9888a",
+   "Reiserer2016_RobustQuantumNetworkMemoryUsing_24e08c",
+   "Ren2026_DecoherenceProtectedEntanglingGatesSilicon_1c6ee2",
+   "Ru2024_SynchronizationControlPlaneProtocolQuantum_775ff0",
+   "Saha2025_HighFidelityRemoteEntanglementTrapped_c031e4",
+   "Sazim2013_StudyTeleportationSuperDenseCoding_abd25c",
+   "Seif2026_EntanglementEnhancedLearningQuantumProcesses_c6f805",
+   "Sharman2021_QuantumRepeatersBasedIndividualElectron_5c6dbe",
+   "Stas2022_RobustMultiQubitQuantumNetwork_056606",
+   "Stas2026_EntanglementAssistedNonLocalOptical_6104ec",
+   "Stasińska2009_ManipulatingMesoscopicMultipartiteEntanglementAtom_b915ef",
+   "Stephenson2020_HighRateHighFidelityEntanglement_b2d85c",
+   "Stolk2024_MetropolitanScaleHeraldedEntanglementSolid_446339",
+   "Stute2012_TunableIonPhotonEntanglementOptical_ef630b",
+   "Sun2022_DeterministicTimeBinEntanglementBetween_ece3e1",
+   "Tanji2008_HeraldedSingleMagnonQuantumMemory_66a13b",
+   "Teller2025_SolidStateTemporallyMultiplexedQuantum_9754ff",
+   "Tissot2026_HybridSingleIonAtomicEnsemble_bf60f2",
+   "Tsunoda2023_ErrorDetectableBosonicEntanglingGates_4011ff",
+   "Usmani2012_HeraldedQuantumEntanglementBetweenTwo_1ffb5c",
+   "Vasan2025_ControlProtocolEntangledPairVerification_d2853c",
+   "Vittorini2014_EntanglementDistinguishableQuantumMemories_94fd9b",
+   "Waas2026_RemoteEntanglementSolidStateSpin_a1a65a",
+   "Wang2022_RemoteEntanglementDistributionQuantumNetwork_6ad123",
+   "Wang2023_ProofPrincipleDemonstrationTemporallyMultiplexed_9c7457",
+   "Wang2026_SelfCorrectingToricCodeMemory_a2957c",
+   "Wei2022_TowardsRealWorldQuantumNetworks_bada70",
+   "Xia2011_StationaryEntanglementStronglyCoupledQubits_cec1cd",
+   "Xu2026_PreservingHeisenbergLimitedMetrologicalInformation_34c6fd",
+   "Yu2021_MeasurementDeviceIndependentVerificationQuantum_763a0b",
+   "Zang2024_AnalyticalPerformanceEstimationsQuantumRepeater_de1827",
+   "Zhang2024_ProposalQuantumRepeaterArchitectureBased_ae492a",
+   "Zhang2026_LongTimeStorageEntangledLogical_3cb51b",
+   "Zheng2026_ImprovingEntanglementResilienceQuantumMemories_418476",
+   "Zhou2025_LearningDecodeLogicalCircuits_8d9453",
+   "Zwierz2009_HighEfficiencyClusterStateGeneration_060951",
+   "Zwierz2010_APPLICATIONSATOMICENSEMBLESDISTRIBUTEDQUANTUM_c26613",
+   "Zwierz2011_QuantumInformationProcessingContinuousVariables_05a496"
+  ],
+  "files": [
+   {
+    "id": "Ainley2024_MultipartiteEntanglementMultiNodeQuantum_81bc17",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ainley2024_MultipartiteEntanglementMultiNodeQuantum_81bc17.pdf",
+    "sha256": "21356fa6beb7977fbe0cf71f5584f77678573ac6b18ae9ae83df58d3c5cdc6ef"
+   },
+   {
+    "id": "Almanakly2025_DeterministicRemoteEntanglementUsingChiral_7608c9",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Almanakly2025_DeterministicRemoteEntanglementUsingChiral_7608c9.pdf",
+    "sha256": "3140ef5e5b94b5d6893e8468203da6b8dcde5413df4556009e608b2c1e330675"
+   },
+   {
+    "id": "Apolín2025_RecoilInducedErrorsTheirCorrection_e53279",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Apolín2025_RecoilInducedErrorsTheirCorrection_e53279.pdf",
+    "sha256": "8e08495f33429b2bf5b0ed9ddbdc54acd6725925f624adc07c65f5132a010e49"
+   },
+   {
+    "id": "Ataides2026_NeuralDecodersUniversalQuantumAlgorithms_df3933",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ataides2026_NeuralDecodersUniversalQuantumAlgorithms_df3933.pdf",
+    "sha256": "acca7ffedcb4870a3ef9957d33ce4febeb08bbecdf9e22df74253ab69dacb776"
+   },
+   {
+    "id": "Avis2024_AsymmetricNodePlacementFiberBased_a7831c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Avis2024_AsymmetricNodePlacementFiberBased_a7831c.pdf",
+    "sha256": "605ec28389ee7343d891a36e53c455353103aaa86267e61fc2020cde347d0175"
+   },
+   {
+    "id": "Behera2019_DemonstrationEntanglementPurificationSwappingProtocol_80f911",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Behera2019_DemonstrationEntanglementPurificationSwappingProtocol_80f911.pdf",
+    "sha256": "bef49b049b47ab092b5fcbef2682ccb9d62073830c8bef0a128fae39dfff46d7"
+   },
+   {
+    "id": "Benjamin2016_HidingQuantumCacheDiamonds_4eed8e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Benjamin2016_HidingQuantumCacheDiamonds_4eed8e.pdf",
+    "sha256": "a3e50b5f9eaa6db83613c84fd8b00a05c4772945dbbb7058609dc29c91f151d6"
+   },
+   {
+    "id": "Bersin2024_TelecomNetworkingDiamondQuantumMemory_39dcfd",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Bersin2024_TelecomNetworkingDiamondQuantumMemory_39dcfd.pdf",
+    "sha256": "503132fd951ea5da8f101ef7b178864d54dc4cd444a3d85fd1f9fcceedb68f74"
+   },
+   {
+    "id": "Bombín2021_InterleavingModularArchitecturesFaultTolerant_d74897",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Bombín2021_InterleavingModularArchitecturesFaultTolerant_d74897.pdf",
+    "sha256": "becf468e5c498fe2f596068d0f30fd138e0c2db99b554bb39696a5454b99db18"
+   },
+   {
+    "id": "Borges2018_HeraldedEntanglingQuantumGateCavity_dcaf35",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Borges2018_HeraldedEntanglingQuantumGateCavity_dcaf35.pdf",
+    "sha256": "926b4900900d4226be40b3c33ad840b62e9ac67f07764ca99a5b48ee52fda930"
+   },
+   {
+    "id": "Businger2022_NonClassicalCorrelationsOver1250_3d80a7",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Businger2022_NonClassicalCorrelationsOver1250_3d80a7.pdf",
+    "sha256": "9767454ffa8c559ea4b1486288fa29c9f08b08048a9db62da0de1302804d7528"
+   },
+   {
+    "id": "Castellini2019_ActivatingRemoteEntanglementQuantumNetwork_c344c9",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Castellini2019_ActivatingRemoteEntanglementQuantumNetwork_c344c9.pdf",
+    "sha256": "00546c261de7ef0d1b00701ae14fba1f405fa5d36d9fc0754c2534dda4efbd43"
+   },
+   {
+    "id": "Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Chandra2024_RoleErrorSyndromesTeleportationScheduling_3a5f59.pdf",
+    "sha256": "7894408767e10db9a1466b62faa0c03f3bf45c2d6e7ea981943bd2dea2ea1ced"
+   },
+   {
+    "id": "Chaudhary2022_StroboscopicQuantumNondemolitionMeasurementsEnhanced_f925fe",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Chaudhary2022_StroboscopicQuantumNondemolitionMeasurementsEnhanced_f925fe.pdf",
+    "sha256": "02ccceb475af162b4b9ecfa546f226fe3b9e903b3f6f8ff4eb132601effbf35a"
+   },
+   {
+    "id": "Choi2008_MappingPhotonicEntanglementIntoOut_cdc1d1",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Choi2008_MappingPhotonicEntanglementIntoOut_cdc1d1.pdf",
+    "sha256": "d2ca7360ce6a939315f36978b3834ac66f23aa5df694f8689ec7f8995ecaa809"
+   },
+   {
+    "id": "Chou2018_DeterministicTeleportationQuantumGateBetween_cd1ba7",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Chou2018_DeterministicTeleportationQuantumGateBetween_cd1ba7.pdf",
+    "sha256": "2eb733e13510d8a80d97325aecada0299ac574b110e474251e11d34e207c9f99"
+   },
+   {
+    "id": "Craddock2019_QuantumInterferenceBetweenPhotonsFrom_5fffe0",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Craddock2019_QuantumInterferenceBetweenPhotonsFrom_5fffe0.pdf",
+    "sha256": "78e1a3eac94747856f1ba709dc6c3ffe3b94589d64e11634b8f00dc0c1c31e18"
+   },
+   {
+    "id": "Cui2026_EntanglingAtomicQuantumMemoriesUsing_5c384e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Cui2026_EntanglingAtomicQuantumMemoriesUsing_5c384e.pdf",
+    "sha256": "56a8b8d9f059f5b1f76e53e9ba1859f6a2e25486546ecacdcd0c1b0d71bb1d7a"
+   },
+   {
+    "id": "Cui2026_TemporallyMultimodeIonIonEntanglement_d0272e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Cui2026_TemporallyMultimodeIonIonEntanglement_d0272e.pdf",
+    "sha256": "0f9cf633794c555d677152098aec7df0e7189bd9493db8d612e228c544fbeb9f"
+   },
+   {
+    "id": "Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dahlberg2019_LinkLayerProtocolQuantumNetworks_83a820.pdf",
+    "sha256": "e2967cc2d897e3fa81abe60376db49575726f56482c4f7ab9add15961148a68b"
+   },
+   {
+    "id": "Dahlberg2022_NetQASMLowLevelInstructionSet_f6f017",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dahlberg2022_NetQASMLowLevelInstructionSet_f6f017.pdf",
+    "sha256": "c4c637b71356e164de9f65ec0f1f01cf72a6a5abcc5f9861244980c829e5cde4"
+   },
+   {
+    "id": "Daiss2021_QuantumLogicGateBetweenDistant_4260bb",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Daiss2021_QuantumLogicGateBetweenDistant_4260bb.pdf",
+    "sha256": "6a1936c267c48291e8d9cdc3e3440c578700aa3642069883e7b028004b72300e"
+   },
+   {
+    "id": "Dakis2024_HighThroughputAssessmentDefectNuclear_899dc4",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dakis2024_HighThroughputAssessmentDefectNuclear_899dc4.pdf",
+    "sha256": "57fd8e1877e368bc81efeca1ce5c6f8f07751337a6430a2ac150b4ccb5a4c72a"
+   },
+   {
+    "id": "Deep2026_QuantumEnhancedSingleMultiparameterMetrology_cfdb04",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Deep2026_QuantumEnhancedSingleMultiparameterMetrology_cfdb04.pdf",
+    "sha256": "c234376f56344fa9c6c891ac79968e1efd80856173a7cf722d72b1842e3f96f3"
+   },
+   {
+    "id": "Dhara2023_EntanglingQuantumMemoriesHeraldedPhotonic_8b9c30",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dhara2023_EntanglingQuantumMemoriesHeraldedPhotonic_8b9c30.pdf",
+    "sha256": "afeca180317d6946e1fe28b8c48fdfb1b9fe4c31cf68344102104d388a43e7a4"
+   },
+   {
+    "id": "Dhara2025_EntanglingQuantumMemoriesChannelCapacity_7a4c0a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dhara2025_EntanglingQuantumMemoriesChannelCapacity_7a4c0a.pdf",
+    "sha256": "53a1af23a0c7663fdc61e5d36325e3e3788cee50337bac162386e82c606e59a5"
+   },
+   {
+    "id": "Dolde2014_HighFidelitySpinEntanglementUsing_f783d1",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dolde2014_HighFidelitySpinEntanglementUsing_f783d1.pdf",
+    "sha256": "34c4b858f2d1c1ab7c8aa58a6d3ce3f7797517490fa79c320758efd6fa748c7c"
+   },
+   {
+    "id": "Dorner2003_EntanglingStringsNeutralAtoms1D_06e019",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dorner2003_EntanglingStringsNeutralAtoms1D_06e019.pdf",
+    "sha256": "deb47c8c546c7c9c490fcd4cd8b8ff338aefa9f96a3c096355dfaf98e7d75066"
+   },
+   {
+    "id": "Duan2002_EntanglingManyAtomicEnsemblesThrough_32d0fa",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Duan2002_EntanglingManyAtomicEnsemblesThrough_32d0fa.pdf",
+    "sha256": "39a4f23670c1303d7c4e62fd64224eec5a1ac2dcf409bd34779e36ceaca65490"
+   },
+   {
+    "id": "Dyckovsky2012_AnalysisPhotonMediatedEntanglementBetween_c5b0bc",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Dyckovsky2012_AnalysisPhotonMediatedEntanglementBetween_c5b0bc.pdf",
+    "sha256": "c3cda5a1db04ad9b3a43b2f9d274677133e19172a351ae6a1e08cf5898721d95"
+   },
+   {
+    "id": "Fan2026_EntanglementDistributionAmongDistinctMechanical_0dde7e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Fan2026_EntanglementDistributionAmongDistinctMechanical_0dde7e.pdf",
+    "sha256": "ebcd6c46e413cf3e611e9158220f55397cbb66d34085b1197f1faec89c878f0b"
+   },
+   {
+    "id": "Ficek2009_QuantumEntanglementDisentanglementMultiAtom_42cd7e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ficek2009_QuantumEntanglementDisentanglementMultiAtom_42cd7e.pdf",
+    "sha256": "4951943cd3f03e94da44c674bf35c0c12d43c4701d2a70f1fc58ba58ca62b210"
+   },
+   {
+    "id": "Flindt2007_SpinPhotonEntanglingDiode_32c837",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Flindt2007_SpinPhotonEntanglingDiode_32c837.pdf",
+    "sha256": "d41618a9d1fc6b64fdb9268e22374ddc1b77affe73aadbc66788492098eb1cc2"
+   },
+   {
+    "id": "Galetsky2025_FeasibilityLogicalBellStateGeneration_fe2956",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Galetsky2025_FeasibilityLogicalBellStateGeneration_fe2956.pdf",
+    "sha256": "9de09893b6b55ccc9565745367444294c76fb87ba971d4137a54619e6877e8d7"
+   },
+   {
+    "id": "Gao2025_RoomTemperatureQuantumEntanglementVan_4efdf2",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Gao2025_RoomTemperatureQuantumEntanglementVan_4efdf2.pdf",
+    "sha256": "3516f3ad214881dd719396c720bdf842db4e8b3f676db80ac00e7408be41d884"
+   },
+   {
+    "id": "Gautam2026_CoherentMicrowaveOpticalTransductionYb_d7aa54",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Gautam2026_CoherentMicrowaveOpticalTransductionYb_d7aa54.pdf",
+    "sha256": "d3eb1ff25324011dd175bdea694c64fb44fcc8f78a769f5a869a367d64f6faf6"
+   },
+   {
+    "id": "Goncharov2025_RESEARCHAPPROACHESIMPLEMENTATIONQUANTUMREPEATER_151d38",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Goncharov2025_RESEARCHAPPROACHESIMPLEMENTATIONQUANTUMREPEATER_151d38.pdf",
+    "sha256": "ef095c224333226bc59f7f357fc1fae39c99f336b1e3a2865235a2eb71c9aac2"
+   },
+   {
+    "id": "Gour2004_RemotePreparationDistributionBipartiteEntangled_b30f01",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Gour2004_RemotePreparationDistributionBipartiteEntangled_b30f01.pdf",
+    "sha256": "df8b05c0bff1405b1d1669540f43ef217310ceb3c8a748f8fe02cb7c932646ff"
+   },
+   {
+    "id": "Greve2013_CompleteTomographyHighFidelitySolid_858de0",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Greve2013_CompleteTomographyHighFidelitySolid_858de0.pdf",
+    "sha256": "ff5a67483b153bcf0022656c4a3a0101fbc74417350c2edc4c395a874b29045c"
+   },
+   {
+    "id": "Greve2022_EntanglementEnhancedMatterWaveInterferometry_7e9754",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Greve2022_EntanglementEnhancedMatterWaveInterferometry_7e9754.pdf",
+    "sha256": "681b90cbd7e07ef81b9440886eba25b956a2bfccdfb61097c8b8922a2d807fa6"
+   },
+   {
+    "id": "Grimbergen2026_ProbabilisticCutoffsHomogeneousQuantumRepeater_dc6c7c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Grimbergen2026_ProbabilisticCutoffsHomogeneousQuantumRepeater_dc6c7c.pdf",
+    "sha256": "0f57d52868e41c2e15509b48c8bc988002e2ca6763d988e860fb9c088136869a"
+   },
+   {
+    "id": "Gritsch2024_OpticalSingleShotReadoutSpin_242e55",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Gritsch2024_OpticalSingleShotReadoutSpin_242e55.pdf",
+    "sha256": "e28746471ed6179ec07d08689234267a865e8a9d79387f8abbed075ce66281e8"
+   },
+   {
+    "id": "Guichard2025_MonitoringGenerationPhotonicLinearCluster_cc4331",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Guichard2025_MonitoringGenerationPhotonicLinearCluster_cc4331.pdf",
+    "sha256": "b22ef83fc5970f6ffd485dda964b6d33b82665be157c7e8f5bb4546731c0fe13"
+   },
+   {
+    "id": "Gupta2023_RobustMillisecondCoherenceTimesErbium_5e1080",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Gupta2023_RobustMillisecondCoherenceTimesErbium_5e1080.pdf",
+    "sha256": "570ab02f62a01c2c31686f9d2e1731f4ed4cdc44eee00d22ea5f5759934ae0a7"
+   },
+   {
+    "id": "Haah2012_LogicalOperatorTradeoffLocalQuantum_d0e0d0",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Haah2012_LogicalOperatorTradeoffLocalQuantum_d0e0d0.pdf",
+    "sha256": "ab337c357f952610609df41e8ac37ef811f88843843329d8f098c94f06db80e7"
+   },
+   {
+    "id": "Han2026_MeasurementFreeToricCodeMemory_1cbbd0",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Han2026_MeasurementFreeToricCodeMemory_1cbbd0.pdf",
+    "sha256": "05bd4e09d01ac7081c0df0428ff11cef67e1856beb98fbd4c443d994f6603c67"
+   },
+   {
+    "id": "Hanamura2025_ScalableOpticalQuantumStateSynthesizer_ff7e94",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hanamura2025_ScalableOpticalQuantumStateSynthesizer_ff7e94.pdf",
+    "sha256": "c7fedcb0599d07c14b9cf5b2cb5845a17bdb6e57184e6ca7707523efc5aaa045"
+   },
+   {
+    "id": "Hannegan2021_ImprovingEntanglementGenerationRatesTrapped_786813",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hannegan2021_ImprovingEntanglementGenerationRatesTrapped_786813.pdf",
+    "sha256": "bf8e823ef5839b247122ca6d5ef465a383952fbb62a4e968a352b6638206a6b5"
+   },
+   {
+    "id": "Hao2023_HybridPacketSwitchingAssistedClassical_75305d",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hao2023_HybridPacketSwitchingAssistedClassical_75305d.pdf",
+    "sha256": "641a40f736d8de5a34ff66d1ed65dec6e4cabd28f17f5c559bb0647d6b7b7d20"
+   },
+   {
+    "id": "Hermans2022_QubitTeleportationBetweenNonNeighbouring_88ea37",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hermans2022_QubitTeleportationBetweenNonNeighbouring_88ea37.pdf",
+    "sha256": "dd72da34d9f7acd55e6cb31879fb1dea3dc24273b9ea7c28af146b7c1543131c"
+   },
+   {
+    "id": "Heuck2020_PhotonPhotonInteractionsDynamicallyCoupled_ae75cb",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Heuck2020_PhotonPhotonInteractionsDynamicallyCoupled_ae75cb.pdf",
+    "sha256": "8c242752637f2d4ffc52664aafd5051eb4213be918716e9bcab4a713d4f30fa0"
+   },
+   {
+    "id": "Hilaire2021_ResourceRequirementsEfficientQuantumCommunication_f6be4c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hilaire2021_ResourceRequirementsEfficientQuantumCommunication_f6be4c.pdf",
+    "sha256": "dd1fab7d8ac8a2fe59eb6443abf0631b3fa5f46e09a04e168780b230cb076d00"
+   },
+   {
+    "id": "Huang2025_RealizationFunctioningDualTypeTrapped_4b0e05",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Huang2025_RealizationFunctioningDualTypeTrapped_4b0e05.pdf",
+    "sha256": "26b11419e6f8bef92edcaf6b213f0536b0c84d78e370b0816188f52b547c2e11"
+   },
+   {
+    "id": "Humphreys2018_DeterministicDeliveryRemoteEntanglementQuantum_f2f5dc",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Humphreys2018_DeterministicDeliveryRemoteEntanglementQuantum_f2f5dc.pdf",
+    "sha256": "fa07e0e3579ca2eed32df9c069cdfac5c705ce15635b844f84f3f6b96769d16e"
+   },
+   {
+    "id": "Humphreys2018_PublisherCorrectionDeterministicDeliveryRemote_9706ee",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Humphreys2018_PublisherCorrectionDeterministicDeliveryRemote_9706ee.pdf",
+    "sha256": "5cdd1c093b3403fb705738bd13d2ebcc4d560608f8448f071345902ed1782804"
+   },
+   {
+    "id": "Hänni2025_HeraldedEntanglementDemandSpinWave_d783f4",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Hänni2025_HeraldedEntanglementDemandSpinWave_d783f4.pdf",
+    "sha256": "06e5f3b344b40627382c74de38501200aa7a10d997f91f4f90066fdabc52cd3e"
+   },
+   {
+    "id": "Irfan2026_AutonomousStabilizationRemoteEntanglementCascaded_8747a8",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Irfan2026_AutonomousStabilizationRemoteEntanglementCascaded_8747a8.pdf",
+    "sha256": "a8be0d81577fc3bc500398f107c9a6f4dc37ec33c5b3bf51b87ab90b6782bdeb"
+   },
+   {
+    "id": "Jin2026_ProgrammableRydbergQuantumBusNonlocal_ae2d32",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Jin2026_ProgrammableRydbergQuantumBusNonlocal_ae2d32.pdf",
+    "sha256": "c00e7754cdf92c0a0b25f39d4078df57d821a2187b43ac5e68ecf7e564891918"
+   },
+   {
+    "id": "Jing2019_EntanglementThreeQuantumMemoriesInterference_ec58e2",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Jing2019_EntanglementThreeQuantumMemoriesInterference_ec58e2.pdf",
+    "sha256": "9c90871d320031e84bd6cc1eaae901a2bebdb2265d056f6268dad1dde09d7b4e"
+   },
+   {
+    "id": "Julsgaard2004_ExperimentalDemonstrationQuantumMemoryLight_c23dfe",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Julsgaard2004_ExperimentalDemonstrationQuantumMemoryLight_c23dfe.pdf",
+    "sha256": "896f340ccc06291fa01ad5e375349241d77ff65979317e032b0b240aa6ff6cd4"
+   },
+   {
+    "id": "Kalb2017_EntanglementDistillationBetweenSolidState_5bb901",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Kalb2017_EntanglementDistillationBetweenSolidState_5bb901.pdf",
+    "sha256": "5064425a3e895fcb9c4297e28f87fe451686d67b8b28d2bc2e734f11a3ddb05f"
+   },
+   {
+    "id": "Kalb2018_DephasingMechanismsDiamondBasedNuclear_5ecd55",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Kalb2018_DephasingMechanismsDiamondBasedNuclear_5ecd55.pdf",
+    "sha256": "1bcb2701b6ea318b14f6d03e77495cb704137b8e3473c7c6eb6ddd43da0d1841"
+   },
+   {
+    "id": "Khazali2022_UniversalTerminalMobileEdgeQuantum_c10d3e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Khazali2022_UniversalTerminalMobileEdgeQuantum_c10d3e.pdf",
+    "sha256": "99cc44fb359fab2f3c420b87c93679726dfc06ee4e4de8efae71fe799983443a"
+   },
+   {
+    "id": "Knall2022_EfficientSourceShapedSinglePhotons_4ade59",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Knall2022_EfficientSourceShapedSinglePhotons_4ade59.pdf",
+    "sha256": "7d29b8dd076237a91130885a03af75cabd2eec24d94fd1f0e971a978e8b7f8f6"
+   },
+   {
+    "id": "Knaut2024_EntanglementNanophotonicQuantumMemoryNodes_4cef92",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Knaut2024_EntanglementNanophotonicQuantumMemoryNodes_4cef92.pdf",
+    "sha256": "46e126618c87fa8e1bbd93fb9410bfb2ba0c2ca44424e057a90df51a647178e3"
+   },
+   {
+    "id": "Krutyanskiy2023_MultimodeIonPhotonEntanglementOver_664116",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Krutyanskiy2023_MultimodeIonPhotonEntanglementOver_664116.pdf",
+    "sha256": "4ccb737fb2f4de693aad69dbdae1e0bf8b463647e046568e0a186f281c409e46"
+   },
+   {
+    "id": "Krutyanskiy2024_MultimodeIonPhotonEntanglementOver_490350",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Krutyanskiy2024_MultimodeIonPhotonEntanglementOver_490350.pdf",
+    "sha256": "a88b00fb14b9c9f824da984ef5057214515e7951d9bbcf8c0064d66b1eb082d7"
+   },
+   {
+    "id": "Kupriyanov2005_MultimodeEntanglementLightAtomicEnsembles_bc51a3",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Kupriyanov2005_MultimodeEntanglementLightAtomicEnsembles_bc51a3.pdf",
+    "sha256": "8119d52d8ebf1a4c2c78d4aebf449e73022f96513cfd2a17eb5eb23940da1cb2"
+   },
+   {
+    "id": "Kurokawa2022_RemoteEntanglementSuperconductingQubitsSolid_2c377e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Kurokawa2022_RemoteEntanglementSuperconductingQubitsSolid_2c377e.pdf",
+    "sha256": "652b9346349daece965ec7dafa83dfbf6c83f0efce130cf5bb0942cb4cb61c89"
+   },
+   {
+    "id": "Kurpiers2018_DeterministicQuantumStateTransferRemote_a47412",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Kurpiers2018_DeterministicQuantumStateTransferRemote_a47412.pdf",
+    "sha256": "19f7ff180c50ed5837eb0017b765c1f8db2d496d6c620de016846d97402bc206"
+   },
+   {
+    "id": "LagoRivera2021_TelecomHeraldedEntanglementBetweenMultimode_ea69dc",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/LagoRivera2021_TelecomHeraldedEntanglementBetweenMultimode_ea69dc.pdf",
+    "sha256": "40fca4de73ec3459893e40692ca102cdc994f366504afef2c384a92748cfdf8e"
+   },
+   {
+    "id": "Landry2007_QuantumTeleportationOverSwisscomTelecommunication_6259a9",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Landry2007_QuantumTeleportationOverSwisscomTelecommunication_6259a9.pdf",
+    "sha256": "612be209778bb635b9f3f7f585cac70907cb0008b9f13a6409e7aa867ea110dd"
+   },
+   {
+    "id": "Laurat2007_HeraldedEntanglementBetweenAtomicEnsembles_9ad355",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Laurat2007_HeraldedEntanglementBetweenAtomicEnsembles_9ad355.pdf",
+    "sha256": "3052469df936d2ffa70f634055282f5b454adf45a2e2d4ae8f45d1877d3f9164"
+   },
+   {
+    "id": "Leent2022_EntanglingSingleAtomsOver33_64b141",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Leent2022_EntanglingSingleAtomsOver33_64b141.pdf",
+    "sha256": "a228be3d643b98375663351041e2b44d625767506b33be76a309c2a63b9e61e7"
+   },
+   {
+    "id": "Li2018_QuantumMemoryGatesUsingType_4b0581",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Li2018_QuantumMemoryGatesUsingType_4b0581.pdf",
+    "sha256": "2408a0752f085d6afc915903b6044854e68363d3516fe17d82c715d8877b5f7b"
+   },
+   {
+    "id": "Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Li2021_EffectiveRoutingDesignRemoteEntanglement_2366e4.pdf",
+    "sha256": "cb1714bca3967ecbe2cee3ac83297d9a34009c56afead547f2707301272325d3"
+   },
+   {
+    "id": "Li2025_ParallelizedTelecomQuantumNetworkingYtterbium_32b7fd",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Li2025_ParallelizedTelecomQuantumNetworkingYtterbium_32b7fd.pdf",
+    "sha256": "f8b4464bf3b79cc8fd451c3cc91c514755e5c2b41fd06f4428b06e7e52615f1e"
+   },
+   {
+    "id": "Li2026_OperationalCriteriaQuantumAdvantageLatency_40079b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Li2026_OperationalCriteriaQuantumAdvantageLatency_40079b.pdf",
+    "sha256": "553c2514713c10ba268f398d1b2ac73392c25a6efc559ddc1b27fffd26299619"
+   },
+   {
+    "id": "Liao2016_XRayGeneratedHeraldedMacroscopical_068047",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Liao2016_XRayGeneratedHeraldedMacroscopical_068047.pdf",
+    "sha256": "a34561fe018cce91cdda8da47325b39a76bf486a65b8d5e3dc3d4d11fa2ebc59"
+   },
+   {
+    "id": "Lin2009_HeraldedQuantumMemorySinglePhoton_7c8104",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Lin2009_HeraldedQuantumMemorySinglePhoton_7c8104.pdf",
+    "sha256": "271439cd951ee2ed502e944eb4f1211c38d0ebc6ced6f527ab1e7c22559ee65d"
+   },
+   {
+    "id": "Lin2025_ColdAtomicEnsemblesAsQuantum_426940",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Lin2025_ColdAtomicEnsemblesAsQuantum_426940.pdf",
+    "sha256": "b3a4001ba74c437a42b754232c9cc37fcf0ea0e6941d4d4b0fe783437b0b0f2e"
+   },
+   {
+    "id": "LindOlsen2026_UniversalQuantumComputationMultiMode_004f0b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/LindOlsen2026_UniversalQuantumComputationMultiMode_004f0b.pdf",
+    "sha256": "8c35df94e7115bb1901b8fabeba0579a2b7a165571cac8924d3ea1d0df55b5cd"
+   },
+   {
+    "id": "Lipka2021_MassivelyMultiplexedGenerationBellType_ebfe37",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Lipka2021_MassivelyMultiplexedGenerationBellType_ebfe37.pdf",
+    "sha256": "02916f5c08c1f5ec97dc3d5245a1e8e98744d30f7465f0b26fe4ad3f7cbfb6fe"
+   },
+   {
+    "id": "Liu2016_DeterministicallyEntanglingTwoRemoteAtomic_e2c286",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Liu2016_DeterministicallyEntanglingTwoRemoteAtomic_e2c286.pdf",
+    "sha256": "86e8dc1e385e3bf7d38e6add3b8c18e21a3b8d5bb563dd4458d88413054ac677"
+   },
+   {
+    "id": "Liu2021_HeraldedEntanglementDistributionBetweenTwo_bafd43",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Liu2021_HeraldedEntanglementDistributionBetweenTwo_bafd43.pdf",
+    "sha256": "899ad645a2ce1a09fa01369db92ddcd7f1e680256c5fe7b13e155e2597125739"
+   },
+   {
+    "id": "Loenen2026_QuantumNetworkNodesRealTime_b15c80",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Loenen2026_QuantumNetworkNodesRealTime_b15c80.pdf",
+    "sha256": "a6b7ae73ada327873fe2a159faff2189bcc190d0b539385fa52d79742daadac0"
+   },
+   {
+    "id": "Luo2025_EntanglingQuantumMemoriesOver420_a71f96",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Luo2025_EntanglingQuantumMemoriesOver420_a71f96.pdf",
+    "sha256": "50283dc0b7572a7437d083b579035a2c031a2bbac66491f191397d87f8972877"
+   },
+   {
+    "id": "Manukhova2020_PulsedAtomMechanicalQuantumNon_8c1c91",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Manukhova2020_PulsedAtomMechanicalQuantumNon_8c1c91.pdf",
+    "sha256": "10026be0880bb88d83214bf73155c786bb4716c8f33a807f62f7b39a676d7870"
+   },
+   {
+    "id": "Maunz2009_HeraldedQuantumGateBetweenRemote_02e22e",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Maunz2009_HeraldedQuantumGateBetweenRemote_02e22e.pdf",
+    "sha256": "8359c7b83bde4a3b72c56e2c5360982a78acdccaaa8dbca6e03830b497a508cb"
+   },
+   {
+    "id": "Merkouche2022_HeraldingMultiplePhotonicPulsedBell_413377",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Merkouche2022_HeraldingMultiplePhotonicPulsedBell_413377.pdf",
+    "sha256": "2be91590e0f93de1e1726a49ce83088e3f8b778b3c6fdc96558fd6b461b2a93c"
+   },
+   {
+    "id": "Mneimneh2026_DistributionLightMatterQuantumCorrelations_06fed3",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Mneimneh2026_DistributionLightMatterQuantumCorrelations_06fed3.pdf",
+    "sha256": "7c9b77ce0a737638b3691358ac1042f86f57b47660fd0e06fc76980c5f4308ab"
+   },
+   {
+    "id": "Muschik2008_QuantumProcessingPhotonicStatesOptical_000171",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Muschik2008_QuantumProcessingPhotonicStatesOptical_000171.pdf",
+    "sha256": "9e4eb6a1f715eb2a84039fdddc5bc1dec00fab458c404e86910e398a92dea9a7"
+   },
+   {
+    "id": "Muschik2012_RobustEntanglementGenerationReservoirEngineering_2cb9d5",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Muschik2012_RobustEntanglementGenerationReservoirEngineering_2cb9d5.pdf",
+    "sha256": "1c47455bd5cf13e082112b687dd2a715b016b489f8d48e8083a5c4c6c6deac2f"
+   },
+   {
+    "id": "Mylavarapu2023_EntanglementTeleportation1DNetwork_7435bd",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Mylavarapu2023_EntanglementTeleportation1DNetwork_7435bd.pdf",
+    "sha256": "c75028e5fe41c01d3b7ef2aee8cb53b377afd6322a22243f468a6cae85219285"
+   },
+   {
+    "id": "Nakav2025_QuantumCnotGateActivelySynchronized_bce54d",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Nakav2025_QuantumCnotGateActivelySynchronized_bce54d.pdf",
+    "sha256": "b050b536c531d8e8c15ce25de423a59a78e4fb2911c318d8f7d71ebac21cb812"
+   },
+   {
+    "id": "Nöller2025_InfiniteHierarchyMultiCopyQuantum_ebcb74",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Nöller2025_InfiniteHierarchyMultiCopyQuantum_ebcb74.pdf",
+    "sha256": "da2282a4bbf29941e3e34a1ec0d7e148afe43d76dc6b1492af5b0915ff3f6f50"
+   },
+   {
+    "id": "Olmschenk2009_QuantumTeleportationBetweenDistantMatter_b2228a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Olmschenk2009_QuantumTeleportationBetweenDistantMatter_b2228a.pdf",
+    "sha256": "8a07da16e0083968d761679c43f33412ef04511395c976d81384a51a0aac36c1"
+   },
+   {
+    "id": "Ortiz2018_AdiabaticEntanglingGateBoseEinstein_f1a6d9",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ortiz2018_AdiabaticEntanglingGateBoseEinstein_f1a6d9.pdf",
+    "sha256": "29e12ee1701fd38393e1f0a230e4895abe6ec21757304672efadadccffa9a2fd"
+   },
+   {
+    "id": "Pang2023_EntanglingMotionalAtomsOpticalLoop_875d6b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Pang2023_EntanglingMotionalAtomsOpticalLoop_875d6b.pdf",
+    "sha256": "fc09e18e9d19786088639ef5c7bccf557c1d4c0f54bfdab96b0b7f6be2725bc2"
+   },
+   {
+    "id": "Patil2024_ImprovedDesignAllPhotonicQuantum_dc376a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Patil2024_ImprovedDesignAllPhotonicQuantum_dc376a.pdf",
+    "sha256": "32e34ad02310f35408c60dd38deb06332263bd063749360715b763e1a44a80d1"
+   },
+   {
+    "id": "Petrosyan2005_TowardsDeterministicOpticalQuantumComputation_e9a2ec",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Petrosyan2005_TowardsDeterministicOpticalQuantumComputation_e9a2ec.pdf",
+    "sha256": "ca5eb7bbd76f2d6739bf87c7e35d048e2b38cb12e5486ae55ca8920307af4b92"
+   },
+   {
+    "id": "Pettersson2017_LightMediatedNonGaussianAtomic_8e0171",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Pettersson2017_LightMediatedNonGaussianAtomic_8e0171.pdf",
+    "sha256": "4e0cf2ca37dfee45b9e9b97a507bc8303362fe4a468595bb759b3a6ae86e848f"
+   },
+   {
+    "id": "Pick2021_BoostingPhotonicQuantumComputationModerate_9ffbe9",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Pick2021_BoostingPhotonicQuantumComputationModerate_9ffbe9.pdf",
+    "sha256": "b66fafb95c0b6a7650e264c9df865f90b3e44b87d4eb3cc2af68a804f25894d0"
+   },
+   {
+    "id": "Piparo2017_MemoryAssistedQuantumKeyDistribution_53836b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Piparo2017_MemoryAssistedQuantumKeyDistribution_53836b.pdf",
+    "sha256": "9cbe2d89ab122b17cffb27d008a535643768c917da4324db19212f098d943ef7"
+   },
+   {
+    "id": "Piparo2018_MemoryAssistedQuantumKeyDistribution_f60423",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Piparo2018_MemoryAssistedQuantumKeyDistribution_f60423.pdf",
+    "sha256": "eb04bf33568773e14e517ed51ee93d38ca66820d243e4d35996116e9f56729db"
+   },
+   {
+    "id": "Puigibert2020_EntanglementNonlocalityBetweenDisparateSolid_a6d6ea",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Puigibert2020_EntanglementNonlocalityBetweenDisparateSolid_a6d6ea.pdf",
+    "sha256": "e7c70aed76b60918ecdbd9ebed3f0e79bd6bcb7f9751d78c6a12f7e00d8d78ca"
+   },
+   {
+    "id": "Qiu2026_ThermalNoiseResilientMicrowaveQuantum_016193",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Qiu2026_ThermalNoiseResilientMicrowaveQuantum_016193.pdf",
+    "sha256": "7276ac64164ad5a4a0b1bd2fa352c7c4e259f04d8778c474ec621f41c5d429f2"
+   },
+   {
+    "id": "Raniwala2025_SpinOptomechanicalCavityInterfacesDeep_f9888a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Raniwala2025_SpinOptomechanicalCavityInterfacesDeep_f9888a.pdf",
+    "sha256": "83b5f4b4fe50da1fe118317191c7a93f707c4b1bba5e87e259cd1aedb07b0ef8"
+   },
+   {
+    "id": "Reiserer2016_RobustQuantumNetworkMemoryUsing_24e08c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Reiserer2016_RobustQuantumNetworkMemoryUsing_24e08c.pdf",
+    "sha256": "893bc3966167ff2c861843640c1c479d5c9527c6e49cbe02378dddf33068d0b2"
+   },
+   {
+    "id": "Ren2026_DecoherenceProtectedEntanglingGatesSilicon_1c6ee2",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ren2026_DecoherenceProtectedEntanglingGatesSilicon_1c6ee2.pdf",
+    "sha256": "443bfcddb91fd6b6924b706cc04aff9af22f9302b56db9e9334c030c5a4d78eb"
+   },
+   {
+    "id": "Ru2024_SynchronizationControlPlaneProtocolQuantum_775ff0",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Ru2024_SynchronizationControlPlaneProtocolQuantum_775ff0.pdf",
+    "sha256": "89abe916e96aa4e580ef7e6afecf35167783ba479e7c094d8ec2043c38a9b05c"
+   },
+   {
+    "id": "Saha2025_HighFidelityRemoteEntanglementTrapped_c031e4",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Saha2025_HighFidelityRemoteEntanglementTrapped_c031e4.pdf",
+    "sha256": "c681163b64e12fbed83255a05d14552388e08d9e46ffce7cba862e4c8a78e4da"
+   },
+   {
+    "id": "Sazim2013_StudyTeleportationSuperDenseCoding_abd25c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Sazim2013_StudyTeleportationSuperDenseCoding_abd25c.pdf",
+    "sha256": "048c4e4f706fa948b6677adc0d5841fc7364d767699125a5fb0bcd0427bf4798"
+   },
+   {
+    "id": "Seif2026_EntanglementEnhancedLearningQuantumProcesses_c6f805",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Seif2026_EntanglementEnhancedLearningQuantumProcesses_c6f805.pdf",
+    "sha256": "8a4ac0ad39401db0411dd15572b33b640945b16b84a39d7abf047157eeca4b07"
+   },
+   {
+    "id": "Sharman2021_QuantumRepeatersBasedIndividualElectron_5c6dbe",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Sharman2021_QuantumRepeatersBasedIndividualElectron_5c6dbe.pdf",
+    "sha256": "5ab705c20e456ff45f445ec8028bc13c9a8d20a03c71517d171a8b856c3c21c2"
+   },
+   {
+    "id": "Stas2022_RobustMultiQubitQuantumNetwork_056606",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stas2022_RobustMultiQubitQuantumNetwork_056606.pdf",
+    "sha256": "53a34d07a00859ae304a6eb68cf2a04f263d06eda4352691a104e494773e3e38"
+   },
+   {
+    "id": "Stas2026_EntanglementAssistedNonLocalOptical_6104ec",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stas2026_EntanglementAssistedNonLocalOptical_6104ec.pdf",
+    "sha256": "aeeeddca916eb076c7cf3e56ddd6bf2d34f4c24dcb8687202b0e52b85869bcb8"
+   },
+   {
+    "id": "Stasińska2009_ManipulatingMesoscopicMultipartiteEntanglementAtom_b915ef",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stasińska2009_ManipulatingMesoscopicMultipartiteEntanglementAtom_b915ef.pdf",
+    "sha256": "c3ff5fbd8633d80a21c23efe6fdca9b9396b90c87fc843aee2f3763754e5988c"
+   },
+   {
+    "id": "Stephenson2020_HighRateHighFidelityEntanglement_b2d85c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stephenson2020_HighRateHighFidelityEntanglement_b2d85c.pdf",
+    "sha256": "9d1b3e8f79a4442c02aa7eb143a9cd64f131c8ef7df90e507b103ad81ae6ec03"
+   },
+   {
+    "id": "Stolk2024_MetropolitanScaleHeraldedEntanglementSolid_446339",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stolk2024_MetropolitanScaleHeraldedEntanglementSolid_446339.pdf",
+    "sha256": "70dc79cfc6027ceed8c2690ee8ee91fd277fd39d554be1272774d2cab35385f6"
+   },
+   {
+    "id": "Stute2012_TunableIonPhotonEntanglementOptical_ef630b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Stute2012_TunableIonPhotonEntanglementOptical_ef630b.pdf",
+    "sha256": "3940c6a972c7176e1573df3f2e58052a5a5043ddd2b2cca75e0bd679211d4e69"
+   },
+   {
+    "id": "Sun2022_DeterministicTimeBinEntanglementBetween_ece3e1",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Sun2022_DeterministicTimeBinEntanglementBetween_ece3e1.pdf",
+    "sha256": "93d0d31acc44f7631e9d149aff973aebbca35b4897fe4b57f70b88dc4c62098f"
+   },
+   {
+    "id": "Tanji2008_HeraldedSingleMagnonQuantumMemory_66a13b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Tanji2008_HeraldedSingleMagnonQuantumMemory_66a13b.pdf",
+    "sha256": "e2e1751255befe4aa38e83fef7d10eb6bebd9e652606628b5502f1d9f0d1f964"
+   },
+   {
+    "id": "Teller2025_SolidStateTemporallyMultiplexedQuantum_9754ff",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Teller2025_SolidStateTemporallyMultiplexedQuantum_9754ff.pdf",
+    "sha256": "bf1f310d46e75a64a4842a46b42d208bbaa7a1f8de60b0a0b35661c8e8815161"
+   },
+   {
+    "id": "Tissot2026_HybridSingleIonAtomicEnsemble_bf60f2",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Tissot2026_HybridSingleIonAtomicEnsemble_bf60f2.pdf",
+    "sha256": "3361ae299ddbdc9dd4a72b8645fbadf98dd6796772d8b8d822aa72e2743b21af"
+   },
+   {
+    "id": "Tsunoda2023_ErrorDetectableBosonicEntanglingGates_4011ff",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Tsunoda2023_ErrorDetectableBosonicEntanglingGates_4011ff.pdf",
+    "sha256": "360bff38c6a45c4839ab5d3f748132e8c05c78371e5916f824cda18b1f148a65"
+   },
+   {
+    "id": "Usmani2012_HeraldedQuantumEntanglementBetweenTwo_1ffb5c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Usmani2012_HeraldedQuantumEntanglementBetweenTwo_1ffb5c.pdf",
+    "sha256": "7053d5db09b1ede96ea09c555eb0731ca4d8b4003890e7806f7b6ceedb8c96ee"
+   },
+   {
+    "id": "Vasan2025_ControlProtocolEntangledPairVerification_d2853c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Vasan2025_ControlProtocolEntangledPairVerification_d2853c.pdf",
+    "sha256": "a47696e6af4ef0daeddf3b1b14b1f311c0acab60e57889c1c059d21fe06360ec"
+   },
+   {
+    "id": "Vittorini2014_EntanglementDistinguishableQuantumMemories_94fd9b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Vittorini2014_EntanglementDistinguishableQuantumMemories_94fd9b.pdf",
+    "sha256": "cb480a15a60b5cd3cd775383aa4b45e6731229aebcf960a77ceae7018899f225"
+   },
+   {
+    "id": "Waas2026_RemoteEntanglementSolidStateSpin_a1a65a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Waas2026_RemoteEntanglementSolidStateSpin_a1a65a.pdf",
+    "sha256": "278e1b8d00c64fcb3dfd1d58201a5e0304098110dd5085c303aad405bdb41f0c"
+   },
+   {
+    "id": "Wang2022_RemoteEntanglementDistributionQuantumNetwork_6ad123",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Wang2022_RemoteEntanglementDistributionQuantumNetwork_6ad123.pdf",
+    "sha256": "b66de8d9a7834baf545c962d084cee4ad98da40206c0fca181af36495e0dfdcd"
+   },
+   {
+    "id": "Wang2023_ProofPrincipleDemonstrationTemporallyMultiplexed_9c7457",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Wang2023_ProofPrincipleDemonstrationTemporallyMultiplexed_9c7457.pdf",
+    "sha256": "618a43de26ac77ea5a9f6c06c7e460f2192447bf5409b5275d88d414cf5bdd28"
+   },
+   {
+    "id": "Wang2026_SelfCorrectingToricCodeMemory_a2957c",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Wang2026_SelfCorrectingToricCodeMemory_a2957c.pdf",
+    "sha256": "20512dc79a02831255b308c50f04e67439feff053257d9b8e3cf236750c574ee"
+   },
+   {
+    "id": "Wei2022_TowardsRealWorldQuantumNetworks_bada70",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Wei2022_TowardsRealWorldQuantumNetworks_bada70.pdf",
+    "sha256": "fd2f36d669b63713783ba0d4328135df4196f187e194de52df8ba90edd21344d"
+   },
+   {
+    "id": "Xia2011_StationaryEntanglementStronglyCoupledQubits_cec1cd",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Xia2011_StationaryEntanglementStronglyCoupledQubits_cec1cd.pdf",
+    "sha256": "692be353b90d09e1dba49303cd7e400c6ce92ec5e8a140dbd7bb2c13398bfb5d"
+   },
+   {
+    "id": "Xu2026_PreservingHeisenbergLimitedMetrologicalInformation_34c6fd",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Xu2026_PreservingHeisenbergLimitedMetrologicalInformation_34c6fd.pdf",
+    "sha256": "4f557a7418b983008a4581be13483ec5266a9553ed93bb4e0ec21862a5ee1be7"
+   },
+   {
+    "id": "Yu2021_MeasurementDeviceIndependentVerificationQuantum_763a0b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Yu2021_MeasurementDeviceIndependentVerificationQuantum_763a0b.pdf",
+    "sha256": "238b91aff80e14295b371daf68d1589d5f315bf680f1b8b1e488c8368cbd14f6"
+   },
+   {
+    "id": "Zang2024_AnalyticalPerformanceEstimationsQuantumRepeater_de1827",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zang2024_AnalyticalPerformanceEstimationsQuantumRepeater_de1827.pdf",
+    "sha256": "1045b555d70c7a2dd8f6ccd709e65f0816df7401c0aeba19c0253c863d8c0cde"
+   },
+   {
+    "id": "Zhang2024_ProposalQuantumRepeaterArchitectureBased_ae492a",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zhang2024_ProposalQuantumRepeaterArchitectureBased_ae492a.pdf",
+    "sha256": "679bcfc61d1717d5b270ee4da61889d362fa6cf6e4415dcf2991fb5aefa2bf30"
+   },
+   {
+    "id": "Zhang2026_LongTimeStorageEntangledLogical_3cb51b",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zhang2026_LongTimeStorageEntangledLogical_3cb51b.pdf",
+    "sha256": "140dd715f73327478958cf6c52b15a0841d29206660816dac59857f85f6eba57"
+   },
+   {
+    "id": "Zheng2026_ImprovingEntanglementResilienceQuantumMemories_418476",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zheng2026_ImprovingEntanglementResilienceQuantumMemories_418476.pdf",
+    "sha256": "4d6f391ea6b12cd4918f110f8e45423eda6ef9f8a163fd25d79fe9155c4abcfb"
+   },
+   {
+    "id": "Zhou2025_LearningDecodeLogicalCircuits_8d9453",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zhou2025_LearningDecodeLogicalCircuits_8d9453.pdf",
+    "sha256": "93156c23ed5403656498a4a2fc219e5cdc75537bdc3295d5cb23b6b8dc5a85b9"
+   },
+   {
+    "id": "Zwierz2009_HighEfficiencyClusterStateGeneration_060951",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zwierz2009_HighEfficiencyClusterStateGeneration_060951.pdf",
+    "sha256": "8942f4a86ee3bc7f32827390a85dff828c5ae1464c374e4daf57a50464dd542b"
+   },
+   {
+    "id": "Zwierz2010_APPLICATIONSATOMICENSEMBLESDISTRIBUTEDQUANTUM_c26613",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zwierz2010_APPLICATIONSATOMICENSEMBLESDISTRIBUTEDQUANTUM_c26613.pdf",
+    "sha256": "7cb53dde6646936f5a2abb538dd5d7f49bb4d92eb83db2f68a3f45e86801039c"
+   },
+   {
+    "id": "Zwierz2011_QuantumInformationProcessingContinuousVariables_05a496",
+    "path": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory/pdfs/Zwierz2011_QuantumInformationProcessingContinuousVariables_05a496.pdf",
+    "sha256": "4a2fb8f0d200822838157b5e80b11a3018a5b1f6d5fc8d5e7029605362ff919e"
+   }
+  ],
+  "skipped": [],
+  "possible_duplicates": [
+   [
+    "Han2026_MeasurementFreeToricCodeMemory_1cbbd0",
+    "Wang2026_SelfCorrectingToricCodeMemory_a2957c"
+   ],
+   [
+    "Piparo2017_MemoryAssistedQuantumKeyDistribution_53836b",
+    "Piparo2018_MemoryAssistedQuantumKeyDistribution_f60423"
+   ]
+  ]
+ },
+ "expect": "",
+ "usage": {
+  "embed_cached": 2289,
+  "embed": 149,
+  "rerank": 3017868
+ },
+ "estimate": 5624066,
+ "outputs": {
+  "hybrid": {
+   "csv": "/Users/huguryildiz/Documents/GitHub/paper-lector/examples/heralded-memory-desktop/runs/2026-10-20_2259_heralded-memory_rank.csv",
+   "fused_top10": [
+    "Wei2022_TowardsRealWorldQuantumNetworks_bada70",
+    "Knaut2024_EntanglementNanophotonicQuantumMemoryNodes_4cef92",
+    "LagoRivera2021_TelecomHeraldedEntanglementBetweenMultimode_ea69dc",
+    "Maunz2009_HeraldedQuantumGateBetweenRemote_02e22e",
+    "Hänni2025_HeraldedEntanglementDemandSpinWave_d783f4",
+    "Liu2021_HeraldedEntanglementDistributionBetweenTwo_bafd43",
+    "Saha2025_HighFidelityRemoteEntanglementTrapped_c031e4",
+    "Usmani2012_HeraldedQuantumEntanglementBetweenTwo_1ffb5c",
+    "Leent2022_EntanglingSingleAtomsOver33_64b141",
+    "Olmschenk2009_QuantumTeleportationBetweenDistantMatter_b2228a"
+   ],
+   "first_query_top10": [
+    "Liu2021_HeraldedEntanglementDistributionBetweenTwo_bafd43",
+    "LagoRivera2021_TelecomHeraldedEntanglementBetweenMultimode_ea69dc",
+    "Wei2022_TowardsRealWorldQuantumNetworks_bada70",
+    "Hänni2025_HeraldedEntanglementDemandSpinWave_d783f4",
+    "Knaut2024_EntanglementNanophotonicQuantumMemoryNodes_4cef92",
+    "Leent2022_EntanglingSingleAtomsOver33_64b141",
+    "Maunz2009_HeraldedQuantumGateBetweenRemote_02e22e",
+    "Usmani2012_HeraldedQuantumEntanglementBetweenTwo_1ffb5c",
+    "Saha2025_HighFidelityRemoteEntanglementTrapped_c031e4",
+    "Pang2023_EntanglingMotionalAtomsOpticalLoop_875d6b"
+   ]
+  }
+ }
+}

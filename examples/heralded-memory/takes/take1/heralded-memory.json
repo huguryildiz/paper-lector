@@ -1,0 +1,13 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {"label": "main", "description": "core question", "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?", "keywords": "heralded entanglement remote quantum memories experiment rate fidelity storage time"},
+    "Q1": {"label": "subject", "description": "memory platforms", "text": "Two spatially separated quantum memory nodes, such as trapped ions, neutral atoms, NV or SiV colour centres in diamond, rare-earth-doped crystals or atomic ensembles, each emitting photons entangled with a stored spin or collective excitation.", "keywords": "quantum memory nodes trapped ion neutral atom NV centre SiV diamond rare-earth crystal atomic ensemble spin-photon"},
+    "Q2": {"label": "approach", "description": "heralding scheme", "text": "Heralded generation of entanglement between distant matter qubits by interfering emitted photons on a beam splitter and detecting them, using single-photon or two-photon Bell-state measurement or DLCZ-type schemes.", "keywords": "heralded entanglement photon interference Bell-state measurement single-photon two-photon DLCZ beam splitter detection"},
+    "Q3": {"label": "outcome", "description": "rate, fidelity, storage", "text": "Reported entanglement heralding rate or success probability, fidelity of the heralded state to a target Bell state, and memory coherence or storage time of the entangled qubits.", "keywords": "heralding rate success probability Bell state fidelity coherence time storage time memory lifetime"},
+    "Q4": {"label": "context", "description": "separated labs over fibre", "text": "Memory nodes placed in separate laboratories or buildings and connected by optical fibre, often with quantum frequency conversion to telecom wavelengths over metropolitan distances.", "keywords": "separate laboratories buildings optical fibre telecom frequency conversion metropolitan distance kilometres"},
+    "Q5": {"label": "comparison", "description": "non-heralded alternatives", "text": "Deterministic remote entanglement or quantum state transfer between nodes, and photonic entanglement distribution without matter memories, as alternatives to heralded memory-memory entanglement.", "keywords": "deterministic state transfer remote entanglement cavity photonic entanglement distribution without memory"}
+  }
+}

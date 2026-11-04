@@ -1,0 +1,12 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {"label": "main", "description": "core question", "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?", "keywords": "heralded entanglement remote quantum memories experiment herald rate Bell state fidelity storage time"},
+    "Q1": {"label": "subject", "description": "remote memory nodes", "text": "Two spatially separated quantum memory nodes, such as trapped ions, neutral atoms, nitrogen-vacancy or silicon-vacancy centres in diamond, atomic ensembles or rare-earth doped crystals, linked by emitted photons.", "keywords": "quantum memory node trapped ion neutral atom NV centre SiV diamond atomic ensemble rare-earth crystal spin photon"},
+    "Q2": {"label": "approach", "description": "heralding protocol", "text": "Photons emitted by each memory interfere at a central Bell-state measurement station, and a detection event heralds the entangled pair, as in Barrett-Kok, single-photon or DLCZ-type heralding schemes.", "keywords": "heralding Bell state measurement two-photon interference single-photon detection Barrett-Kok DLCZ Hong-Ou-Mandel herald"},
+    "Q3": {"label": "outcome", "description": "rate, fidelity, storage", "text": "The experiment reports the heralding rate or success probability, the fidelity of the shared state to the target Bell state, and the memory coherence or storage time of the entangled pair.", "keywords": "entanglement rate success probability heralding rate Bell state fidelity coherence time storage time memory lifetime"},
+    "Q4": {"label": "context", "description": "separated labs over fibre", "text": "The memory nodes sit in separate laboratories or buildings joined by optical fibre, from metres to tens of kilometres apart, sometimes with frequency conversion to telecom wavelengths.", "keywords": "separate laboratories fibre link km distance telecom frequency conversion metropolitan network deployed fiber"}
+  }
+}

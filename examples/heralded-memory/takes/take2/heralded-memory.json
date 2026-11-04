@@ -1,0 +1,37 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question",
+      "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+      "keywords": "heralded entanglement remote quantum memories experiment demonstration rate Bell state fidelity storage time"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "system studied",
+      "text": "Two spatially separated quantum memory nodes, such as trapped ions, neutral atoms in cavities, nitrogen-vacancy or silicon-vacancy centres in diamond, rare-earth doped crystals or cold atomic ensembles, connected by optical photons.",
+      "keywords": "quantum memory nodes trapped ion neutral atom cavity NV centre SiV diamond rare-earth crystal atomic ensemble spin photon interface"
+    },
+    "Q2": {
+      "label": "approach",
+      "description": "heralding protocol",
+      "text": "Heralded entanglement generation in which photons emitted by each memory interfere at a midpoint station and a detector click heralds success, using single-photon or two-photon Barrett-Kok schemes and a photonic Bell-state measurement.",
+      "keywords": "heralded entanglement generation two-photon interference Bell-state measurement single-photon scheme Barrett-Kok midpoint station detector click entanglement swapping"
+    },
+    "Q3": {
+      "label": "outcome",
+      "description": "reported figures",
+      "text": "Reported performance of remote entanglement: heralding or entanglement generation rate per second or per attempt, fidelity of the heralded state to a target Bell state, and memory coherence or storage time of the entangled qubits.",
+      "keywords": "entanglement generation rate success probability per attempt heralding rate Bell state fidelity coherence time storage time memory lifetime T2"
+    },
+    "Q4": {
+      "label": "context",
+      "description": "deployment conditions",
+      "text": "Memory nodes located in separate laboratories or buildings and linked by optical fiber, sometimes with frequency conversion to telecom wavelengths, over distances from metres to tens of kilometres in a metropolitan network.",
+      "keywords": "separate laboratories buildings optical fiber link telecom wavelength frequency conversion kilometres metropolitan deployed fiber quantum network"
+    }
+  }
+}

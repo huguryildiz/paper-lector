@@ -1,0 +1,37 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question",
+      "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+      "keywords": "heralded entanglement remote quantum memories experiment herald rate Bell state fidelity storage time"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "remote memory nodes",
+      "text": "Two physically separated quantum memory nodes, such as trapped ions, neutral atoms, atomic ensembles, NV or SiV colour centres in diamond, or rare-earth-doped crystals, connected by optical photons.",
+      "keywords": "quantum memory nodes trapped ion neutral atom atomic ensemble NV SiV diamond rare-earth crystal photon"
+    },
+    "Q2": {
+      "label": "approach",
+      "description": "heralding schemes",
+      "text": "Entanglement is heralded by interfering photons emitted by each memory at a middle station and detecting one or two photons, as in Barrett-Kok, DLCZ or single-click schemes.",
+      "keywords": "heralding photon interference beam splitter Bell state measurement single-click two-photon Barrett-Kok DLCZ"
+    },
+    "Q3": {
+      "label": "outcome",
+      "description": "rate, fidelity, memory time",
+      "text": "Reported figures of merit: entanglement generation or herald rate per second, fidelity to the target Bell state, and memory storage or coherence time compared with the time needed to herald.",
+      "keywords": "entanglement rate success probability Bell state fidelity memory coherence time storage time"
+    },
+    "Q4": {
+      "label": "context",
+      "description": "separated labs, fibre",
+      "text": "Nodes sit in separate laboratories or buildings and are linked over deployed or spooled optical fibre, often after conversion to telecom wavelengths.",
+      "keywords": "separate laboratories deployed fiber kilometres metropolitan link telecom frequency conversion"
+    }
+  }
+}

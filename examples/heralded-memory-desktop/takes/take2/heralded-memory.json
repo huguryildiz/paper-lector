@@ -1,0 +1,37 @@
+{
+  "name": "heralded-memory",
+  "question": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+  "fuse": ["Q0", "Q1"],
+  "queries": {
+    "Q0": {
+      "label": "main",
+      "description": "core question",
+      "text": "Which experiments have demonstrated heralded entanglement between two remote quantum memories, and what herald rate, Bell-state fidelity and storage time did each report?",
+      "keywords": "heralded entanglement remote quantum memories experiment demonstration herald rate Bell state fidelity storage time"
+    },
+    "Q1": {
+      "label": "subject",
+      "description": "the systems studied",
+      "text": "Two spatially separated quantum memory nodes, such as trapped ions, single neutral atoms, atomic ensembles, nitrogen-vacancy or silicon-vacancy centres in diamond, or rare-earth doped crystals, that are linked by photons to form a quantum network.",
+      "keywords": "quantum network nodes memory trapped ion neutral atom atomic ensemble nitrogen-vacancy NV silicon-vacancy SiV rare-earth crystal"
+    },
+    "Q2": {
+      "label": "approach",
+      "description": "how the entanglement is heralded",
+      "text": "Heralded entanglement generation by interfering photons emitted by or stored in the two memories and detecting them at a midpoint station, including two-photon Barrett-Kok, single-photon and DLCZ schemes with a Bell-state measurement.",
+      "keywords": "heralding photon interference Bell-state measurement two-photon Barrett-Kok single-photon DLCZ midpoint detection spin-photon entanglement"
+    },
+    "Q3": {
+      "label": "outcome",
+      "description": "the figures reported",
+      "text": "Reported figures of merit for remote entanglement: the heralding rate or success probability per attempt, the fidelity of the heralded Bell state, and the memory storage or coherence time that limits how long the entanglement is kept.",
+      "keywords": "entanglement rate success probability per attempt Bell state fidelity coherence time storage time memory lifetime"
+    },
+    "Q4": {
+      "label": "context",
+      "description": "the link conditions",
+      "text": "Memory nodes placed in separate laboratories or buildings and connected by optical fibre over distances from metres to kilometres, possibly with quantum frequency conversion to telecom wavelengths for low-loss transmission.",
+      "keywords": "separate laboratories buildings optical fibre kilometres distance metropolitan telecom wavelength frequency conversion"
+    }
+  }
+}
